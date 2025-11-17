@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kasey's Habit Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cormorant', Georgia, 'Times New Roman', serif;
+            background: #1a1a1a;
+            min-height: 100vh;
+            padding: 16px;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .btn {
+            background: transparent;
+            border: 1px solid #444;
+            color: #999;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: #b59197;
+            color: #2a2a2a;
+            border-color: #b59197;
+        }
+
+        .section-nav {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .nav-tab {
+            background: transparent;
+            border: 1px solid #444;
+            color: #999;
+            padding: 12px 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            text-align: center;
+        }
+
+        .nav-tab.active {
+            background: #b59197;
+            color: #2a2a2a;
+            border-color: #b59197;
+        }
+
+        .nav-tab:hover {
+            border-color: #b59197;
+        }
+
+        .hub-tab {
+            display: none;
+        }
+
+        .hub-tab.active {
+            display: block;
+        }
+
+        .section {
+            background: #2a2a2a;
+            border: 1px solid #b59197;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 0.75rem;
+            font-weight: 400;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #b59197;
+            margin-bottom: 20px;
+        }
+
+        /* BINGO STYLES */
+        .bingo-section {
+            background: #2a2a2a;
+            padding: 20px 16px;
+            border: 1px solid #b59197;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: 4px;
+            font-size: 0.75rem;
+            font-weight: 400;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .main-title {
+            text-align: center;
+            color: #b59197;
+            margin-bottom: 16px;
+            font-size: 2rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #999999;
+            margin-bottom: 16px;
+            font-size: 0.8rem;
+        }
+
+        .date-display {
+            text-align: center;
+            color: #999999;
+            margin-bottom: 20px;
+            font-size: 0.8rem;
+        }
+
+        .bingo-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 2px;
+            margin-bottom: 20px;
+            background: #1a1a1a;
+            max-width: 480px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .bingo-cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 6px;
+            background: #3a3a3a;
+            color: #e0e0e0;
+            position: relative;
+            line-height: 1.2;
+        }
+
+        .bingo-cell.completed {
+            background: #b59197;
+            color: #2a2a2a;
+        }
+
+        .bingo-cell.free-space {
+            background: #b59197;
+            color: #2a2a2a;
+            font-weight: 500;
+            cursor: default;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.7rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .controls .btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 10px 20px;
+            font-size: 0.85rem;
+        }
+
+        .stats {
+            text-align: center;
+            padding: 16px;
+            background: #1a1a1a;
+            display: flex;
+            justify-content: space-around;
+            gap: 20px;
+        }
+
+        .stats-item {
+            color: #999999;
+            font-size: 0.85rem;
+        }
+
+        .stats-item span {
+            color: #b59197;
+            font-size: 1.5rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .celebration {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #2a2a2a;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            text-align: center;
+            display: none;
+            z-index: 1000;
+            border: 1px solid #4a4a4a;
+        }
+
+        .celebration.show {
+            display: block;
+        }
+
+        .celebration h2 {
+            color: #b59197;
+            margin-bottom: 12px;
+            font-size: 2rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+        }
+
+        .celebration p {
+            color: #999;
+            margin-bottom: 24px;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #b59197;
+            position: fixed;
+            left: 50%;
+            animation: confetti-fall 3s linear forwards;
+            z-index: 9999;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* RESOURCE STYLES */
+        .resource-category {
+            margin-bottom: 1px;
+        }
+
+        .resource-header {
+            background: #2a2a2a;
+            padding: 16px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+            border: 1px solid #333;
+        }
+
+        .resource-header:hover {
+            background: #333;
+        }
+
+        .resource-name {
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        .resource-arrow {
+            color: #999;
+            transition: transform 0.2s;
+        }
+
+        .resource-category.active .resource-arrow {
+            transform: rotate(180deg);
+            color: #b59197;
+        }
+
+        .resource-content {
+            display: none;
+            background: #1a1a1a;
+            padding: 16px 20px;
+            border: 1px solid #333;
+            border-top: none;
+        }
+
+        .resource-category.active .resource-content {
+            display: block;
+        }
+
+        .resource-item {
+            background: #2a2a2a;
+            padding: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .resource-item-content {
+            flex: 1;
+        }
+
+        .resource-item-title {
+            color: #fff;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+
+        .resource-item-link {
+            color: #b59197;
+            font-size: 0.85rem;
+            word-break: break-all;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .resource-item-link:hover {
+            text-decoration: underline;
+        }
+
+        .resource-item-note {
+            color: #999;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .add-resource-btn {
+            background: transparent;
+            border: 1px solid #444;
+            color: #999;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            margin-top: 12px;
+            font-family: inherit;
+        }
+
+        .add-resource-btn:hover {
+            background: #b59197;
+            color: #2a2a2a;
+            border-color: #b59197;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #666;
+            padding: 20px;
+        }
+
+        /* VIDEO STYLES */
+        .add-event-btn {
+            width: 100%;
+            margin-top: 12px;
+            background: transparent;
+            border: 1px solid #444;
+            color: #999;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .add-event-btn:hover {
+            background: #b59197;
+            color: #2a2a2a;
+            border-color: #b59197;
+        }
+
+        .event-form {
+            display: none;
+            background: #1a1a1a;
+            padding: 20px;
+            margin-top: 15px;
+            border: 1px solid #333;
+        }
+
+        .event-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #999;
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 10px;
+            font-size: 0.9rem;
+            font-family: inherit;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .form-actions button[type="submit"] {
+            border-color: #b59197;
+            color: #b59197;
+            background: transparent;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .form-actions button[type="submit"]:hover {
+            background: #b59197;
+            color: #2a2a2a;
+        }
+
+        .video-item {
+            background: #1a1a1a;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .video-content {
+            flex: 1;
+        }
+
+        .video-title {
+            color: #fff;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+        }
+
+        .video-link {
+            color: #b59197;
+            font-size: 0.85rem;
+            word-break: break-all;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .video-link:hover {
+            text-decoration: underline;
+        }
+
+        .video-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .video-tag {
+            background: #2a2a2a;
+            color: #999;
+            padding: 4px 10px;
+            font-size: 0.75rem;
+            border: 1px solid #444;
+        }
+
+        /* PROMPT STYLES */
+        .prompt-question {
+            background: #1a1a1a;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 3px solid #b59197;
+        }
+
+        .prompt-label {
+            font-size: 0.75rem;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .prompt-text {
+            color: #fff;
+            font-size: 1.125rem;
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        .answer-box {
+            background: #1a1a1a;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .answer-person {
+            font-size: 0.75rem;
+            color: #b59197;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+
+        .answer-text {
+            color: #e0e0e0;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            white-space: pre-wrap;
+        }
+
+        @media (max-width: 768px) {
+            .section-nav {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .bingo-grid {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 12px;
+            }
+
+            .bingo-section {
+                padding: 12px;
+            }
+
+            .main-title {
+                font-size: 1.5rem;
+            }
+
+            .bingo-cell {
+                font-size: 0.7rem;
+                padding: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="btn" style="margin-bottom: 24px;">← Back to Home</a>
+        
+        <div class="section-nav">
+            <button class="nav-tab active" onclick="switchTab(event, 'bingo')">Bingo Card</button>
+            <button class="nav-tab" onclick="switchTab(event, 'resources')">Resources</button>
+            <button class="nav-tab" onclick="switchTab(event, 'videos')">Video Hub</button>
+            <button class="nav-tab" onclick="switchTab(event, 'prompt')">Daily Prompt</button>
+        </div>
+
+        <!-- BINGO TAB -->
+        <div id="bingo-tab" class="hub-tab active">
+            <div class="bingo-section">
+                <h1>The Ultimate</h1>
+                <div class="main-title">DAILY HABITS<br>BINGO</div>
+                <p class="subtitle">Click squares to mark complete • Get 5 in a row to win</p>
+                <div class="date-display" id="dateDisplay"></div>
+                
+                <div class="bingo-grid" id="bingoGrid"></div>
+                
+                <div class="controls">
+                    <button class="btn" onclick="resetBoard()">Reset Today</button>
+                    <button class="btn" onclick="shuffleBoard()">Shuffle Habits</button>
+                </div>
+
+                <div class="stats">
+                    <div class="stats-item">
+                        <span id="completedCount">0</span>
+                        Complete
+                    </div>
+                    <div class="stats-item">
+                        <span id="bingoCount">0</span>
+                        Bingos
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESOURCES TAB -->
+        <div id="resources-tab" class="hub-tab">
+            <div class="section">
+                <h2 class="section-title">Habit Resources</h2>
+                
+                <div class="event-form" id="resourceForm">
+                    <form onsubmit="addResource(event)">
+                        <input type="hidden" id="resourceCategory" name="category">
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" name="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Upload Image/Video (optional)</label>
+                            <input type="file" name="file" accept="image/*,video/*" id="resourceFile" onchange="handleResourceUpload()">
+                            <div style="text-align: center; color: #999; margin: 8px 0; font-size: 0.85rem;">— OR —</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Link (optional)</label>
+                            <input type="url" name="link" id="resourceLink">
+                        </div>
+                        <div class="form-group">
+                            <label>Notes (optional)</label>
+                            <textarea name="note" rows="3"></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn" onclick="hideAddResourceForm()">Cancel</button>
+                            <button type="submit" class="btn">Save Resource</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="resource-category">
+                    <div class="resource-header" onclick="toggleResource(event, 'meditate')">
+                        <span class="resource-name">Meditate</span>
+                        <span class="resource-arrow">▼</span>
+                    </div>
+                    <div class="resource-content" id="meditate-content">
+                        <div id="meditate-items"></div>
+                        <button class="add-resource-btn" onclick="showAddResourceForm('meditate')">+ Add Resource</button>
+                    </div>
+                </div>
+
+                <div class="resource-category">
+                    <div class="resource-header" onclick="toggleResource(event, 'exercise')">
+                        <span class="resource-name">Exercise</span>
+                        <span class="resource-arrow">▼</span>
+                    </div>
+                    <div class="resource-content" id="exercise-content">
+                        <div id="exercise-items"></div>
+                        <button class="add-resource-btn" onclick="showAddResourceForm('exercise')">+ Add Resource</button>
+                    </div>
+                </div>
+
+                <div class="resource-category">
+                    <div class="resource-header" onclick="toggleResource(event, 'meals')">
+                        <span class="resource-name">Healthy Meals</span>
+                        <span class="resource-arrow">▼</span>
+                    </div>
+                    <div class="resource-content" id="meals-content">
+                        <div id="meals-items"></div>
+                        <button class="add-resource-btn" onclick="showAddResourceForm('meals')">+ Add Resource</button>
+                    </div>
+                </div>
+
+                <div class="resource-category">
+                    <div class="resource-header" onclick="toggleResource(event, 'journal')">
+                        <span class="resource-name">Journal</span>
+                        <span class="resource-arrow">▼</span>
+                    </div>
+                    <div class="resource-content" id="journal-content">
+                        <div id="journal-items"></div>
+                        <button class="add-resource-btn" onclick="showAddResourceForm('journal')">+ Add Resource</button>
+                    </div>
+                </div>
+
+                <div class="resource-category">
+                    <div class="resource-header" onclick="toggleResource(event, 'read')">
+                        <span class="resource-name">Read</span>
+                        <span class="resource-arrow">▼</span>
+                    </div>
+                    <div class="resource-content" id="read-content">
+                        <div id="read-items"></div>
+                        <button class="add-resource-btn" onclick="showAddResourceForm('read')">+ Add Resource</button>
+                    </div>
+                </div>
+
+                <div class="resource-category">
+                    <div class="resource-header" onclick="toggleResource(event, 'walk')">
+                        <span class="resource-name">Walk / Podcasts</span>
+                        <span class="resource-arrow">▼</span>
+                    </div>
+                    <div class="resource-content" id="walk-content">
+                        <div id="walk-items"></div>
+                        <button class="add-resource-btn" onclick="showAddResourceForm('walk')">+ Add Resource</button>
+                    </div>
+                </div>
+
+                <div class="resource-category">
+                    <div class="resource-header" onclick="toggleResource(event, 'tapping')">
+                        <span class="resource-name">EFT Tapping</span>
+                        <span class="resource-arrow">▼</span>
+                    </div>
+                    <div class="resource-content" id="tapping-content">
+                        <div id="tapping-items"></div>
+                        <button class="add-resource-btn" onclick="showAddResourceForm('tapping')">+ Add Resource</button>
+                    </div>
+                </div>
+
+                <div class="resource-category">
+                    <div class="resource-header" onclick="toggleResource(event, 'altar')">
+                        <span class="resource-name">Altar Time</span>
+                        <span class="resource-arrow">▼</span>
+                    </div>
+                    <div class="resource-content" id="altar-content">
+                        <div id="altar-items"></div>
+                        <button class="add-resource-btn" onclick="showAddResourceForm('altar')">+ Add Resource</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIDEOS TAB -->
+        <div id="videos-tab" class="hub-tab">
+            <div class="section">
+                <h2 class="section-title">Video Hub</h2>
+                <button class="add-event-btn" onclick="toggleVideoForm()">Add Video</button>
+                
+                <div class="event-form" id="videoForm">
+                    <form onsubmit="addVideo(event)">
+                        <div class="form-group">
+                            <label>Video Title</label>
+                            <input type="text" name="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Upload Video from Phone</label>
+                            <input type="file" name="video" accept="video/*" id="videoFile" onchange="handleVideoUpload()">
+                            <div style="text-align: center; color: #999; margin: 8px 0; font-size: 0.85rem;">— OR —</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Video Link (TikTok, YouTube, etc)</label>
+                            <input type="url" name="link" id="videoLink">
+                        </div>
+                        <div class="form-group">
+                            <label>Tags (comma separated)</label>
+                            <input type="text" name="tags" placeholder="motivation, exercise, meditation">
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn" onclick="toggleVideoForm()">Cancel</button>
+                            <button type="submit" class="btn">Save Video</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="videosList" style="margin-top: 20px;">
+                    <div class="empty-state">No videos yet. Add your first motivational video!</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROMPT TAB -->
+        <div id="prompt-tab" class="hub-tab">
+            <div class="section">
+                <h2 class="section-title">Today's Prompt</h2>
+                
+                <div class="prompt-question">
+                    <div class="prompt-label">Question of the Day</div>
+                    <div class="prompt-text" id="promptQuestionHub"></div>
+                </div>
+
+                <div id="currentAnswerBox" style="display: none; margin-bottom: 20px;">
+                    <div class="answer-box">
+                        <div class="answer-person">Your Current Answer</div>
+                        <div class="answer-text" id="currentAnswer"></div>
+                    </div>
+                </div>
+
+                <div class="event-form active">
+                    <form onsubmit="saveAnswer(event)">
+                        <div class="form-group">
+                            <label id="answerLabel">Your Answer</label>
+                            <textarea name="answer" rows="6" required id="answerInput"></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn">Save Answer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="celebration" id="celebration">
+        <h2>BINGO!</h2>
+        <p>Amazing work! You got 5 in a row!</p>
+        <button class="btn" onclick="closeCelebration()">Continue</button>
+    </div>
+
+    <script>
+        const kaseyHabits = [
+            "Drink 8 glasses of water",
+            "Exercise 30+ minutes",
+            "Eat a healthy meal",
+            "Read 10+ pages",
+            "Meditate",
+            "Sleep 7+ hours",
+            "Journal",
+            "Walk 10k steps",
+            "Healthy breakfast",
+            "Stretch",
+            "Complete to-do list",
+            "Vibration plate",
+            "Take vitamins and supplements",
+            "Practice gratitude",
+            "Morning routine",
+            "Evening routine",
+            "Do laundry",
+            "Altar time",
+            "Tidy living space",
+            "Dry brushing",
+            "No sugary drinks",
+            "EFT tapping",
+            "Time in nature",
+            "Subliminals/rampages"
+        ];
+
+        const dailyPrompts = [
+            "What's one thing I did today that made you smile?",
+            "What's your favorite memory of us from this past month?",
+            "What's one way I can support you better this week?",
+            "What's something you're grateful for about our relationship?",
+            "What's a goal you have for us as a couple?",
+            "What's one thing you admire about me?",
+            "What's your favorite thing we do together?",
+            "What's something new you'd like to try together?",
+            "What's a challenge we've overcome together that you're proud of?",
+            "What makes you feel most loved by me?",
+            "What's something you've learned about yourself through our relationship?",
+            "What's a small gesture I do that means a lot to you?",
+            "What's your favorite quality about our relationship?",
+            "What's something you're excited about for our future?",
+            "What's one way we've grown together recently?",
+            "What's a tradition you'd like to start with us?",
+            "What's something I do that makes you laugh?",
+            "What's your favorite way to spend quality time together?",
+            "What's something you want to accomplish together this year?",
+            "What's one thing about our relationship that makes you feel secure?",
+            "What's a moment when you felt really connected to me?",
+            "What's something you appreciate about how we handle disagreements?",
+            "What's your favorite inside joke or moment between us?",
+            "What's one way our relationship has changed you for the better?",
+            "What's something you'd like more of in our relationship?",
+            "What's a compliment you wish you heard more often?",
+            "What's your favorite physical gesture of affection from me?",
+            "What's something I do that helps you feel understood?",
+            "What's a dream you have for us that we haven't talked about yet?",
+            "What's one thing that always brightens your day when I do it?"
+        ];
+
+        const defaultResources = {
+            meditate: [
+                { title: 'Insight Timer', link: 'https://insighttimer.com', note: 'Free guided meditations. Huge library.' },
+                { title: 'Headspace', link: 'https://www.headspace.com', note: '10-min daily meditations. Great for beginners.' }
+            ],
+            exercise: [
+                { title: 'Yoga with Adriene', link: 'https://www.youtube.com/@yogawithadriene', note: '30-day programs, all levels.' },
+                { title: 'Rebounder Workouts', link: 'https://www.youtube.com/results?search_query=rebounder+workout', note: 'Low impact cardio, fun!' }
+            ],
+            meals: [
+                { title: 'Budget Bytes', link: 'https://www.budgetbytes.com', note: 'Easy, affordable, healthy recipes.' }
+            ],
+            journal: [
+                { title: 'Morning brain dump', link: null, note: 'Write 3 pages of whatever comes to mind. No filtering.' },
+                { title: 'What I\'m proud of', link: null, note: 'List 3 things from today you handled well.' }
+            ],
+            read: [
+                { title: 'Atomic Habits by James Clear', link: null, note: 'THE book for building habits.' },
+                { title: 'The Mountain Is You by Brianna Wiest', link: null, note: 'About self-sabotage and growth.' }
+            ],
+            walk: [
+                { title: 'Unlocking Us - Brené Brown', link: null, note: 'Podcast about vulnerability and courage.' }
+            ],
+            tapping: [
+                { title: 'Brad Yates YouTube', link: 'https://www.youtube.com/@BradYates', note: 'Huge free library of tapping videos.' }
+            ],
+            altar: [
+                { title: 'Daily tarot pull', link: null, note: 'One card. "What do I need to know today?"' },
+                { title: 'New moon intentions', link: null, note: 'Write intentions, place on altar with crystals.' }
+            ]
+        };
+
+        let boardState = [];
+        let currentHabits = [];
+        let videos = [];
+        let resources = {};
+        let pendingResourceFile = null;
+        let pendingVideoFile = null;
+
+        function switchTab(e, tab) {
+            document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
+            e.target.classList.add('active');
+            document.querySelectorAll('.hub-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(`${tab}-tab`).classList.add('active');
+
+            if (tab === 'prompt') loadHubPrompt();
+            else if (tab === 'resources') renderAllResources();
+        }
+
+        function initBoard() {
+            const today = new Date().toDateString();
+            const savedDate = localStorage.getItem('bingoDate_kasey');
+            
+            if (savedDate !== today) {
+                localStorage.removeItem('bingoState_kasey');
+                localStorage.setItem('bingoDate_kasey', today);
+                shuffleBoard();
+            } else {
+                const saved = localStorage.getItem('bingoState_kasey');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    currentHabits = data.habits;
+                    boardState = data.state;
+                } else {
+                    shuffleBoard();
+                }
+            }
+            
+            updateDateDisplay();
+            renderBoard();
+            updateStats();
+        }
+
+        function updateDateDisplay() {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('dateDisplay').textContent = new Date().toLocaleDateString('en-US', options);
+        }
+
+        function shuffleBoard() {
+            const shuffled = [...kaseyHabits].sort(() => Math.random() - 0.5).slice(0, 24);
+            currentHabits = [...shuffled.slice(0, 12), "FREE SPACE", ...shuffled.slice(12)];
+            boardState = new Array(25).fill(false);
+            boardState[12] = true;
+            saveState();
+            renderBoard();
+            updateStats();
+        }
+
+        function renderBoard() {
+            const grid = document.getElementById('bingoGrid');
+            grid.innerHTML = '';
+            
+            currentHabits.forEach((habit, index) => {
+                const cell = document.createElement('div');
+                cell.className = 'bingo-cell';
+                cell.textContent = habit;
+                
+                if (index === 12) {
+                    cell.classList.add('free-space');
+                } else {
+                    if (boardState[index]) cell.classList.add('completed');
+                    cell.onclick = () => toggleCell(index);
+                }
+                
+                grid.appendChild(cell);
+            });
+        }
+
+        function toggleCell(index) {
+            if (index === 12) return;
+            boardState[index] = !boardState[index];
+            saveState();
+            renderBoard();
+            updateStats();
+            checkBingo();
+        }
+
+        function resetBoard() {
+            boardState = new Array(25).fill(false);
+            boardState[12] = true;
+            saveState();
+            renderBoard();
+            updateStats();
+        }
+
+        function saveState() {
+            localStorage.setItem('bingoState_kasey', JSON.stringify({
+                habits: currentHabits,
+                state: boardState
+            }));
+        }
+
+        function updateStats() {
+            const completed = boardState.filter(Boolean).length - 1;
+            document.getElementById('completedCount').textContent = completed;
+            document.getElementById('bingoCount').textContent = countBingos();
+        }
+
+        function countBingos() {
+            let count = 0;
+            for (let i = 0; i < 5; i++) {
+                if (boardState.slice(i * 5, i * 5 + 5).every(Boolean)) count++;
+            }
+            for (let i = 0; i < 5; i++) {
+                if ([0, 1, 2, 3, 4].every(j => boardState[i + j * 5])) count++;
+            }
+            if ([0, 6, 12, 18, 24].every(i => boardState[i])) count++;
+            if ([4, 8, 12, 16, 20].every(i => boardState[i])) count++;
+            return count;
+        }
+
+        function checkBingo() {
+            const prevCount = parseInt(localStorage.getItem('prevBingoCount_kasey') || '0');
+            const currentCount = countBingos();
+            if (currentCount > prevCount) showCelebration();
+            localStorage.setItem('prevBingoCount_kasey', currentCount);
+        }
+
+        function showCelebration() {
+            document.getElementById('celebration').classList.add('show');
+            createConfetti();
+        }
+
+        function closeCelebration() {
+            document.getElementById('celebration').classList.remove('show');
+        }
+
+        function createConfetti() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#ffd93d', '#a8e6cf', '#ff8b94', '#c7ceea', '#b4f8c8', '#ffa07a', '#98d8c8'];
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.top = '-10px';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    const size = Math.random() * 8 + 6;
+                    confetti.style.width = size + 'px';
+                    confetti.style.height = size + 'px';
+                    const duration = Math.random() * 2 + 2;
+                    confetti.style.animationDuration = duration + 's';
+                    document.body.appendChild(confetti);
+                    setTimeout(() => confetti.remove(), duration * 1000);
+                }, i * 30);
+            }
+        }
+
+        function loadResources() {
+            const saved = localStorage.getItem('resources_kasey');
+            if (saved) {
+                resources = JSON.parse(saved);
+            } else {
+                resources = JSON.parse(JSON.stringify(defaultResources));
+                saveResources();
+            }
+            renderAllResources();
+        }
+
+        function saveResources() {
+            localStorage.setItem('resources_kasey', JSON.stringify(resources));
+        }
+
+        function handleResourceUpload() {
+            const fileInput = document.getElementById('resourceFile');
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    pendingResourceFile = {
+                        data: e.target.result,
+                        type: file.type,
+                        name: file.name
+                    };
+                    document.getElementById('resourceLink').value = '';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function toggleResource(e, category) {
+            e.target.closest('.resource-category').classList.toggle('active');
+        }
+
+        function renderAllResources() {
+            Object.keys(resources).forEach(category => renderResourceCategory(category));
+        }
+
+        function renderResourceCategory(category) {
+            const container = document.getElementById(`${category}-items`);
+            if (!container) return;
+
+            if (!resources[category] || resources[category].length === 0) {
+                container.innerHTML = '<div class="empty-state">No resources yet. Add your first one!</div>';
+                return;
+            }
+
+            container.innerHTML = '';
+            resources[category].forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'resource-item';
+                
+                let mediaContent = '';
+                if (item.file) {
+                    if (item.file.type.startsWith('image')) {
+                        mediaContent = `<img src="${item.file.data}" style="max-width: 200px; margin-bottom: 8px; border-radius: 4px;">`;
+                    } else if (item.file.type.startsWith('video')) {
+                        mediaContent = `<video controls style="max-width: 200px; margin-bottom: 8px;"><source src="${item.file.data}" type="${item.file.type}"></video>`;
+                    }
+                }
+                
+                itemDiv.innerHTML = `
+                    <div class="resource-item-content">
+                        <div class="resource-item-title">${item.title}</div>
+                        ${mediaContent}
+                        ${item.link ? `<a href="${item.link}" target="_blank" class="resource-item-link">${item.link}</a>` : ''}
+                        ${item.note ? `<div class="resource-item-note">${item.note}</div>` : ''}
+                    </div>
+                    <button class="btn" onclick="deleteResource('${category}', ${index})" style="padding: 4px 8px; min-width: auto;">×</button>
+                `;
+                container.appendChild(itemDiv);
+            });
+        }
+
+        function showAddResourceForm(category) {
+            document.getElementById('resourceCategory').value = category;
+            document.getElementById('resourceForm').classList.add('active');
+        }
+
+        function hideAddResourceForm() {
+            document.getElementById('resourceForm').classList.remove('active');
+            document.getElementById('resourceForm').querySelector('form').reset();
+            pendingResourceFile = null;
+        }
+
+        function addResource(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const category = formData.get('category');
+
+            const resource = {
+                title: formData.get('title'),
+                link: formData.get('link') || null,
+                note: formData.get('note') || null,
+                file: pendingResourceFile
+            };
+
+            if (!resources[category]) resources[category] = [];
+            resources[category].push(resource);
+            saveResources();
+            renderResourceCategory(category);
+            hideAddResourceForm();
+        }
+
+        function deleteResource(category, index) {
+            if (confirm('Delete this resource?')) {
+                resources[category].splice(index, 1);
+                saveResources();
+                renderResourceCategory(category);
+            }
+        }
+
+        function handleVideoUpload() {
+            const fileInput = document.getElementById('videoFile');
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    pendingVideoFile = {
+                        data: e.target.result,
+                        type: file.type,
+                        name: file.name
+                    };
+                    document.getElementById('videoLink').value = '';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function loadVideos() {
+            const saved = localStorage.getItem('videos_kasey');
+            if (saved) {
+                videos = JSON.parse(saved);
+                renderVideos();
+            } else {
+                videos = [];
+                renderVideos();
+            }
+        }
+
+        function saveVideos() {
+            localStorage.setItem('videos_kasey', JSON.stringify(videos));
+        }
+
+        function toggleVideoForm() {
+            const form = document.getElementById('videoForm');
+            form.classList.toggle('active');
+            if (!form.classList.contains('active')) {
+                form.querySelector('form').reset();
+                pendingVideoFile = null;
+            }
+        }
+
+        function addVideo(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            
+            const video = {
+                title: formData.get('title'),
+                link: formData.get('link') || null,
+                file: pendingVideoFile,
+                tags: formData.get('tags') ? formData.get('tags').split(',').map(t => t.trim()) : [],
+                dateAdded: new Date().toISOString()
+            };
+
+            videos.push(video);
+            saveVideos();
+            renderVideos();
+            e.target.reset();
+            pendingVideoFile = null;
+            toggleVideoForm();
+        }
+
+        function renderVideos() {
+            const list = document.getElementById('videosList');
+            if (videos.length === 0) {
+                list.innerHTML = '<div class="empty-state">No videos yet. Add your first motivational video!</div>';
+                return;
+            }
+
+            list.innerHTML = '';
+            videos.forEach((video, index) => {
+                const videoDiv = document.createElement('div');
+                videoDiv.className = 'video-item';
+                
+                let videoContent = '';
+                if (video.file) {
+                    videoContent = `
+                        <video controls style="width: 100%; max-width: 300px; margin-bottom: 8px; background: #000;">
+                            <source src="${video.file.data}" type="${video.file.type}">
+                        </video>
+                        <div class="video-title">${video.title}</div>
+                    `;
+                } else if (video.link) {
+                    videoContent = `
+                        <div class="video-title">${video.title}</div>
+                        <a href="${video.link}" target="_blank" class="video-link">${video.link}</a>
+                    `;
+                }
+
+                videoDiv.innerHTML = `
+                    <div class="video-content">
+                        ${videoContent}
+                        ${video.tags.length > 0 ? `
+                            <div class="video-tags">
+                                ${video.tags.map(tag => `<span class="video-tag">${tag}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                    <button class="btn" onclick="deleteVideo(${index})" style="padding: 4px 8px; min-width: auto;">Delete</button>
+                `;
+                list.appendChild(videoDiv);
+            });
+        }
+
+        function deleteVideo(index) {
+            if (confirm('Delete this video?')) {
+                videos.splice(index, 1);
+                saveVideos();
+                renderVideos();
+            }
+        }
+
+        function loadHubPrompt() {
+            const today = new Date();
+            const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 86400000);
+            const promptIndex = dayOfYear % dailyPrompts.length;
+            document.getElementById('promptQuestionHub').textContent = dailyPrompts[promptIndex];
+
+            const savedAnswers = JSON.parse(localStorage.getItem('dailyPromptAnswers') || '{}');
+            
+            if (savedAnswers.date === today.toDateString() && savedAnswers.kasey) {
+                document.getElementById('currentAnswerBox').style.display = 'block';
+                document.getElementById('currentAnswer').textContent = savedAnswers.kasey;
+                document.getElementById('answerLabel').textContent = 'Update Your Answer';
+                document.getElementById('answerInput').value = savedAnswers.kasey;
+            } else {
+                document.getElementById('currentAnswerBox').style.display = 'none';
+                document.getElementById('answerLabel').textContent = 'Your Answer';
+                document.getElementById('answerInput').value = '';
+            }
+        }
+
+        function saveAnswer(e) {
+            e.preventDefault();
+            const answer = new FormData(e.target).get('answer');
+            const today = new Date().toDateString();
+
+            let savedAnswers = JSON.parse(localStorage.getItem('dailyPromptAnswers') || '{}');
+            savedAnswers.date = today;
+            savedAnswers.kasey = answer;
+            localStorage.setItem('dailyPromptAnswers', JSON.stringify(savedAnswers));
+            
+            loadHubPrompt();
+            alert('Your answer has been saved! It will appear on the homepage.');
+        }
+
+        initBoard();
+        loadVideos();
+        loadResources();
+    </script>
+</body>
+</html>
