@@ -30,6 +30,7 @@
         .home-header {
             text-align: center;
             margin-bottom: 32px;
+            margin-top: 24px;
         }
 
         .home-title {
@@ -364,6 +365,29 @@
             padding: 20px;
             margin-bottom: 20px;
             border-left: 3px solid #b59197;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .prompt-question:hover {
+            background: #222;
+        }
+
+        .prompt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .expand-icon {
+            color: #b59197;
+            font-size: 1.25rem;
+            transition: transform 0.3s;
+            user-select: none;
+        }
+
+        .expand-icon.expanded {
+            transform: rotate(180deg);
         }
 
         .prompt-label {
@@ -385,6 +409,14 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 16px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .answers-grid.expanded {
+            max-height: 1000px;
+            margin-top: 20px;
         }
 
         .answer-box {
@@ -400,11 +432,41 @@
             margin-bottom: 12px;
         }
 
-        .answer-text {
+        .answer-input {
+            width: 100%;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 12px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .answer-display {
             color: #e0e0e0;
             line-height: 1.6;
             font-size: 0.95rem;
             white-space: pre-wrap;
+        }
+
+        .save-answer-btn {
+            margin-top: 8px;
+            background: transparent;
+            border: 1px solid #b59197;
+            color: #b59197;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            width: 100%;
+        }
+
+        .save-answer-btn:hover {
+            background: #b59197;
+            color: #2a2a2a;
         }
 
         .no-answer {
@@ -480,6 +542,10 @@
                 flex-direction: column;
                 align-items: stretch;
             }
+
+            body > .container > div[style*="grid-template-columns: 1fr 1fr"] {
+                grid-template-columns: 1fr !important;
+            }
         }
 
         @media (max-width: 480px) {
@@ -516,7 +582,8 @@
                     <button onclick="calendarNext()">→</button>
                 </div>
                 <div style="display: flex; gap: 8px;">
-                    <button class="view-toggle" onclick="calendarToggleView()">Month View</button>
+                    <button class="view-toggle" onclick="calendarToggleView()">Full Week</button>
+                    <button class="view-toggle" onclick="calendarToggleMonthView()">Month View</button>
                 </div>
             </div>
 
@@ -551,7 +618,7 @@
         </div>
 
         <!-- Reminders & Grocery List -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; margin-bottom: 24px;">
             <div class="sticky-note">
                 <h3 class="sticky-note-title">Reminders</h3>
                 <div id="remindersList"></div>
@@ -575,23 +642,32 @@
         <div class="section">
             <h2 class="section-title">Today's Prompt</h2>
             
-            <div class="prompt-question">
-                <div class="prompt-label">Question of the Day</div>
-                <div class="prompt-text" id="promptQuestion"></div>
+            <div class="prompt-question" onclick="togglePromptAnswers()">
+                <div class="prompt-header">
+                    <div style="flex: 1;">
+                        <div class="prompt-label">Question of the Day</div>
+                        <div class="prompt-text" id="promptQuestion"></div>
+                    </div>
+                    <span class="expand-icon" id="expandIcon">▼</span>
+                </div>
             </div>
 
-            <div class="answers-grid">
+            <div class="answers-grid" id="answersGrid">
                 <div class="answer-box">
                     <div class="answer-person">Kasey's Answer</div>
-                    <div class="answer-text" id="kaseyAnswer">
-                        <span class="no-answer">Not answered yet</span>
+                    <div id="kaseyAnswerContainer">
+                        <textarea class="answer-input" id="kaseyAnswerInput" placeholder="Share your thoughts..."></textarea>
+                        <button class="save-answer-btn" onclick="saveAnswer('kasey')">Save Answer</button>
                     </div>
+                    <div id="kaseyAnswerDisplay" class="answer-display" style="display: none;"></div>
                 </div>
                 <div class="answer-box">
                     <div class="answer-person">Charlie's Answer</div>
-                    <div class="answer-text" id="charlieAnswer">
-                        <span class="no-answer">Not answered yet</span>
+                    <div id="charlieAnswerContainer">
+                        <textarea class="answer-input" id="charlieAnswerInput" placeholder="Share your thoughts..."></textarea>
+                        <button class="save-answer-btn" onclick="saveAnswer('charlie')">Save Answer</button>
                     </div>
+                    <div id="charlieAnswerDisplay" class="answer-display" style="display: none;"></div>
                 </div>
             </div>
         </div>
@@ -631,7 +707,7 @@
             "What's one thing that always brightens your day when I do it?"
         ];
 
-        let calendarView = 'week';
+        let calendarView = 'twoday'; // 'twoday', 'week', or 'month'
         let calendarDate = new Date();
         let calendarEvents = [];
         let reminders = [];
@@ -658,18 +734,35 @@
         }
 
         function calendarToggleView() {
-            if (calendarView === 'week') {
-                calendarView = 'month';
-                document.querySelector('.view-toggle').textContent = 'Week View';
-            } else {
+            const buttons = document.querySelectorAll('.view-toggle');
+            if (calendarView === 'twoday') {
                 calendarView = 'week';
-                document.querySelector('.view-toggle').textContent = 'Month View';
+                buttons[0].textContent = 'Today & Tomorrow';
+            } else {
+                calendarView = 'twoday';
+                buttons[0].textContent = 'Full Week';
+            }
+            calendarRender();
+        }
+
+        function calendarToggleMonthView() {
+            const buttons = document.querySelectorAll('.view-toggle');
+            if (calendarView === 'month') {
+                calendarView = 'twoday';
+                buttons[0].textContent = 'Full Week';
+                buttons[1].textContent = 'Month View';
+            } else {
+                calendarView = 'month';
+                buttons[0].textContent = 'Full Week';
+                buttons[1].textContent = 'Day View';
             }
             calendarRender();
         }
 
         function calendarPrevious() {
-            if (calendarView === 'week') {
+            if (calendarView === 'twoday') {
+                calendarDate.setDate(calendarDate.getDate() - 2);
+            } else if (calendarView === 'week') {
                 calendarDate.setDate(calendarDate.getDate() - 7);
             } else {
                 calendarDate.setMonth(calendarDate.getMonth() - 1);
@@ -678,12 +771,67 @@
         }
 
         function calendarNext() {
-            if (calendarView === 'week') {
+            if (calendarView === 'twoday') {
+                calendarDate.setDate(calendarDate.getDate() + 2);
+            } else if (calendarView === 'week') {
                 calendarDate.setDate(calendarDate.getDate() + 7);
             } else {
                 calendarDate.setMonth(calendarDate.getMonth() + 1);
             }
             calendarRender();
+        }
+
+        function calendarRenderTwoDay() {
+            const container = document.getElementById('calendarContainer');
+            container.innerHTML = '';
+            
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(today.getDate() + 1);
+            
+            document.getElementById('calendarTitle').textContent = 
+                `${today.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${tomorrow.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+            
+            for (let i = 0; i < 2; i++) {
+                const date = i === 0 ? new Date(today) : new Date(tomorrow);
+                
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'week-day';
+                
+                if (i === 0) {
+                    dayDiv.classList.add('today');
+                }
+                
+                const dayEvents = calendarGetEventsForDate(date);
+                
+                let eventsHTML = '';
+                if (dayEvents.length > 0) {
+                    dayEvents.forEach((event, idx) => {
+                        const eventIndex = calendarEvents.indexOf(event);
+                        eventsHTML += `
+                            <div class="event-item">
+                                <div>
+                                    <div class="event-title">${event.time ? event.time + ' - ' : ''}${event.title}</div>
+                                    ${event.note ? `<div class="event-note">${event.note}</div>` : ''}
+                                </div>
+                                <button class="btn" onclick="calendarDeleteEvent(${eventIndex})" style="padding: 4px 8px; min-width: auto;">×</button>
+                            </div>
+                        `;
+                    });
+                } else {
+                    eventsHTML = '<div class="empty-state">No events</div>';
+                }
+                
+                dayDiv.innerHTML = `
+                    <div class="week-day-header">
+                        <span class="week-day-name">${date.toLocaleDateString('en-US', { weekday: 'long' })}</span>
+                        <span class="week-day-date">${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                    </div>
+                    <div>${eventsHTML}</div>
+                `;
+                
+                container.appendChild(dayDiv);
+            }
         }
 
         function calendarRenderWeek() {
@@ -813,8 +961,10 @@
             
             dayDiv.onclick = () => {
                 calendarDate = new Date(date);
-                calendarView = 'week';
-                document.querySelector('.view-toggle').textContent = 'Month View';
+                calendarView = 'twoday';
+                const buttons = document.querySelectorAll('.view-toggle');
+                buttons[0].textContent = 'Full Week';
+                buttons[1].textContent = 'Month View';
                 calendarRender();
             };
             
@@ -822,7 +972,9 @@
         }
 
         function calendarRender() {
-            if (calendarView === 'week') {
+            if (calendarView === 'twoday') {
+                calendarRenderTwoDay();
+            } else if (calendarView === 'week') {
                 calendarRenderWeek();
             } else {
                 calendarRenderMonth();
@@ -870,7 +1022,7 @@
         function calendarInit() {
             calendarLoadEvents();
             calendarDate = new Date();
-            calendarView = 'week';
+            calendarView = 'twoday';
             calendarRender();
         }
 
@@ -882,25 +1034,81 @@
             document.getElementById('promptQuestion').textContent = dailyPrompts[promptIndex];
         }
 
+        function togglePromptAnswers() {
+            const answersGrid = document.getElementById('answersGrid');
+            const expandIcon = document.getElementById('expandIcon');
+            
+            if (answersGrid.classList.contains('expanded')) {
+                answersGrid.classList.remove('expanded');
+                expandIcon.classList.remove('expanded');
+            } else {
+                answersGrid.classList.add('expanded');
+                expandIcon.classList.add('expanded');
+            }
+        }
+
+        function saveAnswer(person) {
+            const today = new Date().toDateString();
+            const inputId = person === 'kasey' ? 'kaseyAnswerInput' : 'charlieAnswerInput';
+            const answer = document.getElementById(inputId).value.trim();
+            
+            if (!answer) {
+                alert('Please write an answer before saving.');
+                return;
+            }
+            
+            // Get existing answers
+            const savedAnswers = JSON.parse(localStorage.getItem('dailyPromptAnswers') || '{}');
+            
+            // Check if it's a new day
+            if (savedAnswers.date !== today) {
+                // New day, clear old answers
+                savedAnswers.date = today;
+                savedAnswers.kasey = '';
+                savedAnswers.charlie = '';
+            }
+            
+            // Save the answer
+            savedAnswers[person] = answer;
+            localStorage.setItem('dailyPromptAnswers', JSON.stringify(savedAnswers));
+            
+            // Update the display
+            loadPromptAnswers();
+        }
+
         function loadPromptAnswers() {
             const today = new Date().toDateString();
             const savedAnswers = JSON.parse(localStorage.getItem('dailyPromptAnswers') || '{}');
             
-            if (savedAnswers.date === today) {
-                if (savedAnswers.kasey) {
-                    document.getElementById('kaseyAnswer').textContent = savedAnswers.kasey;
-                } else {
-                    document.getElementById('kaseyAnswer').innerHTML = '<span class="no-answer">Not answered yet</span>';
-                }
-                if (savedAnswers.charlie) {
-                    document.getElementById('charlieAnswer').textContent = savedAnswers.charlie;
-                } else {
-                    document.getElementById('charlieAnswer').innerHTML = '<span class="no-answer">Not answered yet</span>';
-                }
+            // If it's a new day, reset everything
+            if (savedAnswers.date !== today) {
+                localStorage.setItem('dailyPromptAnswers', JSON.stringify({ date: today, kasey: '', charlie: '' }));
+                // Show input forms
+                document.getElementById('kaseyAnswerContainer').style.display = 'block';
+                document.getElementById('kaseyAnswerDisplay').style.display = 'none';
+                document.getElementById('charlieAnswerContainer').style.display = 'block';
+                document.getElementById('charlieAnswerDisplay').style.display = 'none';
+                document.getElementById('kaseyAnswerInput').value = '';
+                document.getElementById('charlieAnswerInput').value = '';
             } else {
-                localStorage.setItem('dailyPromptAnswers', JSON.stringify({ date: today }));
-                document.getElementById('kaseyAnswer').innerHTML = '<span class="no-answer">Not answered yet</span>';
-                document.getElementById('charlieAnswer').innerHTML = '<span class="no-answer">Not answered yet</span>';
+                // Display saved answers or input forms
+                if (savedAnswers.kasey) {
+                    document.getElementById('kaseyAnswerDisplay').textContent = savedAnswers.kasey;
+                    document.getElementById('kaseyAnswerContainer').style.display = 'none';
+                    document.getElementById('kaseyAnswerDisplay').style.display = 'block';
+                } else {
+                    document.getElementById('kaseyAnswerContainer').style.display = 'block';
+                    document.getElementById('kaseyAnswerDisplay').style.display = 'none';
+                }
+                
+                if (savedAnswers.charlie) {
+                    document.getElementById('charlieAnswerDisplay').textContent = savedAnswers.charlie;
+                    document.getElementById('charlieAnswerContainer').style.display = 'none';
+                    document.getElementById('charlieAnswerDisplay').style.display = 'block';
+                } else {
+                    document.getElementById('charlieAnswerContainer').style.display = 'block';
+                    document.getElementById('charlieAnswerDisplay').style.display = 'none';
+                }
             }
         }
 
