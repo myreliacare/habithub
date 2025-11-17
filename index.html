@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Our Daily Habits Hub - Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@300;400;500;600;700&family=Work+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cormorant', Georgia, 'Times New Roman', serif;
+            background: #1a1a1a;
+            min-height: 100vh;
+            padding: 16px;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .home-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .home-title {
+            color: #b59197;
+            font-size: 2.5rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .home-subtitle {
+            color: #999;
+            font-size: 0.875rem;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .hub-nav-btn {
+            background: #2a2a2a;
+            border: 1px solid #b59197;
+            color: #b59197;
+            padding: 24px;
+            font-size: 1.25rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Cormorant', Georgia, 'Times New Roman', serif;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+
+        .hub-nav-btn:hover {
+            background: #b59197;
+            color: #2a2a2a;
+        }
+
+        .hub-nav-btn.charlie {
+            border-color: #7ba886;
+            color: #7ba886;
+            font-family: 'Work Sans', sans-serif;
+            font-weight: 700;
+        }
+
+        .hub-nav-btn.charlie:hover {
+            background: #7ba886;
+            color: #ffffff;
+        }
+
+        .section {
+            background: #2a2a2a;
+            border: 1px solid #b59197;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 0.75rem;
+            font-weight: 400;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #b59197;
+            margin-bottom: 20px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .calendar-nav button,
+        .view-toggle,
+        .add-event-btn,
+        .btn {
+            background: transparent;
+            border: 1px solid #444;
+            color: #999;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .calendar-nav button:hover,
+        .view-toggle:hover,
+        .add-event-btn:hover,
+        .btn:hover {
+            background: #b59197;
+            color: #2a2a2a;
+            border-color: #b59197;
+        }
+
+        .calendar-title {
+            color: #fff;
+            font-size: 1.125rem;
+            font-weight: 400;
+        }
+
+        #calendarContainer {
+            margin-bottom: 20px;
+        }
+
+        .week-day {
+            background: #3a3a3a;
+            padding: 16px;
+            margin-bottom: 8px;
+            border-left: 3px solid transparent;
+        }
+
+        .week-day.today {
+            border-left-color: #b59197;
+            background: rgba(181, 145, 151, 0.1);
+        }
+
+        .week-day-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .week-day-name {
+            font-size: 1rem;
+            color: #fff;
+        }
+
+        .week-day-date {
+            color: #999;
+        }
+
+        .event-item {
+            background: #2a2a2a;
+            padding: 10px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .event-title {
+            color: #fff;
+            font-size: 0.9rem;
+        }
+
+        .event-note {
+            color: #999;
+            font-size: 0.8rem;
+            margin-top: 4px;
+        }
+
+        .add-event-btn {
+            width: 100%;
+            margin-top: 12px;
+        }
+
+        .event-form {
+            display: none;
+            background: #1a1a1a;
+            padding: 20px;
+            margin-top: 15px;
+            border: 1px solid #333;
+        }
+
+        .event-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #999;
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 10px;
+            font-size: 0.9rem;
+            font-family: inherit;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .form-actions button[type="submit"] {
+            border-color: #b59197;
+            color: #b59197;
+        }
+
+        .form-actions button[type="submit"]:hover {
+            background: #b59197;
+            color: #2a2a2a;
+        }
+
+        .sticky-note {
+            background: #2a2a2a;
+            padding: 16px;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+            border-radius: 2px;
+            position: relative;
+            border: 1px solid #3a3a3a;
+        }
+
+        .sticky-note::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 20px;
+            width: 40px;
+            height: 20px;
+            background: rgba(123, 168, 134, 0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .sticky-note-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #7ba886;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .sticky-note-input {
+            display: flex;
+            gap: 6px;
+            margin-top: 12px;
+        }
+
+        .sticky-note-input input {
+            flex: 1;
+            background: #1a1a1a;
+            border: 1px solid #444;
+            padding: 8px;
+            font-size: 0.85rem;
+            font-family: inherit;
+            border-radius: 2px;
+            color: #e0e0e0;
+        }
+
+        .sticky-note-input input::placeholder {
+            color: #666;
+        }
+
+        .sticky-note-input button {
+            background: #7ba886;
+            color: #ffffff;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 1rem;
+            border-radius: 2px;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+
+        .sticky-note-input button:hover {
+            background: #8fb99a;
+        }
+
+        .sticky-item {
+            background: #1a1a1a;
+            padding: 8px 10px;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 2px;
+            border: 1px solid #333;
+        }
+
+        .sticky-item-text {
+            flex: 1;
+            color: #e0e0e0;
+            font-size: 0.85rem;
+            word-wrap: break-word;
+            cursor: pointer;
+        }
+
+        .sticky-item-text.completed {
+            text-decoration: line-through;
+            opacity: 0.5;
+            color: #999;
+        }
+
+        .sticky-item button {
+            background: transparent;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            padding: 4px 8px;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .sticky-item button:hover {
+            color: #7ba886;
+        }
+
+        .prompt-question {
+            background: #1a1a1a;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 3px solid #b59197;
+        }
+
+        .prompt-label {
+            font-size: 0.75rem;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .prompt-text {
+            color: #fff;
+            font-size: 1.125rem;
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        .answers-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .answer-box {
+            background: #1a1a1a;
+            padding: 20px;
+        }
+
+        .answer-person {
+            font-size: 0.75rem;
+            color: #b59197;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+
+        .answer-text {
+            color: #e0e0e0;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            white-space: pre-wrap;
+        }
+
+        .no-answer {
+            color: #666;
+            font-style: italic;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #666;
+            padding: 20px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: #1a1a1a;
+            margin-bottom: 16px;
+        }
+
+        .calendar-day-header {
+            background: #1a1a1a;
+            padding: 12px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #999;
+            text-transform: uppercase;
+        }
+
+        .calendar-day {
+            background: #3a3a3a;
+            padding: 12px;
+            min-height: 80px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .calendar-day:hover {
+            background: #4a4a4a;
+        }
+
+        .calendar-day.other-month {
+            opacity: 0.3;
+        }
+
+        .calendar-day.today {
+            background: rgba(181, 145, 151, 0.2);
+            border: 1px solid #b59197;
+        }
+
+        .day-number {
+            font-size: 0.875rem;
+            color: #e0e0e0;
+            margin-bottom: 4px;
+        }
+
+        .day-events {
+            font-size: 0.7rem;
+            color: #b59197;
+        }
+
+        @media (max-width: 768px) {
+            .answers-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .calendar-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 12px;
+            }
+
+            .home-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="home-header">
+            <h1 class="home-title">Our Habit Hub</h1>
+            <p class="home-subtitle">Growing Together, One Day at a Time</p>
+        </div>
+
+        <div class="nav-buttons">
+            <a href="kasey-hub.html" class="hub-nav-btn">Kasey's Habit Hub</a>
+            <a href="charlie-hub.html" class="hub-nav-btn charlie">Charlie's Habit Hub</a>
+        </div>
+
+        <!-- Shared Calendar -->
+        <div class="section">
+            <h2 class="section-title">Our Shared Calendar</h2>
+            
+            <div class="calendar-header">
+                <div class="calendar-nav">
+                    <button onclick="calendarPrevious()">←</button>
+                    <span class="calendar-title" id="calendarTitle"></span>
+                    <button onclick="calendarNext()">→</button>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <button class="view-toggle" onclick="calendarToggleView()">Month View</button>
+                </div>
+            </div>
+
+            <div id="calendarContainer"></div>
+
+            <button class="add-event-btn" onclick="calendarShowAddForm()">Add Event</button>
+
+            <div class="event-form" id="calendarEventForm">
+                <form onsubmit="calendarAddEvent(event)">
+                    <div class="form-group">
+                        <label>Event Title</label>
+                        <input type="text" id="calendarEventTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" id="calendarEventDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Time (optional)</label>
+                        <input type="time" id="calendarEventTime">
+                    </div>
+                    <div class="form-group">
+                        <label>Notes (optional)</label>
+                        <textarea id="calendarEventNote" rows="3"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn" onclick="calendarHideAddForm()">Cancel</button>
+                        <button type="submit" class="btn">Save Event</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Reminders & Grocery List -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px;">
+            <div class="sticky-note">
+                <h3 class="sticky-note-title">Reminders</h3>
+                <div id="remindersList"></div>
+                <div class="sticky-note-input">
+                    <input type="text" id="reminderInput" placeholder="Add reminder..." onkeypress="if(event.key==='Enter') addReminder()">
+                    <button onclick="addReminder()">+</button>
+                </div>
+            </div>
+
+            <div class="sticky-note">
+                <h3 class="sticky-note-title">Grocery List</h3>
+                <div id="groceryList"></div>
+                <div class="sticky-note-input">
+                    <input type="text" id="groceryInput" placeholder="Add item..." onkeypress="if(event.key==='Enter') addGrocery()">
+                    <button onclick="addGrocery()">+</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Daily Prompt Section -->
+        <div class="section">
+            <h2 class="section-title">Today's Prompt</h2>
+            
+            <div class="prompt-question">
+                <div class="prompt-label">Question of the Day</div>
+                <div class="prompt-text" id="promptQuestion"></div>
+            </div>
+
+            <div class="answers-grid">
+                <div class="answer-box">
+                    <div class="answer-person">Kasey's Answer</div>
+                    <div class="answer-text" id="kaseyAnswer">
+                        <span class="no-answer">Not answered yet</span>
+                    </div>
+                </div>
+                <div class="answer-box">
+                    <div class="answer-person">Charlie's Answer</div>
+                    <div class="answer-text" id="charlieAnswer">
+                        <span class="no-answer">Not answered yet</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const dailyPrompts = [
+            "What's one thing I did today that made you smile?",
+            "What's your favorite memory of us from this past month?",
+            "What's one way I can support you better this week?",
+            "What's something you're grateful for about our relationship?",
+            "What's a goal you have for us as a couple?",
+            "What's one thing you admire about me?",
+            "What's your favorite thing we do together?",
+            "What's something new you'd like to try together?",
+            "What's a challenge we've overcome together that you're proud of?",
+            "What makes you feel most loved by me?",
+            "What's something you've learned about yourself through our relationship?",
+            "What's a small gesture I do that means a lot to you?",
+            "What's your favorite quality about our relationship?",
+            "What's something you're excited about for our future?",
+            "What's one way we've grown together recently?",
+            "What's a tradition you'd like to start with us?",
+            "What's something I do that makes you laugh?",
+            "What's your favorite way to spend quality time together?",
+            "What's something you want to accomplish together this year?",
+            "What's one thing about our relationship that makes you feel secure?",
+            "What's a moment when you felt really connected to me?",
+            "What's something you appreciate about how we handle disagreements?",
+            "What's your favorite inside joke or moment between us?",
+            "What's one way our relationship has changed you for the better?",
+            "What's something you'd like more of in our relationship?",
+            "What's a compliment you wish you heard more often?",
+            "What's your favorite physical gesture of affection from me?",
+            "What's something I do that helps you feel understood?",
+            "What's a dream you have for us that we haven't talked about yet?",
+            "What's one thing that always brightens your day when I do it?"
+        ];
+
+        let calendarView = 'week';
+        let calendarDate = new Date();
+        let calendarEvents = [];
+        let reminders = [];
+        let groceries = [];
+
+        // CALENDAR FUNCTIONS
+        function calendarLoadEvents() {
+            const saved = localStorage.getItem('calendarEvents');
+            if (saved) {
+                calendarEvents = JSON.parse(saved);
+            }
+        }
+
+        function calendarSaveEvents() {
+            localStorage.setItem('calendarEvents', JSON.stringify(calendarEvents));
+        }
+
+        function calendarGetEventsForDate(date) {
+            const dateStr = date.toDateString();
+            return calendarEvents.filter(event => {
+                const eventDate = new Date(event.date);
+                return eventDate.toDateString() === dateStr;
+            });
+        }
+
+        function calendarToggleView() {
+            if (calendarView === 'week') {
+                calendarView = 'month';
+                document.querySelector('.view-toggle').textContent = 'Week View';
+            } else {
+                calendarView = 'week';
+                document.querySelector('.view-toggle').textContent = 'Month View';
+            }
+            calendarRender();
+        }
+
+        function calendarPrevious() {
+            if (calendarView === 'week') {
+                calendarDate.setDate(calendarDate.getDate() - 7);
+            } else {
+                calendarDate.setMonth(calendarDate.getMonth() - 1);
+            }
+            calendarRender();
+        }
+
+        function calendarNext() {
+            if (calendarView === 'week') {
+                calendarDate.setDate(calendarDate.getDate() + 7);
+            } else {
+                calendarDate.setMonth(calendarDate.getMonth() + 1);
+            }
+            calendarRender();
+        }
+
+        function calendarRenderWeek() {
+            const container = document.getElementById('calendarContainer');
+            container.innerHTML = '';
+            
+            const startOfWeek = new Date(calendarDate);
+            startOfWeek.setDate(calendarDate.getDate() - calendarDate.getDay());
+            
+            const endOfWeek = new Date(startOfWeek);
+            endOfWeek.setDate(startOfWeek.getDate() + 6);
+            
+            document.getElementById('calendarTitle').textContent = 
+                `${startOfWeek.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${endOfWeek.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+            
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(startOfWeek);
+                date.setDate(startOfWeek.getDate() + i);
+                
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'week-day';
+                
+                const today = new Date();
+                if (date.toDateString() === today.toDateString()) {
+                    dayDiv.classList.add('today');
+                }
+                
+                const dayEvents = calendarGetEventsForDate(date);
+                
+                let eventsHTML = '';
+                if (dayEvents.length > 0) {
+                    dayEvents.forEach((event, idx) => {
+                        const eventIndex = calendarEvents.indexOf(event);
+                        eventsHTML += `
+                            <div class="event-item">
+                                <div>
+                                    <div class="event-title">${event.time ? event.time + ' - ' : ''}${event.title}</div>
+                                    ${event.note ? `<div class="event-note">${event.note}</div>` : ''}
+                                </div>
+                                <button class="btn" onclick="calendarDeleteEvent(${eventIndex})" style="padding: 4px 8px; min-width: auto;">×</button>
+                            </div>
+                        `;
+                    });
+                } else {
+                    eventsHTML = '<div class="empty-state">No events</div>';
+                }
+                
+                dayDiv.innerHTML = `
+                    <div class="week-day-header">
+                        <span class="week-day-name">${date.toLocaleDateString('en-US', { weekday: 'long' })}</span>
+                        <span class="week-day-date">${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                    </div>
+                    <div>${eventsHTML}</div>
+                `;
+                
+                container.appendChild(dayDiv);
+            }
+        }
+
+        function calendarRenderMonth() {
+            const container = document.getElementById('calendarContainer');
+            container.innerHTML = '';
+            
+            const year = calendarDate.getFullYear();
+            const month = calendarDate.getMonth();
+            
+            document.getElementById('calendarTitle').textContent = 
+                calendarDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+            
+            const grid = document.createElement('div');
+            grid.className = 'calendar-grid';
+            
+            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            dayNames.forEach(day => {
+                const header = document.createElement('div');
+                header.className = 'calendar-day-header';
+                header.textContent = day;
+                grid.appendChild(header);
+            });
+            
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const startingDayOfWeek = firstDay.getDay();
+            
+            const prevMonthLastDay = new Date(year, month, 0).getDate();
+            for (let i = startingDayOfWeek - 1; i >= 0; i--) {
+                const day = prevMonthLastDay - i;
+                const date = new Date(year, month - 1, day);
+                grid.appendChild(calendarCreateMonthDay(date, true));
+            }
+            
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(year, month, day);
+                grid.appendChild(calendarCreateMonthDay(date, false));
+            }
+            
+            const totalCells = startingDayOfWeek + daysInMonth;
+            const remainingCells = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+            for (let day = 1; day <= remainingCells; day++) {
+                const date = new Date(year, month + 1, day);
+                grid.appendChild(calendarCreateMonthDay(date, true));
+            }
+            
+            container.appendChild(grid);
+        }
+
+        function calendarCreateMonthDay(date, otherMonth) {
+            const dayDiv = document.createElement('div');
+            dayDiv.className = 'calendar-day';
+            
+            if (otherMonth) {
+                dayDiv.classList.add('other-month');
+            }
+            
+            const today = new Date();
+            if (date.toDateString() === today.toDateString()) {
+                dayDiv.classList.add('today');
+            }
+            
+            const dayEvents = calendarGetEventsForDate(date);
+            
+            dayDiv.innerHTML = `
+                <div class="day-number">${date.getDate()}</div>
+                ${dayEvents.length > 0 ? `<div class="day-events">${dayEvents.length} event${dayEvents.length > 1 ? 's' : ''}</div>` : ''}
+            `;
+            
+            dayDiv.onclick = () => {
+                calendarDate = new Date(date);
+                calendarView = 'week';
+                document.querySelector('.view-toggle').textContent = 'Month View';
+                calendarRender();
+            };
+            
+            return dayDiv;
+        }
+
+        function calendarRender() {
+            if (calendarView === 'week') {
+                calendarRenderWeek();
+            } else {
+                calendarRenderMonth();
+            }
+        }
+
+        function calendarShowAddForm() {
+            const form = document.getElementById('calendarEventForm');
+            form.classList.add('active');
+            const today = new Date();
+            document.getElementById('calendarEventDate').value = today.toISOString().split('T')[0];
+        }
+
+        function calendarHideAddForm() {
+            const form = document.getElementById('calendarEventForm');
+            form.classList.remove('active');
+            document.getElementById('calendarEventTitle').value = '';
+            document.getElementById('calendarEventDate').value = '';
+            document.getElementById('calendarEventTime').value = '';
+            document.getElementById('calendarEventNote').value = '';
+        }
+
+        function calendarAddEvent(e) {
+            e.preventDefault();
+            const event = {
+                title: document.getElementById('calendarEventTitle').value,
+                date: document.getElementById('calendarEventDate').value,
+                time: document.getElementById('calendarEventTime').value || null,
+                note: document.getElementById('calendarEventNote').value || null
+            };
+            calendarEvents.push(event);
+            calendarSaveEvents();
+            calendarHideAddForm();
+            calendarRender();
+        }
+
+        function calendarDeleteEvent(index) {
+            if (confirm('Delete this event?')) {
+                calendarEvents.splice(index, 1);
+                calendarSaveEvents();
+                calendarRender();
+            }
+        }
+
+        function calendarInit() {
+            calendarLoadEvents();
+            calendarDate = new Date();
+            calendarView = 'week';
+            calendarRender();
+        }
+
+        // DAILY PROMPT FUNCTIONS
+        function setDailyPrompt() {
+            const today = new Date();
+            const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 86400000);
+            const promptIndex = dayOfYear % dailyPrompts.length;
+            document.getElementById('promptQuestion').textContent = dailyPrompts[promptIndex];
+        }
+
+        function loadPromptAnswers() {
+            const today = new Date().toDateString();
+            const savedAnswers = JSON.parse(localStorage.getItem('dailyPromptAnswers') || '{}');
+            
+            if (savedAnswers.date === today) {
+                if (savedAnswers.kasey) {
+                    document.getElementById('kaseyAnswer').textContent = savedAnswers.kasey;
+                } else {
+                    document.getElementById('kaseyAnswer').innerHTML = '<span class="no-answer">Not answered yet</span>';
+                }
+                if (savedAnswers.charlie) {
+                    document.getElementById('charlieAnswer').textContent = savedAnswers.charlie;
+                } else {
+                    document.getElementById('charlieAnswer').innerHTML = '<span class="no-answer">Not answered yet</span>';
+                }
+            } else {
+                localStorage.setItem('dailyPromptAnswers', JSON.stringify({ date: today }));
+                document.getElementById('kaseyAnswer').innerHTML = '<span class="no-answer">Not answered yet</span>';
+                document.getElementById('charlieAnswer').innerHTML = '<span class="no-answer">Not answered yet</span>';
+            }
+        }
+
+        // STICKY NOTES
+        function loadReminders() {
+            const saved = localStorage.getItem('reminders');
+            if (saved) {
+                reminders = JSON.parse(saved);
+            }
+            renderReminders();
+        }
+
+        function saveReminders() {
+            localStorage.setItem('reminders', JSON.stringify(reminders));
+        }
+
+        function addReminder() {
+            const input = document.getElementById('reminderInput');
+            const text = input.value.trim();
+            if (text) {
+                reminders.push({ text, completed: false });
+                saveReminders();
+                renderReminders();
+                input.value = '';
+            }
+        }
+
+        function toggleReminder(index) {
+            reminders[index].completed = !reminders[index].completed;
+            saveReminders();
+            renderReminders();
+        }
+
+        function deleteReminder(index) {
+            reminders.splice(index, 1);
+            saveReminders();
+            renderReminders();
+        }
+
+        function renderReminders() {
+            const list = document.getElementById('remindersList');
+            if (!list) return;
+            
+            if (reminders.length === 0) {
+                list.innerHTML = '<div class="empty-state" style="color: #666; font-size: 0.85rem; padding: 12px;">No reminders yet</div>';
+                return;
+            }
+
+            list.innerHTML = '';
+            reminders.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'sticky-item';
+                itemDiv.innerHTML = `
+                    <div class="sticky-item-text ${item.completed ? 'completed' : ''}" onclick="toggleReminder(${index})">${item.text}</div>
+                    <button onclick="deleteReminder(${index})">×</button>
+                `;
+                list.appendChild(itemDiv);
+            });
+        }
+
+        function loadGroceries() {
+            const saved = localStorage.getItem('groceries');
+            if (saved) {
+                groceries = JSON.parse(saved);
+            }
+            renderGroceries();
+        }
+
+        function saveGroceries() {
+            localStorage.setItem('groceries', JSON.stringify(groceries));
+        }
+
+        function addGrocery() {
+            const input = document.getElementById('groceryInput');
+            const text = input.value.trim();
+            if (text) {
+                groceries.push({ text, completed: false });
+                saveGroceries();
+                renderGroceries();
+                input.value = '';
+            }
+        }
+
+        function toggleGrocery(index) {
+            groceries[index].completed = !groceries[index].completed;
+            saveGroceries();
+            renderGroceries();
+        }
+
+        function deleteGrocery(index) {
+            groceries.splice(index, 1);
+            saveGroceries();
+            renderGroceries();
+        }
+
+        function renderGroceries() {
+            const list = document.getElementById('groceryList');
+            if (!list) return;
+            
+            if (groceries.length === 0) {
+                list.innerHTML = '<div class="empty-state" style="color: #666; font-size: 0.85rem; padding: 12px;">No items yet</div>';
+                return;
+            }
+
+            list.innerHTML = '';
+            groceries.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'sticky-item';
+                itemDiv.innerHTML = `
+                    <div class="sticky-item-text ${item.completed ? 'completed' : ''}" onclick="toggleGrocery(${index})">${item.text}</div>
+                    <button onclick="deleteGrocery(${index})">×</button>
+                `;
+                list.appendChild(itemDiv);
+            });
+        }
+
+        // Initialize
+        calendarInit();
+        loadReminders();
+        loadGroceries();
+        setDailyPrompt();
+        loadPromptAnswers();
+    </script>
+</body>
+</html>
