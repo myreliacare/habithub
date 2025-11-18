@@ -28,49 +28,6 @@
             margin: 0 auto;
         }
 
-        .sync-status {
-            position: fixed;
-            top: 16px;
-            right: 16px;
-            background: #2a2a2a;
-            border: 1px solid #444;
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            color: #999;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .sync-status.synced {
-            border-color: #7ba886;
-            color: #7ba886;
-        }
-
-        .sync-status.error {
-            border-color: #d67373;
-            color: #d67373;
-        }
-
-        .sync-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #999;
-        }
-
-        .sync-status.synced .sync-dot {
-            background: #7ba886;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
         .btn {
             background: transparent;
             border: 1px solid #444;
@@ -186,11 +143,11 @@
 
         .bingo-grid {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 2px;
             margin-bottom: 20px;
             background: #1a1a1a;
-            max-width: 100%;
+            max-width: 500px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -201,14 +158,14 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             cursor: pointer;
             transition: all 0.2s ease;
-            padding: 4px;
+            padding: 3px;
             background: #3a3a3a;
             color: #e0e0e0;
             position: relative;
-            line-height: 1.2;
+            line-height: 1.1;
         }
 
         .bingo-cell.completed {
@@ -216,15 +173,6 @@
             color: #ffffff;
         }
 
-        .bingo-cell.free-space {
-            background: #7ba886;
-            color: #ffffff;
-            font-weight: 700;
-            cursor: default;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            font-size: 0.65rem;
-        }
 
         .controls {
             display: flex;
@@ -597,11 +545,15 @@
 
             .bingo-grid {
                 max-width: 100%;
+                gap: 2px;
             }
 
             .bingo-cell {
-                font-size: 0.55rem;
-                padding: 3px;
+                aspect-ratio: auto;
+                min-height: 80px;
+                font-size: 0.7rem;
+                padding: 6px 3px;
+                line-height: 1.2;
             }
 
             .controls {
@@ -611,13 +563,6 @@
             .controls .btn {
                 width: 100%;
                 min-width: unset;
-            }
-
-            .sync-status {
-                top: 8px;
-                right: 8px;
-                font-size: 0.7rem;
-                padding: 6px 10px;
             }
         }
 
@@ -634,23 +579,44 @@
                 font-size: 1.5rem;
             }
 
-            .bingo-cell {
-                font-size: 0.5rem;
-                padding: 2px;
+            .bingo-grid {
+                gap: 2px;
+                margin-bottom: 12px;
             }
 
-            .bingo-cell.free-space {
-                font-size: 0.5rem;
+            .bingo-cell {
+                aspect-ratio: auto;
+                min-height: 70px;
+                font-size: 0.68rem;
+                padding: 5px 2px;
+                line-height: 1.2;
+            }
+
+            .controls {
+                gap: 8px;
+            }
+
+            .controls .btn {
+                padding: 8px 12px;
+                font-size: 0.75rem;
+            }
+
+            .stats {
+                padding: 12px;
+                gap: 12px;
+            }
+
+            .stats-item {
+                font-size: 0.75rem;
+            }
+
+            .stats-item span {
+                font-size: 1.2rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="sync-status" id="syncStatus">
-        <span class="sync-dot"></span>
-        <span id="syncText">Connecting...</span>
-    </div>
-
     <div class="container">
         <a href="index.html" class="btn" style="margin-bottom: 24px;">← Back to Home</a>
         
@@ -665,8 +631,8 @@
         <div id="bingo-tab" class="hub-tab active">
             <div class="bingo-section">
                 <h1>The Ultimate</h1>
-                <div class="main-title">DAILY HABITS<br>BINGO</div>
-                <p class="subtitle">Click squares to mark complete • Get 5 in a row to win</p>
+                <div class="main-title" style="margin-top: 20px;">DAILY HABITS<br>BINGO</div>
+                <p class="subtitle">Click squares to mark complete • Get 4 in a row to win</p>
                 <div class="date-display" id="dateDisplay"></div>
                 
                 <div class="bingo-grid" id="bingoGrid"></div>
@@ -883,7 +849,7 @@
 
     <div class="celebration" id="celebration">
         <h2>BINGO!</h2>
-        <p>Amazing work! You got 5 in a row!</p>
+        <p>Amazing work! You got 4 in a row!</p>
         <button class="btn" onclick="closeCelebration()">Continue</button>
     </div>
 
@@ -907,50 +873,27 @@
         window.db = db;
         window.firestoreImports = { collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot };
 
-        function updateSyncStatus(status, message) {
-            const statusEl = document.getElementById('syncStatus');
-            const textEl = document.getElementById('syncText');
-            
-            statusEl.className = 'sync-status';
-            if (status === 'synced') {
-                statusEl.classList.add('synced');
-            } else if (status === 'error') {
-                statusEl.classList.add('error');
-            }
-            
-            textEl.textContent = message;
-        }
-
-        updateSyncStatus('synced', 'Synced');
         console.log('Firebase initialized successfully!');
     </script>
 
     <script>
         const charlieHabits = [
-            "Drink 8 glasses of water",
-            "Exercise 30+ minutes",
-            "Eat a healthy meal",
-            "Read 10+ pages",
+            "Exercise 30+ Minutes",
+            "Eat a Healthy Meal",
+            "Read 10+ Pages",
             "Meditate",
-            "Sleep 7+ hours",
+            "Sleep 7+ Hours",
             "Journal",
-            "Walk 10k steps",
-            "Healthy breakfast",
-            "No phone 1hr before bed",
-            "Complete to-do list",
-            "Vibration plate",
-            "Learn something new",
-            "Practice gratitude",
-            "Morning routine",
-            "Evening routine",
-            "Connect with friend",
-            "Acupuncture mat",
-            "Tidy living space",
-            "30 mins of guitar",
-            "No sugary drinks",
-            "EFT tapping",
-            "Time in nature",
-            "Acts of kindness"
+            "Walk 10k Steps",
+            "Vibration Plate",
+            "Learn Something New",
+            "Practice Gratitude",
+            "Acupuncture Mat",
+            "Tidy Living Space",
+            "30 Mins of Guitar",
+            "EFT Tapping",
+            "Time in Nature",
+            "Acts of Kindness"
         ];
 
         const dailyPrompts = [
@@ -1082,23 +1025,34 @@
         async function initBoard() {
             const today = new Date().toDateString();
             const savedDate = localStorage.getItem('bingoDate_charlie');
+            const boardVersion = localStorage.getItem('bingoVersion_charlie');
             
-            if (savedDate !== today) {
+            // Force reset if switching from 5x5 to 4x4
+            if (boardVersion !== '4x4') {
+                localStorage.removeItem('bingoState_charlie');
+                localStorage.setItem('bingoVersion_charlie', '4x4');
+                localStorage.setItem('bingoDate_charlie', today);
+                await shuffleBoard();
+            } else if (savedDate !== today) {
                 localStorage.removeItem('bingoState_charlie');
                 localStorage.setItem('bingoDate_charlie', today);
                 await shuffleBoard();
             } else {
                 const firebaseData = await loadFromFirebase('bingoState_charlie');
-                if (firebaseData) {
+                if (firebaseData && firebaseData.habits && firebaseData.habits.length === 16) {
                     currentHabits = firebaseData.habits;
                     boardState = firebaseData.state;
                 } else {
                     const saved = localStorage.getItem('bingoState_charlie');
                     if (saved) {
                         const data = JSON.parse(saved);
-                        currentHabits = data.habits;
-                        boardState = data.state;
-                        await syncToFirebase('bingoState_charlie', data);
+                        if (data.habits && data.habits.length === 16) {
+                            currentHabits = data.habits;
+                            boardState = data.state;
+                            await syncToFirebase('bingoState_charlie', data);
+                        } else {
+                            await shuffleBoard();
+                        }
                     } else {
                         await shuffleBoard();
                     }
@@ -1110,10 +1064,12 @@
             updateStats();
             
             setupFirebaseListener('bingoState_charlie', (data) => {
-                currentHabits = data.habits;
-                boardState = data.state;
-                renderBoard();
-                updateStats();
+                if (data.habits && data.habits.length === 16) {
+                    currentHabits = data.habits;
+                    boardState = data.state;
+                    renderBoard();
+                    updateStats();
+                }
             });
         }
 
@@ -1123,10 +1079,26 @@
         }
 
         async function shuffleBoard() {
-            const shuffled = [...charlieHabits].sort(() => Math.random() - 0.5).slice(0, 24);
-            currentHabits = [...shuffled.slice(0, 12), "FREE SPACE", ...shuffled.slice(12)];
-            boardState = new Array(25).fill(false);
-            boardState[12] = true;
+            // Save which habits are currently completed
+            const completedHabits = new Set();
+            currentHabits.forEach((habit, index) => {
+                if (boardState[index]) {
+                    completedHabits.add(habit);
+                }
+            });
+
+            // Shuffle and get new habits
+            const shuffled = [...charlieHabits].sort(() => Math.random() - 0.5).slice(0, 16);
+            currentHabits = shuffled;
+            
+            // Restore completed state for habits that are still on the board
+            boardState = new Array(16).fill(false);
+            currentHabits.forEach((habit, index) => {
+                if (completedHabits.has(habit)) {
+                    boardState[index] = true;
+                }
+            });
+
             await saveState();
             renderBoard();
             updateStats();
@@ -1141,19 +1113,14 @@
                 cell.className = 'bingo-cell';
                 cell.textContent = habit;
                 
-                if (index === 12) {
-                    cell.classList.add('free-space');
-                } else {
-                    if (boardState[index]) cell.classList.add('completed');
-                    cell.onclick = () => toggleCell(index);
-                }
+                if (boardState[index]) cell.classList.add('completed');
+                cell.onclick = () => toggleCell(index);
                 
                 grid.appendChild(cell);
             });
         }
 
         async function toggleCell(index) {
-            if (index === 12) return;
             boardState[index] = !boardState[index];
             await saveState();
             renderBoard();
@@ -1162,8 +1129,7 @@
         }
 
         async function resetBoard() {
-            boardState = new Array(25).fill(false);
-            boardState[12] = true;
+            boardState = new Array(16).fill(false);
             await saveState();
             renderBoard();
             updateStats();
@@ -1179,21 +1145,24 @@
         }
 
         function updateStats() {
-            const completed = boardState.filter(Boolean).length - 1;
+            const completed = boardState.filter(Boolean).length;
             document.getElementById('completedCount').textContent = completed;
             document.getElementById('bingoCount').textContent = countBingos();
         }
 
         function countBingos() {
             let count = 0;
-            for (let i = 0; i < 5; i++) {
-                if (boardState.slice(i * 5, i * 5 + 5).every(Boolean)) count++;
+            // Check rows (4 rows)
+            for (let i = 0; i < 4; i++) {
+                if (boardState.slice(i * 4, i * 4 + 4).every(Boolean)) count++;
             }
-            for (let i = 0; i < 5; i++) {
-                if ([0, 1, 2, 3, 4].every(j => boardState[i + j * 5])) count++;
+            // Check columns (4 columns)
+            for (let i = 0; i < 4; i++) {
+                if ([0, 1, 2, 3].every(j => boardState[i + j * 4])) count++;
             }
-            if ([0, 6, 12, 18, 24].every(i => boardState[i])) count++;
-            if ([4, 8, 12, 16, 20].every(i => boardState[i])) count++;
+            // Check diagonals
+            if ([0, 5, 10, 15].every(i => boardState[i])) count++; // Top-left to bottom-right
+            if ([3, 6, 9, 12].every(i => boardState[i])) count++; // Top-right to bottom-left
             return count;
         }
 
