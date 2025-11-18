@@ -341,6 +341,77 @@
             color: #2a2a2a;
         }
 
+        .day-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .day-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            background: #1a1a1a;
+            border: 1px solid #444;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .day-checkbox:hover {
+            background: #2a2a2a;
+            border-color: #b59197;
+        }
+
+        .day-checkbox input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: #b59197;
+        }
+
+        .day-checkbox label {
+            cursor: pointer;
+            margin: 0;
+            font-size: 0.85rem;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
+        .repeat-mode {
+            display: none;
+        }
+
+        .repeat-mode.active {
+            display: block;
+        }
+
+        .date-tag {
+            background: #b59197;
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .date-tag button {
+            background: transparent;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .date-tag button:hover {
+            opacity: 0.7;
+        }
+
         .sticky-note {
             background: #2a2a2a;
             padding: 16px;
@@ -910,8 +981,29 @@
                         <input type="text" id="calendarEventTitle" required>
                     </div>
                     <div class="form-group">
-                        <label>Date</label>
+                        <label>Date(s)</label>
+                        <select id="calendarRepeatMode" onchange="toggleRepeatOptions()">
+                            <option value="single">Single date</option>
+                            <option value="multiple">Multiple specific dates</option>
+                            <option value="range">Date range (consecutive days)</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="singleDateMode">
                         <input type="date" id="calendarEventDate" required>
+                    </div>
+                    <div class="form-group repeat-mode" id="multipleDateMode">
+                        <label>Select dates (click + to add each date):</label>
+                        <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                            <input type="date" id="multipleDateInput" style="flex: 1;">
+                            <button type="button" class="btn" onclick="addSelectedDate()" style="padding: 8px 16px;">+</button>
+                        </div>
+                        <div id="selectedDatesList" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
+                    </div>
+                    <div class="form-group repeat-mode" id="rangeMode">
+                        <label>Start Date</label>
+                        <input type="date" id="calendarRangeStartDate">
+                        <label style="margin-top: 8px;">End Date</label>
+                        <input type="date" id="calendarEventEndDate">
                     </div>
                     <div class="form-group">
                         <label>Time (optional)</label>
@@ -1122,6 +1214,7 @@
         let calendarEvents = [];
         let reminders = [];
         let groceries = [];
+        let selectedDates = [];
 
         // FIREBASE FUNCTIONS
         async function syncToFirebase(collectionName, data) {
@@ -1486,36 +1579,155 @@
             document.getElementById('calendarEventDate').value = today.toISOString().split('T')[0];
         }
 
+        function toggleRepeatOptions() {
+            const repeatMode = document.getElementById('calendarRepeatMode').value;
+            const singleDateMode = document.getElementById('singleDateMode');
+            const multipleDateMode = document.getElementById('multipleDateMode');
+            const rangeMode = document.getElementById('rangeMode');
+            
+            // Hide all modes first
+            singleDateMode.style.display = 'none';
+            multipleDateMode.classList.remove('active');
+            rangeMode.classList.remove('active');
+            
+            // Show the selected mode
+            if (repeatMode === 'single') {
+                singleDateMode.style.display = 'block';
+            } else if (repeatMode === 'multiple') {
+                multipleDateMode.classList.add('active');
+            } else if (repeatMode === 'range') {
+                rangeMode.classList.add('active');
+            }
+        }
+
+        function addSelectedDate() {
+            const dateInput = document.getElementById('multipleDateInput');
+            const date = dateInput.value;
+            
+            if (!date) {
+                alert('Please select a date first.');
+                return;
+            }
+            
+            if (selectedDates.includes(date)) {
+                alert('This date is already added.');
+                return;
+            }
+            
+            selectedDates.push(date);
+            selectedDates.sort();
+            renderSelectedDates();
+            dateInput.value = '';
+        }
+
+        function removeSelectedDate(date) {
+            selectedDates = selectedDates.filter(d => d !== date);
+            renderSelectedDates();
+        }
+
+        function renderSelectedDates() {
+            const container = document.getElementById('selectedDatesList');
+            if (selectedDates.length === 0) {
+                container.innerHTML = '<div style="color: #666; font-size: 0.85rem;">No dates selected yet</div>';
+                return;
+            }
+            
+            container.innerHTML = selectedDates.map(date => {
+                const dateObj = new Date(date + 'T00:00:00');
+                const formatted = dateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+                return `<div class="date-tag">${formatted}<button onclick="removeSelectedDate('${date}')">×</button></div>`;
+            }).join('');
+        }
+
         function calendarHideAddForm() {
             const form = document.getElementById('calendarEventForm');
             form.classList.remove('active');
             document.getElementById('calendarEventTitle').value = '';
             document.getElementById('calendarEventDate').value = '';
+            document.getElementById('calendarRangeStartDate').value = '';
+            document.getElementById('calendarEventEndDate').value = '';
             document.getElementById('calendarEventTime').value = '';
             document.getElementById('calendarEventNote').value = '';
+            document.getElementById('calendarRepeatMode').value = 'single';
+            document.getElementById('multipleDateInput').value = '';
+            
+            selectedDates = [];
+            renderSelectedDates();
+            toggleRepeatOptions();
         }
 
         async function calendarAddEvent(e) {
             e.preventDefault();
             
             const title = document.getElementById('calendarEventTitle').value;
-            const date = document.getElementById('calendarEventDate').value;
+            const repeatMode = document.getElementById('calendarRepeatMode').value;
             const time = document.getElementById('calendarEventTime').value;
             const note = document.getElementById('calendarEventNote').value;
             
-            if (!title || !date) {
-                alert('Please fill in the event title and date.');
+            if (!title) {
+                alert('Please fill in the event title.');
                 return;
             }
             
-            const event = {
-                title: title,
-                date: date,
-                time: time || null,
-                note: note || null
-            };
+            const datesToAdd = [];
             
-            calendarEvents.push(event);
+            if (repeatMode === 'single') {
+                // Single date
+                const date = document.getElementById('calendarEventDate').value;
+                if (!date) {
+                    alert('Please select a date.');
+                    return;
+                }
+                datesToAdd.push(date);
+            } else if (repeatMode === 'multiple') {
+                // Multiple specific dates
+                if (selectedDates.length === 0) {
+                    alert('Please add at least one date.');
+                    return;
+                }
+                datesToAdd.push(...selectedDates);
+            } else if (repeatMode === 'range') {
+                // Consecutive date range
+                const startDate = document.getElementById('calendarRangeStartDate').value;
+                const endDate = document.getElementById('calendarEventEndDate').value;
+                
+                if (!startDate || !endDate) {
+                    alert('Please select both start and end dates.');
+                    return;
+                }
+                
+                if (endDate < startDate) {
+                    alert('End date must be after start date.');
+                    return;
+                }
+                
+                const start = new Date(startDate);
+                const end = new Date(endDate);
+                const currentDate = new Date(start);
+                
+                while (currentDate <= end) {
+                    datesToAdd.push(currentDate.toISOString().split('T')[0]);
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+            }
+            
+            // Create event for each date
+            const isMultiDay = datesToAdd.length > 1;
+            const eventGroup = isMultiDay ? Date.now().toString() : null;
+            
+            datesToAdd.forEach(date => {
+                const event = {
+                    title: title,
+                    date: date,
+                    time: time || null,
+                    note: note || null,
+                    isMultiDay: isMultiDay,
+                    eventGroup: eventGroup,
+                    repeatMode: repeatMode
+                };
+                calendarEvents.push(event);
+            });
+            
             await calendarSaveEvents();
             calendarHideAddForm();
             calendarRender();
@@ -1526,10 +1738,26 @@
             
             const event = calendarEvents[index];
             const eventTitle = event.title;
-            if (confirm(`Are you sure you want to delete "${eventTitle}"?\n\nThis cannot be undone.`)) {
-                calendarEvents.splice(index, 1);
-                await calendarSaveEvents();
-                calendarRender();
+            
+            // Check if this is part of a multi-day event
+            if (event.isMultiDay && event.eventGroup) {
+                const groupEvents = calendarEvents.filter(e => e.eventGroup === event.eventGroup);
+                const dateList = groupEvents.map(e => {
+                    const d = new Date(e.date + 'T00:00:00');
+                    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                }).join(', ');
+                
+                if (confirm(`This event appears on multiple dates (${dateList}). Delete "${eventTitle}" from all dates?\n\nThis cannot be undone.`)) {
+                    calendarEvents = calendarEvents.filter(e => e.eventGroup !== event.eventGroup);
+                    await calendarSaveEvents();
+                    calendarRender();
+                }
+            } else {
+                if (confirm(`Are you sure you want to delete "${eventTitle}"?\n\nThis cannot be undone.`)) {
+                    calendarEvents.splice(index, 1);
+                    await calendarSaveEvents();
+                    calendarRender();
+                }
             }
         }
 
