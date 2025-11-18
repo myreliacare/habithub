@@ -39,6 +39,49 @@
             margin: 0 auto;
         }
 
+        .sync-status {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            color: #999;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sync-status.synced {
+            border-color: #7ba886;
+            color: #7ba886;
+        }
+
+        .sync-status.error {
+            border-color: #d67373;
+            color: #d67373;
+        }
+
+        .sync-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #999;
+        }
+
+        .sync-status.synced .sync-dot {
+            background: #7ba886;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
         .home-header {
             text-align: center;
             margin-bottom: 32px;
@@ -636,6 +679,13 @@
             .sticky-notes-grid {
                 grid-template-columns: 1fr !important;
             }
+
+            .sync-status {
+                top: 8px;
+                right: 8px;
+                font-size: 0.7rem;
+                padding: 6px 10px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -650,6 +700,11 @@
     </style>
 </head>
 <body>
+    <div class="sync-status" id="syncStatus">
+        <span class="sync-dot"></span>
+        <span id="syncText">Connecting...</span>
+    </div>
+
     <div class="container">
         <div class="home-header">
             <h1 class="home-title">Our Habit Hub</h1>
@@ -782,6 +837,50 @@
         </div>
     </div>
 
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCDda9sPwSY-RQ5rrM5THOvcLtHvcPRYd4",
+            authDomain: "our-habit-hub.firebaseapp.com",
+            projectId: "our-habit-hub",
+            storageBucket: "our-habit-hub.firebasestorage.app",
+            messagingSenderId: "78555830496",
+            appId: "1:78555830496:web:3e457e54729cc11b825885"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Make Firebase available globally
+        window.db = db;
+        window.firestoreImports = { collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot };
+
+        // Update sync status
+        function updateSyncStatus(status, message) {
+            const statusEl = document.getElementById('syncStatus');
+            const textEl = document.getElementById('syncText');
+            
+            statusEl.className = 'sync-status';
+            if (status === 'synced') {
+                statusEl.classList.add('synced');
+            } else if (status === 'error') {
+                statusEl.classList.add('error');
+            }
+            
+            textEl.textContent = message;
+        }
+
+        // Initialize sync status
+        updateSyncStatus('synced', 'Synced');
+
+        console.log('Firebase initialized successfully!');
+    </script>
+
     <script>
         const dailyPrompts = [
             "What's one thing I did today that made you smile?",
@@ -837,25 +936,68 @@
         let reminders = [];
         let groceries = [];
 
-        // CALENDAR FUNCTIONS
-        function calendarLoadEvents() {
+        // FIREBASE FUNCTIONS
+        async function syncToFirebase(collectionName, data) {
+            if (!window.db) return;
             try {
-                const saved = localStorage.getItem('calendarEvents');
-                if (saved) {
-                    calendarEvents = JSON.parse(saved);
-                }
-            } catch (e) {
-                console.error('Error loading events:', e);
-                calendarEvents = [];
+                const { setDoc, doc } = window.firestoreImports;
+                await setDoc(doc(window.db, collectionName, 'data'), { items: data });
+                console.log(`${collectionName} synced to Firebase`);
+            } catch (error) {
+                console.error(`Error syncing ${collectionName}:`, error);
             }
         }
 
-        function calendarSaveEvents() {
+        async function loadFromFirebase(collectionName) {
+            if (!window.db) return null;
             try {
-                localStorage.setItem('calendarEvents', JSON.stringify(calendarEvents));
-            } catch (e) {
-                console.error('Error saving events:', e);
+                const { getDoc, doc } = window.firestoreImports;
+                const docRef = doc(window.db, collectionName, 'data');
+                const docSnap = await getDoc(docRef);
+                
+                if (docSnap.exists()) {
+                    return docSnap.data().items;
+                }
+                return null;
+            } catch (error) {
+                console.error(`Error loading ${collectionName}:`, error);
+                return null;
             }
+        }
+
+        function setupFirebaseListener(collectionName, callback) {
+            if (!window.db) return;
+            try {
+                const { onSnapshot, doc } = window.firestoreImports;
+                const docRef = doc(window.db, collectionName, 'data');
+                
+                onSnapshot(docRef, (doc) => {
+                    if (doc.exists()) {
+                        callback(doc.data().items);
+                    }
+                });
+            } catch (error) {
+                console.error(`Error setting up listener for ${collectionName}:`, error);
+            }
+        }
+
+        // CALENDAR FUNCTIONS
+        async function calendarLoadEvents() {
+            const firebaseData = await loadFromFirebase('calendarEvents');
+            if (firebaseData) {
+                calendarEvents = firebaseData;
+            } else {
+                const saved = localStorage.getItem('calendarEvents');
+                if (saved) {
+                    calendarEvents = JSON.parse(saved);
+                    await syncToFirebase('calendarEvents', calendarEvents);
+                }
+            }
+        }
+
+        async function calendarSaveEvents() {
+            localStorage.setItem('calendarEvents', JSON.stringify(calendarEvents));
+            await syncToFirebase('calendarEvents', calendarEvents);
         }
 
         function calendarGetEventsForDate(date) {
@@ -1138,7 +1280,7 @@
             document.getElementById('calendarEventNote').value = '';
         }
 
-        function calendarAddEvent(e) {
+        async function calendarAddEvent(e) {
             e.preventDefault();
             
             const title = document.getElementById('calendarEventTitle').value;
@@ -1159,28 +1301,34 @@
             };
             
             calendarEvents.push(event);
-            calendarSaveEvents();
+            await calendarSaveEvents();
             calendarHideAddForm();
             calendarRender();
         }
 
-        function calendarDeleteEvent(index) {
+        async function calendarDeleteEvent(index) {
             if (index < 0 || index >= calendarEvents.length) return;
             
             const event = calendarEvents[index];
             const eventTitle = event.title;
             if (confirm(`Are you sure you want to delete "${eventTitle}"?\n\nThis cannot be undone.`)) {
                 calendarEvents.splice(index, 1);
-                calendarSaveEvents();
+                await calendarSaveEvents();
                 calendarRender();
             }
         }
 
-        function calendarInit() {
-            calendarLoadEvents();
+        async function calendarInit() {
+            await calendarLoadEvents();
             calendarDate = new Date();
             calendarView = 'twoday';
             calendarRender();
+            
+            // Setup real-time listener
+            setupFirebaseListener('calendarEvents', (data) => {
+                calendarEvents = data;
+                calendarRender();
+            });
         }
 
         // DAILY PROMPT FUNCTIONS
@@ -1204,7 +1352,7 @@
             }
         }
 
-        function saveAnswer(person) {
+        async function saveAnswer(person) {
             const today = new Date().toDateString();
             const inputId = person === 'kasey' ? 'kaseyAnswerInput' : 'charlieAnswerInput';
             const answer = document.getElementById(inputId).value.trim();
@@ -1214,7 +1362,7 @@
                 return;
             }
             
-            const savedAnswers = JSON.parse(localStorage.getItem('dailyPromptAnswers') || '{}');
+            const savedAnswers = await loadFromFirebase('dailyPromptAnswers') || { date: today, kasey: '', charlie: '' };
             
             if (savedAnswers.date !== today) {
                 savedAnswers.date = today;
@@ -1224,16 +1372,20 @@
             
             savedAnswers[person] = answer;
             localStorage.setItem('dailyPromptAnswers', JSON.stringify(savedAnswers));
+            await syncToFirebase('dailyPromptAnswers', savedAnswers);
             
             loadPromptAnswers();
         }
 
-        function loadPromptAnswers() {
+        async function loadPromptAnswers() {
             const today = new Date().toDateString();
-            const savedAnswers = JSON.parse(localStorage.getItem('dailyPromptAnswers') || '{}');
+            const savedAnswers = await loadFromFirebase('dailyPromptAnswers') || { date: today, kasey: '', charlie: '' };
             
             if (savedAnswers.date !== today) {
-                localStorage.setItem('dailyPromptAnswers', JSON.stringify({ date: today, kasey: '', charlie: '' }));
+                const newAnswers = { date: today, kasey: '', charlie: '' };
+                localStorage.setItem('dailyPromptAnswers', JSON.stringify(newAnswers));
+                await syncToFirebase('dailyPromptAnswers', newAnswers);
+                
                 document.getElementById('kaseyAnswerContainer').style.display = 'block';
                 document.getElementById('kaseyAnswerDisplay').style.display = 'none';
                 document.getElementById('charlieAnswerContainer').style.display = 'block';
@@ -1262,50 +1414,48 @@
         }
 
         // STICKY NOTES
-        function loadReminders() {
-            try {
+        async function loadReminders() {
+            const firebaseData = await loadFromFirebase('reminders');
+            if (firebaseData) {
+                reminders = firebaseData;
+            } else {
                 const saved = localStorage.getItem('reminders');
                 if (saved) {
                     reminders = JSON.parse(saved);
+                    await syncToFirebase('reminders', reminders);
                 }
-            } catch (e) {
-                console.error('Error loading reminders:', e);
-                reminders = [];
             }
             renderReminders();
         }
 
-        function saveReminders() {
-            try {
-                localStorage.setItem('reminders', JSON.stringify(reminders));
-            } catch (e) {
-                console.error('Error saving reminders:', e);
-            }
+        async function saveReminders() {
+            localStorage.setItem('reminders', JSON.stringify(reminders));
+            await syncToFirebase('reminders', reminders);
         }
 
-        function addReminder() {
+        async function addReminder() {
             const input = document.getElementById('reminderInput');
             const text = input.value.trim();
             if (text) {
                 reminders.push({ text, completed: false });
-                saveReminders();
+                await saveReminders();
                 renderReminders();
                 input.value = '';
             }
         }
 
-        function toggleReminder(index) {
+        async function toggleReminder(index) {
             if (index >= 0 && index < reminders.length) {
                 reminders[index].completed = !reminders[index].completed;
-                saveReminders();
+                await saveReminders();
                 renderReminders();
             }
         }
 
-        function deleteReminder(index) {
+        async function deleteReminder(index) {
             if (index >= 0 && index < reminders.length) {
                 reminders.splice(index, 1);
-                saveReminders();
+                await saveReminders();
                 renderReminders();
             }
         }
@@ -1331,50 +1481,48 @@
             });
         }
 
-        function loadGroceries() {
-            try {
+        async function loadGroceries() {
+            const firebaseData = await loadFromFirebase('groceries');
+            if (firebaseData) {
+                groceries = firebaseData;
+            } else {
                 const saved = localStorage.getItem('groceries');
                 if (saved) {
                     groceries = JSON.parse(saved);
+                    await syncToFirebase('groceries', groceries);
                 }
-            } catch (e) {
-                console.error('Error loading groceries:', e);
-                groceries = [];
             }
             renderGroceries();
         }
 
-        function saveGroceries() {
-            try {
-                localStorage.setItem('groceries', JSON.stringify(groceries));
-            } catch (e) {
-                console.error('Error saving groceries:', e);
-            }
+        async function saveGroceries() {
+            localStorage.setItem('groceries', JSON.stringify(groceries));
+            await syncToFirebase('groceries', groceries);
         }
 
-        function addGrocery() {
+        async function addGrocery() {
             const input = document.getElementById('groceryInput');
             const text = input.value.trim();
             if (text) {
                 groceries.push({ text, completed: false });
-                saveGroceries();
+                await saveGroceries();
                 renderGroceries();
                 input.value = '';
             }
         }
 
-        function toggleGrocery(index) {
+        async function toggleGrocery(index) {
             if (index >= 0 && index < groceries.length) {
                 groceries[index].completed = !groceries[index].completed;
-                saveGroceries();
+                await saveGroceries();
                 renderGroceries();
             }
         }
 
-        function deleteGrocery(index) {
+        async function deleteGrocery(index) {
             if (index >= 0 && index < groceries.length) {
                 groceries.splice(index, 1);
-                saveGroceries();
+                await saveGroceries();
                 renderGroceries();
             }
         }
@@ -1401,25 +1549,26 @@
         }
 
         // MONTHLY CHALLENGE FUNCTIONS
-        function setMonthlyChallenge() {
+        async function setMonthlyChallenge() {
             const today = new Date();
-            const currentMonth = today.getMonth();
+            const currentMonth = today.getMonth(); // 0-11 (0=Jan, 10=Nov)
             const currentYear = today.getFullYear();
             const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
                               'July', 'August', 'September', 'October', 'November', 'December'];
             
             document.getElementById('challengeMonth').textContent = `${monthNames[currentMonth]} ${currentYear}`;
             
-            const challengeIndex = currentMonth % monthlyChallenges.length;
+            // Use current month index directly (Nov = 10, which maps to index 10)
+            const challengeIndex = currentMonth;
             document.getElementById('challengeText').textContent = monthlyChallenges[challengeIndex];
             
-            loadChallengeStatus();
+            await loadChallengeStatus();
         }
 
-        function loadChallengeStatus() {
+        async function loadChallengeStatus() {
             const today = new Date();
             const currentMonth = `${today.getFullYear()}-${today.getMonth()}`;
-            const savedChallenge = JSON.parse(localStorage.getItem('monthlyChallenge') || '{}');
+            const savedChallenge = await loadFromFirebase('monthlyChallenge') || { month: currentMonth, completed: false };
             
             if (savedChallenge.month === currentMonth && savedChallenge.completed) {
                 document.getElementById('challengeComplete').checked = true;
@@ -1428,23 +1577,25 @@
                 document.getElementById('challengeComplete').checked = false;
                 document.getElementById('challengeStatus').textContent = 'Not completed';
                 if (savedChallenge.month !== currentMonth) {
-                    localStorage.setItem('monthlyChallenge', JSON.stringify({ 
-                        month: currentMonth, 
-                        completed: false 
-                    }));
+                    const newChallenge = { month: currentMonth, completed: false };
+                    localStorage.setItem('monthlyChallenge', JSON.stringify(newChallenge));
+                    await syncToFirebase('monthlyChallenge', newChallenge);
                 }
             }
         }
 
-        function toggleChallenge() {
+        async function toggleChallenge() {
             const isCompleted = document.getElementById('challengeComplete').checked;
             const today = new Date();
             const currentMonth = `${today.getFullYear()}-${today.getMonth()}`;
             
-            localStorage.setItem('monthlyChallenge', JSON.stringify({
+            const challengeData = {
                 month: currentMonth,
                 completed: isCompleted
-            }));
+            };
+            
+            localStorage.setItem('monthlyChallenge', JSON.stringify(challengeData));
+            await syncToFirebase('monthlyChallenge', challengeData);
             
             if (isCompleted) {
                 document.getElementById('challengeStatus').textContent = 'Completed! 🎉';
@@ -1453,14 +1604,38 @@
             }
         }
 
+        // Setup real-time listeners for all collections
+        function setupAllListeners() {
+            setupFirebaseListener('reminders', (data) => {
+                reminders = data;
+                renderReminders();
+            });
+            
+            setupFirebaseListener('groceries', (data) => {
+                groceries = data;
+                renderGroceries();
+            });
+            
+            setupFirebaseListener('dailyPromptAnswers', (data) => {
+                loadPromptAnswers();
+            });
+            
+            setupFirebaseListener('monthlyChallenge', (data) => {
+                loadChallengeStatus();
+            });
+        }
+
         // Initialize everything
-        document.addEventListener('DOMContentLoaded', function() {
-            calendarInit();
-            loadReminders();
-            loadGroceries();
+        document.addEventListener('DOMContentLoaded', async function() {
+            await calendarInit();
+            await loadReminders();
+            await loadGroceries();
             setDailyPrompt();
-            loadPromptAnswers();
-            setMonthlyChallenge();
+            await loadPromptAnswers();
+            await setMonthlyChallenge();
+            
+            // Setup real-time listeners
+            setTimeout(setupAllListeners, 1000);
         });
     </script>
 </body>
