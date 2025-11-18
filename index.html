@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <title>Our Daily Habits Hub - Home</title>
@@ -18,11 +18,8 @@
         }
 
         html {
-            position: fixed;
             width: 100%;
             height: 100%;
-            overflow: hidden;
-            touch-action: pan-y;
         }
 
         body {
@@ -33,11 +30,8 @@
             color: #e0e0e0;
             position: relative;
             width: 100%;
-            height: 100%;
-            overflow-y: auto;
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
-            overscroll-behavior: contain;
         }
 
         .container {
@@ -268,6 +262,12 @@
             padding: 10px;
             font-size: 0.9rem;
             font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #b59197;
         }
 
         .form-actions {
@@ -632,6 +632,10 @@
             body > .container > div[style*="grid-template-columns: 1fr 1fr"] {
                 grid-template-columns: 1fr !important;
             }
+
+            .sticky-notes-grid {
+                grid-template-columns: 1fr !important;
+            }
         }
 
         @media (max-width: 480px) {
@@ -703,7 +707,7 @@
         </div>
 
         <!-- Reminders & Grocery List -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; margin-bottom: 24px;">
+        <div class="sticky-notes-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; margin-bottom: 24px;">
             <div class="sticky-note">
                 <h3 class="sticky-note-title">Reminders</h3>
                 <div id="remindersList"></div>
@@ -827,7 +831,7 @@
             "Create something together (art, craft, garden, etc.)"
         ];
 
-        let calendarView = 'twoday'; // 'twoday', 'week', or 'month'
+        let calendarView = 'twoday';
         let calendarDate = new Date();
         let calendarEvents = [];
         let reminders = [];
@@ -835,23 +839,35 @@
 
         // CALENDAR FUNCTIONS
         function calendarLoadEvents() {
-            const saved = localStorage.getItem('calendarEvents');
-            if (saved) {
-                calendarEvents = JSON.parse(saved);
+            try {
+                const saved = localStorage.getItem('calendarEvents');
+                if (saved) {
+                    calendarEvents = JSON.parse(saved);
+                }
+            } catch (e) {
+                console.error('Error loading events:', e);
+                calendarEvents = [];
             }
         }
 
         function calendarSaveEvents() {
-            localStorage.setItem('calendarEvents', JSON.stringify(calendarEvents));
+            try {
+                localStorage.setItem('calendarEvents', JSON.stringify(calendarEvents));
+            } catch (e) {
+                console.error('Error saving events:', e);
+            }
         }
 
         function calendarGetEventsForDate(date) {
             const dateStr = date.toDateString();
             return calendarEvents.filter(event => {
-                // Parse the date string without time to avoid timezone issues
-                const [year, month, day] = event.date.split('-').map(Number);
-                const eventDate = new Date(year, month - 1, day);
-                return eventDate.toDateString() === dateStr;
+                try {
+                    const [year, month, day] = event.date.split('-').map(Number);
+                    const eventDate = new Date(year, month - 1, day);
+                    return eventDate.toDateString() === dateStr;
+                } catch (e) {
+                    return false;
+                }
             });
         }
 
@@ -907,7 +923,6 @@
             const container = document.getElementById('calendarContainer');
             container.innerHTML = '';
             
-            // Use calendarDate as the starting point
             const firstDay = new Date(calendarDate);
             const secondDay = new Date(calendarDate);
             secondDay.setDate(firstDay.getDate() + 1);
@@ -915,7 +930,6 @@
             document.getElementById('calendarTitle').textContent = 
                 `${firstDay.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${secondDay.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
             
-            // Check if we're showing today
             const today = new Date();
             const todayStr = today.toDateString();
             
@@ -925,7 +939,6 @@
                 const dayDiv = document.createElement('div');
                 dayDiv.className = 'week-day';
                 
-                // Highlight if this is today
                 if (date.toDateString() === todayStr) {
                     dayDiv.classList.add('today');
                 }
@@ -934,7 +947,7 @@
                 
                 let eventsHTML = '';
                 if (dayEvents.length > 0) {
-                    dayEvents.forEach((event, idx) => {
+                    dayEvents.forEach((event) => {
                         const eventIndex = calendarEvents.indexOf(event);
                         eventsHTML += `
                             <div class="event-item">
@@ -991,7 +1004,7 @@
                 
                 let eventsHTML = '';
                 if (dayEvents.length > 0) {
-                    dayEvents.forEach((event, idx) => {
+                    dayEvents.forEach((event) => {
                         const eventIndex = calendarEvents.indexOf(event);
                         eventsHTML += `
                             <div class="event-item">
@@ -1127,12 +1140,24 @@
 
         function calendarAddEvent(e) {
             e.preventDefault();
+            
+            const title = document.getElementById('calendarEventTitle').value;
+            const date = document.getElementById('calendarEventDate').value;
+            const time = document.getElementById('calendarEventTime').value;
+            const note = document.getElementById('calendarEventNote').value;
+            
+            if (!title || !date) {
+                alert('Please fill in the event title and date.');
+                return;
+            }
+            
             const event = {
-                title: document.getElementById('calendarEventTitle').value,
-                date: document.getElementById('calendarEventDate').value,
-                time: document.getElementById('calendarEventTime').value || null,
-                note: document.getElementById('calendarEventNote').value || null
+                title: title,
+                date: date,
+                time: time || null,
+                note: note || null
             };
+            
             calendarEvents.push(event);
             calendarSaveEvents();
             calendarHideAddForm();
@@ -1140,6 +1165,8 @@
         }
 
         function calendarDeleteEvent(index) {
+            if (index < 0 || index >= calendarEvents.length) return;
+            
             const event = calendarEvents[index];
             const eventTitle = event.title;
             if (confirm(`Are you sure you want to delete "${eventTitle}"?\n\nThis cannot be undone.`)) {
@@ -1187,22 +1214,17 @@
                 return;
             }
             
-            // Get existing answers
             const savedAnswers = JSON.parse(localStorage.getItem('dailyPromptAnswers') || '{}');
             
-            // Check if it's a new day
             if (savedAnswers.date !== today) {
-                // New day, clear old answers
                 savedAnswers.date = today;
                 savedAnswers.kasey = '';
                 savedAnswers.charlie = '';
             }
             
-            // Save the answer
             savedAnswers[person] = answer;
             localStorage.setItem('dailyPromptAnswers', JSON.stringify(savedAnswers));
             
-            // Update the display
             loadPromptAnswers();
         }
 
@@ -1210,10 +1232,8 @@
             const today = new Date().toDateString();
             const savedAnswers = JSON.parse(localStorage.getItem('dailyPromptAnswers') || '{}');
             
-            // If it's a new day, reset everything
             if (savedAnswers.date !== today) {
                 localStorage.setItem('dailyPromptAnswers', JSON.stringify({ date: today, kasey: '', charlie: '' }));
-                // Show input forms
                 document.getElementById('kaseyAnswerContainer').style.display = 'block';
                 document.getElementById('kaseyAnswerDisplay').style.display = 'none';
                 document.getElementById('charlieAnswerContainer').style.display = 'block';
@@ -1221,7 +1241,6 @@
                 document.getElementById('kaseyAnswerInput').value = '';
                 document.getElementById('charlieAnswerInput').value = '';
             } else {
-                // Display saved answers or input forms
                 if (savedAnswers.kasey) {
                     document.getElementById('kaseyAnswerDisplay').textContent = savedAnswers.kasey;
                     document.getElementById('kaseyAnswerContainer').style.display = 'none';
@@ -1244,15 +1263,24 @@
 
         // STICKY NOTES
         function loadReminders() {
-            const saved = localStorage.getItem('reminders');
-            if (saved) {
-                reminders = JSON.parse(saved);
+            try {
+                const saved = localStorage.getItem('reminders');
+                if (saved) {
+                    reminders = JSON.parse(saved);
+                }
+            } catch (e) {
+                console.error('Error loading reminders:', e);
+                reminders = [];
             }
             renderReminders();
         }
 
         function saveReminders() {
-            localStorage.setItem('reminders', JSON.stringify(reminders));
+            try {
+                localStorage.setItem('reminders', JSON.stringify(reminders));
+            } catch (e) {
+                console.error('Error saving reminders:', e);
+            }
         }
 
         function addReminder() {
@@ -1267,15 +1295,19 @@
         }
 
         function toggleReminder(index) {
-            reminders[index].completed = !reminders[index].completed;
-            saveReminders();
-            renderReminders();
+            if (index >= 0 && index < reminders.length) {
+                reminders[index].completed = !reminders[index].completed;
+                saveReminders();
+                renderReminders();
+            }
         }
 
         function deleteReminder(index) {
-            reminders.splice(index, 1);
-            saveReminders();
-            renderReminders();
+            if (index >= 0 && index < reminders.length) {
+                reminders.splice(index, 1);
+                saveReminders();
+                renderReminders();
+            }
         }
 
         function renderReminders() {
@@ -1300,15 +1332,24 @@
         }
 
         function loadGroceries() {
-            const saved = localStorage.getItem('groceries');
-            if (saved) {
-                groceries = JSON.parse(saved);
+            try {
+                const saved = localStorage.getItem('groceries');
+                if (saved) {
+                    groceries = JSON.parse(saved);
+                }
+            } catch (e) {
+                console.error('Error loading groceries:', e);
+                groceries = [];
             }
             renderGroceries();
         }
 
         function saveGroceries() {
-            localStorage.setItem('groceries', JSON.stringify(groceries));
+            try {
+                localStorage.setItem('groceries', JSON.stringify(groceries));
+            } catch (e) {
+                console.error('Error saving groceries:', e);
+            }
         }
 
         function addGrocery() {
@@ -1323,15 +1364,19 @@
         }
 
         function toggleGrocery(index) {
-            groceries[index].completed = !groceries[index].completed;
-            saveGroceries();
-            renderGroceries();
+            if (index >= 0 && index < groceries.length) {
+                groceries[index].completed = !groceries[index].completed;
+                saveGroceries();
+                renderGroceries();
+            }
         }
 
         function deleteGrocery(index) {
-            groceries.splice(index, 1);
-            saveGroceries();
-            renderGroceries();
+            if (index >= 0 && index < groceries.length) {
+                groceries.splice(index, 1);
+                saveGroceries();
+                renderGroceries();
+            }
         }
 
         function renderGroceries() {
@@ -1358,14 +1403,13 @@
         // MONTHLY CHALLENGE FUNCTIONS
         function setMonthlyChallenge() {
             const today = new Date();
-            const currentMonth = today.getMonth(); // 0-11
+            const currentMonth = today.getMonth();
             const currentYear = today.getFullYear();
             const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
                               'July', 'August', 'September', 'October', 'November', 'December'];
             
             document.getElementById('challengeMonth').textContent = `${monthNames[currentMonth]} ${currentYear}`;
             
-            // Use month index to get challenge (cycles through the 12 challenges)
             const challengeIndex = currentMonth % monthlyChallenges.length;
             document.getElementById('challengeText').textContent = monthlyChallenges[challengeIndex];
             
@@ -1383,7 +1427,6 @@
             } else {
                 document.getElementById('challengeComplete').checked = false;
                 document.getElementById('challengeStatus').textContent = 'Not completed';
-                // Clear old month's completion
                 if (savedChallenge.month !== currentMonth) {
                     localStorage.setItem('monthlyChallenge', JSON.stringify({ 
                         month: currentMonth, 
@@ -1410,13 +1453,15 @@
             }
         }
 
-        // Initialize
-        calendarInit();
-        loadReminders();
-        loadGroceries();
-        setDailyPrompt();
-        loadPromptAnswers();
-        setMonthlyChallenge();
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            calendarInit();
+            loadReminders();
+            loadGroceries();
+            setDailyPrompt();
+            loadPromptAnswers();
+            setMonthlyChallenge();
+        });
     </script>
 </body>
 </html>
