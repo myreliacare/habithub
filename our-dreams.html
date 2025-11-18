@@ -59,9 +59,9 @@
         }
 
         .btn:hover {
-            background: #9b8a9e;
+            background: #b59197;
             color: #ffffff;
-            border-color: #9b8a9e;
+            border-color: #b59197;
         }
 
         .page-header {
@@ -88,30 +88,6 @@
             font-style: italic;
         }
 
-        .sync-status {
-            position: fixed;
-            top: 20px;
-            right: 30px;
-            font-size: 0.75rem;
-            color: #999;
-            font-weight: 500;
-            letter-spacing: 0.05em;
-            z-index: 100;
-            background: #2a2a2a;
-            padding: 6px 12px;
-            border: 1px solid #444;
-        }
-
-        .sync-status.connected {
-            color: #7ba886;
-            border-color: #7ba886;
-        }
-
-        .sync-status.connected::before {
-            content: "✓ ";
-            font-weight: bold;
-        }
-
         .section-nav-dropdown {
             margin-bottom: 32px;
         }
@@ -119,8 +95,8 @@
         #sectionSelect {
             width: 100%;
             background: #2a2a2a;
-            border: 1px solid #9b8a9e;
-            color: #9b8a9e;
+            border: 1px solid #7ba886;
+            color: #7ba886;
             padding: 16px;
             font-size: 1rem;
             cursor: pointer;
@@ -130,7 +106,7 @@
             appearance: none;
             -webkit-appearance: none;
             -moz-appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239b8a9e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237ba886' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
             background-repeat: no-repeat;
             background-position: right 12px center;
             background-size: 20px;
@@ -144,7 +120,7 @@
 
         #sectionSelect:focus {
             outline: none;
-            border-color: #7ba886;
+            border-color: #b59197;
         }
 
         #sectionSelect option {
@@ -163,7 +139,7 @@
 
         .section {
             background: #2a2a2a;
-            border: 1px solid #9b8a9e;
+            border: 1px solid #b59197;
             padding: 24px;
             margin-bottom: 24px;
         }
@@ -173,7 +149,7 @@
             font-weight: 400;
             letter-spacing: 0.15em;
             text-transform: uppercase;
-            color: #9b8a9e;
+            color: #b59197;
             margin-bottom: 20px;
         }
 
@@ -198,7 +174,7 @@
         }
 
         .dream-list-toggle-text {
-            color: #9b8a9e;
+            color: #7ba886;
             font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -228,7 +204,7 @@
             background: #1a1a1a;
             padding: 16px;
             margin-bottom: 12px;
-            border-left: 3px solid #9b8a9e;
+            border-left: 3px solid #b59197;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
@@ -295,9 +271,9 @@
         }
 
         .image-upload-label:hover {
-            background: #9b8a9e;
+            background: #b59197;
             color: #ffffff;
-            border-color: #9b8a9e;
+            border-color: #b59197;
         }
 
         .image-upload-input {
@@ -388,9 +364,9 @@
         }
 
         .icon-btn:hover {
-            background: #9b8a9e;
+            background: #7ba886;
             color: #ffffff;
-            border-color: #9b8a9e;
+            border-color: #7ba886;
         }
 
         .icon-btn.achieved {
@@ -417,9 +393,9 @@
         }
 
         .add-dream-btn:hover {
-            background: #9b8a9e;
+            background: #b59197;
             color: #ffffff;
-            border-color: #9b8a9e;
+            border-color: #b59197;
         }
 
         .dream-form {
@@ -472,8 +448,8 @@
         }
 
         .form-actions button[type="submit"] {
-            border: 1px solid #9b8a9e;
-            color: #9b8a9e;
+            border: 1px solid #b59197;
+            color: #b59197;
             background: transparent;
             padding: 8px 16px;
             cursor: pointer;
@@ -483,7 +459,7 @@
         }
 
         .form-actions button[type="submit"]:hover {
-            background: #9b8a9e;
+            background: #b59197;
             color: #ffffff;
         }
 
@@ -505,7 +481,7 @@
             text-align: center;
             display: none;
             z-index: 1000;
-            border: 2px solid #9b8a9e;
+            border: 2px solid #b59197;
             max-width: 90%;
         }
 
@@ -572,11 +548,8 @@
     </style>
 </head>
 <body>
-    <div class="sync-status" id="syncStatus">Connecting</div>
     
     <div class="container">
-        <a href="index.html" class="btn" style="margin-bottom: 24px;">← Back to Home</a>
-        
         <div class="page-header">
             <h1 class="page-title">Our Life Together</h1>
             <p class="page-subtitle">Dreams, goals, ideas & all the things we want to do</p>
@@ -594,135 +567,6 @@
                 <option value="pets">Future Pets</option>
                 <option value="traditions">Traditions</option>
             </select>
-        </div>
-
-        <!-- WISHLISTS TAB -->
-        <div id="wishlists-tab" class="dreams-tab">
-            <div class="section" style="margin-bottom: 24px;">
-                <h2 class="section-title">Kasey's Wishlist</h2>
-                
-                <button class="add-dream-btn" onclick="showForm('kasey-wishlist')">+ Add to Kasey's List</button>
-                
-                <div class="dream-form" id="kasey-wishlist-form">
-                    <form onsubmit="addDream(event, 'kasey-wishlist')">
-                        <div class="form-group">
-                            <label>Item or Experience</label>
-                            <input type="text" name="title" required placeholder="What does Kasey want?">
-                        </div>
-                        <div class="form-group">
-                            <label>Details / Link</label>
-                            <textarea name="details" placeholder="Where to find it, price, why you want it..."></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Add Image (Optional)</label>
-                            <input type="file" class="image-upload-input" id="kasey-wishlist-image" accept="image/*" onchange="previewImage(event, 'kasey-wishlist')">
-                            <label for="kasey-wishlist-image" class="image-upload-label">Choose Image</label>
-                            <div id="kasey-wishlist-preview"></div>
-                        </div>
-                        <div class="form-group">
-                            <label>Priority</label>
-                            <select name="priority">
-                                <option value="">Nice to Have</option>
-                                <option value="soon">Really Want</option>
-                                <option value="high">Top of List</option>
-                            </select>
-                        </div>
-                        <div class="form-actions">
-                            <button type="button" class="btn" onclick="hideForm('kasey-wishlist')">Cancel</button>
-                            <button type="submit" class="btn">Save</button>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="dream-list" id="kasey-wishlist-list">
-                    <div class="empty-state">Loading...</div>
-                </div>
-            </div>
-
-            <div class="section">
-                <h2 class="section-title">Charlie's Wishlist</h2>
-                
-                <button class="add-dream-btn" onclick="showForm('charlie-wishlist')">+ Add to Charlie's List</button>
-                
-                <div class="dream-form" id="charlie-wishlist-form">
-                    <form onsubmit="addDream(event, 'charlie-wishlist')">
-                        <div class="form-group">
-                            <label>Item or Experience</label>
-                            <input type="text" name="title" required placeholder="What does Charlie want?">
-                        </div>
-                        <div class="form-group">
-                            <label>Details / Link</label>
-                            <textarea name="details" placeholder="Where to find it, price, why you want it..."></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Add Image (Optional)</label>
-                            <input type="file" class="image-upload-input" id="charlie-wishlist-image" accept="image/*" onchange="previewImage(event, 'charlie-wishlist')">
-                            <label for="charlie-wishlist-image" class="image-upload-label">Choose Image</label>
-                            <div id="charlie-wishlist-preview"></div>
-                        </div>
-                        <div class="form-group">
-                            <label>Priority</label>
-                            <select name="priority">
-                                <option value="">Nice to Have</option>
-                                <option value="soon">Really Want</option>
-                                <option value="high">Top of List</option>
-                            </select>
-                        </div>
-                        <div class="form-actions">
-                            <button type="button" class="btn" onclick="hideForm('charlie-wishlist')">Cancel</button>
-                            <button type="submit" class="btn">Save</button>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="dream-list" id="charlie-wishlist-list">
-                    <div class="empty-state">Loading...</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- TRAVEL TAB -->
-        <div id="travel-tab" class="dreams-tab">
-            <div class="section">
-                <h2 class="section-title">Places We Want to Travel</h2>
-                
-                <button class="add-dream-btn" onclick="showForm('travel')">+ Add Travel Dream</button>
-                
-                <div class="dream-form" id="travel-form">
-                    <form onsubmit="addDream(event, 'travel')">
-                        <div class="form-group">
-                            <label>Destination</label>
-                            <input type="text" name="title" required placeholder="Where do you want to go?">
-                        </div>
-                        <div class="form-group">
-                            <label>Why / What to Do There</label>
-                            <textarea name="details" placeholder="What draws you to this place?"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Add Image (Optional)</label>
-                            <input type="file" class="image-upload-input" id="travel-image" accept="image/*" onchange="previewImage(event, 'travel')">
-                            <label for="travel-image" class="image-upload-label">Choose Image</label>
-                            <div id="travel-preview"></div>
-                        </div>
-                        <div class="form-group">
-                            <label>Priority</label>
-                            <select name="priority">
-                                <option value="">Someday</option>
-                                <option value="soon">Soon</option>
-                                <option value="high">Bucket List!</option>
-                            </select>
-                        </div>
-                        <div class="form-actions">
-                            <button type="button" class="btn" onclick="hideForm('travel')">Cancel</button>
-                            <button type="submit" class="btn">Save Dream</button>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="dream-list" id="travel-list">
-                    <div class="empty-state">Loading...</div>
-                </div>
-            </div>
         </div>
 
         <!-- RESTAURANTS TAB -->
@@ -793,7 +637,7 @@
                 </div>
 
                 <div class="dream-list" id="restaurants-list">
-                    <div class="empty-state">Loading...</div>
+                    <div class="empty-state">No restaurants yet. Where should you go for date night?</div>
                 </div>
             </div>
         </div>
@@ -837,7 +681,136 @@
                 </div>
 
                 <div class="dream-list" id="places-list">
-                    <div class="empty-state">Loading...</div>
+                    <div class="empty-state">No places yet. Where do you want to go?</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- WISHLISTS TAB -->
+        <div id="wishlists-tab" class="dreams-tab">
+            <div class="section" style="margin-bottom: 24px;">
+                <h2 class="section-title">Kasey's Wishlist</h2>
+                
+                <button class="add-dream-btn" onclick="showForm('kasey-wishlist')">+ Add to Kasey's List</button>
+                
+                <div class="dream-form" id="kasey-wishlist-form">
+                    <form onsubmit="addDream(event, 'kasey-wishlist')">
+                        <div class="form-group">
+                            <label>Item or Experience</label>
+                            <input type="text" name="title" required placeholder="What does Kasey want?">
+                        </div>
+                        <div class="form-group">
+                            <label>Details / Link</label>
+                            <textarea name="details" placeholder="Where to find it, price, why you want it..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Add Image (Optional)</label>
+                            <input type="file" class="image-upload-input" id="kasey-wishlist-image" accept="image/*" onchange="previewImage(event, 'kasey-wishlist')">
+                            <label for="kasey-wishlist-image" class="image-upload-label">Choose Image</label>
+                            <div id="kasey-wishlist-preview"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Priority</label>
+                            <select name="priority">
+                                <option value="">Nice to Have</option>
+                                <option value="soon">Really Want</option>
+                                <option value="high">Top of List</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn" onclick="hideForm('kasey-wishlist')">Cancel</button>
+                            <button type="submit" class="btn">Save</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="dream-list" id="kasey-wishlist-list">
+                    <div class="empty-state">Kasey's wishlist is empty</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Charlie's Wishlist</h2>
+                
+                <button class="add-dream-btn" onclick="showForm('charlie-wishlist')">+ Add to Charlie's List</button>
+                
+                <div class="dream-form" id="charlie-wishlist-form">
+                    <form onsubmit="addDream(event, 'charlie-wishlist')">
+                        <div class="form-group">
+                            <label>Item or Experience</label>
+                            <input type="text" name="title" required placeholder="What does Charlie want?">
+                        </div>
+                        <div class="form-group">
+                            <label>Details / Link</label>
+                            <textarea name="details" placeholder="Where to find it, price, why you want it..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Add Image (Optional)</label>
+                            <input type="file" class="image-upload-input" id="charlie-wishlist-image" accept="image/*" onchange="previewImage(event, 'charlie-wishlist')">
+                            <label for="charlie-wishlist-image" class="image-upload-label">Choose Image</label>
+                            <div id="charlie-wishlist-preview"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Priority</label>
+                            <select name="priority">
+                                <option value="">Nice to Have</option>
+                                <option value="soon">Really Want</option>
+                                <option value="high">Top of List</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn" onclick="hideForm('charlie-wishlist')">Cancel</button>
+                            <button type="submit" class="btn">Save</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="dream-list" id="charlie-wishlist-list">
+                    <div class="empty-state">Charlie's wishlist is empty</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRAVEL TAB -->
+        <div id="travel-tab" class="dreams-tab">
+            <div class="section">
+                <h2 class="section-title">Places We Want to Travel</h2>
+                
+                <button class="add-dream-btn" onclick="showForm('travel')">+ Add Travel Dream</button>
+                
+                <div class="dream-form" id="travel-form">
+                    <form onsubmit="addDream(event, 'travel')">
+                        <div class="form-group">
+                            <label>Destination</label>
+                            <input type="text" name="title" required placeholder="Where do you want to go?">
+                        </div>
+                        <div class="form-group">
+                            <label>Why / What to Do There</label>
+                            <textarea name="details" placeholder="What draws you to this place?"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Add Image (Optional)</label>
+                            <input type="file" class="image-upload-input" id="travel-image" accept="image/*" onchange="previewImage(event, 'travel')">
+                            <label for="travel-image" class="image-upload-label">Choose Image</label>
+                            <div id="travel-preview"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Priority</label>
+                            <select name="priority">
+                                <option value="">Someday</option>
+                                <option value="soon">Soon</option>
+                                <option value="high">Bucket List!</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn" onclick="hideForm('travel')">Cancel</button>
+                            <button type="submit" class="btn">Save Dream</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="dream-list" id="travel-list">
+                    <div class="empty-state">No travel dreams yet. Where do you want to go?</div>
                 </div>
             </div>
         </div>
@@ -881,7 +854,7 @@
                 </div>
 
                 <div class="dream-list" id="shows-movies-list">
-                    <div class="empty-state">Loading...</div>
+                    <div class="empty-state">No shows or movies yet. What do you want to watch together?</div>
                 </div>
             </div>
         </div>
@@ -925,7 +898,7 @@
                 </div>
 
                 <div class="dream-list" id="bucket-list">
-                    <div class="empty-state">Loading...</div>
+                    <div class="empty-state">Start building your bucket list together!</div>
                 </div>
             </div>
         </div>
@@ -969,7 +942,7 @@
                 </div>
 
                 <div class="dream-list" id="home-list">
-                    <div class="empty-state">Loading...</div>
+                    <div class="empty-state">What does your dream home look like?</div>
                 </div>
             </div>
         </div>
@@ -1013,7 +986,7 @@
                 </div>
 
                 <div class="dream-list" id="pets-list">
-                    <div class="empty-state">Loading...</div>
+                    <div class="empty-state">Dream about your future fur (or scale, or feather) babies!</div>
                 </div>
             </div>
         </div>
@@ -1057,7 +1030,7 @@
                 </div>
 
                 <div class="dream-list" id="traditions-list">
-                    <div class="empty-state">Loading...</div>
+                    <div class="empty-state">What traditions do you want to create together?</div>
                 </div>
             </div>
         </div>
@@ -1104,18 +1077,6 @@
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
-        }
-
-        // Update sync status
-        function updateSyncStatus(connected) {
-            const statusEl = document.getElementById('syncStatus');
-            if (connected) {
-                statusEl.textContent = 'Synced';
-                statusEl.classList.add('connected');
-            } else {
-                statusEl.textContent = 'Connecting';
-                statusEl.classList.remove('connected');
-            }
         }
 
         // Image preview function
@@ -1165,11 +1126,9 @@
                     
                     if (!isConnected) {
                         isConnected = true;
-                        updateSyncStatus(true);
                     }
                 }, (error) => {
                     console.error('Firebase error:', error);
-                    updateSyncStatus(false);
                 });
             });
         }
@@ -1197,7 +1156,7 @@
         };
 
         // Add dream
-        window.addDream = function(e, category) {
+        window.addDream = async function(e, category) {
             e.preventDefault();
             const formData = new FormData(e.target);
             
@@ -1220,10 +1179,14 @@
             }
 
             // Push to Firebase
-            const dreamsRef = ref(database, `dreams/${category}`);
-            push(dreamsRef, dream);
-
-            window.hideForm(category);
+            try {
+                const dreamsRef = ref(database, `dreams/${category}`);
+                await push(dreamsRef, dream);
+                window.hideForm(category);
+            } catch (error) {
+                console.error('Error saving dream:', error);
+                alert('Failed to save. Please try again.');
+            }
         };
 
         // Render dreams
@@ -1366,7 +1329,7 @@
 
         // Create confetti
         function createConfetti() {
-            const colors = ['#b59197', '#7ba886', '#9b8a9e', '#ff9999', '#ffcc99', '#a8e6cf'];
+            const colors = ['#b59197', '#7ba886', '#d4a5ae', '#ff9999', '#ffcc99', '#a8e6cf', '#95c9b4'];
             for (let i = 0; i < 100; i++) {
                 setTimeout(() => {
                     const confetti = document.createElement('div');
