@@ -40,7 +40,7 @@
         }
 
         .sync-status {
-            position: fixed;
+            position: absolute;
             top: 16px;
             right: 16px;
             background: #2a2a2a;
@@ -85,11 +85,14 @@
         .home-header {
             text-align: center;
             margin-bottom: 32px;
-            margin-top: 24px;
+            margin-top: 48px;
         }
 
         .home-title {
-            color: #b59197;
+            background: linear-gradient(135deg, #b59197 0%, #7ba886 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             font-size: 2.5rem;
             font-weight: 400;
             letter-spacing: 0.05em;
@@ -135,6 +138,7 @@
             color: #7ba886;
             font-family: 'Work Sans', sans-serif;
             font-weight: 700;
+            font-size: 1.15rem;
         }
 
         .hub-nav-btn.charlie:hover {
@@ -143,8 +147,13 @@
         }
 
         .hub-nav-btn.dreams {
-            border-color: #9b8a9e;
-            color: #9b8a9e;
+            border: 2px solid transparent;
+            background-image: 
+                linear-gradient(#2a2a2a, #2a2a2a),
+                linear-gradient(135deg, #b59197 0%, #7ba886 100%);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            color: #b59197;
             font-family: 'Cormorant', Georgia, 'Times New Roman', serif;
             font-weight: 500;
         }
@@ -152,7 +161,6 @@
         .hub-nav-btn.dreams:hover {
             background: linear-gradient(135deg, #b59197 0%, #7ba886 100%);
             color: #ffffff;
-            border-color: #9b8a9e;
         }
 
         .section {
@@ -173,7 +181,7 @@
 
         .calendar-header {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             margin-bottom: 20px;
             flex-wrap: wrap;
@@ -439,6 +447,7 @@
             padding: 20px;
             margin-bottom: 20px;
             border-left: 3px solid #b59197;
+            border-right: 3px solid #7ba886;
             cursor: pointer;
             transition: background 0.2s;
         }
@@ -528,8 +537,8 @@
         .save-answer-btn {
             margin-top: 8px;
             background: transparent;
-            border: 1px solid #b59197;
-            color: #b59197;
+            border: 1px solid #7ba886;
+            color: #7ba886;
             padding: 8px 16px;
             cursor: pointer;
             font-size: 0.85rem;
@@ -539,8 +548,8 @@
         }
 
         .save-answer-btn:hover {
-            background: #b59197;
-            color: #2a2a2a;
+            background: #7ba886;
+            color: #ffffff;
         }
 
         .challenge-box {
@@ -596,6 +605,86 @@
             font-size: 1.125rem;
             line-height: 1.6;
             font-style: italic;
+        }
+
+        .challenge-notes {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #3a3a3a;
+        }
+
+        .challenge-notes-toggle {
+            background: transparent;
+            border: 1px solid #7ba886;
+            color: #7ba886;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            width: 100%;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .challenge-notes-toggle:hover {
+            background: rgba(123, 168, 134, 0.1);
+        }
+
+        .challenge-notes-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .challenge-notes-content.expanded {
+            max-height: 300px;
+            margin-top: 12px;
+        }
+
+        .challenge-notes-textarea {
+            width: 100%;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 12px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .challenge-notes-textarea:focus {
+            outline: none;
+            border-color: #7ba886;
+        }
+
+        .challenge-notes-save {
+            margin-top: 8px;
+            background: transparent;
+            border: 1px solid #7ba886;
+            color: #7ba886;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .challenge-notes-save:hover {
+            background: #7ba886;
+            color: #ffffff;
+        }
+
+        .challenge-notes-display {
+            color: #e0e0e0;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            white-space: pre-wrap;
+            padding: 12px;
+            background: #2a2a2a;
         }
 
         .no-answer {
@@ -833,6 +922,20 @@
                     </label>
                 </div>
                 <div class="challenge-text" id="challengeText"></div>
+                
+                <div class="challenge-notes">
+                    <button class="challenge-notes-toggle" onclick="toggleChallengeNotes()">
+                        <span>Notes & Ideas</span>
+                        <span class="expand-icon" id="challengeNotesIcon">▼</span>
+                    </button>
+                    <div class="challenge-notes-content" id="challengeNotesContent">
+                        <div id="challengeNotesEdit">
+                            <textarea class="challenge-notes-textarea" id="challengeNotesInput" placeholder="Add notes, ideas, or plans for this challenge..."></textarea>
+                            <button class="challenge-notes-save" onclick="saveChallengeNotes()">Save Notes</button>
+                        </div>
+                        <div id="challengeNotesDisplay" class="challenge-notes-display" style="display: none;"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -926,7 +1029,7 @@
             "Start a new tradition together",
             "Declutter and organize one space in your home together",
             "Take photos together once a week to capture memories",
-            "Take a day trip to somewhere you've never been",
+            "Cook a new recipe together that neither of you has tried before",
             "Create something together (art, craft, garden, etc.)"
         ];
 
@@ -1551,14 +1654,13 @@
         // MONTHLY CHALLENGE FUNCTIONS
         async function setMonthlyChallenge() {
             const today = new Date();
-            const currentMonth = today.getMonth(); // 0-11 (0=Jan, 10=Nov)
+            const currentMonth = today.getMonth();
             const currentYear = today.getFullYear();
             const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
                               'July', 'August', 'September', 'October', 'November', 'December'];
             
             document.getElementById('challengeMonth').textContent = `${monthNames[currentMonth]} ${currentYear}`;
             
-            // Use current month index directly (Nov = 10, which maps to index 10)
             const challengeIndex = currentMonth;
             document.getElementById('challengeText').textContent = monthlyChallenges[challengeIndex];
             
@@ -1572,7 +1674,7 @@
             
             if (savedChallenge.month === currentMonth && savedChallenge.completed) {
                 document.getElementById('challengeComplete').checked = true;
-                document.getElementById('challengeStatus').textContent = 'Completed! 🎉';
+                document.getElementById('challengeStatus').textContent = 'Completed';
             } else {
                 document.getElementById('challengeComplete').checked = false;
                 document.getElementById('challengeStatus').textContent = 'Not completed';
@@ -1598,9 +1700,61 @@
             await syncToFirebase('monthlyChallenge', challengeData);
             
             if (isCompleted) {
-                document.getElementById('challengeStatus').textContent = 'Completed! 🎉';
+                document.getElementById('challengeStatus').textContent = 'Completed';
             } else {
                 document.getElementById('challengeStatus').textContent = 'Not completed';
+            }
+        }
+
+        function toggleChallengeNotes() {
+            const content = document.getElementById('challengeNotesContent');
+            const icon = document.getElementById('challengeNotesIcon');
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                icon.classList.remove('expanded');
+            } else {
+                content.classList.add('expanded');
+                icon.classList.add('expanded');
+            }
+        }
+
+        async function saveChallengeNotes() {
+            const today = new Date();
+            const currentMonth = `${today.getFullYear()}-${today.getMonth()}`;
+            const notes = document.getElementById('challengeNotesInput').value.trim();
+            
+            const notesData = {
+                month: currentMonth,
+                notes: notes
+            };
+            
+            localStorage.setItem('challengeNotes', JSON.stringify(notesData));
+            await syncToFirebase('challengeNotes', notesData);
+            
+            loadChallengeNotes();
+        }
+
+        async function loadChallengeNotes() {
+            const today = new Date();
+            const currentMonth = `${today.getFullYear()}-${today.getMonth()}`;
+            const savedNotes = await loadFromFirebase('challengeNotes') || { month: currentMonth, notes: '' };
+            
+            if (savedNotes.month !== currentMonth) {
+                const newNotes = { month: currentMonth, notes: '' };
+                localStorage.setItem('challengeNotes', JSON.stringify(newNotes));
+                await syncToFirebase('challengeNotes', newNotes);
+                document.getElementById('challengeNotesInput').value = '';
+                document.getElementById('challengeNotesEdit').style.display = 'block';
+                document.getElementById('challengeNotesDisplay').style.display = 'none';
+            } else if (savedNotes.notes) {
+                document.getElementById('challengeNotesDisplay').textContent = savedNotes.notes;
+                document.getElementById('challengeNotesEdit').style.display = 'none';
+                document.getElementById('challengeNotesDisplay').style.display = 'block';
+            } else {
+                document.getElementById('challengeNotesInput').value = '';
+                document.getElementById('challengeNotesEdit').style.display = 'block';
+                document.getElementById('challengeNotesDisplay').style.display = 'none';
             }
         }
 
@@ -1623,6 +1777,10 @@
             setupFirebaseListener('monthlyChallenge', (data) => {
                 loadChallengeStatus();
             });
+
+            setupFirebaseListener('challengeNotes', (data) => {
+                loadChallengeNotes();
+            });
         }
 
         // Initialize everything
@@ -1633,6 +1791,7 @@
             setDailyPrompt();
             await loadPromptAnswers();
             await setMonthlyChallenge();
+            await loadChallengeNotes();
             
             // Setup real-time listeners
             setTimeout(setupAllListeners, 1000);
