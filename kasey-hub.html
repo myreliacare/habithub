@@ -102,34 +102,42 @@
             border-color: #b59197;
         }
 
-        .section-nav {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
+        .section-nav-dropdown {
             margin-bottom: 24px;
         }
 
-        .nav-tab {
-            background: transparent;
-            border: 1px solid #444;
-            color: #999;
-            padding: 12px 8px;
-            font-size: 0.9rem;
+        .section-dropdown {
+            width: 100%;
+            background: #2a2a2a;
+            border: 1px solid #b59197;
+            color: #fff;
+            padding: 14px 16px;
+            font-size: 1rem;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
             font-family: inherit;
-            text-align: center;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23b59197' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
         }
 
-        .nav-tab.active {
-            background: #b59197;
-            color: #2a2a2a;
+        .section-dropdown:hover {
+            background: #333;
             border-color: #b59197;
         }
 
-        .nav-tab:hover {
+        .section-dropdown:focus {
+            outline: none;
             border-color: #b59197;
+            box-shadow: 0 0 0 2px rgba(181, 145, 151, 0.2);
+        }
+
+        .section-dropdown option {
+            background: #2a2a2a;
+            color: #fff;
+            padding: 10px;
         }
 
         .hub-tab {
@@ -616,11 +624,113 @@
             white-space: pre-wrap;
         }
 
-        @media (max-width: 768px) {
-            .section-nav {
-                grid-template-columns: repeat(2, 1fr);
-            }
+        .todo-container {
+            background: #2a2a2a;
+            border: 1px solid #b59197;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
 
+        .todo-input-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .todo-input {
+            flex: 1;
+            background: #1a1a1a;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .todo-add-btn {
+            background: transparent;
+            border: 1px solid #b59197;
+            color: #b59197;
+            padding: 12px 24px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .todo-add-btn:hover {
+            background: #b59197;
+            color: #2a2a2a;
+        }
+
+        .todo-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .todo-item {
+            background: #1a1a1a;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 3px solid #b59197;
+            transition: all 0.2s ease;
+        }
+
+        .todo-item.completed {
+            opacity: 0.6;
+            border-left-color: #666;
+        }
+
+        .todo-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #b59197;
+        }
+
+        .todo-text {
+            flex: 1;
+            color: #e0e0e0;
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+
+        .todo-item.completed .todo-text {
+            text-decoration: line-through;
+            color: #666;
+        }
+
+        .todo-delete {
+            background: transparent;
+            border: 1px solid #444;
+            color: #999;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .todo-delete:hover {
+            background: #d67373;
+            color: #2a2a2a;
+            border-color: #d67373;
+        }
+
+        .todo-empty {
+            text-align: center;
+            color: #666;
+            padding: 40px 20px;
+            font-size: 1rem;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
             .bingo-grid {
                 max-width: 100%;
                 gap: 2px;
@@ -742,11 +852,14 @@
     <div class="container">
         <a href="index.html" class="btn" style="margin-bottom: 24px;">← Back to Home</a>
         
-        <div class="section-nav">
-            <button class="nav-tab active" onclick="switchTab(event, 'bingo')">Bingo Card</button>
-            <button class="nav-tab" onclick="switchTab(event, 'resources')">Resources</button>
-            <button class="nav-tab" onclick="switchTab(event, 'videos')">Video Hub</button>
-            <button class="nav-tab" onclick="switchTab(event, 'prompt')">Daily Prompt</button>
+        <div class="section-nav-dropdown">
+            <select id="sectionSelect" class="section-dropdown" onchange="switchTabFromDropdown()">
+                <option value="bingo">Bingo Card</option>
+                <option value="todo">To-Do List</option>
+                <option value="resources">Resources</option>
+                <option value="videos">Video Hub</option>
+                <option value="prompt">Daily Prompt</option>
+            </select>
         </div>
 
         <!-- BINGO TAB -->
@@ -773,6 +886,28 @@
                         <span id="bingoCount">0</span>
                         Bingos
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TO-DO LIST TAB -->
+        <div id="todo-tab" class="hub-tab">
+            <div class="todo-container">
+                <h2 class="section-title">My To-Do List</h2>
+                
+                <div class="todo-input-group">
+                    <input 
+                        type="text" 
+                        id="todoInput" 
+                        class="todo-input" 
+                        placeholder="Add a new task..."
+                        onkeypress="if(event.key === 'Enter') addTodo()"
+                    >
+                    <button class="todo-add-btn" onclick="addTodo()">Add</button>
+                </div>
+
+                <div id="todoList" class="todo-list">
+                    <div class="todo-empty">No tasks yet. Add your first one above!</div>
                 </div>
             </div>
         </div>
@@ -1105,8 +1240,100 @@
         let currentHabits = [];
         let videos = [];
         let resources = {};
+        let todos = [];
         let pendingResourceFile = null;
         let pendingVideoFile = null;
+
+        // TO-DO LIST FUNCTIONS
+        async function loadTodos() {
+            const firebaseData = await loadFromFirebase('todos_kasey');
+            if (firebaseData) {
+                todos = firebaseData;
+            } else {
+                const saved = localStorage.getItem('todos_kasey');
+                if (saved) {
+                    todos = JSON.parse(saved);
+                    await syncToFirebase('todos_kasey', todos);
+                } else {
+                    todos = [];
+                }
+            }
+            renderTodos();
+            
+            setupFirebaseListener('todos_kasey', (data) => {
+                todos = data;
+                renderTodos();
+            });
+        }
+
+        async function saveTodos() {
+            localStorage.setItem('todos_kasey', JSON.stringify(todos));
+            await syncToFirebase('todos_kasey', todos);
+        }
+
+        function addTodo() {
+            const input = document.getElementById('todoInput');
+            const text = input.value.trim();
+            
+            if (text === '') return;
+            
+            const todo = {
+                id: Date.now(),
+                text: text,
+                completed: false,
+                createdAt: new Date().toISOString()
+            };
+            
+            todos.unshift(todo);
+            saveTodos();
+            renderTodos();
+            input.value = '';
+        }
+
+        async function toggleTodo(id) {
+            const todo = todos.find(t => t.id === id);
+            if (todo) {
+                todo.completed = !todo.completed;
+                await saveTodos();
+                renderTodos();
+            }
+        }
+
+        async function deleteTodo(id) {
+            if (confirm('Delete this task?')) {
+                todos = todos.filter(t => t.id !== id);
+                await saveTodos();
+                renderTodos();
+            }
+        }
+
+        function renderTodos() {
+            const list = document.getElementById('todoList');
+            
+            if (todos.length === 0) {
+                list.innerHTML = '<div class="todo-empty">No tasks yet. Add your first one above!</div>';
+                return;
+            }
+            
+            list.innerHTML = '';
+            todos.forEach(todo => {
+                const item = document.createElement('div');
+                item.className = 'todo-item' + (todo.completed ? ' completed' : '');
+                
+                item.innerHTML = `
+                    <input 
+                        type="checkbox" 
+                        class="todo-checkbox" 
+                        ${todo.completed ? 'checked' : ''}
+                        onchange="toggleTodo(${todo.id})"
+                    >
+                    <div class="todo-text">${todo.text}</div>
+                    <button class="todo-delete" onclick="deleteTodo(${todo.id})">Delete</button>
+                `;
+                
+                list.appendChild(item);
+            });
+        }
 
         // FIREBASE FUNCTIONS
         async function syncToFirebase(collectionName, data) {
@@ -1153,13 +1380,22 @@
         }
 
         function switchTab(e, tab) {
-            document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
-            e.target.classList.add('active');
             document.querySelectorAll('.hub-tab').forEach(t => t.classList.remove('active'));
             document.getElementById(`${tab}-tab`).classList.add('active');
 
             if (tab === 'prompt') loadHubPrompt();
             else if (tab === 'resources') renderAllResources();
+        }
+
+        function switchTabFromDropdown() {
+            const dropdown = document.getElementById('sectionSelect');
+            const selectedTab = dropdown.value;
+            
+            document.querySelectorAll('.hub-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(`${selectedTab}-tab`).classList.add('active');
+
+            if (selectedTab === 'prompt') loadHubPrompt();
+            else if (selectedTab === 'resources') renderAllResources();
         }
 
         async function initBoard() {
@@ -1645,6 +1881,7 @@
             await initBoard();
             await loadVideos();
             await loadResources();
+            await loadTodos();
         });
     </script>
 </body>
