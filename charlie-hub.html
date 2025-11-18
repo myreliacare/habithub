@@ -158,14 +158,15 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             cursor: pointer;
             transition: all 0.2s ease;
-            padding: 3px;
+            padding: 8px 4px;
             background: #3a3a3a;
             color: #e0e0e0;
             position: relative;
-            line-height: 1.1;
+            line-height: 1.2;
+            font-weight: 600;
         }
 
         .bingo-cell.completed {
@@ -825,13 +826,6 @@
                     <div class="prompt-text" id="promptQuestionHub"></div>
                 </div>
 
-                <div id="currentAnswerBox" style="display: none; margin-bottom: 20px;">
-                    <div class="answer-box">
-                        <div class="answer-person">Your Current Answer</div>
-                        <div class="answer-text" id="currentAnswer"></div>
-                    </div>
-                </div>
-
                 <div class="event-form active">
                     <form onsubmit="saveAnswer(event)">
                         <div class="form-group">
@@ -1027,7 +1021,7 @@
             const savedDate = localStorage.getItem('bingoDate_charlie');
             const boardVersion = localStorage.getItem('bingoVersion_charlie');
             
-            // Force reset if switching from 5x5 to 4x4
+            // Force reset if switching from 5x5 to 4x4 OR if we detect wrong number of habits
             if (boardVersion !== '4x4') {
                 localStorage.removeItem('bingoState_charlie');
                 localStorage.setItem('bingoVersion_charlie', '4x4');
@@ -1046,17 +1040,24 @@
                     const saved = localStorage.getItem('bingoState_charlie');
                     if (saved) {
                         const data = JSON.parse(saved);
+                        // Only use saved data if it has exactly 16 habits
                         if (data.habits && data.habits.length === 16) {
                             currentHabits = data.habits;
                             boardState = data.state;
                             await syncToFirebase('bingoState_charlie', data);
                         } else {
+                            // Wrong number of habits, force shuffle
                             await shuffleBoard();
                         }
                     } else {
                         await shuffleBoard();
                     }
                 }
+            }
+            
+            // Final safety check - if we somehow still don't have 16 habits, shuffle
+            if (!currentHabits || currentHabits.length !== 16) {
+                await shuffleBoard();
             }
             
             updateDateDisplay();
@@ -1457,14 +1458,10 @@
 
             const savedAnswers = await loadFromFirebase('dailyPromptAnswers') || {};
             
+            // If there's a saved answer for today, populate the textarea
             if (savedAnswers.date === today.toDateString() && savedAnswers.charlie) {
-                document.getElementById('currentAnswerBox').style.display = 'block';
-                document.getElementById('currentAnswer').textContent = savedAnswers.charlie;
-                document.getElementById('answerLabel').textContent = 'Update Your Answer';
                 document.getElementById('answerInput').value = savedAnswers.charlie;
             } else {
-                document.getElementById('currentAnswerBox').style.display = 'none';
-                document.getElementById('answerLabel').textContent = 'Your Answer';
                 document.getElementById('answerInput').value = '';
             }
         }
