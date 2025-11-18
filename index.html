@@ -366,6 +366,38 @@
             letter-spacing: 0.05em;
         }
 
+        .sticky-note-list {
+            max-height: none;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .sticky-note-list.collapsed {
+            max-height: 250px;
+        }
+
+        .sticky-note-expand-btn {
+            background: transparent;
+            border: 1px solid #7ba886;
+            color: #7ba886;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            width: 100%;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .sticky-note-expand-btn.show {
+            display: block;
+        }
+
+        .sticky-note-expand-btn:hover {
+            background: rgba(123, 168, 134, 0.1);
+        }
+
         .sticky-note-input {
             display: flex;
             gap: 6px;
@@ -871,7 +903,8 @@
         <div class="sticky-notes-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; margin-bottom: 24px;">
             <div class="sticky-note">
                 <h3 class="sticky-note-title">Reminders</h3>
-                <div id="remindersList"></div>
+                <div class="sticky-note-list collapsed" id="remindersList"></div>
+                <button class="sticky-note-expand-btn" id="remindersExpandBtn" onclick="toggleRemindersList()">Show More</button>
                 <div class="sticky-note-input">
                     <input type="text" id="reminderInput" placeholder="Add reminder..." onkeypress="if(event.key==='Enter') addReminder()">
                     <button onclick="addReminder()">+</button>
@@ -880,7 +913,8 @@
 
             <div class="sticky-note">
                 <h3 class="sticky-note-title">Grocery List</h3>
-                <div id="groceryList"></div>
+                <div class="sticky-note-list collapsed" id="groceryList"></div>
+                <button class="sticky-note-expand-btn" id="groceryExpandBtn" onclick="toggleGroceryList()">Show More</button>
                 <div class="sticky-note-input">
                     <input type="text" id="groceryInput" placeholder="Add item..." onkeypress="if(event.key==='Enter') addGrocery()">
                     <button onclick="addGrocery()">+</button>
@@ -1585,10 +1619,12 @@
 
         function renderReminders() {
             const list = document.getElementById('remindersList');
+            const expandBtn = document.getElementById('remindersExpandBtn');
             if (!list) return;
             
             if (reminders.length === 0) {
                 list.innerHTML = '<div class="empty-state" style="color: #666; font-size: 0.85rem; padding: 12px;">No reminders yet</div>';
+                expandBtn.classList.remove('show');
                 return;
             }
 
@@ -1602,6 +1638,27 @@
                 `;
                 list.appendChild(itemDiv);
             });
+
+            // Show expand button if 5 or more items
+            if (reminders.length >= 5) {
+                expandBtn.classList.add('show');
+            } else {
+                expandBtn.classList.remove('show');
+                list.classList.remove('collapsed');
+            }
+        }
+
+        function toggleRemindersList() {
+            const list = document.getElementById('remindersList');
+            const btn = document.getElementById('remindersExpandBtn');
+            
+            if (list.classList.contains('collapsed')) {
+                list.classList.remove('collapsed');
+                btn.textContent = 'Show Less';
+            } else {
+                list.classList.add('collapsed');
+                btn.textContent = 'Show More';
+            }
         }
 
         async function loadGroceries() {
@@ -1652,10 +1709,12 @@
 
         function renderGroceries() {
             const list = document.getElementById('groceryList');
+            const expandBtn = document.getElementById('groceryExpandBtn');
             if (!list) return;
             
             if (groceries.length === 0) {
                 list.innerHTML = '<div class="empty-state" style="color: #666; font-size: 0.85rem; padding: 12px;">No items yet</div>';
+                expandBtn.classList.remove('show');
                 return;
             }
 
@@ -1669,6 +1728,27 @@
                 `;
                 list.appendChild(itemDiv);
             });
+
+            // Show expand button if 5 or more items
+            if (groceries.length >= 5) {
+                expandBtn.classList.add('show');
+            } else {
+                expandBtn.classList.remove('show');
+                list.classList.remove('collapsed');
+            }
+        }
+
+        function toggleGroceryList() {
+            const list = document.getElementById('groceryList');
+            const btn = document.getElementById('groceryExpandBtn');
+            
+            if (list.classList.contains('collapsed')) {
+                list.classList.remove('collapsed');
+                btn.textContent = 'Show Less';
+            } else {
+                list.classList.add('collapsed');
+                btn.textContent = 'Show More';
+            }
         }
 
         // MONTHLY CHALLENGE FUNCTIONS
