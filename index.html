@@ -86,6 +86,72 @@
             text-align: center;
             margin-bottom: 32px;
             margin-top: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+        }
+
+        .header-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(181, 145, 151, 0.5);
+        }
+
+        .header-photo-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+        }
+
+        .photo-placeholder {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 2px dashed rgba(181, 145, 151, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #b59197;
+        }
+
+        .upload-photo-btn {
+            position: absolute;
+            bottom: -8px;
+            right: -8px;
+            background: #b59197;
+            border: 2px solid #1a1a1a;
+            color: #fff;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            font-family: inherit;
+            opacity: 0;
+        }
+
+        .header-photo-container:hover .upload-photo-btn {
+            opacity: 1;
+        }
+
+        .upload-photo-btn span {
+            display: none;
+        }
+
+        .upload-photo-btn::before {
+            content: '📷';
+        }
+
+        .upload-photo-btn:hover {
+            background: #c5a1a7;
+            transform: scale(1.1);
         }
 
         .home-title {
@@ -957,6 +1023,16 @@
             .home-title {
                 font-size: 2.25rem;
             }
+
+            .home-header {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .header-photo {
+                width: 100px;
+                height: 100px;
+            }
         }
     </style>
 </head>
@@ -968,6 +1044,16 @@
 
     <div class="container">
         <div class="home-header">
+            <div class="header-photo-container">
+                <img id="headerPhoto" class="header-photo" style="display: none;">
+                <div id="photoPlaceholder" class="photo-placeholder">
+                    <span style="font-size: 2rem; opacity: 0.3;">+</span>
+                </div>
+                <input type="file" id="photoUpload" accept="image/*" style="display: none;">
+                <button class="upload-photo-btn" onclick="document.getElementById('photoUpload').click()">
+                    <span id="uploadBtnText">Upload Photo</span>
+                </button>
+            </div>
             <h1 class="home-title">Our Habit Hub</h1>
         </div>
 
@@ -2206,10 +2292,56 @@
             await loadPromptAnswers();
             await setMonthlyChallenge();
             await loadChallengeNotes();
+            await loadHeaderPhoto();
+            
+            // Setup photo upload
+            document.getElementById('photoUpload').addEventListener('change', handlePhotoUpload);
             
             // Setup real-time listeners
             setTimeout(setupAllListeners, 1000);
         });
+
+        async function loadHeaderPhoto() {
+            const savedPhoto = await loadFromFirebase('headerPhoto');
+            if (savedPhoto && savedPhoto.data) {
+                const img = document.getElementById('headerPhoto');
+                const placeholder = document.getElementById('photoPlaceholder');
+                img.src = savedPhoto.data;
+                img.style.display = 'block';
+                placeholder.style.display = 'none';
+            }
+        }
+
+        async function handlePhotoUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            if (!file.type.startsWith('image/')) {
+                alert('Please select an image file.');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = async function(event) {
+                const img = document.getElementById('headerPhoto');
+                const placeholder = document.getElementById('photoPlaceholder');
+                
+                img.src = event.target.result;
+                img.style.display = 'block';
+                placeholder.style.display = 'none';
+                
+                // Save to Firebase
+                const photoData = {
+                    data: event.target.result,
+                    uploaded: new Date().toISOString()
+                };
+                
+                localStorage.setItem('headerPhoto', JSON.stringify(photoData));
+                await syncToFirebase('headerPhoto', photoData);
+            };
+            
+            reader.readAsDataURL(file);
+        }
     </script>
 </body>
 </html>
