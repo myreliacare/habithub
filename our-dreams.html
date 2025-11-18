@@ -584,9 +584,10 @@
 
         <div class="section-nav-dropdown">
             <select id="sectionSelect" onchange="switchToSection(this.value)">
+                <option value="restaurants">Restaurants</option>
+                <option value="places">Places to Go</option>
                 <option value="wishlists">Wishlists</option>
                 <option value="travel">Travel</option>
-                <option value="restaurants">Restaurants</option>
                 <option value="shows-movies">TV Shows & Movies</option>
                 <option value="bucket">Bucket List</option>
                 <option value="home">Dream Home</option>
@@ -596,7 +597,7 @@
         </div>
 
         <!-- WISHLISTS TAB -->
-        <div id="wishlists-tab" class="dreams-tab active">
+        <div id="wishlists-tab" class="dreams-tab">
             <div class="section" style="margin-bottom: 24px;">
                 <h2 class="section-title">Kasey's Wishlist</h2>
                 
@@ -725,7 +726,7 @@
         </div>
 
         <!-- RESTAURANTS TAB -->
-        <div id="restaurants-tab" class="dreams-tab">
+        <div id="restaurants-tab" class="dreams-tab active">
             <div class="section">
                 <h2 class="section-title">Restaurants We Want to Try</h2>
                 
@@ -736,6 +737,35 @@
                         <div class="form-group">
                             <label>Restaurant Name</label>
                             <input type="text" name="title" required placeholder="Name of the place">
+                        </div>
+                        <div class="form-group">
+                            <label>Type (Select all that apply)</label>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px;">
+                                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 0.85rem; text-transform: none;">
+                                    <input type="checkbox" name="restaurantType" value="breakfast"> Breakfast
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 0.85rem; text-transform: none;">
+                                    <input type="checkbox" name="restaurantType" value="brunch"> Brunch
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 0.85rem; text-transform: none;">
+                                    <input type="checkbox" name="restaurantType" value="lunch"> Lunch
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 0.85rem; text-transform: none;">
+                                    <input type="checkbox" name="restaurantType" value="dinner"> Dinner
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 0.85rem; text-transform: none;">
+                                    <input type="checkbox" name="restaurantType" value="cafe"> Cafe
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 0.85rem; text-transform: none;">
+                                    <input type="checkbox" name="restaurantType" value="bar"> Bar
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 0.85rem; text-transform: none;">
+                                    <input type="checkbox" name="restaurantType" value="bakery"> Bakery
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 0.85rem; text-transform: none;">
+                                    <input type="checkbox" name="restaurantType" value="dessert"> Dessert
+                                </label>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>Location & Details</label>
@@ -763,6 +793,50 @@
                 </div>
 
                 <div class="dream-list" id="restaurants-list">
+                    <div class="empty-state">Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PLACES TAB -->
+        <div id="places-tab" class="dreams-tab">
+            <div class="section">
+                <h2 class="section-title">Places We Want to Go</h2>
+                
+                <button class="add-dream-btn" onclick="showForm('places')">+ Add Place</button>
+                
+                <div class="dream-form" id="places-form">
+                    <form onsubmit="addDream(event, 'places')">
+                        <div class="form-group">
+                            <label>Place Name</label>
+                            <input type="text" name="title" required placeholder="Where do you want to go?">
+                        </div>
+                        <div class="form-group">
+                            <label>Details</label>
+                            <textarea name="details" placeholder="What is it? What do you want to do there?"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Add Image (Optional)</label>
+                            <input type="file" class="image-upload-input" id="places-image" accept="image/*" onchange="previewImage(event, 'places')">
+                            <label for="places-image" class="image-upload-label">Choose Image</label>
+                            <div id="places-preview"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Priority</label>
+                            <select name="priority">
+                                <option value="">Someday</option>
+                                <option value="soon">Soon</option>
+                                <option value="high">Must Go!</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn" onclick="hideForm('places')">Cancel</button>
+                            <button type="submit" class="btn">Save</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="dream-list" id="places-list">
                     <div class="empty-state">Loading...</div>
                 </div>
             </div>
@@ -1020,10 +1094,17 @@
         const database = getDatabase(app);
 
         // Global variables
-        const categories = ['kasey-wishlist', 'charlie-wishlist', 'travel', 'restaurants', 'bucket', 'home', 'pets', 'traditions', 'shows-movies'];
+        const categories = ['restaurants', 'places', 'kasey-wishlist', 'charlie-wishlist', 'travel', 'bucket', 'home', 'pets', 'traditions', 'shows-movies'];
         let dreams = {};
         let isConnected = false;
         let currentImageData = {};
+
+        // Helper function to escape HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
 
         // Update sync status
         function updateSyncStatus(connected) {
@@ -1130,6 +1211,14 @@
                 image: currentImageData[category] || null
             };
 
+            // Add restaurant types if it's a restaurant (multiple selections)
+            if (category === 'restaurants') {
+                const types = formData.getAll('restaurantType');
+                if (types.length > 0) {
+                    dream.restaurantTypes = types;
+                }
+            }
+
             // Push to Firebase
             const dreamsRef = ref(database, `dreams/${category}`);
             push(dreamsRef, dream);
@@ -1143,10 +1232,11 @@
             
             if (dreams[category].length === 0) {
                 const emptyMessages = {
+                    restaurants: 'No restaurants yet. Where should you go for date night?',
+                    places: 'No places yet. Where do you want to go?',
                     'kasey-wishlist': 'Kasey\'s wishlist is empty',
                     'charlie-wishlist': 'Charlie\'s wishlist is empty',
                     travel: 'No travel dreams yet. Where do you want to go?',
-                    restaurants: 'No restaurants yet. Where should you go for date night?',
                     'shows-movies': 'No shows or movies yet. What do you want to watch together?',
                     bucket: 'Start building your bucket list together!',
                     home: 'What does your dream home look like?',
@@ -1182,13 +1272,33 @@
                     priorityTag = '<span class="dream-tag priority-soon">Soon</span>';
                 }
 
+                // Add restaurant type tags if they exist (handle both old single and new multiple)
+                let restaurantTypeTags = '';
+                if (dream.restaurantTypes && Array.isArray(dream.restaurantTypes)) {
+                    // New format: multiple types
+                    restaurantTypeTags = dream.restaurantTypes.map(type => {
+                        const typeLabel = type.charAt(0).toUpperCase() + type.slice(1);
+                        return `<span class="dream-tag">${typeLabel}</span>`;
+                    }).join('');
+                } else if (dream.restaurantType) {
+                    // Old format: single type (for backward compatibility)
+                    const typeLabel = dream.restaurantType.charAt(0).toUpperCase() + dream.restaurantType.slice(1);
+                    restaurantTypeTags = `<span class="dream-tag">${typeLabel}</span>`;
+                }
+
+                // Combine all tags
+                let allTags = '';
+                if (restaurantTypeTags || priorityTag) {
+                    allTags = `<div class="dream-item-meta">${restaurantTypeTags}${priorityTag}</div>`;
+                }
+
                 html += `
                     <div class="dream-item ${dream.achieved ? 'achieved' : ''}">
                         <div class="dream-item-content">
-                            <div class="dream-item-title">${dream.title}</div>
-                            ${dream.details ? `<div class="dream-item-details">${dream.details}</div>` : ''}
-                            ${dream.image ? `<img src="${dream.image}" class="dream-item-image" onclick="openLightbox('${dream.image}')" alt="${dream.title}">` : ''}
-                            ${priorityTag ? `<div class="dream-item-meta">${priorityTag}</div>` : ''}
+                            <div class="dream-item-title">${escapeHtml(dream.title)}</div>
+                            ${dream.details ? `<div class="dream-item-details">${escapeHtml(dream.details)}</div>` : ''}
+                            ${dream.image ? `<img src="${dream.image}" class="dream-item-image" onclick="openLightbox(this.src)" alt="${escapeHtml(dream.title)}">` : ''}
+                            ${allTags}
                         </div>
                         <div class="dream-item-actions">
                             <button class="icon-btn ${dream.achieved ? 'achieved' : ''}" onclick="toggleAchieved('${category}', '${dream.firebaseId}', ${!dream.achieved})">
