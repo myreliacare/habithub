@@ -587,6 +587,7 @@
                 <option value="wishlists">Wishlists</option>
                 <option value="travel">Travel</option>
                 <option value="restaurants">Restaurants</option>
+                <option value="shows-movies">TV Shows & Movies</option>
                 <option value="bucket">Bucket List</option>
                 <option value="home">Dream Home</option>
                 <option value="pets">Future Pets</option>
@@ -762,6 +763,50 @@
                 </div>
 
                 <div class="dream-list" id="restaurants-list">
+                    <div class="empty-state">Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TV SHOWS & MOVIES TAB -->
+        <div id="shows-movies-tab" class="dreams-tab">
+            <div class="section">
+                <h2 class="section-title">TV Shows & Movies to Watch Together</h2>
+                
+                <button class="add-dream-btn" onclick="showForm('shows-movies')">+ Add Show or Movie</button>
+                
+                <div class="dream-form" id="shows-movies-form">
+                    <form onsubmit="addDream(event, 'shows-movies')">
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" name="title" required placeholder="Name of the show or movie">
+                        </div>
+                        <div class="form-group">
+                            <label>Details</label>
+                            <textarea name="details" placeholder="Where to watch? Genre? Why you want to see it?"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Add Image (Optional)</label>
+                            <input type="file" class="image-upload-input" id="shows-movies-image" accept="image/*" onchange="previewImage(event, 'shows-movies')">
+                            <label for="shows-movies-image" class="image-upload-label">Choose Image</label>
+                            <div id="shows-movies-preview"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Priority</label>
+                            <select name="priority">
+                                <option value="">Someday</option>
+                                <option value="soon">Watch Soon</option>
+                                <option value="high">Must Watch!</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn" onclick="hideForm('shows-movies')">Cancel</button>
+                            <button type="submit" class="btn">Save</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="dream-list" id="shows-movies-list">
                     <div class="empty-state">Loading...</div>
                 </div>
             </div>
@@ -975,7 +1020,7 @@
         const database = getDatabase(app);
 
         // Global variables
-        const categories = ['kasey-wishlist', 'charlie-wishlist', 'travel', 'restaurants', 'bucket', 'home', 'pets', 'traditions'];
+        const categories = ['kasey-wishlist', 'charlie-wishlist', 'travel', 'restaurants', 'bucket', 'home', 'pets', 'traditions', 'shows-movies'];
         let dreams = {};
         let isConnected = false;
         let currentImageData = {};
@@ -1102,6 +1147,7 @@
                     'charlie-wishlist': 'Charlie\'s wishlist is empty',
                     travel: 'No travel dreams yet. Where do you want to go?',
                     restaurants: 'No restaurants yet. Where should you go for date night?',
+                    'shows-movies': 'No shows or movies yet. What do you want to watch together?',
                     bucket: 'Start building your bucket list together!',
                     home: 'What does your dream home look like?',
                     pets: 'Dream about your future fur (or scale, or feather) babies!',
