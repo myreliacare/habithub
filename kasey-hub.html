@@ -165,8 +165,8 @@
             text-align: center;
             color: #ffffff;
             margin-bottom: 4px;
-            font-size: 0.75rem;
-            font-weight: 400;
+            font-size: 0.9rem;
+            font-weight: 600;
             letter-spacing: 0.15em;
             text-transform: uppercase;
         }
@@ -175,8 +175,8 @@
             text-align: center;
             color: #b59197;
             margin-bottom: 16px;
-            font-size: 2rem;
-            font-weight: 400;
+            font-size: 2.5rem;
+            font-weight: 600;
             letter-spacing: 0.05em;
             line-height: 1.2;
         }
@@ -185,14 +185,16 @@
             text-align: center;
             color: #999999;
             margin-bottom: 16px;
-            font-size: 0.8rem;
+            font-size: 0.95rem;
+            font-weight: 500;
         }
 
         .date-display {
             text-align: center;
             color: #999999;
             margin-bottom: 20px;
-            font-size: 0.8rem;
+            font-size: 0.95rem;
+            font-weight: 500;
         }
 
         .bingo-grid {
@@ -212,14 +214,15 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            font-size: 0.7rem;
+            font-size: 0.9rem;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
-            padding: 3px;
+            padding: 8px;
             background: #3a3a3a;
-            color: #e0e0e0;
+            color: #ffffff;
             position: relative;
-            line-height: 1.1;
+            line-height: 1.3;
         }
 
         .bingo-cell.completed {
@@ -230,11 +233,11 @@
         .bingo-cell.free-space {
             background: #b59197;
             color: #2a2a2a;
-            font-weight: 500;
+            font-weight: 700;
             cursor: default;
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            font-size: 0.7rem;
+            font-size: 0.9rem;
         }
 
         .controls {
@@ -612,14 +615,16 @@
 
             .bingo-cell {
                 aspect-ratio: auto;
-                min-height: 80px;
-                font-size: 0.7rem;
-                padding: 6px 3px;
-                line-height: 1.2;
+                min-height: 90px;
+                font-size: 0.85rem;
+                font-weight: 600;
+                padding: 8px 4px;
+                line-height: 1.3;
             }
 
             .bingo-cell.free-space {
-                font-size: 0.75rem;
+                font-size: 0.9rem;
+                font-weight: 700;
             }
 
             .controls {
@@ -659,18 +664,21 @@
             }
 
             .main-title {
-                font-size: 1.3rem;
+                font-size: 1.6rem;
                 margin-bottom: 10px;
+                font-weight: 600;
             }
 
             .subtitle {
-                font-size: 0.7rem;
+                font-size: 0.85rem;
                 margin-bottom: 10px;
+                font-weight: 500;
             }
 
             .date-display {
-                font-size: 0.7rem;
+                font-size: 0.85rem;
                 margin-bottom: 12px;
+                font-weight: 500;
             }
 
             .bingo-grid {
@@ -680,14 +688,16 @@
 
             .bingo-cell {
                 aspect-ratio: auto;
-                min-height: 70px;
-                font-size: 0.68rem;
-                padding: 5px 2px;
-                line-height: 1.2;
+                min-height: 80px;
+                font-size: 0.8rem;
+                font-weight: 600;
+                padding: 6px 3px;
+                line-height: 1.3;
             }
 
             .bingo-cell.free-space {
-                font-size: 0.7rem;
+                font-size: 0.85rem;
+                font-weight: 700;
                 letter-spacing: 0.05em;
             }
 
@@ -996,9 +1006,9 @@
             "Eat a Healthy Meal",
             "Read 10+ Pages",
             "Meditate",
-            "Sleep 7+ Hours",
+            "Subliminals & Rampages",
             "Journal",
-            "Walk 10k Steps",
+            "Walk 8k Steps",
             "Stretch",
             "Vibration Plate",
             "Take Vitamins & Supplements",
@@ -1007,9 +1017,9 @@
             "Do Laundry",
             "Altar Time",
             "Tidy Living Space",
-            "Dry Brushing",
+            "Dry Brushing & Face Massage",
             "EFT Tapping",
-            "Time Outside",
+            "Spend Time Outside",
             "No Social Media in the Morning"
         ];
 
@@ -1208,7 +1218,7 @@
             const shuffled = [...kaseyHabits].sort(() => Math.random() - 0.5).slice(0, 16);
             currentHabits = shuffled;
             
-            // Restore completed state for habits that are still on the board
+            // Restore completed state for ALL habits that were completed, even if they're on the new board
             boardState = new Array(16).fill(false);
             currentHabits.forEach((habit, index) => {
                 if (completedHabits.has(habit)) {
@@ -1602,6 +1612,23 @@
         }
 
         document.addEventListener('DOMContentLoaded', async function() {
+            // Force clear old cached habits if they don't match current list
+            const saved = localStorage.getItem('bingoState_kasey');
+            if (saved) {
+                const data = JSON.parse(saved);
+                // Check if saved habits include old values that need updating
+                if (data.habits && (
+                    data.habits.includes('Walk 10k Steps') || 
+                    data.habits.includes('Dry Brushing') ||
+                    data.habits.includes('Sleep 7+ Hours') ||
+                    data.habits.includes('Time Outside')
+                )) {
+                    // Clear the old saved state
+                    localStorage.removeItem('bingoState_kasey');
+                    console.log('Cleared outdated habits');
+                }
+            }
+            
             await initBoard();
             await loadVideos();
             await loadResources();
