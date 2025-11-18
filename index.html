@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>Our Daily Habits Hub - Home</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,6 +14,15 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            touch-action: pan-y;
         }
 
         body {
@@ -20,6 +31,13 @@
             min-height: 100vh;
             padding: 16px;
             color: #e0e0e0;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
         }
 
         .container {
@@ -85,6 +103,19 @@
         .hub-nav-btn.charlie:hover {
             background: #7ba886;
             color: #ffffff;
+        }
+
+        .hub-nav-btn.dreams {
+            border-color: #9b8a9e;
+            color: #9b8a9e;
+            font-family: 'Cormorant', Georgia, 'Times New Roman', serif;
+            font-weight: 500;
+        }
+
+        .hub-nav-btn.dreams:hover {
+            background: linear-gradient(135deg, #b59197 0%, #7ba886 100%);
+            color: #ffffff;
+            border-color: #9b8a9e;
         }
 
         .section {
@@ -469,6 +500,61 @@
             color: #2a2a2a;
         }
 
+        .challenge-box {
+            background: #1a1a1a;
+            padding: 24px;
+            border-left: 3px solid #7ba886;
+        }
+
+        .challenge-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .challenge-month {
+            color: #7ba886;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 500;
+        }
+
+        .challenge-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .challenge-checkbox input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #7ba886;
+        }
+
+        .challenge-status {
+            color: #999;
+            font-size: 0.85rem;
+        }
+
+        .challenge-checkbox input[type="checkbox"]:checked ~ .challenge-status {
+            color: #7ba886;
+            font-weight: 500;
+        }
+
+        .challenge-text {
+            color: #fff;
+            font-size: 1.125rem;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
         .no-answer {
             color: #666;
             font-style: italic;
@@ -563,7 +649,6 @@
     <div class="container">
         <div class="home-header">
             <h1 class="home-title">Our Habit Hub</h1>
-            <p class="home-subtitle">Growing Together, One Day at a Time</p>
         </div>
 
         <div class="nav-buttons">
@@ -638,6 +723,9 @@
             </div>
         </div>
 
+        <!-- Dreams & Goals Link -->
+        <a href="our-dreams.html" class="hub-nav-btn dreams" style="margin-bottom: 24px;">Our Life Together</a>
+
         <!-- Daily Prompt Section -->
         <div class="section">
             <h2 class="section-title">Today's Prompt</h2>
@@ -669,6 +757,23 @@
                     </div>
                     <div id="charlieAnswerDisplay" class="answer-display" style="display: none;"></div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Monthly Challenge Section -->
+        <div class="section">
+            <h2 class="section-title">This Month's Challenge</h2>
+            
+            <div class="challenge-box">
+                <div class="challenge-header">
+                    <div class="challenge-month" id="challengeMonth"></div>
+                    <label class="challenge-checkbox">
+                        <input type="checkbox" id="challengeComplete" onchange="toggleChallenge()">
+                        <span class="checkmark"></span>
+                        <span class="challenge-status" id="challengeStatus">Not completed</span>
+                    </label>
+                </div>
+                <div class="challenge-text" id="challengeText"></div>
             </div>
         </div>
     </div>
@@ -707,6 +812,21 @@
             "What's one thing that always brightens your day when I do it?"
         ];
 
+        const monthlyChallenges = [
+            "Write each other a love letter and read them aloud together",
+            "Go on a walk together at least 3 times per week",
+            "Try a new restaurant or cafe you've never been to",
+            "Have a technology-free evening once a week",
+            "Learn something new together (a skill, hobby, or topic)",
+            "Do a random act of kindness for each other every week",
+            "Plan and execute a surprise date for each other",
+            "Start a new tradition together",
+            "Declutter and organize one space in your home together",
+            "Take photos together once a week to capture memories",
+            "Take a day trip to somewhere you've never been",
+            "Create something together (art, craft, garden, etc.)"
+        ];
+
         let calendarView = 'twoday'; // 'twoday', 'week', or 'month'
         let calendarDate = new Date();
         let calendarEvents = [];
@@ -728,7 +848,9 @@
         function calendarGetEventsForDate(date) {
             const dateStr = date.toDateString();
             return calendarEvents.filter(event => {
-                const eventDate = new Date(event.date);
+                // Parse the date string without time to avoid timezone issues
+                const [year, month, day] = event.date.split('-').map(Number);
+                const eventDate = new Date(year, month - 1, day);
                 return eventDate.toDateString() === dateStr;
             });
         }
@@ -785,20 +907,26 @@
             const container = document.getElementById('calendarContainer');
             container.innerHTML = '';
             
-            const today = new Date();
-            const tomorrow = new Date(today);
-            tomorrow.setDate(today.getDate() + 1);
+            // Use calendarDate as the starting point
+            const firstDay = new Date(calendarDate);
+            const secondDay = new Date(calendarDate);
+            secondDay.setDate(firstDay.getDate() + 1);
             
             document.getElementById('calendarTitle').textContent = 
-                `${today.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${tomorrow.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+                `${firstDay.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${secondDay.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+            
+            // Check if we're showing today
+            const today = new Date();
+            const todayStr = today.toDateString();
             
             for (let i = 0; i < 2; i++) {
-                const date = i === 0 ? new Date(today) : new Date(tomorrow);
+                const date = i === 0 ? new Date(firstDay) : new Date(secondDay);
                 
                 const dayDiv = document.createElement('div');
                 dayDiv.className = 'week-day';
                 
-                if (i === 0) {
+                // Highlight if this is today
+                if (date.toDateString() === todayStr) {
                     dayDiv.classList.add('today');
                 }
                 
@@ -814,7 +942,7 @@
                                     <div class="event-title">${event.time ? event.time + ' - ' : ''}${event.title}</div>
                                     ${event.note ? `<div class="event-note">${event.note}</div>` : ''}
                                 </div>
-                                <button class="btn" onclick="calendarDeleteEvent(${eventIndex})" style="padding: 4px 8px; min-width: auto;">×</button>
+                                <button class="btn" onclick="calendarDeleteEvent(${eventIndex})" style="padding: 6px 12px; font-size: 0.75rem;">Delete</button>
                             </div>
                         `;
                     });
@@ -871,7 +999,7 @@
                                     <div class="event-title">${event.time ? event.time + ' - ' : ''}${event.title}</div>
                                     ${event.note ? `<div class="event-note">${event.note}</div>` : ''}
                                 </div>
-                                <button class="btn" onclick="calendarDeleteEvent(${eventIndex})" style="padding: 4px 8px; min-width: auto;">×</button>
+                                <button class="btn" onclick="calendarDeleteEvent(${eventIndex})" style="padding: 6px 12px; font-size: 0.75rem;">Delete</button>
                             </div>
                         `;
                     });
@@ -1012,7 +1140,9 @@
         }
 
         function calendarDeleteEvent(index) {
-            if (confirm('Delete this event?')) {
+            const event = calendarEvents[index];
+            const eventTitle = event.title;
+            if (confirm(`Are you sure you want to delete "${eventTitle}"?\n\nThis cannot be undone.`)) {
                 calendarEvents.splice(index, 1);
                 calendarSaveEvents();
                 calendarRender();
@@ -1225,12 +1355,68 @@
             });
         }
 
+        // MONTHLY CHALLENGE FUNCTIONS
+        function setMonthlyChallenge() {
+            const today = new Date();
+            const currentMonth = today.getMonth(); // 0-11
+            const currentYear = today.getFullYear();
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                              'July', 'August', 'September', 'October', 'November', 'December'];
+            
+            document.getElementById('challengeMonth').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+            
+            // Use month index to get challenge (cycles through the 12 challenges)
+            const challengeIndex = currentMonth % monthlyChallenges.length;
+            document.getElementById('challengeText').textContent = monthlyChallenges[challengeIndex];
+            
+            loadChallengeStatus();
+        }
+
+        function loadChallengeStatus() {
+            const today = new Date();
+            const currentMonth = `${today.getFullYear()}-${today.getMonth()}`;
+            const savedChallenge = JSON.parse(localStorage.getItem('monthlyChallenge') || '{}');
+            
+            if (savedChallenge.month === currentMonth && savedChallenge.completed) {
+                document.getElementById('challengeComplete').checked = true;
+                document.getElementById('challengeStatus').textContent = 'Completed! 🎉';
+            } else {
+                document.getElementById('challengeComplete').checked = false;
+                document.getElementById('challengeStatus').textContent = 'Not completed';
+                // Clear old month's completion
+                if (savedChallenge.month !== currentMonth) {
+                    localStorage.setItem('monthlyChallenge', JSON.stringify({ 
+                        month: currentMonth, 
+                        completed: false 
+                    }));
+                }
+            }
+        }
+
+        function toggleChallenge() {
+            const isCompleted = document.getElementById('challengeComplete').checked;
+            const today = new Date();
+            const currentMonth = `${today.getFullYear()}-${today.getMonth()}`;
+            
+            localStorage.setItem('monthlyChallenge', JSON.stringify({
+                month: currentMonth,
+                completed: isCompleted
+            }));
+            
+            if (isCompleted) {
+                document.getElementById('challengeStatus').textContent = 'Completed! 🎉';
+            } else {
+                document.getElementById('challengeStatus').textContent = 'Not completed';
+            }
+        }
+
         // Initialize
         calendarInit();
         loadReminders();
         loadGroceries();
         setDailyPrompt();
         loadPromptAnswers();
+        setMonthlyChallenge();
     </script>
 </body>
 </html>
