@@ -1186,7 +1186,7 @@
 
         function calendarGetEventsForDate(date) {
             const dateStr = date.toDateString();
-            return calendarEvents.filter(event => {
+            const events = calendarEvents.filter(event => {
                 try {
                     const [year, month, day] = event.date.split('-').map(Number);
                     const eventDate = new Date(year, month - 1, day);
@@ -1195,6 +1195,32 @@
                     return false;
                 }
             });
+            
+            // Sort events by time
+            events.sort((a, b) => {
+                // Events without time go to the end
+                if (!a.time && !b.time) return 0;
+                if (!a.time) return 1;
+                if (!b.time) return -1;
+                
+                // Compare times
+                return a.time.localeCompare(b.time);
+            });
+            
+            return events;
+        }
+
+        function formatTime12Hour(time24) {
+            if (!time24) return '';
+            
+            const [hours, minutes] = time24.split(':');
+            let hour = parseInt(hours);
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            
+            hour = hour % 12;
+            hour = hour ? hour : 12; // Convert 0 to 12
+            
+            return `${hour}:${minutes} ${ampm}`;
         }
 
         function calendarToggleView() {
@@ -1275,10 +1301,11 @@
                 if (dayEvents.length > 0) {
                     dayEvents.forEach((event) => {
                         const eventIndex = calendarEvents.indexOf(event);
+                        const displayTime = event.time ? formatTime12Hour(event.time) : '';
                         eventsHTML += `
                             <div class="event-item">
                                 <div>
-                                    <div class="event-title">${event.time ? event.time + ' - ' : ''}${event.title}</div>
+                                    <div class="event-title">${displayTime ? displayTime + ' - ' : ''}${event.title}</div>
                                     ${event.note ? `<div class="event-note">${event.note}</div>` : ''}
                                 </div>
                                 <button class="btn" onclick="calendarDeleteEvent(${eventIndex})" style="padding: 6px 12px; font-size: 0.75rem;">Delete</button>
@@ -1332,10 +1359,11 @@
                 if (dayEvents.length > 0) {
                     dayEvents.forEach((event) => {
                         const eventIndex = calendarEvents.indexOf(event);
+                        const displayTime = event.time ? formatTime12Hour(event.time) : '';
                         eventsHTML += `
                             <div class="event-item">
                                 <div>
-                                    <div class="event-title">${event.time ? event.time + ' - ' : ''}${event.title}</div>
+                                    <div class="event-title">${displayTime ? displayTime + ' - ' : ''}${event.title}</div>
                                     ${event.note ? `<div class="event-note">${event.note}</div>` : ''}
                                 </div>
                                 <button class="btn" onclick="calendarDeleteEvent(${eventIndex})" style="padding: 6px 12px; font-size: 0.75rem;">Delete</button>
