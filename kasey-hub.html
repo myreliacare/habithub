@@ -201,7 +201,7 @@
             gap: 2px;
             margin-bottom: 20px;
             background: #1a1a1a;
-            max-width: 100%;
+            max-width: 500px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -212,14 +212,14 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            font-size: 0.85rem;
+            font-size: 0.7rem;
             cursor: pointer;
             transition: all 0.2s ease;
-            padding: 4px;
+            padding: 3px;
             background: #3a3a3a;
             color: #e0e0e0;
             position: relative;
-            line-height: 1.2;
+            line-height: 1.1;
         }
 
         .bingo-cell.completed {
@@ -234,7 +234,7 @@
             cursor: default;
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            font-size: 0.85rem;
+            font-size: 0.7rem;
         }
 
         .controls {
@@ -609,11 +609,6 @@
                 max-width: 100%;
             }
 
-            .bingo-cell {
-                font-size: 0.75rem;
-                padding: 3px;
-            }
-
             .controls {
                 flex-direction: column;
             }
@@ -633,11 +628,11 @@
 
         @media (max-width: 480px) {
             body {
-                padding: 12px;
+                padding: 8px;
             }
 
             .bingo-section {
-                padding: 12px;
+                padding: 12px 8px;
             }
 
             .main-title {
@@ -645,12 +640,12 @@
             }
 
             .bingo-cell {
-                font-size: 0.7rem;
+                font-size: 0.6rem;
                 padding: 2px;
             }
 
             .bingo-cell.free-space {
-                font-size: 0.7rem;
+                font-size: 0.6rem;
             }
         }
     </style>
