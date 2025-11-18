@@ -147,7 +147,7 @@
             gap: 2px;
             margin-bottom: 20px;
             background: #1a1a1a;
-            max-width: 480px;
+            max-width: 100%;
             margin-left: auto;
             margin-right: auto;
         }
@@ -158,10 +158,10 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             cursor: pointer;
             transition: all 0.2s ease;
-            padding: 6px;
+            padding: 4px;
             background: #3a3a3a;
             color: #e0e0e0;
             position: relative;
@@ -180,7 +180,7 @@
             cursor: default;
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
         }
 
         .controls {
@@ -188,6 +188,7 @@
             gap: 12px;
             justify-content: center;
             margin-bottom: 20px;
+            flex-wrap: wrap;
         }
 
         .controls .btn {
@@ -554,6 +555,20 @@
             .bingo-grid {
                 max-width: 100%;
             }
+
+            .bingo-cell {
+                font-size: 0.55rem;
+                padding: 3px;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .controls .btn {
+                width: 100%;
+                min-width: unset;
+            }
         }
 
         @media (max-width: 480px) {
@@ -570,8 +585,12 @@
             }
 
             .bingo-cell {
-                font-size: 0.7rem;
-                padding: 6px;
+                font-size: 0.5rem;
+                padding: 2px;
+            }
+
+            .bingo-cell.free-space {
+                font-size: 0.5rem;
             }
         }
     </style>
