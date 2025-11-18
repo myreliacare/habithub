@@ -88,6 +88,30 @@
             font-style: italic;
         }
 
+        .sync-status {
+            position: fixed;
+            top: 20px;
+            right: 30px;
+            font-size: 0.75rem;
+            color: #999;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            z-index: 100;
+            background: #2a2a2a;
+            padding: 6px 12px;
+            border: 1px solid #444;
+        }
+
+        .sync-status.connected {
+            color: #7ba886;
+            border-color: #7ba886;
+        }
+
+        .sync-status.connected::before {
+            content: "✓ ";
+            font-weight: bold;
+        }
+
         .section-nav-dropdown {
             margin-bottom: 32px;
         }
@@ -237,6 +261,85 @@
             line-height: 1.5;
         }
 
+        .dream-item-image {
+            width: 100%;
+            max-width: 300px;
+            margin-top: 12px;
+            margin-bottom: 8px;
+            border: 1px solid #444;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .dream-item-image:hover {
+            transform: scale(1.02);
+        }
+
+        .image-upload-preview {
+            max-width: 200px;
+            margin-top: 10px;
+            border: 1px solid #444;
+        }
+
+        .image-upload-label {
+            display: inline-block;
+            background: transparent;
+            border: 1px solid #444;
+            color: #999;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            margin-top: 6px;
+        }
+
+        .image-upload-label:hover {
+            background: #9b8a9e;
+            color: #ffffff;
+            border-color: #9b8a9e;
+        }
+
+        .image-upload-input {
+            display: none;
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .lightbox.show {
+            display: flex;
+        }
+
+        .lightbox-image {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 10px;
+        }
+
         .dream-item-meta {
             display: flex;
             flex-wrap: wrap;
@@ -369,7 +472,7 @@
         }
 
         .form-actions button[type="submit"] {
-            border-color: #9b8a9e;
+            border: 1px solid #9b8a9e;
             color: #9b8a9e;
             background: transparent;
             padding: 8px 16px;
@@ -469,6 +572,8 @@
     </style>
 </head>
 <body>
+    <div class="sync-status" id="syncStatus">Connecting</div>
+    
     <div class="container">
         <a href="index.html" class="btn" style="margin-bottom: 24px;">← Back to Home</a>
         
@@ -507,6 +612,12 @@
                             <textarea name="details" placeholder="Where to find it, price, why you want it..."></textarea>
                         </div>
                         <div class="form-group">
+                            <label>Add Image (Optional)</label>
+                            <input type="file" class="image-upload-input" id="kasey-wishlist-image" accept="image/*" onchange="previewImage(event, 'kasey-wishlist')">
+                            <label for="kasey-wishlist-image" class="image-upload-label">Choose Image</label>
+                            <div id="kasey-wishlist-preview"></div>
+                        </div>
+                        <div class="form-group">
                             <label>Priority</label>
                             <select name="priority">
                                 <option value="">Nice to Have</option>
@@ -522,7 +633,7 @@
                 </div>
 
                 <div class="dream-list" id="kasey-wishlist-list">
-                    <div class="empty-state">Kasey's wishlist is empty</div>
+                    <div class="empty-state">Loading...</div>
                 </div>
             </div>
 
@@ -542,6 +653,12 @@
                             <textarea name="details" placeholder="Where to find it, price, why you want it..."></textarea>
                         </div>
                         <div class="form-group">
+                            <label>Add Image (Optional)</label>
+                            <input type="file" class="image-upload-input" id="charlie-wishlist-image" accept="image/*" onchange="previewImage(event, 'charlie-wishlist')">
+                            <label for="charlie-wishlist-image" class="image-upload-label">Choose Image</label>
+                            <div id="charlie-wishlist-preview"></div>
+                        </div>
+                        <div class="form-group">
                             <label>Priority</label>
                             <select name="priority">
                                 <option value="">Nice to Have</option>
@@ -557,7 +674,7 @@
                 </div>
 
                 <div class="dream-list" id="charlie-wishlist-list">
-                    <div class="empty-state">Charlie's wishlist is empty</div>
+                    <div class="empty-state">Loading...</div>
                 </div>
             </div>
         </div>
@@ -580,6 +697,12 @@
                             <textarea name="details" placeholder="What draws you to this place?"></textarea>
                         </div>
                         <div class="form-group">
+                            <label>Add Image (Optional)</label>
+                            <input type="file" class="image-upload-input" id="travel-image" accept="image/*" onchange="previewImage(event, 'travel')">
+                            <label for="travel-image" class="image-upload-label">Choose Image</label>
+                            <div id="travel-preview"></div>
+                        </div>
+                        <div class="form-group">
                             <label>Priority</label>
                             <select name="priority">
                                 <option value="">Someday</option>
@@ -595,7 +718,7 @@
                 </div>
 
                 <div class="dream-list" id="travel-list">
-                    <div class="empty-state">No travel dreams yet. Where do you want to go?</div>
+                    <div class="empty-state">Loading...</div>
                 </div>
             </div>
         </div>
@@ -618,6 +741,12 @@
                             <textarea name="details" placeholder="Where is it? What kind of food? What do you want to try?"></textarea>
                         </div>
                         <div class="form-group">
+                            <label>Add Image (Optional)</label>
+                            <input type="file" class="image-upload-input" id="restaurants-image" accept="image/*" onchange="previewImage(event, 'restaurants')">
+                            <label for="restaurants-image" class="image-upload-label">Choose Image</label>
+                            <div id="restaurants-preview"></div>
+                        </div>
+                        <div class="form-group">
                             <label>Occasion</label>
                             <select name="priority">
                                 <option value="">Casual</option>
@@ -633,7 +762,7 @@
                 </div>
 
                 <div class="dream-list" id="restaurants-list">
-                    <div class="empty-state">No restaurants yet. Where should you go for date night?</div>
+                    <div class="empty-state">Loading...</div>
                 </div>
             </div>
         </div>
@@ -656,6 +785,12 @@
                             <textarea name="details" placeholder="Any specifics or ideas?"></textarea>
                         </div>
                         <div class="form-group">
+                            <label>Add Image (Optional)</label>
+                            <input type="file" class="image-upload-input" id="bucket-image" accept="image/*" onchange="previewImage(event, 'bucket')">
+                            <label for="bucket-image" class="image-upload-label">Choose Image</label>
+                            <div id="bucket-preview"></div>
+                        </div>
+                        <div class="form-group">
                             <label>Priority</label>
                             <select name="priority">
                                 <option value="">Someday</option>
@@ -671,7 +806,7 @@
                 </div>
 
                 <div class="dream-list" id="bucket-list">
-                    <div class="empty-state">Start building your bucket list together!</div>
+                    <div class="empty-state">Loading...</div>
                 </div>
             </div>
         </div>
@@ -694,6 +829,12 @@
                             <textarea name="details" placeholder="Describe how you imagine it..."></textarea>
                         </div>
                         <div class="form-group">
+                            <label>Add Image (Optional)</label>
+                            <input type="file" class="image-upload-input" id="home-image" accept="image/*" onchange="previewImage(event, 'home')">
+                            <label for="home-image" class="image-upload-label">Choose Image</label>
+                            <div id="home-preview"></div>
+                        </div>
+                        <div class="form-group">
                             <label>Importance</label>
                             <select name="priority">
                                 <option value="">Nice to Have</option>
@@ -709,7 +850,7 @@
                 </div>
 
                 <div class="dream-list" id="home-list">
-                    <div class="empty-state">What does your dream home look like?</div>
+                    <div class="empty-state">Loading...</div>
                 </div>
             </div>
         </div>
@@ -732,6 +873,12 @@
                             <textarea name="details" placeholder="Breed, personality, care needs, name ideas..."></textarea>
                         </div>
                         <div class="form-group">
+                            <label>Add Image (Optional)</label>
+                            <input type="file" class="image-upload-input" id="pets-image" accept="image/*" onchange="previewImage(event, 'pets')">
+                            <label for="pets-image" class="image-upload-label">Choose Image</label>
+                            <div id="pets-preview"></div>
+                        </div>
+                        <div class="form-group">
                             <label>Timeline</label>
                             <select name="priority">
                                 <option value="">Someday</option>
@@ -747,7 +894,7 @@
                 </div>
 
                 <div class="dream-list" id="pets-list">
-                    <div class="empty-state">Dream about your future fur (or scale, or feather) babies!</div>
+                    <div class="empty-state">Loading...</div>
                 </div>
             </div>
         </div>
@@ -770,6 +917,12 @@
                             <textarea name="details" placeholder="When? How often? What would it look like?"></textarea>
                         </div>
                         <div class="form-group">
+                            <label>Add Image (Optional)</label>
+                            <input type="file" class="image-upload-input" id="traditions-image" accept="image/*" onchange="previewImage(event, 'traditions')">
+                            <label for="traditions-image" class="image-upload-label">Choose Image</label>
+                            <div id="traditions-preview"></div>
+                        </div>
+                        <div class="form-group">
                             <label>Priority</label>
                             <select name="priority">
                                 <option value="">Future Idea</option>
@@ -785,7 +938,7 @@
                 </div>
 
                 <div class="dream-list" id="traditions-list">
-                    <div class="empty-state">What traditions do you want to create together?</div>
+                    <div class="empty-state">Loading...</div>
                 </div>
             </div>
         </div>
@@ -797,34 +950,128 @@
         <button class="btn" onclick="closeCelebration()">Continue Dreaming</button>
     </div>
 
-    <script>
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <button class="lightbox-close" onclick="closeLightbox()">×</button>
+        <img class="lightbox-image" id="lightboxImage" src="" alt="">
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getDatabase, ref, onValue, push, set, remove, update } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCDda9sPwSY-RQ5rrM5THOvcLtHvcPRYd4",
+            authDomain: "our-habit-hub.firebaseapp.com",
+            projectId: "our-habit-hub",
+            storageBucket: "our-habit-hub.firebasestorage.app",
+            messagingSenderId: "78555830496",
+            appId: "1:78555830496:web:3e457e54729cc11b825885"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Global variables
         const categories = ['kasey-wishlist', 'charlie-wishlist', 'travel', 'restaurants', 'bucket', 'home', 'pets', 'traditions'];
         let dreams = {};
+        let isConnected = false;
+        let currentImageData = {};
 
-        function initDreams() {
-            categories.forEach(cat => {
-                const saved = localStorage.getItem(`dreams_${cat}`);
-                dreams[cat] = saved ? JSON.parse(saved) : [];
-                renderDreams(cat);
+        // Update sync status
+        function updateSyncStatus(connected) {
+            const statusEl = document.getElementById('syncStatus');
+            if (connected) {
+                statusEl.textContent = 'Synced';
+                statusEl.classList.add('connected');
+            } else {
+                statusEl.textContent = 'Connecting';
+                statusEl.classList.remove('connected');
+            }
+        }
+
+        // Image preview function
+        window.previewImage = function(event, category) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentImageData[category] = e.target.result;
+                    const preview = document.getElementById(`${category}-preview`);
+                    preview.innerHTML = `<img src="${e.target.result}" class="image-upload-preview" alt="Preview">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+
+        // Open lightbox
+        window.openLightbox = function(imageSrc) {
+            document.getElementById('lightboxImage').src = imageSrc;
+            document.getElementById('lightbox').classList.add('show');
+        };
+
+        // Close lightbox
+        window.closeLightbox = function() {
+            document.getElementById('lightbox').classList.remove('show');
+        };
+
+        // Initialize Firebase listeners for all categories
+        function initFirebaseListeners() {
+            categories.forEach(category => {
+                const dreamsRef = ref(database, `dreams/${category}`);
+                
+                onValue(dreamsRef, (snapshot) => {
+                    const data = snapshot.val();
+                    dreams[category] = [];
+                    
+                    if (data) {
+                        Object.keys(data).forEach(key => {
+                            dreams[category].push({
+                                firebaseId: key,
+                                ...data[key]
+                            });
+                        });
+                    }
+                    
+                    renderDreams(category);
+                    
+                    if (!isConnected) {
+                        isConnected = true;
+                        updateSyncStatus(true);
+                    }
+                }, (error) => {
+                    console.error('Firebase error:', error);
+                    updateSyncStatus(false);
+                });
             });
         }
 
-        function switchToSection(section) {
+        // Switch section
+        window.switchToSection = function(section) {
             document.querySelectorAll('.dreams-tab').forEach(t => t.classList.remove('active'));
             document.getElementById(`${section}-tab`).classList.add('active');
-        }
+        };
 
-        function showForm(category) {
+        // Show form
+        window.showForm = function(category) {
             document.getElementById(`${category}-form`).classList.add('active');
-        }
+        };
 
-        function hideForm(category) {
+        // Hide form
+        window.hideForm = function(category) {
             const form = document.getElementById(`${category}-form`);
             form.classList.remove('active');
             form.querySelector('form').reset();
-        }
+            // Clear image preview and data
+            const preview = document.getElementById(`${category}-preview`);
+            if (preview) preview.innerHTML = '';
+            delete currentImageData[category];
+        };
 
-        function addDream(e, category) {
+        // Add dream
+        window.addDream = function(e, category) {
             e.preventDefault();
             const formData = new FormData(e.target);
             
@@ -834,19 +1081,18 @@
                 details: formData.get('details') || '',
                 priority: formData.get('priority') || '',
                 achieved: false,
-                dateAdded: new Date().toISOString()
+                dateAdded: new Date().toISOString(),
+                image: currentImageData[category] || null
             };
 
-            dreams[category].push(dream);
-            saveDreams(category);
-            renderDreams(category);
-            hideForm(category);
-        }
+            // Push to Firebase
+            const dreamsRef = ref(database, `dreams/${category}`);
+            push(dreamsRef, dream);
 
-        function saveDreams(category) {
-            localStorage.setItem(`dreams_${category}`, JSON.stringify(dreams[category]));
-        }
+            window.hideForm(category);
+        };
 
+        // Render dreams
         function renderDreams(category) {
             const listContainer = document.getElementById(`${category}-list`);
             
@@ -895,13 +1141,14 @@
                         <div class="dream-item-content">
                             <div class="dream-item-title">${dream.title}</div>
                             ${dream.details ? `<div class="dream-item-details">${dream.details}</div>` : ''}
+                            ${dream.image ? `<img src="${dream.image}" class="dream-item-image" onclick="openLightbox('${dream.image}')" alt="${dream.title}">` : ''}
                             ${priorityTag ? `<div class="dream-item-meta">${priorityTag}</div>` : ''}
                         </div>
                         <div class="dream-item-actions">
-                            <button class="icon-btn ${dream.achieved ? 'achieved' : ''}" onclick="toggleAchieved('${category}', ${dream.id})">
+                            <button class="icon-btn ${dream.achieved ? 'achieved' : ''}" onclick="toggleAchieved('${category}', '${dream.firebaseId}', ${!dream.achieved})">
                                 ${dream.achieved ? '✓ Done' : 'Mark Done'}
                             </button>
-                            <button class="icon-btn" onclick="deleteDream('${category}', ${dream.id})">Delete</button>
+                            <button class="icon-btn" onclick="deleteDream('${category}', '${dream.firebaseId}')">Delete</button>
                         </div>
                     </div>
                 `;
@@ -910,7 +1157,7 @@
             html += '</div>';
             listContainer.innerHTML = html;
             
-            // Check if this list should be expanded by default
+            // Check if this list should be expanded
             const expandedState = localStorage.getItem(`dreamListExpanded_${category}`);
             if (expandedState === 'true') {
                 listContainer.classList.add('expanded');
@@ -919,45 +1166,49 @@
             }
         }
 
-        function toggleDreamList(category) {
+        // Toggle dream list
+        window.toggleDreamList = function(category) {
             const list = document.getElementById(`${category}-list`);
             list.classList.toggle('expanded');
             
-            // Save expanded state
             const isExpanded = list.classList.contains('expanded');
             localStorage.setItem(`dreamListExpanded_${category}`, isExpanded);
-        }
+        };
 
-        function toggleAchieved(category, id) {
-            const dream = dreams[category].find(d => d.id === id);
-            if (dream) {
-                dream.achieved = !dream.achieved;
-                if (dream.achieved) {
+        // Toggle achieved
+        window.toggleAchieved = function(category, firebaseId, newAchievedState) {
+            const dreamRef = ref(database, `dreams/${category}/${firebaseId}`);
+            update(dreamRef, { achieved: newAchievedState });
+            
+            if (newAchievedState) {
+                const dream = dreams[category].find(d => d.firebaseId === firebaseId);
+                if (dream) {
                     showCelebration(dream.title);
                 }
-                saveDreams(category);
-                renderDreams(category);
             }
-        }
+        };
 
-        function deleteDream(category, id) {
+        // Delete dream
+        window.deleteDream = function(category, firebaseId) {
             if (confirm('Delete this dream?')) {
-                dreams[category] = dreams[category].filter(d => d.id !== id);
-                saveDreams(category);
-                renderDreams(category);
+                const dreamRef = ref(database, `dreams/${category}/${firebaseId}`);
+                remove(dreamRef);
             }
-        }
+        };
 
+        // Show celebration
         function showCelebration(dreamTitle) {
             document.getElementById('celebrationText').textContent = `You achieved: "${dreamTitle}"`;
             document.getElementById('celebration').classList.add('show');
             createConfetti();
         }
 
-        function closeCelebration() {
+        // Close celebration
+        window.closeCelebration = function() {
             document.getElementById('celebration').classList.remove('show');
-        }
+        };
 
+        // Create confetti
         function createConfetti() {
             const colors = ['#b59197', '#7ba886', '#9b8a9e', '#ff9999', '#ffcc99', '#a8e6cf'];
             for (let i = 0; i < 100; i++) {
@@ -978,7 +1229,8 @@
             }
         }
 
-        initDreams();
+        // Initialize
+        initFirebaseListeners();
     </script>
 </body>
 </html>
