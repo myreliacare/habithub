@@ -685,6 +685,23 @@
             white-space: pre-wrap;
             padding: 12px;
             background: #2a2a2a;
+            position: relative;
+        }
+
+        .challenge-notes-edit-btn {
+            margin-top: 8px;
+            background: transparent;
+            border: 1px solid #7ba886;
+            color: #7ba886;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .challenge-notes-edit-btn:hover {
+            background: rgba(123, 168, 134, 0.1);
         }
 
         .no-answer {
@@ -933,7 +950,10 @@
                             <textarea class="challenge-notes-textarea" id="challengeNotesInput" placeholder="Add notes, ideas, or plans for this challenge..."></textarea>
                             <button class="challenge-notes-save" onclick="saveChallengeNotes()">Save Notes</button>
                         </div>
-                        <div id="challengeNotesDisplay" class="challenge-notes-display" style="display: none;"></div>
+                        <div id="challengeNotesDisplayContainer" style="display: none;">
+                            <div id="challengeNotesDisplay" class="challenge-notes-display"></div>
+                            <button class="challenge-notes-edit-btn" onclick="editChallengeNotes()">Edit Notes</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1735,6 +1755,13 @@
             loadChallengeNotes();
         }
 
+        function editChallengeNotes() {
+            const displayText = document.getElementById('challengeNotesDisplay').textContent;
+            document.getElementById('challengeNotesInput').value = displayText;
+            document.getElementById('challengeNotesEdit').style.display = 'block';
+            document.getElementById('challengeNotesDisplayContainer').style.display = 'none';
+        }
+
         async function loadChallengeNotes() {
             const today = new Date();
             const currentMonth = `${today.getFullYear()}-${today.getMonth()}`;
@@ -1746,15 +1773,15 @@
                 await syncToFirebase('challengeNotes', newNotes);
                 document.getElementById('challengeNotesInput').value = '';
                 document.getElementById('challengeNotesEdit').style.display = 'block';
-                document.getElementById('challengeNotesDisplay').style.display = 'none';
+                document.getElementById('challengeNotesDisplayContainer').style.display = 'none';
             } else if (savedNotes.notes) {
                 document.getElementById('challengeNotesDisplay').textContent = savedNotes.notes;
                 document.getElementById('challengeNotesEdit').style.display = 'none';
-                document.getElementById('challengeNotesDisplay').style.display = 'block';
+                document.getElementById('challengeNotesDisplayContainer').style.display = 'block';
             } else {
                 document.getElementById('challengeNotesInput').value = '';
                 document.getElementById('challengeNotesEdit').style.display = 'block';
-                document.getElementById('challengeNotesDisplay').style.display = 'none';
+                document.getElementById('challengeNotesDisplayContainer').style.display = 'none';
             }
         }
 
