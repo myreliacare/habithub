@@ -98,12 +98,40 @@
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid rgba(181, 145, 151, 0.5);
+            cursor: move;
+            object-position: center;
         }
 
         .header-photo-container {
             position: relative;
             width: 120px;
             height: 120px;
+            overflow: hidden;
+            border-radius: 50%;
+        }
+
+        .header-photo-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+            position: relative;
+            border: 2px solid rgba(181, 145, 151, 0.5);
+        }
+
+        .header-photo-draggable {
+            position: absolute;
+            cursor: move;
+            user-select: none;
+        }
+
+        .header-photo-draggable img {
+            display: block;
+            pointer-events: none;
+        }
+
+        .header-photo-draggable.dragging {
+            cursor: grabbing;
         }
 
         .photo-placeholder {
@@ -119,22 +147,24 @@
 
         .upload-photo-btn {
             position: absolute;
-            bottom: -8px;
-            right: -8px;
+            bottom: -12px;
+            right: -12px;
             background: #b59197;
-            border: 2px solid #1a1a1a;
+            border: 3px solid #1a1a1a;
             color: #fff;
             border-radius: 50%;
-            width: 36px;
-            height: 36px;
+            width: 44px;
+            height: 44px;
             cursor: pointer;
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.2s;
             font-family: inherit;
             opacity: 0;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
 
         .header-photo-container:hover .upload-photo-btn {
@@ -143,6 +173,36 @@
 
         .upload-photo-btn span {
             display: none;
+        }
+
+        .upload-photo-btn::before {
+            content: '📷';
+        }
+
+        .upload-photo-btn:hover {
+            background: #c5a1a7;
+            transform: scale(1.1);
+        }
+
+        .upload-photo-btn {
+            position: absolute;
+            bottom: -8px;
+            right: -8px;
+            background: #b59197;
+            border: 3px solid #1a1a1a;
+            color: #fff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            font-family: inherit;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
 
         .upload-photo-btn::before {
@@ -1045,14 +1105,16 @@
     <div class="container">
         <div class="home-header">
             <div class="header-photo-container">
-                <img id="headerPhoto" class="header-photo" style="display: none;">
+                <div class="header-photo-inner" id="photoInner">
+                    <div class="header-photo-draggable" id="photoDraggable" style="display: none;">
+                        <img id="headerPhoto">
+                    </div>
+                </div>
                 <div id="photoPlaceholder" class="photo-placeholder">
                     <span style="font-size: 2rem; opacity: 0.3;">+</span>
                 </div>
                 <input type="file" id="photoUpload" accept="image/*" style="display: none;">
-                <button class="upload-photo-btn" onclick="document.getElementById('photoUpload').click()">
-                    <span id="uploadBtnText">Upload Photo</span>
-                </button>
+                <button class="upload-photo-btn" onclick="document.getElementById('photoUpload').click()"></button>
             </div>
             <h1 class="home-title">Our Habit Hub</h1>
         </div>
@@ -2294,22 +2356,61 @@
             await loadChallengeNotes();
             await loadHeaderPhoto();
             
-            // Setup photo upload
+            // Setup photo upload and drag
             document.getElementById('photoUpload').addEventListener('change', handlePhotoUpload);
+            setupPhotoDrag();
             
             // Setup real-time listeners
             setTimeout(setupAllListeners, 1000);
         });
 
+        let photoPosition = { x: 0, y: 0 };
+        let photoScale = 1;
+        let isDragging = false;
+        let startPos = { x: 0, y: 0 };
+
         async function loadHeaderPhoto() {
             const savedPhoto = await loadFromFirebase('headerPhoto');
             if (savedPhoto && savedPhoto.data) {
-                const img = document.getElementById('headerPhoto');
-                const placeholder = document.getElementById('photoPlaceholder');
-                img.src = savedPhoto.data;
-                img.style.display = 'block';
-                placeholder.style.display = 'none';
+                displayPhoto(savedPhoto.data, savedPhoto.position, savedPhoto.scale);
             }
+        }
+
+        function displayPhoto(dataUrl, position = { x: 0, y: 0 }, scale = 1.5) {
+            const img = document.getElementById('headerPhoto');
+            const draggable = document.getElementById('photoDraggable');
+            const placeholder = document.getElementById('photoPlaceholder');
+            
+            img.src = dataUrl;
+            img.onload = function() {
+                photoPosition = position;
+                photoScale = scale;
+                updatePhotoTransform();
+                draggable.style.display = 'block';
+                placeholder.style.display = 'none';
+            };
+        }
+
+        function updatePhotoTransform() {
+            const draggable = document.getElementById('photoDraggable');
+            const img = document.getElementById('headerPhoto');
+            
+            const containerSize = 120;
+            const imgAspect = img.naturalWidth / img.naturalHeight;
+            
+            let width, height;
+            if (imgAspect > 1) {
+                height = containerSize * photoScale;
+                width = height * imgAspect;
+            } else {
+                width = containerSize * photoScale;
+                height = width / imgAspect;
+            }
+            
+            img.style.width = width + 'px';
+            img.style.height = height + 'px';
+            draggable.style.left = photoPosition.x + 'px';
+            draggable.style.top = photoPosition.y + 'px';
         }
 
         async function handlePhotoUpload(e) {
@@ -2323,24 +2424,87 @@
             
             const reader = new FileReader();
             reader.onload = async function(event) {
-                const img = document.getElementById('headerPhoto');
-                const placeholder = document.getElementById('photoPlaceholder');
+                photoPosition = { x: 0, y: 0 };
+                photoScale = 1.5; // Start zoomed in a bit
                 
-                img.src = event.target.result;
-                img.style.display = 'block';
-                placeholder.style.display = 'none';
-                
-                // Save to Firebase
-                const photoData = {
-                    data: event.target.result,
-                    uploaded: new Date().toISOString()
-                };
-                
-                localStorage.setItem('headerPhoto', JSON.stringify(photoData));
-                await syncToFirebase('headerPhoto', photoData);
+                displayPhoto(event.target.result, photoPosition, photoScale);
+                await savePhotoData(event.target.result);
             };
             
             reader.readAsDataURL(file);
+        }
+
+        async function savePhotoData(dataUrl = null) {
+            const img = document.getElementById('headerPhoto');
+            const photoData = {
+                data: dataUrl || img.src,
+                position: photoPosition,
+                scale: photoScale,
+                uploaded: new Date().toISOString()
+            };
+            
+            localStorage.setItem('headerPhoto', JSON.stringify(photoData));
+            await syncToFirebase('headerPhoto', photoData);
+        }
+
+        function zoomPhoto(delta) {
+            photoScale = Math.max(0.5, Math.min(3, photoScale + delta));
+            updatePhotoTransform();
+            savePhotoData();
+        }
+
+        // Setup drag functionality
+        function setupPhotoDrag() {
+            const draggable = document.getElementById('photoDraggable');
+            
+            draggable.addEventListener('mousedown', startDrag);
+            draggable.addEventListener('touchstart', startDrag);
+            
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('touchmove', drag);
+            
+            document.addEventListener('mouseup', endDrag);
+            document.addEventListener('touchend', endDrag);
+        }
+
+        function startDrag(e) {
+            isDragging = true;
+            const draggable = document.getElementById('photoDraggable');
+            draggable.classList.add('dragging');
+            
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            
+            startPos = {
+                x: clientX - photoPosition.x,
+                y: clientY - photoPosition.y
+            };
+            
+            e.preventDefault();
+        }
+
+        function drag(e) {
+            if (!isDragging) return;
+            
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            
+            photoPosition = {
+                x: clientX - startPos.x,
+                y: clientY - startPos.y
+            };
+            
+            updatePhotoTransform();
+            e.preventDefault();
+        }
+
+        function endDrag() {
+            if (isDragging) {
+                isDragging = false;
+                const draggable = document.getElementById('photoDraggable');
+                draggable.classList.remove('dragging');
+                savePhotoData();
+            }
         }
     </script>
 </body>
