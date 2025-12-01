@@ -176,7 +176,7 @@
         }
 
         .upload-photo-btn::before {
-            content: 'ðŸ“·';
+            content: '📷';
         }
 
         .upload-photo-btn:hover {
@@ -206,7 +206,7 @@
         }
 
         .upload-photo-btn::before {
-            content: 'ðŸ“·';
+            content: '📷';
         }
 
         .upload-photo-btn:hover {
@@ -561,38 +561,41 @@
 
         .sticky-note {
             background: #2a2a2a;
-            border: 1px solid #7ba886;
             padding: 16px;
-            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+            border-radius: 2px;
             position: relative;
+            border: 1px solid #3a3a3a;
         }
 
-        .sticky-note:nth-child(2) {
-            border-color: #b59197;
+        .sticky-note::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 20px;
+            width: 40px;
+            height: 20px;
+            background: rgba(123, 168, 134, 0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .sticky-note-title {
-            font-size: 0.875rem;
+            font-size: 0.9rem;
             font-weight: 600;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
             color: #7ba886;
             margin-bottom: 12px;
-        }
-
-        .sticky-note:nth-child(2) .sticky-note-title {
-            color: #b59197;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .sticky-note-list {
             max-height: none;
             overflow: hidden;
             transition: max-height 0.3s ease;
-            margin-bottom: 8px;
         }
 
         .sticky-note-list.collapsed {
-            max-height: 200px;
+            max-height: 250px;
         }
 
         .sticky-note-expand-btn {
@@ -609,11 +612,6 @@
             display: none;
         }
 
-        .sticky-note:nth-child(2) .sticky-note-expand-btn {
-            border-color: #b59197;
-            color: #b59197;
-        }
-
         .sticky-note-expand-btn.show {
             display: block;
         }
@@ -622,22 +620,18 @@
             background: rgba(123, 168, 134, 0.1);
         }
 
-        .sticky-note:nth-child(2) .sticky-note-expand-btn:hover {
-            background: rgba(181, 145, 151, 0.1);
-        }
-
         .sticky-note-input {
             display: flex;
             gap: 6px;
-            margin-top: 8px;
+            margin-top: 12px;
         }
 
         .sticky-note-input input {
             flex: 1;
             background: #1a1a1a;
             border: 1px solid #444;
-            padding: 7px 8px;
-            font-size: 0.9rem;
+            padding: 8px;
+            font-size: 0.85rem;
             font-family: inherit;
             border-radius: 2px;
             color: #e0e0e0;
@@ -645,15 +639,6 @@
 
         .sticky-note-input input::placeholder {
             color: #666;
-        }
-
-        .sticky-note-input input:focus {
-            outline: none;
-            border-color: #7ba886;
-        }
-
-        .sticky-note:nth-child(2) .sticky-note-input input:focus {
-            border-color: #b59197;
         }
 
         .sticky-note-input button {
@@ -668,63 +653,47 @@
             font-weight: 600;
         }
 
-        .sticky-note:nth-child(2) .sticky-note-input button {
-            background: #b59197;
-        }
-
         .sticky-note-input button:hover {
             background: #8fb99a;
         }
 
-        .sticky-note:nth-child(2) .sticky-note-input button:hover {
-            background: #c5a1a7;
-        }
-
         .sticky-item {
-            background: transparent;
-            padding: 6px 4px;
-            margin-bottom: 2px;
+            background: #1a1a1a;
+            padding: 8px 10px;
+            margin-bottom: 6px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .sticky-item:last-of-type {
-            border-bottom: none;
+            border-radius: 2px;
+            border: 1px solid #333;
         }
 
         .sticky-item-text {
             flex: 1;
             color: #e0e0e0;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             word-wrap: break-word;
             cursor: pointer;
-            line-height: 1.3;
         }
 
         .sticky-item-text.completed {
             text-decoration: line-through;
-            opacity: 0.4;
+            opacity: 0.5;
             color: #999;
         }
 
         .sticky-item button {
             background: transparent;
             border: none;
-            color: #555;
+            color: #666;
             cursor: pointer;
-            padding: 2px 6px;
-            font-size: 1rem;
+            padding: 4px 8px;
+            font-size: 0.9rem;
             transition: color 0.2s;
         }
 
         .sticky-item button:hover {
             color: #7ba886;
-        }
-
-        .sticky-note:nth-child(2) .sticky-item button:hover {
-            color: #b59197;
         }
 
         .prompt-question {
@@ -1160,9 +1129,9 @@
             
             <div class="calendar-header">
                 <div class="calendar-nav">
-                    <button onclick="calendarPrevious()">←</button>
+                    <button onclick="calendarPrevious()">←</button>
                     <span class="calendar-title" id="calendarTitle"></span>
-                    <button onclick="calendarNext()">←’</button>
+                    <button onclick="calendarNext()">→</button>
                 </div>
                 <div style="display: flex; gap: 8px;">
                     <button class="view-toggle" onclick="calendarToggleView()">Full Week</button>
@@ -1777,7 +1746,6 @@
             form.classList.add('active');
             const today = new Date();
             document.getElementById('calendarEventDate').value = today.toISOString().split('T')[0];
-            toggleRepeatOptions();
         }
 
         function toggleRepeatOptions() {
@@ -2110,7 +2078,7 @@
             if (!list) return;
             
             if (reminders.length === 0) {
-                list.innerHTML = '<div class="empty-state" style="color: #666; font-size: 0.85rem; padding: 8px 4px;">No reminders yet</div>';
+                list.innerHTML = '<div class="empty-state" style="color: #666; font-size: 0.85rem; padding: 12px;">No reminders yet</div>';
                 expandBtn.classList.remove('show');
                 return;
             }
@@ -2200,7 +2168,7 @@
             if (!list) return;
             
             if (groceries.length === 0) {
-                list.innerHTML = '<div class="empty-state" style="color: #666; font-size: 0.85rem; padding: 8px 4px;">No items yet</div>';
+                list.innerHTML = '<div class="empty-state" style="color: #666; font-size: 0.85rem; padding: 12px;">No items yet</div>';
                 expandBtn.classList.remove('show');
                 return;
             }
