@@ -1365,11 +1365,20 @@
         // Add dream
         window.addDream = async function(e, category) {
             e.preventDefault();
+            
+            console.log('Adding dream to category:', category);
+            
             const formData = new FormData(e.target);
+            const title = formData.get('title');
+            
+            if (!title || title.trim() === '') {
+                alert('Please enter a title');
+                return;
+            }
             
             const dream = {
                 id: Date.now(),
-                title: formData.get('title'),
+                title: title.trim(),
                 details: formData.get('details') || '',
                 priority: formData.get('priority') || '',
                 achieved: false,
@@ -1400,12 +1409,33 @@
 
             // Push to Firebase
             try {
+                console.log('Saving dream:', dream);
                 const dreamsRef = ref(database, `dreams/${category}`);
-                await push(dreamsRef, dream);
+                const newDreamRef = await push(dreamsRef, dream);
+                console.log('Dream saved successfully with ID:', newDreamRef.key);
+                
+                // Show brief success message
+                const form = document.getElementById(`${category}-form`);
+                const submitBtn = form.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = '✓ Saved!';
+                submitBtn.style.background = '#7ba886';
+                submitBtn.style.color = '#ffffff';
+                submitBtn.style.borderColor = '#7ba886';
+                
+                // Wait a moment to ensure Firebase sync completes and show success
+                await new Promise(resolve => setTimeout(resolve, 800));
+                
+                // Reset button
+                submitBtn.textContent = originalText;
+                submitBtn.style.background = '';
+                submitBtn.style.color = '';
+                submitBtn.style.borderColor = '';
+                
                 window.hideForm(category);
             } catch (error) {
                 console.error('Error saving dream:', error);
-                alert('Failed to save. Please try again.');
+                alert('Failed to save. Please try again. Error: ' + error.message);
             }
         };
 
@@ -1509,7 +1539,7 @@
                         </div>
                         <div class="dream-item-actions">
                             <button class="icon-btn ${dream.achieved ? 'achieved' : ''}" onclick="toggleAchieved('${category}', '${dream.firebaseId}', ${!dream.achieved})">
-                                ${dream.achieved ? '✓ Done' : 'Mark Done'}
+                                ${dream.achieved ? 'âœ“ Done' : 'Mark Done'}
                             </button>
                             <button class="icon-btn" onclick="deleteDream('${category}', '${dream.firebaseId}')">Delete</button>
                         </div>
