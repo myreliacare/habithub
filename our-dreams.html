@@ -701,7 +701,7 @@
                 </div>
                 
                 <div class="dream-form" id="restaurants-form">
-                    <form onsubmit="return addDream(event, 'restaurants')">
+                    <form onsubmit="addDream(event, 'restaurants')">
                         <div class="form-group">
                             <label>Restaurant Name</label>
                             <input type="text" name="title" required placeholder="Name of the place">
@@ -794,7 +794,7 @@
                 </div>
                 
                 <div class="dream-form" id="places-form">
-                    <form onsubmit="return addDream(event, 'places')">
+                    <form onsubmit="addDream(event, 'places')">
                         <div class="form-group">
                             <label>Place Name</label>
                             <input type="text" name="title" required placeholder="Where do you want to go?">
@@ -887,7 +887,7 @@
                 <button class="add-dream-btn" onclick="showForm('kasey-wishlist')">+ Add to Kasey's List</button>
                 
                 <div class="dream-form" id="kasey-wishlist-form">
-                    <form onsubmit="return addDream(event, 'kasey-wishlist')">
+                    <form onsubmit="addDream(event, 'kasey-wishlist')">
                         <div class="form-group">
                             <label>Item or Experience</label>
                             <input type="text" name="title" required placeholder="What does Kasey want?">
@@ -928,7 +928,7 @@
                 <button class="add-dream-btn" onclick="showForm('charlie-wishlist')">+ Add to Charlie's List</button>
                 
                 <div class="dream-form" id="charlie-wishlist-form">
-                    <form onsubmit="return addDream(event, 'charlie-wishlist')">
+                    <form onsubmit="addDream(event, 'charlie-wishlist')">
                         <div class="form-group">
                             <label>Item or Experience</label>
                             <input type="text" name="title" required placeholder="What does Charlie want?">
@@ -972,7 +972,7 @@
                 <button class="add-dream-btn" onclick="showForm('travel')">+ Add Travel Dream</button>
                 
                 <div class="dream-form" id="travel-form">
-                    <form onsubmit="return addDream(event, 'travel')">
+                    <form onsubmit="addDream(event, 'travel')">
                         <div class="form-group">
                             <label>Destination</label>
                             <input type="text" name="title" required placeholder="Where do you want to go?">
@@ -1019,7 +1019,7 @@
                 </div>
                 
                 <div class="dream-form" id="shows-movies-form">
-                    <form onsubmit="return addDream(event, 'shows-movies')">
+                    <form onsubmit="addDream(event, 'shows-movies')">
                         <div class="form-group">
                             <label>Title</label>
                             <input type="text" name="title" required placeholder="Name of the show or movie">
@@ -1063,7 +1063,7 @@
                 <button class="add-dream-btn" onclick="showForm('bucket')">+ Add to Bucket List</button>
                 
                 <div class="dream-form" id="bucket-form">
-                    <form onsubmit="return addDream(event, 'bucket')">
+                    <form onsubmit="addDream(event, 'bucket')">
                         <div class="form-group">
                             <label>Experience or Goal</label>
                             <input type="text" name="title" required placeholder="What do you want to do together?">
@@ -1107,7 +1107,7 @@
                 <button class="add-dream-btn" onclick="showForm('home')">+ Add Home Feature</button>
                 
                 <div class="dream-form" id="home-form">
-                    <form onsubmit="return addDream(event, 'home')">
+                    <form onsubmit="addDream(event, 'home')">
                         <div class="form-group">
                             <label>Feature or Room</label>
                             <input type="text" name="title" required placeholder="What do you want in your dream home?">
@@ -1151,7 +1151,7 @@
                 <button class="add-dream-btn" onclick="showForm('pets')">+ Add Pet Dream</button>
                 
                 <div class="dream-form" id="pets-form">
-                    <form onsubmit="return addDream(event, 'pets')">
+                    <form onsubmit="addDream(event, 'pets')">
                         <div class="form-group">
                             <label>Pet Type or Name Idea</label>
                             <input type="text" name="title" required placeholder="What kind of pet?">
@@ -1195,7 +1195,7 @@
                 <button class="add-dream-btn" onclick="showForm('traditions')">+ Add Tradition Idea</button>
                 
                 <div class="dream-form" id="traditions-form">
-                    <form onsubmit="return addDream(event, 'traditions')">
+                    <form onsubmit="addDream(event, 'traditions')">
                         <div class="form-group">
                             <label>Tradition Name</label>
                             <input type="text" name="title" required placeholder="What tradition do you want to start?">
@@ -1257,7 +1257,7 @@
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getFirestore, collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getFirestore, collection, doc, setDoc, getDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
         // Firebase configuration
         const firebaseConfig = {
@@ -1272,8 +1272,8 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        
-        console.log('[Firebase] Firestore initialized successfully');
+        window.db = db;
+        window.firestoreImports = { collection, doc, setDoc, getDoc, onSnapshot };
 
         // Global variables
         const categories = ['restaurants', 'places', 'kasey-wishlist', 'charlie-wishlist', 'travel', 'bucket', 'home', 'pets', 'traditions', 'shows-movies'];
@@ -1316,41 +1316,25 @@
         // Initialize Firebase listeners for all categories
         async function initFirebaseListeners() {
             for (const category of categories) {
-                try {
-                    const docRef = doc(db, `dreams_${category}`, 'data');
-                    
-                    // Load initial data
-                    const docSnap = await getDoc(docRef);
+                const docRef = doc(db, 'dreams_' + category, 'data');
+                const docSnap = await getDoc(docRef);
+                
+                if (docSnap.exists()) {
+                    dreams[category] = docSnap.data().items || [];
+                } else {
                     dreams[category] = [];
-                    
-                    if (docSnap.exists()) {
-                        const data = docSnap.data();
-                        if (data && data.items) {
-                            dreams[category] = data.items;
-                        }
-                    }
-                    
-                    renderDreams(category);
-                    
-                    // Setup real-time listener
-                    onSnapshot(docRef, (doc) => {
-                        if (doc.exists()) {
-                            const data = doc.data();
-                            if (data && data.items) {
-                                dreams[category] = data.items;
-                                renderDreams(category);
-                            }
-                        }
-                    });
-                    
-                    if (!isConnected) {
-                        isConnected = true;
-                        console.log('[Firebase] Connected and listening');
-                    }
-                } catch (error) {
-                    console.error('[Firebase] Error loading category:', category, error);
                 }
+                
+                renderDreams(category);
+                
+                onSnapshot(docRef, (doc) => {
+                    if (doc.exists()) {
+                        dreams[category] = doc.data().items || [];
+                        renderDreams(category);
+                    }
+                });
             }
+            isConnected = true;
         }
 
         // Switch section
@@ -1378,21 +1362,11 @@
         // Add dream
         window.addDream = async function(e, category) {
             e.preventDefault();
-            e.stopPropagation();
-            
-            console.log('[addDream] Starting save for:', category);
-            
             const formData = new FormData(e.target);
-            const title = formData.get('title');
-            
-            if (!title || title.trim() === '') {
-                alert('Please enter a title');
-                return false;
-            }
             
             const dream = {
-                id: Date.now().toString(),
-                title: title.trim(),
+                id: Date.now(),
+                title: formData.get('title'),
                 details: formData.get('details') || '',
                 priority: formData.get('priority') || '',
                 achieved: false,
@@ -1400,66 +1374,28 @@
                 image: currentImageData[category] || null
             };
 
-            // Add occasion for restaurants
             if (category === 'restaurants') {
                 dream.occasion = formData.get('occasion') || '';
-            }
-
-            // Add restaurant types if it's a restaurant (multiple selections)
-            if (category === 'restaurants') {
                 const types = formData.getAll('restaurantType');
-                if (types.length > 0) {
-                    dream.restaurantTypes = types;
-                }
+                if (types.length > 0) dream.restaurantTypes = types;
             }
 
-            // Add place types if it's a place (multiple selections)
             if (category === 'places') {
                 const types = formData.getAll('placeType');
-                if (types.length > 0) {
-                    dream.placeTypes = types;
-                }
+                if (types.length > 0) dream.placeTypes = types;
             }
 
-            // Save to Firestore
+            dreams[category].push(dream);
+            
             try {
-                console.log('[addDream] Saving dream:', dream);
-                
-                // Add to local array
-                if (!dreams[category]) dreams[category] = [];
-                dreams[category].push(dream);
-                
-                // Save to Firestore
-                const docRef = doc(db, `dreams_${category}`, 'data');
+                const docRef = doc(db, 'dreams_' + category, 'data');
                 await setDoc(docRef, { items: dreams[category] });
-                
-                console.log('[addDream] Save successful!');
-                
-                // Visual feedback
-                const submitBtn = e.target.querySelector('button[type="submit"]');
-                if (submitBtn) {
-                    const origText = submitBtn.textContent;
-                    submitBtn.textContent = '✓ Saved!';
-                    submitBtn.style.background = '#7ba886';
-                    submitBtn.style.color = '#fff';
-                    submitBtn.style.borderColor = '#7ba886';
-                    
-                    setTimeout(() => {
-                        submitBtn.textContent = origText;
-                        submitBtn.style.background = '';
-                        submitBtn.style.color = '';
-                        submitBtn.style.borderColor = '';
-                    }, 800);
-                }
-                
-                window.hideForm(category);
                 renderDreams(category);
-                
-                return false;
+                window.hideForm(category);
             } catch (error) {
-                console.error('[addDream] SAVE FAILED:', error);
-                alert('SAVE FAILED: ' + error.message);
-                return false;
+                console.error('Error saving:', error);
+                dreams[category].pop();
+                alert('Failed to save.');
             }
         };
 
@@ -1594,35 +1530,36 @@
 
         // Toggle achieved
         window.toggleAchieved = async function(category, dreamId, newAchievedState) {
+            const dream = dreams[category].find(d => d.id === dreamId);
+            if (!dream) return;
+            
+            dream.achieved = newAchievedState;
+            
             try {
-                const dream = dreams[category].find(d => d.id === dreamId);
-                if (dream) {
-                    dream.achieved = newAchievedState;
-                    const docRef = doc(db, `dreams_${category}`, 'data');
-                    await setDoc(docRef, { items: dreams[category] });
-                    
-                    if (newAchievedState) {
-                        showCelebration(dream.title);
-                    }
-                    
-                    renderDreams(category);
-                }
+                const docRef = doc(db, 'dreams_' + category, 'data');
+                await setDoc(docRef, { items: dreams[category] });
+                renderDreams(category);
+                if (newAchievedState) showCelebration(dream.title);
             } catch (error) {
-                console.error('Error toggling achieved:', error);
+                console.error('Error updating:', error);
+                dream.achieved = !newAchievedState;
             }
         };
 
         // Delete dream
         window.deleteDream = async function(category, dreamId) {
             if (confirm('Delete this dream?')) {
+                const index = dreams[category].findIndex(d => d.id === dreamId);
+                if (index === -1) return;
+                
+                dreams[category].splice(index, 1);
+                
                 try {
-                    dreams[category] = dreams[category].filter(d => d.id !== dreamId);
-                    const docRef = doc(db, `dreams_${category}`, 'data');
+                    const docRef = doc(db, 'dreams_' + category, 'data');
                     await setDoc(docRef, { items: dreams[category] });
                     renderDreams(category);
                 } catch (error) {
-                    console.error('Error deleting dream:', error);
-                    alert('Failed to delete. Please try again.');
+                    console.error('Error deleting:', error);
                 }
             }
         };
