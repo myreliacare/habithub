@@ -1600,14 +1600,26 @@
         }
 
         async function saveResources() {
-            localStorage.setItem('resources_kasey', JSON.stringify(resources));
-            await syncToFirebase('resources_kasey', resources);
+            try {
+                localStorage.setItem('resources_kasey', JSON.stringify(resources));
+                await syncToFirebase('resources_kasey', resources);
+                return true;
+            } catch (error) {
+                console.error('[Resources] Save failed:', error);
+                return false;
+            }
         }
 
         function handleResourceUpload() {
             const fileInput = document.getElementById('resourceFile');
             const file = fileInput.files[0];
             if (file) {
+                const sizeMB = file.size / (1024 * 1024);
+                if (sizeMB > 0.8) {
+                    alert('File too large (' + sizeMB.toFixed(1) + 'MB). Use a link instead.');
+                    fileInput.value = '';
+                    return;
+                }
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     pendingResourceFile = {
@@ -1680,9 +1692,13 @@
             e.preventDefault();
             const formData = new FormData(e.target);
             const category = formData.get('category');
+            const title = formData.get('title');
+            
+            if (!title) return;
 
             const resource = {
-                title: formData.get('title'),
+                id: Date.now(),
+                title: title.trim(),
                 link: formData.get('link') || null,
                 note: formData.get('note') || null,
                 file: pendingResourceFile
@@ -1690,9 +1706,16 @@
 
             if (!resources[category]) resources[category] = [];
             resources[category].push(resource);
-            await saveResources();
-            renderResourceCategory(category);
-            hideAddResourceForm();
+            
+            const saved = await saveResources();
+            if (saved) {
+                renderResourceCategory(category);
+                hideAddResourceForm();
+                pendingResourceFile = null;
+            } else {
+                resources[category].pop();
+                alert('Failed to save. Try using a link instead of uploading a file.');
+            }
         }
 
         async function deleteResource(category, index) {
