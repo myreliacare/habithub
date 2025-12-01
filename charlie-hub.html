@@ -173,11 +173,21 @@
             position: relative;
             line-height: 1.2;
             font-weight: 600;
+            user-select: none;
+        }
+
+        .bingo-cell:hover {
+            background: #4a4a4a;
+            transform: scale(1.02);
         }
 
         .bingo-cell.completed {
             background: #7ba886;
             color: #ffffff;
+        }
+
+        .bingo-cell.completed:hover {
+            background: #8fc99a;
         }
 
 
@@ -710,16 +720,16 @@
                 <h2 class="section-title">Habit Resources</h2>
                 
                 <div class="event-form" id="resourceForm">
-                    <form onsubmit="addResource(event)">
+                    <form onsubmit="addResource(event); return false;">
                         <input type="hidden" id="resourceCategory" name="category">
                         <div class="form-group">
                             <label>Title</label>
-                            <input type="text" name="title" required>
+                            <input type="text" id="resourceTitle" name="title" required>
                         </div>
                         <div class="form-group">
                             <label>Upload Image/Video (optional)</label>
                             <input type="file" name="file" accept="image/*,video/*" id="resourceFile" onchange="handleResourceUpload()">
-                            <div style="text-align: center; color: #999; margin: 8px 0; font-size: 0.85rem;">— OR —</div>
+                            <div style="text-align: center; color: #999; margin: 8px 0; font-size: 0.85rem;">â€” OR â€”</div>
                         </div>
                         <div class="form-group">
                             <label>Link (optional)</label>
@@ -727,7 +737,7 @@
                         </div>
                         <div class="form-group">
                             <label>Notes (optional)</label>
-                            <textarea name="note" rows="3"></textarea>
+                            <textarea id="resourceNote" name="note" rows="3"></textarea>
                         </div>
                         <div class="form-actions">
                             <button type="button" class="btn" onclick="hideAddResourceForm()">Cancel</button>
@@ -841,7 +851,7 @@
                         <div class="form-group">
                             <label>Upload Video from Phone</label>
                             <input type="file" name="video" accept="video/*" id="videoFile" onchange="handleVideoUpload()">
-                            <div style="text-align: center; color: #999; margin: 8px 0; font-size: 0.85rem;">— OR —</div>
+                            <div style="text-align: center; color: #999; margin: 8px 0; font-size: 0.85rem;">â€” OR â€”</div>
                         </div>
                         <div class="form-group">
                             <label>Video Link (TikTok, YouTube, etc)</label>
@@ -920,6 +930,24 @@
         <button class="btn" onclick="closeCelebration()">Continue</button>
     </div>
 
+    <script>
+        // Force clear any bad cached data
+        const cacheVersion = '20250101-v3';
+        const currentVersion = localStorage.getItem('cacheVersion');
+        if (currentVersion !== cacheVersion) {
+            console.log('CLEARING OLD CACHE DATA - PAGE WILL RELOAD');
+            localStorage.removeItem('bingoState_charlie');
+            localStorage.removeItem('bingoState_kasey');
+            localStorage.removeItem('bingoDate_charlie');
+            localStorage.removeItem('bingoDate_kasey');
+            localStorage.removeItem('bingoVersion_charlie');
+            localStorage.removeItem('bingoVersion_kasey');
+            localStorage.setItem('cacheVersion', cacheVersion);
+            // Reload page once to ensure clean state
+            window.location.reload();
+        }
+    </script>
+
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
@@ -939,8 +967,10 @@
 
         window.db = db;
         window.firestoreImports = { collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot };
+        window.firebaseReady = true;
 
         console.log('Firebase initialized successfully!');
+
     </script>
 
     <script>
@@ -1017,7 +1047,7 @@
                 { title: 'The Mountain Is You by Brianna Wiest', link: null, note: 'About self-sabotage and growth.' }
             ],
             walk: [
-                { title: 'Unlocking Us - Brené Brown', link: null, note: 'Podcast about vulnerability and courage.' }
+                { title: 'Unlocking Us - BrenÃ© Brown', link: null, note: 'Podcast about vulnerability and courage.' }
             ],
             guitar: [
                 { title: 'JustinGuitar', link: 'https://www.justinguitar.com', note: 'Free structured course. Start here.' },
@@ -1037,17 +1067,39 @@
         let pendingResourceFile = null;
         let pendingVideoFile = null;
 
+        // Wait for Firebase to be ready
+        function waitForFirebase() {
+            return new Promise((resolve) => {
+                if (window.firebaseReady) {
+                    resolve();
+                } else {
+                    const checkInterval = setInterval(() => {
+                        if (window.firebaseReady) {
+                            clearInterval(checkInterval);
+                            resolve();
+                        }
+                    }, 100);
+                }
+            });
+        }
+
         async function syncToFirebase(collectionName, data) {
-            if (!window.db) return;
+            await waitForFirebase();
+            if (!window.db) {
+                console.warn('Firebase not available');
+                return;
+            }
             try {
                 const { setDoc, doc } = window.firestoreImports;
                 await setDoc(doc(window.db, collectionName, 'data'), { items: data });
+                console.log(`${collectionName} synced`);
             } catch (error) {
                 console.error(`Error syncing ${collectionName}:`, error);
             }
         }
 
         async function loadFromFirebase(collectionName) {
+            await waitForFirebase();
             if (!window.db) return null;
             try {
                 const { getDoc, doc } = window.firestoreImports;
@@ -1065,19 +1117,21 @@
         }
 
         function setupFirebaseListener(collectionName, callback) {
-            if (!window.db) return;
-            try {
-                const { onSnapshot, doc } = window.firestoreImports;
-                const docRef = doc(window.db, collectionName, 'data');
-                
-                onSnapshot(docRef, (doc) => {
-                    if (doc.exists()) {
-                        callback(doc.data().items);
-                    }
-                });
-            } catch (error) {
-                console.error(`Error setting up listener for ${collectionName}:`, error);
-            }
+            waitForFirebase().then(() => {
+                if (!window.db) return;
+                try {
+                    const { onSnapshot, doc } = window.firestoreImports;
+                    const docRef = doc(window.db, collectionName, 'data');
+                    
+                    onSnapshot(docRef, (doc) => {
+                        if (doc.exists()) {
+                            callback(doc.data().items);
+                        }
+                    });
+                } catch (error) {
+                    console.error(`Error setting up listener for ${collectionName}:`, error);
+                }
+            });
         }
 
         function switchTabFromDropdown() {
@@ -1093,61 +1147,48 @@
         }
 
         async function initBoard() {
+            console.log('initBoard started');
             const today = new Date().toDateString();
             const savedDate = localStorage.getItem('bingoDate_charlie');
             const boardVersion = localStorage.getItem('bingoVersion_charlie');
             
-            // Force reset if switching from 5x5 to 4x4 OR if we detect wrong number of habits
-            if (boardVersion !== '4x4') {
-                localStorage.removeItem('bingoState_charlie');
+            // Always shuffle if new day or wrong version
+            if (boardVersion !== '4x4' || savedDate !== today) {
+                console.log('New day or version change - shuffling');
                 localStorage.setItem('bingoVersion_charlie', '4x4');
                 localStorage.setItem('bingoDate_charlie', today);
                 await shuffleBoard();
-            } else if (savedDate !== today) {
-                localStorage.removeItem('bingoState_charlie');
-                localStorage.setItem('bingoDate_charlie', today);
-                await shuffleBoard();
-            } else {
-                const firebaseData = await loadFromFirebase('bingoState_charlie');
-                if (firebaseData && firebaseData.habits && firebaseData.habits.length === 16) {
-                    currentHabits = firebaseData.habits;
-                    boardState = firebaseData.state;
-                } else {
-                    const saved = localStorage.getItem('bingoState_charlie');
-                    if (saved) {
-                        const data = JSON.parse(saved);
-                        // Only use saved data if it has exactly 16 habits
-                        if (data.habits && data.habits.length === 16) {
-                            currentHabits = data.habits;
-                            boardState = data.state;
-                            await syncToFirebase('bingoState_charlie', data);
-                        } else {
-                            // Wrong number of habits, force shuffle
-                            await shuffleBoard();
-                        }
-                    } else {
-                        await shuffleBoard();
+                updateDateDisplay();
+                renderBoard();
+                updateStats();
+                return;
+            }
+            
+            // Try to load from localStorage first (faster)
+            const saved = localStorage.getItem('bingoState_charlie');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    if (data.habits && data.habits.length === 16) {
+                        console.log('Loaded from localStorage:', data.habits.length, 'habits');
+                        currentHabits = data.habits;
+                        boardState = data.state;
+                        updateDateDisplay();
+                        renderBoard();
+                        updateStats();
+                        return;
                     }
+                } catch (e) {
+                    console.error('Error parsing localStorage:', e);
                 }
             }
             
-            // Final safety check - if we somehow still don't have 16 habits, shuffle
-            if (!currentHabits || currentHabits.length !== 16) {
-                await shuffleBoard();
-            }
-            
+            // If no valid localStorage, shuffle
+            console.log('No valid saved state - shuffling');
+            await shuffleBoard();
             updateDateDisplay();
             renderBoard();
             updateStats();
-            
-            setupFirebaseListener('bingoState_charlie', (data) => {
-                if (data.habits && data.habits.length === 16) {
-                    currentHabits = data.habits;
-                    boardState = data.state;
-                    renderBoard();
-                    updateStats();
-                }
-            });
         }
 
         function updateDateDisplay() {
@@ -1156,17 +1197,21 @@
         }
 
         async function shuffleBoard() {
+            console.log('shuffleBoard called');
             // Save which habits are currently completed
             const completedHabits = new Set();
-            currentHabits.forEach((habit, index) => {
-                if (boardState[index]) {
-                    completedHabits.add(habit);
-                }
-            });
+            if (currentHabits && currentHabits.length > 0) {
+                currentHabits.forEach((habit, index) => {
+                    if (boardState[index]) {
+                        completedHabits.add(habit);
+                    }
+                });
+            }
 
             // Shuffle and get new habits
             const shuffled = [...charlieHabits].sort(() => Math.random() - 0.5).slice(0, 16);
             currentHabits = shuffled;
+            console.log('Shuffled habits:', currentHabits.length);
             
             // Restore completed state for habits that are still on the board
             boardState = new Array(16).fill(false);
@@ -1176,33 +1221,85 @@
                 }
             });
 
-            await saveState();
+            console.log('About to render and save');
             renderBoard();
             updateStats();
+            await saveState();
+            console.log('Board shuffled and rendered');
         }
 
         function renderBoard() {
             const grid = document.getElementById('bingoGrid');
+            if (!grid) {
+                console.error('bingoGrid element not found!');
+                return;
+            }
+            
+            console.log('renderBoard called with', currentHabits.length, 'habits');
             grid.innerHTML = '';
             
-            currentHabits.forEach((habit, index) => {
-                const cell = document.createElement('div');
-                cell.className = 'bingo-cell';
-                cell.textContent = habit;
-                
-                if (boardState[index]) cell.classList.add('completed');
-                cell.onclick = () => toggleCell(index);
-                
-                grid.appendChild(cell);
-            });
+            if (!currentHabits || currentHabits.length === 0) {
+                console.error('currentHabits is empty!');
+                grid.innerHTML = '<div style="color: #999; padding: 20px;">Loading habits...</div>';
+                return;
+            }
+            
+            try {
+                currentHabits.forEach((habit, index) => {
+                    const cell = document.createElement('div');
+                    cell.className = 'bingo-cell';
+                    cell.textContent = habit;
+                    
+                    if (boardState && boardState[index]) {
+                        cell.classList.add('completed');
+                    }
+                    
+                    // Add click handler - use function reference to avoid closure issues
+                    cell.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Cell clicked:', index, habit);
+                        toggleCell(index);
+                    });
+                    
+                    grid.appendChild(cell);
+                });
+            } catch (error) {
+                console.error('Error rendering cells:', error);
+            }
+            
+            console.log('Board rendered:', grid.children.length, 'cells');
         }
 
-        async function toggleCell(index) {
-            boardState[index] = !boardState[index];
-            await saveState();
-            renderBoard();
-            updateStats();
-            checkBingo();
+        function toggleCell(index) {
+            console.log('toggleCell called for index', index);
+            
+            try {
+                // Toggle state
+                boardState[index] = !boardState[index];
+                console.log('New state for index', index, ':', boardState[index]);
+                
+                // Update just this cell in the DOM
+                const grid = document.getElementById('bingoGrid');
+                if (grid && grid.children[index]) {
+                    const cell = grid.children[index];
+                    if (boardState[index]) {
+                        cell.classList.add('completed');
+                    } else {
+                        cell.classList.remove('completed');
+                    }
+                }
+                
+                // Update stats
+                updateStats();
+                checkBingo();
+                
+                // Save in background (non-blocking)
+                saveState();
+                
+            } catch (error) {
+                console.error('toggleCell error:', error);
+            }
         }
 
         async function resetBoard() {
@@ -1213,12 +1310,21 @@
         }
 
         async function saveState() {
-            const data = {
-                habits: currentHabits,
-                state: boardState
-            };
-            localStorage.setItem('bingoState_charlie', JSON.stringify(data));
-            await syncToFirebase('bingoState_charlie', data);
+            try {
+                const data = {
+                    habits: currentHabits,
+                    state: boardState
+                };
+                localStorage.setItem('bingoState_charlie', JSON.stringify(data));
+                console.log('Saved to localStorage');
+                
+                // Sync to Firebase in background without waiting
+                syncToFirebase('bingoState_charlie', data).catch(err => {
+                    console.error('Firebase sync failed (non-critical):', err);
+                });
+            } catch (error) {
+                console.error('saveState error:', error);
+            }
         }
 
         function updateStats() {
@@ -1280,29 +1386,41 @@
         }
 
         async function loadResources() {
-            const firebaseData = await loadFromFirebase('resources_charlie');
-            if (firebaseData) {
-                resources = firebaseData;
-            } else {
-                const saved = localStorage.getItem('resources_charlie');
-                if (saved) {
-                    resources = JSON.parse(saved);
+            try {
+                const firebaseData = await loadFromFirebase('resources_charlie');
+                if (firebaseData) {
+                    resources = firebaseData;
                 } else {
-                    resources = JSON.parse(JSON.stringify(defaultResources));
+                    const saved = localStorage.getItem('resources_charlie');
+                    if (saved) {
+                        resources = JSON.parse(saved);
+                    } else {
+                        resources = JSON.parse(JSON.stringify(defaultResources));
+                    }
+                    await saveResources();
                 }
-                await saveResources();
-            }
-            renderAllResources();
-            
-            setupFirebaseListener('resources_charlie', (data) => {
-                resources = data;
                 renderAllResources();
-            });
+                
+                setupFirebaseListener('resources_charlie', (data) => {
+                    resources = data;
+                    renderAllResources();
+                });
+            } catch (error) {
+                console.error('Error loading resources:', error);
+                resources = JSON.parse(JSON.stringify(defaultResources));
+                renderAllResources();
+            }
         }
 
         async function saveResources() {
-            localStorage.setItem('resources_charlie', JSON.stringify(resources));
-            await syncToFirebase('resources_charlie', resources);
+            try {
+                localStorage.setItem('resources_charlie', JSON.stringify(resources));
+                await syncToFirebase('resources_charlie', resources);
+                console.log('Resources saved successfully');
+            } catch (error) {
+                console.error('Error saving resources:', error);
+                alert('Error saving resources. Please try again.');
+            }
         }
 
         function handleResourceUpload() {
@@ -1327,12 +1445,16 @@
         }
 
         function renderAllResources() {
-            Object.keys(resources).forEach(category => renderResourceCategory(category));
+            const categories = ['meditate', 'exercise', 'meals', 'journal', 'read', 'walk', 'guitar', 'learn'];
+            categories.forEach(category => renderResourceCategory(category));
         }
 
         function renderResourceCategory(category) {
             const container = document.getElementById(`${category}-items`);
-            if (!container) return;
+            if (!container) {
+                console.warn(`Container not found: ${category}-items`);
+                return;
+            }
 
             if (!resources[category] || resources[category].length === 0) {
                 container.innerHTML = '<div class="empty-state">No resources yet. Add your first one!</div>';
@@ -1369,38 +1491,81 @@
         function showAddResourceForm(category) {
             document.getElementById('resourceCategory').value = category;
             document.getElementById('resourceForm').classList.add('active');
+            console.log('Showing form for category:', category);
         }
 
         function hideAddResourceForm() {
-            document.getElementById('resourceForm').classList.remove('active');
-            document.getElementById('resourceForm').querySelector('form').reset();
+            const form = document.getElementById('resourceForm');
+            form.classList.remove('active');
+            
+            // Reset all form fields by ID
+            document.getElementById('resourceTitle').value = '';
+            document.getElementById('resourceLink').value = '';
+            document.getElementById('resourceNote').value = '';
+            document.getElementById('resourceFile').value = '';
+            document.getElementById('resourceCategory').value = '';
+            
+            // Clear pending file reference
             pendingResourceFile = null;
+            console.log('Form hidden and reset');
         }
 
         async function addResource(e) {
             e.preventDefault();
-            const formData = new FormData(e.target);
-            const category = formData.get('category');
+            
+            try {
+                const category = document.getElementById('resourceCategory').value;
+                const title = document.getElementById('resourceTitle').value.trim();
+                const link = document.getElementById('resourceLink').value.trim();
+                const note = document.getElementById('resourceNote').value.trim();
 
-            const resource = {
-                title: formData.get('title'),
-                link: formData.get('link') || null,
-                note: formData.get('note') || null,
-                file: pendingResourceFile
-            };
+                console.log('Adding resource:', { category, title, link, note });
 
-            if (!resources[category]) resources[category] = [];
-            resources[category].push(resource);
-            await saveResources();
-            renderResourceCategory(category);
-            hideAddResourceForm();
+                if (!category) {
+                    alert('Error: Category not set. Please try again.');
+                    return;
+                }
+
+                if (!title) {
+                    alert('Please enter a title for the resource.');
+                    return;
+                }
+
+                const resource = {
+                    title: title,
+                    link: link || null,
+                    note: note || null,
+                    file: pendingResourceFile
+                };
+
+                if (!resources[category]) {
+                    resources[category] = [];
+                }
+                
+                resources[category].push(resource);
+                console.log('Resource added to category:', category, resources[category]);
+                
+                await saveResources();
+                renderResourceCategory(category);
+                hideAddResourceForm();
+                
+                alert('Resource added successfully!');
+            } catch (error) {
+                console.error('Error adding resource:', error);
+                alert('Error adding resource: ' + error.message);
+            }
         }
 
         async function deleteResource(category, index) {
             if (confirm('Delete this resource?')) {
-                resources[category].splice(index, 1);
-                await saveResources();
-                renderResourceCategory(category);
+                try {
+                    resources[category].splice(index, 1);
+                    await saveResources();
+                    renderResourceCategory(category);
+                } catch (error) {
+                    console.error('Error deleting resource:', error);
+                    alert('Error deleting resource. Please try again.');
+                }
             }
         }
 
@@ -1650,6 +1815,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', async function() {
+            console.log('DOM loaded, initializing...');
             await initBoard();
             await loadVideos();
             await loadResources();
