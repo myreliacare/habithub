@@ -1250,14 +1250,14 @@
     </div>
 
     <div class="lightbox" id="lightbox" onclick="closeLightbox()">
-        <button class="lightbox-close" onclick="closeLightbox()">×</button>
+        <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
         <img class="lightbox-image" id="lightboxImage" src="" alt="">
     </div>
 
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getFirestore, collection, doc, setDoc, getDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getDatabase, ref, onValue, push, set, remove, update } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
         // Firebase configuration
         const firebaseConfig = {
@@ -1271,9 +1271,7 @@
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        window.db = db;
-        window.firestoreImports = { collection, doc, setDoc, getDoc, onSnapshot };
+        const database = getDatabase(app);
 
         // Global variables
         const categories = ['restaurants', 'places', 'kasey-wishlist', 'charlie-wishlist', 'travel', 'bucket', 'home', 'pets', 'traditions', 'shows-movies'];
@@ -1314,27 +1312,32 @@
         };
 
         // Initialize Firebase listeners for all categories
-        async function initFirebaseListeners() {
-            for (const category of categories) {
-                const docRef = doc(db, 'dreams_' + category, 'data');
-                const docSnap = await getDoc(docRef);
+        function initFirebaseListeners() {
+            categories.forEach(category => {
+                const dreamsRef = ref(database, `dreams/${category}`);
                 
-                if (docSnap.exists()) {
-                    dreams[category] = docSnap.data().items || [];
-                } else {
+                onValue(dreamsRef, (snapshot) => {
+                    const data = snapshot.val();
                     dreams[category] = [];
-                }
-                
-                renderDreams(category);
-                
-                onSnapshot(docRef, (doc) => {
-                    if (doc.exists()) {
-                        dreams[category] = doc.data().items || [];
-                        renderDreams(category);
+                    
+                    if (data) {
+                        Object.keys(data).forEach(key => {
+                            dreams[category].push({
+                                firebaseId: key,
+                                ...data[key]
+                            });
+                        });
                     }
+                    
+                    renderDreams(category);
+                    
+                    if (!isConnected) {
+                        isConnected = true;
+                    }
+                }, (error) => {
+                    console.error('Firebase error:', error);
                 });
-            }
-            isConnected = true;
+            });
         }
 
         // Switch section
@@ -1374,28 +1377,35 @@
                 image: currentImageData[category] || null
             };
 
+            // Add occasion for restaurants
             if (category === 'restaurants') {
                 dream.occasion = formData.get('occasion') || '';
-                const types = formData.getAll('restaurantType');
-                if (types.length > 0) dream.restaurantTypes = types;
             }
 
+            // Add restaurant types if it's a restaurant (multiple selections)
+            if (category === 'restaurants') {
+                const types = formData.getAll('restaurantType');
+                if (types.length > 0) {
+                    dream.restaurantTypes = types;
+                }
+            }
+
+            // Add place types if it's a place (multiple selections)
             if (category === 'places') {
                 const types = formData.getAll('placeType');
-                if (types.length > 0) dream.placeTypes = types;
+                if (types.length > 0) {
+                    dream.placeTypes = types;
+                }
             }
 
-            dreams[category].push(dream);
-            
+            // Push to Firebase
             try {
-                const docRef = doc(db, 'dreams_' + category, 'data');
-                await setDoc(docRef, { items: dreams[category] });
-                renderDreams(category);
+                const dreamsRef = ref(database, `dreams/${category}`);
+                await push(dreamsRef, dream);
                 window.hideForm(category);
             } catch (error) {
-                console.error('Error saving:', error);
-                dreams[category].pop();
-                alert('Failed to save.');
+                console.error('Error saving dream:', error);
+                alert('Failed to save. Please try again.');
             }
         };
 
@@ -1432,7 +1442,7 @@
             let html = `
                 <div class="dream-list-toggle" onclick="toggleDreamList('${category}')">
                     <span class="dream-list-toggle-text">View List (${sorted.length} item${sorted.length !== 1 ? 's' : ''})</span>
-                    <span class="dream-list-arrow">▼</span>
+                    <span class="dream-list-arrow">&#9660;</span>
                 </div>
                 <div class="dream-list-content">
             `;
@@ -1498,10 +1508,10 @@
                             ${allTags}
                         </div>
                         <div class="dream-item-actions">
-                            <button class="icon-btn ${dream.achieved ? 'achieved' : ''}" onclick="toggleAchieved('${category}', '${dream.id}', ${!dream.achieved})">
-                                ${dream.achieved ? '✓ Done' : 'Mark Done'}
+                            <button class="icon-btn ${dream.achieved ? 'achieved' : ''}" onclick="toggleAchieved('${category}', '${dream.firebaseId}', ${!dream.achieved})">
+                                ${dream.achieved ? '&#10004; Done' : 'Mark Done'}
                             </button>
-                            <button class="icon-btn" onclick="deleteDream('${category}', '${dream.id}')">Delete</button>
+                            <button class="icon-btn" onclick="deleteDream('${category}', '${dream.firebaseId}')">Delete</button>
                         </div>
                     </div>
                 `;
@@ -1529,38 +1539,23 @@
         };
 
         // Toggle achieved
-        window.toggleAchieved = async function(category, dreamId, newAchievedState) {
-            const dream = dreams[category].find(d => d.id === dreamId);
-            if (!dream) return;
+        window.toggleAchieved = function(category, firebaseId, newAchievedState) {
+            const dreamRef = ref(database, `dreams/${category}/${firebaseId}`);
+            update(dreamRef, { achieved: newAchievedState });
             
-            dream.achieved = newAchievedState;
-            
-            try {
-                const docRef = doc(db, 'dreams_' + category, 'data');
-                await setDoc(docRef, { items: dreams[category] });
-                renderDreams(category);
-                if (newAchievedState) showCelebration(dream.title);
-            } catch (error) {
-                console.error('Error updating:', error);
-                dream.achieved = !newAchievedState;
+            if (newAchievedState) {
+                const dream = dreams[category].find(d => d.firebaseId === firebaseId);
+                if (dream) {
+                    showCelebration(dream.title);
+                }
             }
         };
 
         // Delete dream
-        window.deleteDream = async function(category, dreamId) {
+        window.deleteDream = function(category, firebaseId) {
             if (confirm('Delete this dream?')) {
-                const index = dreams[category].findIndex(d => d.id === dreamId);
-                if (index === -1) return;
-                
-                dreams[category].splice(index, 1);
-                
-                try {
-                    const docRef = doc(db, 'dreams_' + category, 'data');
-                    await setDoc(docRef, { items: dreams[category] });
-                    renderDreams(category);
-                } catch (error) {
-                    console.error('Error deleting:', error);
-                }
+                const dreamRef = ref(database, `dreams/${category}/${firebaseId}`);
+                remove(dreamRef);
             }
         };
 
