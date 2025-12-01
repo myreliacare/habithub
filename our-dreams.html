@@ -1257,7 +1257,7 @@
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getDatabase, ref, onValue, push, set, remove, update } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+        import { getFirestore, collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
         // Firebase configuration
         const firebaseConfig = {
@@ -1271,10 +1271,9 @@
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
+        const db = getFirestore(app);
         
-        console.log('[Firebase] Initialized successfully');
-        console.log('[Firebase] Database:', database ? 'READY' : 'FAILED');
+        console.log('[Firebase] Firestore initialized successfully');
 
         // Global variables
         const categories = ['restaurants', 'places', 'kasey-wishlist', 'charlie-wishlist', 'travel', 'bucket', 'home', 'pets', 'traditions', 'shows-movies'];
@@ -1315,32 +1314,43 @@
         };
 
         // Initialize Firebase listeners for all categories
-        function initFirebaseListeners() {
-            categories.forEach(category => {
-                const dreamsRef = ref(database, `dreams/${category}`);
-                
-                onValue(dreamsRef, (snapshot) => {
-                    const data = snapshot.val();
+        async function initFirebaseListeners() {
+            for (const category of categories) {
+                try {
+                    const docRef = doc(db, `dreams_${category}`, 'data');
+                    
+                    // Load initial data
+                    const docSnap = await getDoc(docRef);
                     dreams[category] = [];
                     
-                    if (data) {
-                        Object.keys(data).forEach(key => {
-                            dreams[category].push({
-                                firebaseId: key,
-                                ...data[key]
-                            });
-                        });
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        if (data && data.items) {
+                            dreams[category] = data.items;
+                        }
                     }
                     
                     renderDreams(category);
                     
+                    // Setup real-time listener
+                    onSnapshot(docRef, (doc) => {
+                        if (doc.exists()) {
+                            const data = doc.data();
+                            if (data && data.items) {
+                                dreams[category] = data.items;
+                                renderDreams(category);
+                            }
+                        }
+                    });
+                    
                     if (!isConnected) {
                         isConnected = true;
+                        console.log('[Firebase] Connected and listening');
                     }
-                }, (error) => {
-                    console.error('Firebase error:', error);
-                });
-            });
+                } catch (error) {
+                    console.error('[Firebase] Error loading category:', category, error);
+                }
+            }
         }
 
         // Switch section
@@ -1370,7 +1380,7 @@
             e.preventDefault();
             e.stopPropagation();
             
-            console.log('[addDream] Starting save for category:', category);
+            console.log('[addDream] Starting save for:', category);
             
             const formData = new FormData(e.target);
             const title = formData.get('title');
@@ -1380,13 +1390,8 @@
                 return false;
             }
             
-            if (!database) {
-                alert('Database not initialized. Please refresh the page.');
-                return false;
-            }
-            
             const dream = {
-                id: Date.now(),
+                id: Date.now().toString(),
                 title: title.trim(),
                 details: formData.get('details') || '',
                 priority: formData.get('priority') || '',
@@ -1416,33 +1421,44 @@
                 }
             }
 
-            // Push to Firebase
+            // Save to Firestore
             try {
-                console.log('[addDream] Saving to Firebase:', dream);
-                const dreamsRef = ref(database, `dreams/${category}`);
-                const newRef = await push(dreamsRef, dream);
-                console.log('[addDream] Save successful, ID:', newRef.key);
+                console.log('[addDream] Saving dream:', dream);
                 
-                // Brief success indication
+                // Add to local array
+                if (!dreams[category]) dreams[category] = [];
+                dreams[category].push(dream);
+                
+                // Save to Firestore
+                const docRef = doc(db, `dreams_${category}`, 'data');
+                await setDoc(docRef, { items: dreams[category] });
+                
+                console.log('[addDream] Save successful!');
+                
+                // Visual feedback
                 const submitBtn = e.target.querySelector('button[type="submit"]');
-                const origText = submitBtn.textContent;
-                submitBtn.textContent = '✓ Saved!';
-                submitBtn.style.background = '#7ba886';
-                submitBtn.style.color = '#fff';
-                submitBtn.style.borderColor = '#7ba886';
+                if (submitBtn) {
+                    const origText = submitBtn.textContent;
+                    submitBtn.textContent = '✓ Saved!';
+                    submitBtn.style.background = '#7ba886';
+                    submitBtn.style.color = '#fff';
+                    submitBtn.style.borderColor = '#7ba886';
+                    
+                    setTimeout(() => {
+                        submitBtn.textContent = origText;
+                        submitBtn.style.background = '';
+                        submitBtn.style.color = '';
+                        submitBtn.style.borderColor = '';
+                    }, 800);
+                }
                 
-                setTimeout(() => {
-                    submitBtn.textContent = origText;
-                    submitBtn.style.background = '';
-                    submitBtn.style.color = '';
-                    submitBtn.style.borderColor = '';
-                    window.hideForm(category);
-                }, 600);
+                window.hideForm(category);
+                renderDreams(category);
                 
                 return false;
             } catch (error) {
-                console.error('[addDream] Error saving:', error);
-                alert('SAVE FAILED: ' + error.message + '\n\nPlease check:\n1. Internet connection\n2. Try refreshing the page\n3. Check browser console for details');
+                console.error('[addDream] SAVE FAILED:', error);
+                alert('SAVE FAILED: ' + error.message);
                 return false;
             }
         };
@@ -1546,10 +1562,10 @@
                             ${allTags}
                         </div>
                         <div class="dream-item-actions">
-                            <button class="icon-btn ${dream.achieved ? 'achieved' : ''}" onclick="toggleAchieved('${category}', '${dream.firebaseId}', ${!dream.achieved})">
+                            <button class="icon-btn ${dream.achieved ? 'achieved' : ''}" onclick="toggleAchieved('${category}', '${dream.id}', ${!dream.achieved})">
                                 ${dream.achieved ? 'âœ“ Done' : 'Mark Done'}
                             </button>
-                            <button class="icon-btn" onclick="deleteDream('${category}', '${dream.firebaseId}')">Delete</button>
+                            <button class="icon-btn" onclick="deleteDream('${category}', '${dream.id}')">Delete</button>
                         </div>
                     </div>
                 `;
@@ -1577,23 +1593,37 @@
         };
 
         // Toggle achieved
-        window.toggleAchieved = function(category, firebaseId, newAchievedState) {
-            const dreamRef = ref(database, `dreams/${category}/${firebaseId}`);
-            update(dreamRef, { achieved: newAchievedState });
-            
-            if (newAchievedState) {
-                const dream = dreams[category].find(d => d.firebaseId === firebaseId);
+        window.toggleAchieved = async function(category, dreamId, newAchievedState) {
+            try {
+                const dream = dreams[category].find(d => d.id === dreamId);
                 if (dream) {
-                    showCelebration(dream.title);
+                    dream.achieved = newAchievedState;
+                    const docRef = doc(db, `dreams_${category}`, 'data');
+                    await setDoc(docRef, { items: dreams[category] });
+                    
+                    if (newAchievedState) {
+                        showCelebration(dream.title);
+                    }
+                    
+                    renderDreams(category);
                 }
+            } catch (error) {
+                console.error('Error toggling achieved:', error);
             }
         };
 
         // Delete dream
-        window.deleteDream = function(category, firebaseId) {
+        window.deleteDream = async function(category, dreamId) {
             if (confirm('Delete this dream?')) {
-                const dreamRef = ref(database, `dreams/${category}/${firebaseId}`);
-                remove(dreamRef);
+                try {
+                    dreams[category] = dreams[category].filter(d => d.id !== dreamId);
+                    const docRef = doc(db, `dreams_${category}`, 'data');
+                    await setDoc(docRef, { items: dreams[category] });
+                    renderDreams(category);
+                } catch (error) {
+                    console.error('Error deleting dream:', error);
+                    alert('Failed to delete. Please try again.');
+                }
             }
         };
 
