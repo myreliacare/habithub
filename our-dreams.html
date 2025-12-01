@@ -1250,7 +1250,7 @@
     </div>
 
     <div class="lightbox" id="lightbox" onclick="closeLightbox()">
-        <button class="lightbox-close" onclick="closeLightbox()">Ã—</button>
+        <button class="lightbox-close" onclick="closeLightbox()">×</button>
         <img class="lightbox-image" id="lightboxImage" src="" alt="">
     </div>
 
@@ -1432,7 +1432,7 @@
             let html = `
                 <div class="dream-list-toggle" onclick="toggleDreamList('${category}')">
                     <span class="dream-list-toggle-text">View List (${sorted.length} item${sorted.length !== 1 ? 's' : ''})</span>
-                    <span class="dream-list-arrow">â–¼</span>
+                    <span class="dream-list-arrow">▼</span>
                 </div>
                 <div class="dream-list-content">
             `;
@@ -1499,7 +1499,7 @@
                         </div>
                         <div class="dream-item-actions">
                             <button class="icon-btn ${dream.achieved ? 'achieved' : ''}" onclick="toggleAchieved('${category}', '${dream.id}', ${!dream.achieved})">
-                                ${dream.achieved ? 'âœ“ Done' : 'Mark Done'}
+                                ${dream.achieved ? '✓ Done' : 'Mark Done'}
                             </button>
                             <button class="icon-btn" onclick="deleteDream('${category}', '${dream.id}')">Delete</button>
                         </div>
