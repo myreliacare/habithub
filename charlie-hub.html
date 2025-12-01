@@ -664,7 +664,7 @@
 </head>
 <body>
     <div class="container">
-        <a href="index.html" class="btn" style="margin-bottom: 24px;">â† Back to Home</a>
+        <a href="index.html" class="btn" style="margin-bottom: 24px;">← Back to Home</a>
         
         <div class="section-nav">
             <select id="sectionDropdown" onchange="switchTabFromDropdown()" class="section-dropdown">
@@ -681,7 +681,7 @@
             <div class="bingo-section">
                 <h1>The Ultimate</h1>
                 <div class="main-title">DAILY HABITS<br>BINGO</div>
-                <p class="subtitle">Click squares to mark complete â€¢ Get 4 in a row to win</p>
+                <p class="subtitle">Click squares to mark complete • Get 4 in a row to win</p>
                 <div class="date-display" id="dateDisplay"></div>
                 
                 <div class="bingo-grid" id="bingoGrid"></div>
@@ -719,7 +719,7 @@
                         <div class="form-group">
                             <label>Upload Image/Video (optional)</label>
                             <input type="file" name="file" accept="image/*,video/*" id="resourceFile" onchange="handleResourceUpload()">
-                            <div style="text-align: center; color: #999; margin: 8px 0; font-size: 0.85rem;">â€” OR â€”</div>
+                            <div style="text-align: center; color: #999; margin: 8px 0; font-size: 0.85rem;">— OR —</div>
                         </div>
                         <div class="form-group">
                             <label>Link (optional)</label>
@@ -739,7 +739,7 @@
                 <div class="resource-category">
                     <div class="resource-header" onclick="toggleResource(event, 'meditate')">
                         <span class="resource-name">Meditate</span>
-                        <span class="resource-arrow">â–¼</span>
+                        <span class="resource-arrow">▼</span>
                     </div>
                     <div class="resource-content" id="meditate-content">
                         <div id="meditate-items"></div>
@@ -750,7 +750,7 @@
                 <div class="resource-category">
                     <div class="resource-header" onclick="toggleResource(event, 'exercise')">
                         <span class="resource-name">Exercise</span>
-                        <span class="resource-arrow">â–¼</span>
+                        <span class="resource-arrow">▼</span>
                     </div>
                     <div class="resource-content" id="exercise-content">
                         <div id="exercise-items"></div>
@@ -761,7 +761,7 @@
                 <div class="resource-category">
                     <div class="resource-header" onclick="toggleResource(event, 'meals')">
                         <span class="resource-name">Healthy Meals</span>
-                        <span class="resource-arrow">â–¼</span>
+                        <span class="resource-arrow">▼</span>
                     </div>
                     <div class="resource-content" id="meals-content">
                         <div id="meals-items"></div>
@@ -772,7 +772,7 @@
                 <div class="resource-category">
                     <div class="resource-header" onclick="toggleResource(event, 'journal')">
                         <span class="resource-name">Journal</span>
-                        <span class="resource-arrow">â–¼</span>
+                        <span class="resource-arrow">▼</span>
                     </div>
                     <div class="resource-content" id="journal-content">
                         <div id="journal-items"></div>
@@ -783,7 +783,7 @@
                 <div class="resource-category">
                     <div class="resource-header" onclick="toggleResource(event, 'read')">
                         <span class="resource-name">Read</span>
-                        <span class="resource-arrow">â–¼</span>
+                        <span class="resource-arrow">▼</span>
                     </div>
                     <div class="resource-content" id="read-content">
                         <div id="read-items"></div>
@@ -794,7 +794,7 @@
                 <div class="resource-category">
                     <div class="resource-header" onclick="toggleResource(event, 'walk')">
                         <span class="resource-name">Walk / Podcasts</span>
-                        <span class="resource-arrow">â–¼</span>
+                        <span class="resource-arrow">▼</span>
                     </div>
                     <div class="resource-content" id="walk-content">
                         <div id="walk-items"></div>
@@ -805,7 +805,7 @@
                 <div class="resource-category">
                     <div class="resource-header" onclick="toggleResource(event, 'guitar')">
                         <span class="resource-name">Guitar</span>
-                        <span class="resource-arrow">â–¼</span>
+                        <span class="resource-arrow">▼</span>
                     </div>
                     <div class="resource-content" id="guitar-content">
                         <div id="guitar-items"></div>
@@ -816,7 +816,7 @@
                 <div class="resource-category">
                     <div class="resource-header" onclick="toggleResource(event, 'learn')">
                         <span class="resource-name">Learn Something New</span>
-                        <span class="resource-arrow">â–¼</span>
+                        <span class="resource-arrow">▼</span>
                     </div>
                     <div class="resource-content" id="learn-content">
                         <div id="learn-items"></div>
@@ -841,7 +841,7 @@
                         <div class="form-group">
                             <label>Upload Video from Phone</label>
                             <input type="file" name="video" accept="video/*" id="videoFile" onchange="handleVideoUpload()">
-                            <div style="text-align: center; color: #999; margin: 8px 0; font-size: 0.85rem;">â€” OR â€”</div>
+                            <div style="text-align: center; color: #999; margin: 8px 0; font-size: 0.85rem;">— OR —</div>
                         </div>
                         <div class="form-group">
                             <label>Video Link (TikTok, YouTube, etc)</label>
@@ -1372,7 +1372,7 @@
                         ${item.link ? `<a href="${item.link}" target="_blank" class="resource-item-link">${item.link}</a>` : ''}
                         ${item.note ? `<div class="resource-item-note">${item.note}</div>` : ''}
                     </div>
-                    <button class="btn" onclick="deleteResource('${category}', ${index})" style="padding: 4px 8px; min-width: auto;">Ã—</button>
+                    <button class="btn" onclick="deleteResource('${category}', ${index})" style="padding: 4px 8px; min-width: auto;">×</button>
                 `;
                 container.appendChild(itemDiv);
             });
