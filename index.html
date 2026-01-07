@@ -311,6 +311,87 @@
         .day-modal-form-row input { flex: 1; }
         .day-modal-form-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 10px; }
         
+        /* Reminder Management Modal */
+        .reminder-modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.7); z-index: 2000;
+            display: none; align-items: center; justify-content: center;
+            padding: 20px;
+        }
+        .reminder-modal-overlay.visible { display: flex; }
+        .reminder-modal {
+            background: #3d2f31; border: 1px solid rgba(61, 107, 107, 0.4);
+            width: 100%; max-width: 550px; max-height: 85vh;
+            overflow-y: auto; padding: 24px;
+        }
+        .reminder-modal-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px; padding-bottom: 12px;
+            border-bottom: 1px solid rgba(61, 107, 107, 0.2);
+        }
+        .reminder-modal-title { font-size: 1.1rem; color: #f2ebe0; }
+        .reminder-modal-close {
+            background: transparent; border: none; color: #c9a9a6;
+            font-size: 1.5rem; cursor: pointer; padding: 0; line-height: 1;
+        }
+        .reminder-modal-close:hover { color: #f2ebe0; }
+        .reminder-list { margin-bottom: 20px; }
+        .reminder-list-item {
+            background: rgba(20, 20, 20, 0.4); padding: 14px;
+            margin-bottom: 10px; border-left: 2px solid #a3b899;
+        }
+        .reminder-list-item.overdue { border-left-color: #c9a9a6; }
+        .reminder-list-header {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            margin-bottom: 8px;
+        }
+        .reminder-list-title { color: #f2ebe0; font-size: 0.95rem; flex: 1; }
+        .reminder-list-actions { display: flex; gap: 8px; }
+        .reminder-list-actions button {
+            background: transparent; border: none; cursor: pointer;
+            font-size: 0.75rem; padding: 2px 6px; transition: color 0.2s;
+        }
+        .reminder-edit-btn { color: rgba(163, 184, 153, 0.6); }
+        .reminder-edit-btn:hover { color: #a3b899; }
+        .reminder-delete-btn { color: rgba(201, 169, 166, 0.5); }
+        .reminder-delete-btn:hover { color: #c9a9a6; }
+        .reminder-list-meta { font-size: 0.8rem; color: rgba(242, 235, 224, 0.5); }
+        .reminder-list-meta span { margin-right: 12px; }
+        .reminder-list-link { 
+            display: inline-block; margin-top: 6px;
+            font-size: 0.8rem; color: #3d6b6b; 
+        }
+        .reminder-list-link:hover { color: #5a9a9a; }
+        .reminder-add-form {
+            background: rgba(20, 20, 20, 0.3); padding: 16px;
+            margin-bottom: 16px; border: 1px solid rgba(61, 107, 107, 0.2);
+        }
+        .reminder-add-form h4 {
+            color: #a3b899; font-size: 0.8rem; margin-bottom: 12px;
+            text-transform: uppercase; letter-spacing: 0.1em;
+        }
+        .reminder-form-row { margin-bottom: 10px; }
+        .reminder-form-row label {
+            display: block; font-size: 0.75rem; color: rgba(242, 235, 224, 0.6);
+            margin-bottom: 4px;
+        }
+        .reminder-form-row input, .reminder-form-row select {
+            width: 100%; background: rgba(20, 20, 20, 0.5);
+            border: 1px solid rgba(61, 107, 107, 0.25); color: #f2ebe0;
+            padding: 10px 12px; font-size: 0.9rem; font-family: inherit;
+        }
+        .reminder-form-row input:focus, .reminder-form-row select:focus {
+            outline: none; border-color: rgba(61, 107, 107, 0.5);
+        }
+        .reminder-form-row input::placeholder { color: rgba(242, 235, 224, 0.4); }
+        .reminder-form-inline { display: flex; gap: 10px; }
+        .reminder-form-inline > div { flex: 1; }
+        .reminder-form-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 14px; }
+        .reminder-empty { 
+            color: rgba(242, 235, 224, 0.4); font-style: italic; 
+            text-align: center; padding: 30px 0; 
+        }
+        
         .add-event-btn {
             width: 100%; background: transparent;
             border: 1px solid rgba(61, 107, 107, 0.3); color: #3d6b6b;
@@ -634,6 +715,50 @@
                     <button class="btn" onclick="saveDayModalEvent()">Save</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Reminder Management Modal -->
+    <div class="reminder-modal-overlay" id="reminderModalOverlay" onclick="closeReminderModal(event)">
+        <div class="reminder-modal" onclick="event.stopPropagation()">
+            <div class="reminder-modal-header">
+                <div class="reminder-modal-title">Manage Reminders</div>
+                <button class="reminder-modal-close" onclick="closeReminderModal()">&times;</button>
+            </div>
+            
+            <!-- Add New Reminder Form -->
+            <div class="reminder-add-form">
+                <h4 id="reminderFormTitle">Add New Reminder</h4>
+                <div class="reminder-form-row">
+                    <label>Title</label>
+                    <input type="text" id="reminderModalTitle" placeholder="e.g., Car registration renewal">
+                </div>
+                <div class="reminder-form-inline">
+                    <div class="reminder-form-row">
+                        <label>Notify Date</label>
+                        <input type="date" id="reminderModalDate">
+                    </div>
+                    <div class="reminder-form-row">
+                        <label>Frequency</label>
+                        <select id="reminderModalFrequency">
+                            <option value="once">One-time</option>
+                            <option value="yearly">Yearly</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="reminder-form-row">
+                    <label>Link (optional)</label>
+                    <input type="url" id="reminderModalLink" placeholder="https://...">
+                </div>
+                <input type="hidden" id="reminderModalEditId">
+                <div class="reminder-form-actions">
+                    <button class="cancel-contact-btn" onclick="clearReminderForm()">Clear</button>
+                    <button class="btn" onclick="saveReminderFromModal()">Save Reminder</button>
+                </div>
+            </div>
+            
+            <!-- Reminder List -->
+            <div class="reminder-list" id="reminderModalList"></div>
         </div>
     </div>
 
@@ -964,9 +1089,141 @@
             updateReminderDisplay();
         }
 
+        // REMINDER MODAL FUNCTIONS
         function openReminderModal() {
-            alert('Reminder management modal coming soon!\n\nCurrent reminders:\n' + 
-                lifeReminders.map(r => `• ${r.title}`).join('\n'));
+            renderReminderList();
+            clearReminderForm();
+            document.getElementById('reminderModalOverlay').classList.add('visible');
+        }
+
+        function closeReminderModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('reminderModalOverlay').classList.remove('visible');
+        }
+
+        function renderReminderList() {
+            const container = document.getElementById('reminderModalList');
+            
+            if (lifeReminders.length === 0) {
+                container.innerHTML = '<div class="reminder-empty">No reminders yet. Add one above!</div>';
+                return;
+            }
+            
+            // Sort by next notify date
+            const sorted = [...lifeReminders].sort((a, b) => {
+                const dateA = new Date(getNextNotifyDate(a));
+                const dateB = new Date(getNextNotifyDate(b));
+                return dateA - dateB;
+            });
+            
+            container.innerHTML = sorted.map(reminder => {
+                const nextDate = new Date(getNextNotifyDate(reminder));
+                const daysUntil = getDaysUntilNotify(reminder);
+                const isOverdue = daysUntil < 0;
+                const frequencyText = reminder.frequency === 'yearly' ? 'Yearly' : 'One-time';
+                
+                let linkHtml = '';
+                if (reminder.link) {
+                    linkHtml = `<a href="${reminder.link}" target="_blank" class="reminder-list-link">🔗 ${new URL(reminder.link).hostname}</a>`;
+                }
+                
+                return `
+                    <div class="reminder-list-item ${isOverdue ? 'overdue' : ''}">
+                        <div class="reminder-list-header">
+                            <div class="reminder-list-title">${reminder.title}</div>
+                            <div class="reminder-list-actions">
+                                <button class="reminder-edit-btn" onclick="editReminder('${reminder.id}')">Edit</button>
+                                <button class="reminder-delete-btn" onclick="deleteReminder('${reminder.id}')">×</button>
+                            </div>
+                        </div>
+                        <div class="reminder-list-meta">
+                            <span>${formatDueText(daysUntil)}</span>
+                            <span>${frequencyText}</span>
+                            <span>${nextDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                        </div>
+                        ${linkHtml}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function clearReminderForm() {
+            document.getElementById('reminderModalTitle').value = '';
+            document.getElementById('reminderModalDate').value = '';
+            document.getElementById('reminderModalFrequency').value = 'once';
+            document.getElementById('reminderModalLink').value = '';
+            document.getElementById('reminderModalEditId').value = '';
+            document.getElementById('reminderFormTitle').textContent = 'Add New Reminder';
+        }
+
+        function editReminder(id) {
+            const reminder = lifeReminders.find(r => r.id === id);
+            if (!reminder) return;
+            
+            document.getElementById('reminderModalTitle').value = reminder.title;
+            document.getElementById('reminderModalDate').value = reminder.notifyDate;
+            document.getElementById('reminderModalFrequency').value = reminder.frequency || 'once';
+            document.getElementById('reminderModalLink').value = reminder.link || '';
+            document.getElementById('reminderModalEditId').value = id;
+            document.getElementById('reminderFormTitle').textContent = 'Edit Reminder';
+            
+            // Scroll to top of modal
+            document.querySelector('.reminder-modal').scrollTop = 0;
+        }
+
+        async function deleteReminder(id) {
+            if (!confirm('Delete this reminder?')) return;
+            
+            lifeReminders = lifeReminders.filter(r => r.id !== id);
+            await saveLifeReminders();
+            renderReminderList();
+            updateReminderDisplay();
+        }
+
+        async function saveReminderFromModal() {
+            const title = document.getElementById('reminderModalTitle').value.trim();
+            const date = document.getElementById('reminderModalDate').value;
+            const frequency = document.getElementById('reminderModalFrequency').value;
+            const link = document.getElementById('reminderModalLink').value.trim();
+            const editId = document.getElementById('reminderModalEditId').value;
+            
+            if (!title) {
+                alert('Please enter a reminder title');
+                return;
+            }
+            
+            if (!date) {
+                alert('Please select a notify date');
+                return;
+            }
+            
+            if (editId) {
+                // Update existing reminder
+                const index = lifeReminders.findIndex(r => r.id === editId);
+                if (index !== -1) {
+                    lifeReminders[index].title = title;
+                    lifeReminders[index].notifyDate = date;
+                    lifeReminders[index].frequency = frequency;
+                    lifeReminders[index].link = link || null;
+                }
+            } else {
+                // Create new reminder
+                const newReminder = {
+                    id: Date.now().toString(),
+                    title: title,
+                    notifyDate: date,
+                    frequency: frequency,
+                    link: link || null,
+                    lastDone: null,
+                    snoozedUntil: null
+                };
+                lifeReminders.push(newReminder);
+            }
+            
+            await saveLifeReminders();
+            clearReminderForm();
+            renderReminderList();
+            updateReminderDisplay();
         }
 
         // CALENDAR FUNCTIONS
