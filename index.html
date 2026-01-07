@@ -3,1096 +3,456 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Our Daily Habits Hub - Home</title>
+    <title>Our Life Hub</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@300;400;500;600;700&family=Work+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        html {
-            width: 100%;
-            height: 100%;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Cormorant', Georgia, 'Times New Roman', serif;
-            background: #1a1a1a;
+            background: #3d2f31;
+            color: #e0d2d0;
+            font-family: 'Philosopher', Georgia, serif;
             min-height: 100vh;
-            padding: 16px;
-            color: #e0e0e0;
-            position: relative;
-            width: 100%;
-            overflow-x: hidden;
-            -webkit-overflow-scrolling: touch;
+            line-height: 1.6;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
+        .container { max-width: 680px; margin: 0 auto; padding: 70px 24px 80px; }
 
+        /* Sync Status */
         .sync-status {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            background: #2a2a2a;
-            border: 1px solid #444;
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            color: #999;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            position: fixed; top: 16px; right: 16px;
+            background: rgba(40, 30, 31, 0.95);
+            padding: 8px 14px; font-size: 0.65rem;
+            display: flex; align-items: center; gap: 8px;
+            z-index: 1000; border: 1px solid rgba(61, 107, 107, 0.4);
+            letter-spacing: 0.08em; text-transform: uppercase;
+            color: rgba(242, 235, 224, 0.6);
         }
+        .sync-dot { width: 5px; height: 5px; background: #a3b899; border-radius: 50%; }
+        .sync-status.synced .sync-dot { background: #a3b899; }
+        .sync-status.error .sync-dot { background: #c9a9a6; }
 
-        .sync-status.synced {
-            border-color: #7ba886;
-            color: #7ba886;
-        }
-
-        .sync-status.error {
-            border-color: #d67373;
-            color: #d67373;
-        }
-
-        .sync-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #999;
-        }
-
-        .sync-status.synced .sync-dot {
-            background: #7ba886;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .home-header {
-            text-align: center;
-            margin-bottom: 32px;
-            margin-top: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 24px;
-        }
-
-        .header-photo {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid rgba(181, 145, 151, 0.5);
-            cursor: move;
-            object-position: center;
-        }
-
+        /* Header */
+        .home-header { text-align: center; padding: 0 0 24px; }
         .header-photo-container {
-            position: relative;
-            width: 120px;
-            height: 120px;
-            overflow: hidden;
-            border-radius: 50%;
+            width: 90px; height: 90px; margin: 0 auto 20px;
+            border-radius: 50%; overflow: hidden; position: relative;
+            border: 2px solid rgba(163, 184, 153, 0.4);
+            background: linear-gradient(145deg, #3d6b6b 0%, #1c1c1c 100%);
         }
-
-        .header-photo-inner {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            overflow: hidden;
-            position: relative;
-            border: 2px solid rgba(181, 145, 151, 0.5);
-        }
-
-        .header-photo-draggable {
-            position: absolute;
-            cursor: move;
-            user-select: none;
-        }
-
-        .header-photo-draggable img {
-            display: block;
-            pointer-events: none;
-        }
-
-        .header-photo-draggable.dragging {
-            cursor: grabbing;
-        }
-
+        .header-photo-inner { width: 100%; height: 100%; position: relative; overflow: hidden; }
+        .header-photo-draggable { position: absolute; cursor: move; }
+        .header-photo-draggable img { display: block; }
         .photo-placeholder {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            border: 2px dashed rgba(181, 145, 151, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #b59197;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(242, 235, 224, 0.2); font-size: 1.5rem;
         }
-
         .upload-photo-btn {
-            position: absolute;
-            bottom: -12px;
-            right: -12px;
-            background: #b59197;
-            border: 3px solid #1a1a1a;
-            color: #fff;
-            border-radius: 50%;
-            width: 44px;
-            height: 44px;
-            cursor: pointer;
-            font-size: 1.4rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            font-family: inherit;
-            opacity: 0;
-            z-index: 10;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            position: absolute; bottom: 0; right: 0; width: 28px; height: 28px;
+            background: #3d6b6b; border: none; border-radius: 50%; cursor: pointer;
+            opacity: 0; transition: opacity 0.2s;
         }
-
-        .header-photo-container:hover .upload-photo-btn {
-            opacity: 1;
-        }
-
-        .upload-photo-btn span {
-            display: none;
-        }
-
-        .upload-photo-btn::before {
-            content: '📷';
-        }
-
-        .upload-photo-btn:hover {
-            background: #c5a1a7;
-            transform: scale(1.1);
-        }
-
-        .upload-photo-btn {
-            position: absolute;
-            bottom: -8px;
-            right: -8px;
-            background: #b59197;
-            border: 3px solid #1a1a1a;
-            color: #fff;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            font-size: 1.3rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            font-family: inherit;
-            z-index: 10;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
-
-        .upload-photo-btn::before {
-            content: '📷';
-        }
-
-        .upload-photo-btn:hover {
-            background: #c5a1a7;
-            transform: scale(1.1);
-        }
-
+        .header-photo-container:hover .upload-photo-btn { opacity: 1; }
         .home-title {
-            background: linear-gradient(135deg, #b59197 0%, #7ba886 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-size: 2.75rem;
-            font-weight: 500;
-            letter-spacing: 0.05em;
-            margin-bottom: 8px;
+            font-size: 1.5rem; font-weight: 400;
+            letter-spacing: 0.3em; text-transform: uppercase; color: #f2ebe0;
         }
 
-        .home-subtitle {
-            color: #999;
-            font-size: 0.875rem;
-            letter-spacing: 0.05em;
+        /* Reminder Section */
+        .reminder-section { margin-bottom: 28px; }
+        .current-reminder {
+            background: rgba(20, 20, 20, 0.4);
+            border: 1px solid rgba(61, 107, 107, 0.3);
+            padding: 22px 26px; margin-bottom: 14px; display: none;
         }
-
-        .nav-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 32px;
+        .current-reminder.visible { display: block; }
+        .reminder-eyebrow {
+            font-size: 0.6rem; text-transform: uppercase;
+            letter-spacing: 0.25em; color: #a3b899; margin-bottom: 10px;
         }
+        .reminder-title {
+            font-size: 1.1rem; color: #f2ebe0; font-weight: 400;
+            margin-bottom: 6px; line-height: 1.4;
+        }
+        .reminder-due { font-size: 0.85rem; color: #c9a9a6; margin-bottom: 16px; }
+        .reminder-links { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+        .reminder-links:empty { display: none; margin-bottom: 0; }
+        .reminder-link {
+            background: rgba(163, 184, 153, 0.15);
+            border: 1px solid rgba(163, 184, 153, 0.4);
+            color: #a3b899; padding: 9px 16px; text-decoration: none;
+            font-size: 0.8rem; font-family: inherit; transition: all 0.2s ease;
+        }
+        .reminder-link:hover { background: rgba(163, 184, 153, 0.25); }
+        .reminder-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        .reminder-btn {
+            background: transparent; border: 1px solid rgba(163, 184, 153, 0.4);
+            color: #a3b899; padding: 10px 20px; cursor: pointer;
+            font-size: 0.8rem; font-family: inherit; transition: all 0.2s ease;
+        }
+        .reminder-btn:hover { background: rgba(163, 184, 153, 0.15); }
+        .reminder-btn.primary { background: #3d6b6b; border-color: #3d6b6b; color: #f2ebe0; }
+        .reminder-btn.primary:hover { background: #4a7a7a; }
+        .reminder-btn.subtle { border-color: rgba(224, 210, 208, 0.2); color: rgba(224, 210, 208, 0.6); }
+        .reminder-btn.subtle:hover { border-color: rgba(224, 210, 208, 0.4); color: #e0d2d0; }
 
+        .quick-add { display: flex; gap: 0; margin-bottom: 6px; }
+        .quick-add input {
+            flex: 1; background: rgba(20, 20, 20, 0.5);
+            border: 1px solid rgba(61, 107, 107, 0.25); border-right: none;
+            color: #f2ebe0; padding: 13px 16px; font-size: 0.9rem; font-family: inherit;
+        }
+        .quick-add input:focus { outline: none; border-color: rgba(61, 107, 107, 0.5); }
+        .quick-add input::placeholder { color: rgba(242, 235, 224, 0.35); font-style: italic; }
+        .quick-add button {
+            background: #3d6b6b; border: 1px solid #3d6b6b; color: #f2ebe0;
+            padding: 13px 18px; cursor: pointer; font-size: 1rem;
+            font-family: inherit; transition: all 0.2s ease;
+        }
+        .quick-add button:hover { background: #4a7a7a; }
+        .manage-link { text-align: right; }
+        .manage-link button {
+            background: transparent; border: none;
+            color: rgba(242, 235, 224, 0.4); font-size: 0.7rem;
+            font-family: inherit; cursor: pointer;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            padding: 6px 0; transition: color 0.2s ease;
+        }
+        .manage-link button:hover { color: rgba(242, 235, 224, 0.7); }
+
+        /* Navigation */
+        .nav-buttons { display: flex; gap: 12px; margin-bottom: 12px; }
         .hub-nav-btn {
-            background: #2a2a2a;
-            border: 1px solid #b59197;
-            color: #b59197;
-            padding: 24px;
-            font-size: 1.25rem;
-            font-weight: 400;
-            letter-spacing: 0.05em;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: 'Cormorant', Georgia, 'Times New Roman', serif;
-            text-decoration: none;
-            display: block;
-            text-align: center;
+            flex: 1; background: transparent;
+            border: 1px solid rgba(201, 169, 166, 0.5); color: #c9a9a6;
+            text-decoration: none; padding: 14px 20px; text-align: center;
+            font-size: 0.85rem; font-family: inherit;
+            transition: all 0.2s ease; letter-spacing: 0.05em;
         }
-
-        .hub-nav-btn:hover {
-            background: #b59197;
-            color: #2a2a2a;
-        }
-
-        .hub-nav-btn.charlie {
-            border-color: #7ba886;
-            color: #7ba886;
-            font-family: 'Work Sans', sans-serif;
-            font-weight: 700;
-            font-size: 1.15rem;
-        }
-
-        .hub-nav-btn.charlie:hover {
-            background: #7ba886;
-            color: #ffffff;
-        }
-
+        .hub-nav-btn:hover { border-color: rgba(201, 169, 166, 0.8); background: rgba(201, 169, 166, 0.1); }
+        .hub-nav-btn.charlie { color: #a3b899; border-color: rgba(163, 184, 153, 0.5); }
+        .hub-nav-btn.charlie:hover { border-color: rgba(163, 184, 153, 0.8); background: rgba(163, 184, 153, 0.1); }
         .hub-nav-btn.dreams {
-            border: 2px solid transparent;
-            background-image: 
-                linear-gradient(#2a2a2a, #2a2a2a),
-                linear-gradient(135deg, #b59197 0%, #7ba886 100%);
-            background-origin: border-box;
-            background-clip: padding-box, border-box;
-            color: #b59197;
-            font-family: 'Cormorant', Georgia, 'Times New Roman', serif;
-            font-weight: 500;
+            display: block; width: 100%;
+            background: transparent; border: 1px solid rgba(242, 235, 224, 0.4);
+            color: #f2ebe0; margin-bottom: 24px;
         }
+        .hub-nav-btn.dreams:hover { background: rgba(242, 235, 224, 0.1); border-color: #f2ebe0; }
 
-        .hub-nav-btn.dreams:hover {
-            background: linear-gradient(135deg, #b59197 0%, #7ba886 100%);
-            color: #ffffff;
-        }
-
+        /* Section Cards */
         .section {
-            background: #2a2a2a;
-            border: 1px solid #b59197;
-            padding: 24px;
-            margin-bottom: 24px;
+            background: rgba(20, 20, 20, 0.4);
+            border: 1px solid rgba(61, 107, 107, 0.25);
+            padding: 22px; margin-bottom: 20px;
         }
-
         .section-title {
-            font-size: 0.875rem;
-            font-weight: 600;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: #b59197;
-            margin-bottom: 20px;
-        }
-
-        .section-title.centered {
-            text-align: center;
-        }
-
-        .calendar-header {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .calendar-nav {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-
-        .calendar-nav button,
-        .view-toggle,
-        .add-event-btn,
-        .btn {
-            background: transparent;
-            border: 1px solid #444;
-            color: #999;
-            padding: 8px 16px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.2s ease;
-            font-family: inherit;
-        }
-
-        .calendar-nav button:hover,
-        .view-toggle:hover,
-        .add-event-btn:hover,
-        .btn:hover {
-            background: #b59197;
-            color: #2a2a2a;
-            border-color: #b59197;
-        }
-
-        .calendar-title {
-            color: #fff;
-            font-size: 1.125rem;
-            font-weight: 400;
-        }
-
-        #calendarContainer {
-            margin-bottom: 20px;
-        }
-
-        .week-day {
-            background: #3a3a3a;
-            padding: 16px;
-            margin-bottom: 8px;
-            border-left: 3px solid transparent;
-        }
-
-        .week-day.today {
-            border-left-color: #b59197;
-            background: rgba(181, 145, 151, 0.1);
-        }
-
-        .week-day-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 12px;
-        }
-
-        .week-day-name {
-            font-size: 1rem;
-            color: #fff;
-        }
-
-        .week-day-date {
-            color: #999;
-        }
-
-        .event-item {
-            background: #2a2a2a;
-            padding: 10px;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-        }
-
-        .event-title {
-            color: #fff;
-            font-size: 0.9rem;
-        }
-
-        .event-note {
-            color: #999;
-            font-size: 0.8rem;
-            margin-top: 4px;
-        }
-
-        .add-event-btn {
-            width: 100%;
-            margin-top: 12px;
-        }
-
-        .event-form {
-            display: none;
-            background: #1a1a1a;
-            padding: 20px;
-            margin-top: 15px;
-            border: 1px solid #333;
-        }
-
-        .event-form.active {
-            display: block;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            color: #999;
-            font-size: 0.85rem;
-            margin-bottom: 6px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            background: #2a2a2a;
-            border: 1px solid #444;
-            color: #fff;
-            padding: 10px;
-            font-size: 0.9rem;
-            font-family: inherit;
-        }
-
-        .form-group select {
-            width: 100%;
-            background: #2a2a2a;
-            border: 1px solid #444;
-            color: #fff;
-            padding: 10px;
-            font-size: 0.9rem;
-            font-family: inherit;
-            cursor: pointer;
-            transition: border-color 0.2s;
-        }
-
-        .form-group select:focus {
-            outline: none;
-            border-color: #b59197;
-        }
-
-        .form-group select:hover {
-            border-color: #b59197;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #b59197;
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-        }
-
-        .form-actions button[type="submit"] {
-            border-color: #b59197;
-            color: #b59197;
-        }
-
-        .form-actions button[type="submit"]:hover {
-            background: #b59197;
-            color: #2a2a2a;
-        }
-
-        .day-selector {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 8px;
-            margin-top: 8px;
-        }
-
-        .day-checkbox {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px;
-            background: #1a1a1a;
-            border: 1px solid #444;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .day-checkbox:hover {
-            background: #2a2a2a;
-            border-color: #b59197;
-        }
-
-        .day-checkbox input[type="checkbox"] {
-            width: 16px;
-            height: 16px;
-            cursor: pointer;
-            accent-color: #b59197;
-        }
-
-        .day-checkbox label {
-            cursor: pointer;
-            margin: 0;
-            font-size: 0.85rem;
-            text-transform: none;
-            letter-spacing: normal;
-        }
-
-        .repeat-mode {
-            display: none;
-        }
-
-        .repeat-mode.active {
-            display: block;
-        }
-
-        .date-tag {
-            background: #b59197;
-            color: #fff;
-            padding: 6px 10px;
-            border-radius: 3px;
-            font-size: 0.8rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .date-tag button {
-            background: transparent;
-            border: none;
-            color: #fff;
-            cursor: pointer;
-            font-size: 1rem;
-            padding: 0;
-            line-height: 1;
-        }
-
-        .date-tag button:hover {
-            opacity: 0.7;
-        }
-
-        .sticky-note {
-            background: #2a2a2a;
-            padding: 16px;
-            box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
-            border-radius: 2px;
-            position: relative;
-            border: 1px solid #3a3a3a;
-        }
-
-        .sticky-note::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 20px;
-            width: 40px;
-            height: 20px;
-            background: rgba(123, 168, 134, 0.1);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .sticky-note-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #7ba886;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .sticky-note-list {
-            max-height: none;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .sticky-note-list.collapsed {
-            max-height: 250px;
-        }
-
-        .sticky-note-expand-btn {
-            background: transparent;
-            border: 1px solid #7ba886;
-            color: #7ba886;
-            padding: 6px 12px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            transition: all 0.2s ease;
-            font-family: inherit;
-            width: 100%;
-            margin-top: 8px;
-            display: none;
-        }
-
-        .sticky-note-expand-btn.show {
-            display: block;
-        }
-
-        .sticky-note-expand-btn:hover {
-            background: rgba(123, 168, 134, 0.1);
-        }
-
-        .sticky-note-input {
-            display: flex;
-            gap: 6px;
-            margin-top: 12px;
-        }
-
-        .sticky-note-input input {
-            flex: 1;
-            background: #1a1a1a;
-            border: 1px solid #444;
-            padding: 8px;
-            font-size: 0.85rem;
-            font-family: inherit;
-            border-radius: 2px;
-            color: #e0e0e0;
-        }
-
-        .sticky-note-input input::placeholder {
-            color: #666;
-        }
-
-        .sticky-note-input button {
-            background: #7ba886;
-            color: #ffffff;
-            border: none;
-            padding: 8px 16px;
-            cursor: pointer;
-            font-size: 1rem;
-            border-radius: 2px;
-            transition: all 0.2s;
-            font-weight: 600;
-        }
-
-        .sticky-note-input button:hover {
-            background: #8fb99a;
-        }
-
-        .sticky-item {
-            background: #1a1a1a;
-            padding: 8px 10px;
-            margin-bottom: 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-radius: 2px;
-            border: 1px solid #333;
-        }
-
-        .sticky-item-text {
-            flex: 1;
-            color: #e0e0e0;
-            font-size: 0.85rem;
-            word-wrap: break-word;
-            cursor: pointer;
-        }
-
-        .sticky-item-text.completed {
-            text-decoration: line-through;
-            opacity: 0.5;
-            color: #999;
-        }
-
-        .sticky-item button {
-            background: transparent;
-            border: none;
-            color: #666;
-            cursor: pointer;
-            padding: 4px 8px;
-            font-size: 0.9rem;
-            transition: color 0.2s;
-        }
-
-        .sticky-item button:hover {
-            color: #7ba886;
-        }
-
-        .prompt-question {
-            background: #1a1a1a;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-left: 3px solid #b59197;
-            border-right: 3px solid #7ba886;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .prompt-question:hover {
-            background: #222;
-        }
-
-        .prompt-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-
-        .expand-icon {
-            color: #b59197;
-            font-size: 1.25rem;
-            transition: transform 0.3s;
-            user-select: none;
-        }
-
-        .expand-icon.expanded {
-            transform: rotate(180deg);
-        }
-
-        .prompt-label {
-            font-size: 0.75rem;
-            color: #999;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 8px;
-        }
-
-        .prompt-text {
-            color: #fff;
-            font-size: 1rem;
-            line-height: 1.5;
-            font-style: italic;
-        }
-
-        .answers-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .answers-grid.expanded {
-            max-height: 1000px;
-            margin-top: 20px;
-        }
-
-        .answer-box {
-            background: #1a1a1a;
-            padding: 20px;
-        }
-
-        .answer-person {
-            font-size: 0.75rem;
-            color: #b59197;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 12px;
-        }
-
-        .answer-input {
-            width: 100%;
-            background: #2a2a2a;
-            border: 1px solid #444;
-            color: #fff;
-            padding: 12px;
-            font-size: 0.9rem;
-            font-family: inherit;
-            min-height: 80px;
-            resize: vertical;
-        }
-
-        .answer-display {
-            color: #e0e0e0;
-            line-height: 1.6;
-            font-size: 0.95rem;
-            white-space: pre-wrap;
-        }
-
-        .save-answer-btn {
-            margin-top: 8px;
-            background: transparent;
-            border: 1px solid #7ba886;
-            color: #7ba886;
-            padding: 8px 16px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.2s ease;
-            font-family: inherit;
-            width: 100%;
-        }
-
-        .save-answer-btn:hover {
-            background: #7ba886;
-            color: #ffffff;
-        }
-
-        .challenge-box {
-            background: #1a1a1a;
-            padding: 24px;
-            border-left: 3px solid #7ba886;
-        }
-
-        .challenge-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .challenge-month {
-            color: #7ba886;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            font-weight: 500;
-        }
-
-        .challenge-checkbox {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .challenge-checkbox input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-            accent-color: #7ba886;
-        }
-
-        .challenge-status {
-            color: #999;
-            font-size: 0.85rem;
-        }
-
-        .challenge-checkbox input[type="checkbox"]:checked ~ .challenge-status {
-            color: #7ba886;
-            font-weight: 500;
-        }
-
-        .challenge-text {
-            color: #fff;
-            font-size: 1rem;
-            line-height: 1.6;
-            font-style: italic;
-        }
-
-        .challenge-notes {
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 1px solid #3a3a3a;
-        }
-
-        .challenge-notes-toggle {
-            background: transparent;
-            border: 1px solid #7ba886;
-            color: #7ba886;
-            padding: 8px 16px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.2s ease;
-            font-family: inherit;
-            width: 100%;
-            text-align: left;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .challenge-notes-toggle:hover {
-            background: rgba(123, 168, 134, 0.1);
-        }
-
-        .challenge-notes-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .challenge-notes-content.expanded {
-            max-height: 300px;
-            margin-top: 12px;
-        }
-
-        .challenge-notes-textarea {
-            width: 100%;
-            background: #2a2a2a;
-            border: 1px solid #444;
-            color: #fff;
-            padding: 12px;
-            font-size: 0.9rem;
-            font-family: inherit;
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        .challenge-notes-textarea:focus {
-            outline: none;
-            border-color: #7ba886;
-        }
-
-        .challenge-notes-save {
-            margin-top: 8px;
-            background: transparent;
-            border: 1px solid #7ba886;
-            color: #7ba886;
-            padding: 8px 16px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.2s ease;
-            font-family: inherit;
-        }
-
-        .challenge-notes-save:hover {
-            background: #7ba886;
-            color: #ffffff;
-        }
-
-        .challenge-notes-display {
-            color: #e0e0e0;
-            line-height: 1.6;
-            font-size: 0.95rem;
-            white-space: pre-wrap;
-            padding: 12px;
-            background: #2a2a2a;
-            position: relative;
-        }
-
-        .challenge-notes-edit-btn {
-            margin-top: 8px;
-            background: transparent;
-            border: 1px solid #7ba886;
-            color: #7ba886;
-            padding: 8px 16px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.2s ease;
-            font-family: inherit;
-        }
-
-        .challenge-notes-edit-btn:hover {
-            background: rgba(123, 168, 134, 0.1);
-        }
-
-        .no-answer {
-            color: #666;
-            font-style: italic;
-        }
-
-        .empty-state {
-            text-align: center;
-            color: #666;
-            padding: 20px;
-        }
-
+            font-size: 0.65rem; font-weight: 400;
+            letter-spacing: 0.2em; text-transform: uppercase;
+            color: #3d6b6b; margin-bottom: 16px;
+        }
+
+        /* Calendar */
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+        .calendar-nav { display: flex; align-items: center; gap: 12px; }
+        .calendar-nav button {
+            background: transparent; border: 1px solid rgba(61, 107, 107, 0.4);
+            color: #a3b899; padding: 8px 14px; cursor: pointer;
+            font-size: 0.8rem; font-family: inherit; transition: all 0.2s;
+        }
+        .calendar-nav button:hover { background: rgba(61, 107, 107, 0.15); }
+        .calendar-title { color: #f2ebe0; font-size: 1rem; letter-spacing: 0.1em; }
+        .view-toggle {
+            background: transparent; border: 1px solid rgba(61, 107, 107, 0.3);
+            color: rgba(163, 184, 153, 0.7); padding: 6px 12px; cursor: pointer;
+            font-size: 0.75rem; font-family: inherit; transition: all 0.2s;
+        }
+        .view-toggle:hover { border-color: rgba(61, 107, 107, 0.5); color: #a3b899; }
+        .view-toggle.active { background: rgba(61, 107, 107, 0.2); border-color: #3d6b6b; color: #a3b899; }
+        
+        /* Month Grid */
         .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 1px;
-            background: #1a1a1a;
-            margin-bottom: 16px;
+            display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px;
         }
-
         .calendar-day-header {
-            background: #1a1a1a;
-            padding: 12px;
-            text-align: center;
-            font-size: 0.75rem;
-            color: #999;
-            text-transform: uppercase;
+            background: rgba(61, 107, 107, 0.2); padding: 8px 4px;
+            text-align: center; font-size: 0.7rem; color: #a3b899;
+            text-transform: uppercase; letter-spacing: 0.1em;
         }
-
+        .calendar-month-day {
+            background: rgba(20, 20, 20, 0.3); padding: 8px;
+            min-height: 70px; cursor: pointer; transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+        .calendar-month-day:hover { background: rgba(20, 20, 20, 0.5); border-color: rgba(61, 107, 107, 0.3); }
+        .calendar-month-day.today { background: rgba(61, 107, 107, 0.15); border-color: #3d6b6b; }
+        .calendar-month-day.other-month { opacity: 0.4; }
+        .calendar-month-day .day-number {
+            font-size: 0.9rem; color: #f2ebe0; margin-bottom: 4px;
+        }
+        .calendar-month-day.today .day-number { color: #a3b899; font-weight: 700; }
+        .calendar-month-day .day-count {
+            font-size: 0.7rem; color: #c9a9a6; 
+        }
+        .calendar-month-day .day-dot {
+            width: 6px; height: 6px; background: #a3b899; border-radius: 50%;
+            display: inline-block; margin-right: 3px;
+        }
+        
+        /* List view days (2-day and week) */
         .calendar-day {
-            background: #3a3a3a;
-            padding: 12px;
-            min-height: 80px;
-            cursor: pointer;
-            transition: background 0.2s;
+            background: rgba(20, 20, 20, 0.3); padding: 12px;
+            border: 1px solid rgba(61, 107, 107, 0.15); min-height: 80px;
+            margin-bottom: 8px;
         }
-
-        .calendar-day:hover {
-            background: #4a4a4a;
+        .calendar-day.today { border-color: #3d6b6b; background: rgba(61, 107, 107, 0.1); }
+        .calendar-date { font-size: 0.85rem; color: #a3b899; margin-bottom: 10px; font-weight: 400; }
+        .calendar-event {
+            background: rgba(163, 184, 153, 0.2); padding: 8px 12px;
+            margin-bottom: 6px; font-size: 0.85rem; color: #f2ebe0;
+            border-left: 2px solid #a3b899; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center;
         }
-
-        .calendar-day.other-month {
-            opacity: 0.3;
+        .calendar-event:hover { background: rgba(163, 184, 153, 0.3); }
+        .calendar-event-time { font-size: 0.75rem; color: #c9a9a6; }
+        .no-events { color: rgba(242, 235, 224, 0.4); font-size: 0.85rem; font-style: italic; }
+        
+        /* List view styles (2-day and week) */
+        .week-day {
+            background: rgba(20, 20, 20, 0.3); padding: 16px;
+            border: 1px solid rgba(61, 107, 107, 0.15); margin-bottom: 12px;
         }
-
-        .calendar-day.today {
-            background: rgba(181, 145, 151, 0.2);
-            border: 1px solid #b59197;
+        .week-day.today { border-color: #3d6b6b; background: rgba(61, 107, 107, 0.1); }
+        .week-day-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 12px; padding-bottom: 10px;
+            border-bottom: 1px solid rgba(61, 107, 107, 0.15);
         }
-
-        .day-number {
-            font-size: 0.875rem;
-            color: #e0e0e0;
-            margin-bottom: 4px;
+        .week-day-name { color: #f2ebe0; font-size: 0.95rem; }
+        .week-day-date { color: #a3b899; font-size: 0.85rem; }
+        .event-item {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            background: rgba(163, 184, 153, 0.15); padding: 10px 14px;
+            margin-bottom: 8px; border-left: 2px solid #a3b899;
         }
-
-        .day-events {
-            font-size: 0.7rem;
-            color: #b59197;
+        .event-title { color: #f2ebe0; font-size: 0.9rem; margin-bottom: 2px; }
+        .event-note { color: rgba(242, 235, 224, 0.5); font-size: 0.8rem; font-style: italic; }
+        .empty-state { color: rgba(242, 235, 224, 0.4); font-size: 0.85rem; font-style: italic; padding: 8px 0; }
+        
+        /* Day Detail Modal */
+        .day-modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.7); z-index: 2000;
+            display: none; align-items: center; justify-content: center;
+            padding: 20px;
         }
-
-        @media (max-width: 768px) {
-            .answers-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .nav-buttons {
-                grid-template-columns: 1fr;
-            }
-
-            .calendar-header {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .calendar-nav {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .calendar-header > div {
-                justify-content: center;
-            }
-
-            .calendar-day {
-                min-height: 60px;
-                padding: 8px;
-            }
-
-            .day-number {
-                font-size: 0.75rem;
-            }
-
-            .day-events {
-                font-size: 0.65rem;
-            }
-
-            .calendar-day-header {
-                padding: 8px;
-                font-size: 0.65rem;
-            }
-
-            body > .container > div[style*="grid-template-columns: 1fr 1fr"] {
-                grid-template-columns: 1fr !important;
-            }
-
-            .sticky-notes-grid {
-                grid-template-columns: 1fr !important;
-            }
-
-            .sync-status {
-                top: 8px;
-                right: 8px;
-                font-size: 0.7rem;
-                padding: 6px 10px;
-            }
+        .day-modal-overlay.visible { display: flex; }
+        .day-modal {
+            background: #3d2f31; border: 1px solid rgba(61, 107, 107, 0.4);
+            width: 100%; max-width: 500px; max-height: 80vh;
+            overflow-y: auto; padding: 24px;
         }
+        .day-modal-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px; padding-bottom: 12px;
+            border-bottom: 1px solid rgba(61, 107, 107, 0.2);
+        }
+        .day-modal-title { font-size: 1.1rem; color: #f2ebe0; }
+        .day-modal-close {
+            background: transparent; border: none; color: #c9a9a6;
+            font-size: 1.5rem; cursor: pointer; padding: 0; line-height: 1;
+        }
+        .day-modal-close:hover { color: #f2ebe0; }
+        .day-modal-events { margin-bottom: 20px; }
+        .day-modal-event {
+            background: rgba(20, 20, 20, 0.4); padding: 14px;
+            margin-bottom: 10px; border-left: 2px solid #a3b899;
+        }
+        .day-modal-event-header {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            margin-bottom: 6px;
+        }
+        .day-modal-event-title { color: #f2ebe0; font-size: 0.95rem; }
+        .day-modal-event-actions { display: flex; gap: 8px; }
+        .day-modal-event-actions button {
+            background: transparent; border: none; cursor: pointer;
+            font-size: 0.75rem; padding: 2px 6px; transition: color 0.2s;
+        }
+        .day-modal-edit { color: rgba(163, 184, 153, 0.6); }
+        .day-modal-edit:hover { color: #a3b899; }
+        .day-modal-delete { color: rgba(201, 169, 166, 0.5); }
+        .day-modal-delete:hover { color: #c9a9a6; }
+        .day-modal-event-time { font-size: 0.8rem; color: #c9a9a6; margin-bottom: 4px; }
+        .day-modal-event-note { font-size: 0.85rem; color: rgba(242, 235, 224, 0.6); font-style: italic; }
+        .day-modal-empty { color: rgba(242, 235, 224, 0.4); font-style: italic; padding: 20px 0; text-align: center; }
+        .day-modal-add {
+            width: 100%; background: transparent;
+            border: 1px solid rgba(61, 107, 107, 0.4); color: #3d6b6b;
+            padding: 12px; cursor: pointer; font-size: 0.85rem;
+            font-family: inherit; transition: all 0.2s;
+        }
+        .day-modal-add:hover { background: rgba(61, 107, 107, 0.1); border-color: #3d6b6b; }
+        
+        /* Edit form in modal */
+        .day-modal-form { display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(61, 107, 107, 0.2); }
+        .day-modal-form.visible { display: block; }
+        .day-modal-form input, .day-modal-form textarea {
+            width: 100%; background: rgba(20, 20, 20, 0.5);
+            border: 1px solid rgba(61, 107, 107, 0.25); color: #f2ebe0;
+            padding: 10px 12px; font-size: 0.9rem; font-family: inherit;
+            margin-bottom: 10px;
+        }
+        .day-modal-form input:focus, .day-modal-form textarea:focus {
+            outline: none; border-color: rgba(61, 107, 107, 0.5);
+        }
+        .day-modal-form-row { display: flex; gap: 10px; }
+        .day-modal-form-row input { flex: 1; }
+        .day-modal-form-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 10px; }
+        
+        .add-event-btn {
+            width: 100%; background: transparent;
+            border: 1px solid rgba(61, 107, 107, 0.3); color: #3d6b6b;
+            padding: 12px; margin-top: 16px; cursor: pointer;
+            font-size: 0.85rem; font-family: inherit; transition: all 0.2s;
+        }
+        .add-event-btn:hover { background: rgba(61, 107, 107, 0.1); border-color: rgba(61, 107, 107, 0.5); }
+        .event-form {
+            display: none; background: rgba(20, 20, 20, 0.5);
+            padding: 20px; margin-top: 16px;
+        }
+        .event-form.visible { display: block; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 0.75rem; color: #a3b899; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.1em; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; background: rgba(20, 20, 20, 0.6);
+            border: 1px solid rgba(61, 107, 107, 0.25); color: #f2ebe0;
+            padding: 10px 12px; font-size: 0.9rem; font-family: inherit;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none; border-color: rgba(61, 107, 107, 0.5);
+        }
+        .form-actions { display: flex; gap: 10px; justify-content: flex-end; }
+        .btn {
+            background: #3d6b6b; border: none; color: #f2ebe0;
+            padding: 10px 20px; cursor: pointer; font-size: 0.85rem;
+            font-family: inherit; transition: background 0.2s;
+        }
+        .btn:hover { background: #4a7a7a; }
+        .repeat-mode { display: none; }
 
-        @media (max-width: 480px) {
-            body {
-                padding: 12px;
-            }
+        /* Grocery */
+        .grocery-item {
+            display: flex; align-items: center;
+            padding: 11px 0; border-bottom: 1px solid rgba(61, 107, 107, 0.1); gap: 12px;
+        }
+        .grocery-item:last-of-type { border-bottom: none; }
+        .grocery-item input[type="checkbox"] { width: 17px; height: 17px; accent-color: #a3b899; cursor: pointer; }
+        .grocery-item span { flex: 1; color: #f2ebe0; font-size: 0.95rem; }
+        .grocery-item.done span { text-decoration: line-through; color: rgba(242, 235, 224, 0.35); }
+        .grocery-item button {
+            background: transparent; border: none;
+            color: rgba(201, 169, 166, 0.4); cursor: pointer;
+            font-size: 0.9rem; padding: 4px 8px; transition: color 0.2s ease;
+        }
+        .grocery-item button:hover { color: #c9a9a6; }
+        .add-input { display: flex; gap: 0; margin-top: 14px; }
+        .add-input input {
+            flex: 1; background: rgba(20, 20, 20, 0.5);
+            border: 1px solid rgba(163, 184, 153, 0.2); border-right: none;
+            color: #f2ebe0; padding: 11px 14px; font-size: 0.85rem; font-family: inherit;
+        }
+        .add-input input:focus { outline: none; border-color: rgba(163, 184, 153, 0.4); }
+        .add-input input::placeholder { color: rgba(242, 235, 224, 0.3); }
+        .add-input button {
+            background: #a3b899; border: 1px solid #a3b899; color: #1c1c1c;
+            padding: 11px 16px; cursor: pointer; font-size: 0.95rem; transition: all 0.2s ease;
+        }
+        .add-input button:hover { background: #b4c9aa; }
 
-            .home-title {
-                font-size: 2.25rem;
-            }
+        /* Phone Book */
+        .phonebook-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .expand-icon { color: rgba(61, 107, 107, 0.5); font-size: 0.65rem; transition: transform 0.3s; }
+        .phonebook-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .phonebook-content.expanded { max-height: 2000px; }
+        .phonebook-search { margin: 16px 0 12px; }
+        .phonebook-search input {
+            width: 100%; background: rgba(20, 20, 20, 0.5);
+            border: 1px solid rgba(61, 107, 107, 0.2); color: #f2ebe0;
+            padding: 10px 14px; font-size: 0.85rem; font-family: inherit;
+        }
+        .phonebook-search input:focus { outline: none; border-color: rgba(61, 107, 107, 0.4); }
+        .phonebook-search input::placeholder { color: rgba(242, 235, 224, 0.3); }
+        .contact {
+            background: rgba(20, 20, 20, 0.4); padding: 14px;
+            margin-bottom: 8px; border-left: 2px solid #3d6b6b;
+        }
+        .contact-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+        .contact-name { color: #f2ebe0; font-size: 0.95rem; }
+        .contact-actions { display: flex; gap: 6px; }
+        .contact-edit-btn, .contact-delete-btn {
+            background: transparent; border: none; cursor: pointer;
+            font-size: 0.75rem; font-family: inherit; padding: 2px 6px; transition: color 0.2s;
+        }
+        .contact-edit-btn { color: rgba(163, 184, 153, 0.5); }
+        .contact-edit-btn:hover { color: #a3b899; }
+        .contact-delete-btn { color: rgba(201, 169, 166, 0.4); }
+        .contact-delete-btn:hover { color: #c9a9a6; }
+        .contact-links { display: flex; flex-wrap: wrap; gap: 8px; }
+        .contact-link {
+            background: rgba(61, 107, 107, 0.15); color: #3d6b6b;
+            padding: 7px 12px; text-decoration: none;
+            font-size: 0.8rem; transition: all 0.2s ease;
+        }
+        .contact-link:hover { background: rgba(61, 107, 107, 0.25); }
+        .contact-link.phone { background: rgba(201, 169, 166, 0.15); color: #c9a9a6; }
+        .contact-link.phone:hover { background: rgba(201, 169, 166, 0.25); }
+        .contact-notes {
+            margin-top: 10px; padding-top: 10px;
+            border-top: 1px solid rgba(61, 107, 107, 0.1);
+            color: rgba(242, 235, 224, 0.5); font-size: 0.8rem; font-style: italic;
+        }
+        .add-contact-btn {
+            width: 100%; background: transparent;
+            border: 1px solid rgba(61, 107, 107, 0.3); color: #3d6b6b;
+            padding: 12px; cursor: pointer; font-size: 0.85rem;
+            font-family: inherit; margin-top: 8px; transition: all 0.2s;
+        }
+        .add-contact-btn:hover { background: rgba(61, 107, 107, 0.1); border-color: rgba(61, 107, 107, 0.5); }
+        .add-contact-form {
+            display: none; background: rgba(20, 20, 20, 0.5);
+            padding: 16px; margin-top: 12px;
+        }
+        .add-contact-form.visible { display: block; }
+        .add-contact-form input, .add-contact-form textarea {
+            width: 100%; background: rgba(20, 20, 20, 0.6);
+            border: 1px solid rgba(61, 107, 107, 0.2); color: #f2ebe0;
+            padding: 10px 12px; font-size: 0.85rem; font-family: inherit; margin-bottom: 10px;
+        }
+        .add-contact-form input:focus, .add-contact-form textarea:focus { outline: none; border-color: rgba(61, 107, 107, 0.4); }
+        .add-contact-form textarea { min-height: 60px; resize: vertical; }
+        .add-contact-form .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .save-contact-btn {
+            background: #3d6b6b; border: none; color: #f2ebe0;
+            padding: 10px 16px; cursor: pointer; font-size: 0.85rem;
+            font-family: inherit; transition: background 0.2s;
+        }
+        .save-contact-btn:hover { background: #4a7a7a; }
+        .cancel-contact-btn {
+            background: transparent; border: 1px solid rgba(201, 169, 166, 0.3);
+            color: #c9a9a6; padding: 10px 16px; cursor: pointer;
+            font-size: 0.85rem; font-family: inherit; transition: all 0.2s;
+        }
+        .cancel-contact-btn:hover { border-color: rgba(201, 169, 166, 0.5); }
 
-            .home-header {
-                flex-direction: column;
-                gap: 16px;
-            }
-
-            .header-photo {
-                width: 100px;
-                height: 100px;
-            }
+        /* Responsive */
+        @media (max-width: 600px) {
+            .nav-buttons { flex-direction: column; }
+            .reminder-actions { flex-direction: column; }
+            .reminder-btn { width: 100%; text-align: center; }
+            .add-contact-form .form-row { grid-template-columns: 1fr; }
+            .calendar-header { flex-direction: column; align-items: stretch; }
         }
     </style>
 </head>
@@ -1116,20 +476,47 @@
                 <input type="file" id="photoUpload" accept="image/*" style="display: none;">
                 <button class="upload-photo-btn" onclick="document.getElementById('photoUpload').click()"></button>
             </div>
-            <h1 class="home-title">Our Habit Hub</h1>
+            <h1 class="home-title">Our Life Hub</h1>
         </div>
 
+        <!-- REMINDER SECTION -->
+        <div class="reminder-section">
+            <div class="current-reminder visible" id="currentReminder">
+                <div class="reminder-eyebrow">Reminder</div>
+                <div class="reminder-title" id="reminderTitle">Q4 estimated taxes due Jan 15</div>
+                <div class="reminder-due" id="reminderDue">In 9 days</div>
+                <div class="reminder-links" id="reminderLinks">
+                    <a href="https://www.irs.gov/payments" target="_blank" class="reminder-link">IRS Payment Portal</a>
+                </div>
+                <div class="reminder-actions">
+                    <button class="reminder-btn primary" onclick="markCurrentReminderDone()">Done</button>
+                    <button class="reminder-btn subtle" onclick="snoozeCurrentReminder(7)">Snooze 1 week</button>
+                    <button class="reminder-btn subtle" onclick="snoozeCurrentReminder(30)">Snooze 1 month</button>
+                    <button class="reminder-btn subtle" onclick="showNextReminder()">Next</button>
+                </div>
+            </div>
+            <div class="quick-add">
+                <input type="text" id="quickReminderInput" placeholder="Add a quick reminder..." onkeypress="if(event.key==='Enter') addQuickReminder()">
+                <button onclick="addQuickReminder()">+</button>
+            </div>
+            <div class="manage-link">
+                <button onclick="openReminderModal()">Manage All Reminders</button>
+            </div>
+        </div>
+
+        <!-- Navigation -->
         <div class="nav-buttons">
             <a href="kasey-hub.html" class="hub-nav-btn">Kasey's Habit Hub</a>
             <a href="charlie-hub.html" class="hub-nav-btn charlie">Charlie's Habit Hub</a>
         </div>
 
-        <!-- Shared Calendar -->
+        <a href="our-dreams.html" class="hub-nav-btn dreams">Our Life Together</a>
+
+        <!-- Calendar -->
         <div class="section">
-            
             <div class="calendar-header">
                 <div class="calendar-nav">
-                    <button onclick="calendarPrevious()">←</button>
+                    <button onclick="calendarPrevious()">←</button>
                     <span class="calendar-title" id="calendarTitle"></span>
                     <button onclick="calendarNext()">→</button>
                 </div>
@@ -1138,11 +525,8 @@
                     <button class="view-toggle" onclick="calendarToggleMonthView()">Month View</button>
                 </div>
             </div>
-
             <div id="calendarContainer"></div>
-
             <button class="add-event-btn" onclick="calendarShowAddForm()">Add Event</button>
-
             <div class="event-form" id="calendarEventForm">
                 <form onsubmit="calendarAddEvent(event)">
                     <div class="form-group">
@@ -1154,14 +538,14 @@
                         <select id="calendarRepeatMode" onchange="toggleRepeatOptions()">
                             <option value="single">Single date</option>
                             <option value="multiple">Multiple specific dates</option>
-                            <option value="range">Date range (consecutive days)</option>
+                            <option value="range">Date range</option>
                         </select>
                     </div>
                     <div class="form-group" id="singleDateMode">
                         <input type="date" id="calendarEventDate" required>
                     </div>
                     <div class="form-group repeat-mode" id="multipleDateMode">
-                        <label>Select dates (click + to add each date):</label>
+                        <label>Select dates:</label>
                         <div style="display: flex; gap: 8px; margin-bottom: 8px;">
                             <input type="date" id="multipleDateInput" style="flex: 1;">
                             <button type="button" class="btn" onclick="addSelectedDate()" style="padding: 8px 16px;">+</button>
@@ -1190,102 +574,69 @@
             </div>
         </div>
 
-        <!-- Reminders & Grocery List -->
-        <div class="sticky-notes-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; margin-bottom: 24px;">
-            <div class="sticky-note">
-                <h3 class="sticky-note-title">Reminders</h3>
-                <div class="sticky-note-list collapsed" id="remindersList"></div>
-                <button class="sticky-note-expand-btn" id="remindersExpandBtn" onclick="toggleRemindersList()">Show More</button>
-                <div class="sticky-note-input">
-                    <input type="text" id="reminderInput" placeholder="Add reminder..." onkeypress="if(event.key==='Enter') addReminder()">
-                    <button onclick="addReminder()">+</button>
-                </div>
-            </div>
-
-            <div class="sticky-note">
-                <h3 class="sticky-note-title">Grocery List</h3>
-                <div class="sticky-note-list collapsed" id="groceryList"></div>
-                <button class="sticky-note-expand-btn" id="groceryExpandBtn" onclick="toggleGroceryList()">Show More</button>
-                <div class="sticky-note-input">
-                    <input type="text" id="groceryInput" placeholder="Add item..." onkeypress="if(event.key==='Enter') addGrocery()">
-                    <button onclick="addGrocery()">+</button>
-                </div>
+        <!-- Grocery List -->
+        <div class="section">
+            <div class="section-title">Grocery List</div>
+            <div id="groceryList"></div>
+            <div class="add-input">
+                <input type="text" id="groceryInput" placeholder="Add item..." onkeypress="if(event.key==='Enter') addGrocery()">
+                <button onclick="addGrocery()">+</button>
             </div>
         </div>
 
-        <!-- Dreams & Goals Link -->
-        <a href="our-dreams.html" class="hub-nav-btn dreams" style="margin-bottom: 24px;">Our Life Together</a>
-
-        <!-- Daily Prompt Section -->
+        <!-- Phone Book -->
         <div class="section">
-            <h2 class="section-title">Today's Prompt</h2>
-            
-            <div class="prompt-question" onclick="togglePromptAnswers()">
-                <div class="prompt-header">
-                    <div style="flex: 1;">
-                        <div class="prompt-label">Question of the Day</div>
-                        <div class="prompt-text" id="promptQuestion"></div>
-                    </div>
-                    <span class="expand-icon" id="expandIcon">▼</span>
-                </div>
+            <div class="phonebook-header" onclick="togglePhonebook()">
+                <div class="section-title" style="margin-bottom: 0;">Phone Book</div>
+                <span class="expand-icon" id="phonebookIcon">▼</span>
             </div>
-
-            <div class="answers-grid" id="answersGrid">
-                <div class="answer-box">
-                    <div class="answer-person">Kasey's Answer</div>
-                    <div id="kaseyAnswerContainer">
-                        <textarea class="answer-input" id="kaseyAnswerInput" placeholder="Share your thoughts..."></textarea>
-                        <button class="save-answer-btn" onclick="saveAnswer('kasey')">Save Answer</button>
+            <div class="phonebook-content expanded" id="phonebookContent">
+                <div class="phonebook-search">
+                    <input type="text" id="phonebookSearch" placeholder="Search contacts..." oninput="filterContacts()">
+                </div>
+                <div id="contactsList"></div>
+                <button class="add-contact-btn" onclick="toggleAddContact()">+ Add Contact</button>
+                <div class="add-contact-form" id="addContactForm">
+                    <input type="text" id="contactName" placeholder="Name / What it's for">
+                    <div class="form-row">
+                        <input type="tel" id="contactPhone" placeholder="Phone number">
+                        <input type="email" id="contactEmail" placeholder="Email">
                     </div>
-                    <div id="kaseyAnswerDisplay" class="answer-display" style="display: none;"></div>
-                </div>
-                <div class="answer-box">
-                    <div class="answer-person">Charlie's Answer</div>
-                    <div id="charlieAnswerContainer">
-                        <textarea class="answer-input" id="charlieAnswerInput" placeholder="Share your thoughts..."></textarea>
-                        <button class="save-answer-btn" onclick="saveAnswer('charlie')">Save Answer</button>
-                    </div>
-                    <div id="charlieAnswerDisplay" class="answer-display" style="display: none;"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Monthly Challenge Section -->
-        <div class="section">
-            <h2 class="section-title">This Month's Challenge</h2>
-            
-            <div class="challenge-box">
-                <div class="challenge-header">
-                    <div class="challenge-month" id="challengeMonth"></div>
-                    <label class="challenge-checkbox">
-                        <input type="checkbox" id="challengeComplete" onchange="toggleChallenge()">
-                        <span class="checkmark"></span>
-                        <span class="challenge-status" id="challengeStatus">Not completed</span>
-                    </label>
-                </div>
-                <div class="challenge-text" id="challengeText"></div>
-                
-                <div class="challenge-notes">
-                    <button class="challenge-notes-toggle" onclick="toggleChallengeNotes()">
-                        <span>Notes & Ideas</span>
-                        <span class="expand-icon" id="challengeNotesIcon">▼</span>
-                    </button>
-                    <div class="challenge-notes-content" id="challengeNotesContent">
-                        <div id="challengeNotesEdit">
-                            <textarea class="challenge-notes-textarea" id="challengeNotesInput" placeholder="Add notes, ideas, or plans for this challenge..."></textarea>
-                            <button class="challenge-notes-save" onclick="saveChallengeNotes()">Save Notes</button>
-                        </div>
-                        <div id="challengeNotesDisplayContainer" style="display: none;">
-                            <div id="challengeNotesDisplay" class="challenge-notes-display"></div>
-                            <button class="challenge-notes-edit-btn" onclick="editChallengeNotes()">Edit Notes</button>
-                        </div>
+                    <input type="url" id="contactWebsite" placeholder="Website / Link">
+                    <textarea id="contactNotes" placeholder="Notes (hours, account #, etc.)"></textarea>
+                    <div class="form-row">
+                        <button class="save-contact-btn" onclick="saveContact()">Save Contact</button>
+                        <button class="cancel-contact-btn" onclick="toggleAddContact()">Cancel</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Firebase SDK -->
+    <!-- Day Detail Modal -->
+    <div class="day-modal-overlay" id="dayModalOverlay" onclick="closeDayModal(event)">
+        <div class="day-modal" onclick="event.stopPropagation()">
+            <div class="day-modal-header">
+                <div class="day-modal-title" id="dayModalTitle">Monday, January 6</div>
+                <button class="day-modal-close" onclick="closeDayModal()">&times;</button>
+            </div>
+            <div class="day-modal-events" id="dayModalEvents"></div>
+            <button class="day-modal-add" onclick="showDayModalForm()">+ Add Event</button>
+            <div class="day-modal-form" id="dayModalForm">
+                <input type="text" id="dayModalEventTitle" placeholder="Event title">
+                <div class="day-modal-form-row">
+                    <input type="time" id="dayModalEventTime">
+                </div>
+                <textarea id="dayModalEventNote" placeholder="Notes (optional)" rows="2"></textarea>
+                <input type="hidden" id="dayModalEditId">
+                <div class="day-modal-form-actions">
+                    <button class="cancel-contact-btn" onclick="hideDayModalForm()">Cancel</button>
+                    <button class="btn" onclick="saveDayModalEvent()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getFirestore, collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
@@ -1428,6 +779,194 @@
             } catch (error) {
                 console.error(`Error setting up listener for ${collectionName}:`, error);
             }
+        }
+
+        // LIFE REMINDERS - Single reminder at a time, ADHD-friendly
+        let lifeReminders = [];
+        let currentReminderIndex = 0;
+
+        const defaultLifeReminders = [
+            { id: 1, title: "Q4 estimated taxes", notifyDate: { month: 1, day: 15 }, frequency: "yearly", link: "https://www.irs.gov/payments" },
+            { id: 2, title: "Q1 estimated taxes", notifyDate: { month: 4, day: 15 }, frequency: "yearly", link: "https://www.irs.gov/payments" },
+            { id: 3, title: "Q2 estimated taxes", notifyDate: { month: 6, day: 15 }, frequency: "yearly", link: "https://www.irs.gov/payments" },
+            { id: 4, title: "Q3 estimated taxes", notifyDate: { month: 9, day: 15 }, frequency: "yearly", link: "https://www.irs.gov/payments" },
+            { id: 5, title: "Renew car registration", notifyDate: { month: 6, day: 1 }, frequency: "yearly" },
+            { id: 6, title: "Schedule annual vet checkup", notifyDate: { month: 3, day: 1 }, frequency: "yearly" }
+        ];
+
+        async function loadLifeReminders() {
+            const firebaseData = await loadFromFirebase('lifeReminders');
+            if (firebaseData && firebaseData.length > 0) {
+                lifeReminders = firebaseData;
+            } else {
+                lifeReminders = defaultLifeReminders;
+                await syncToFirebase('lifeReminders', lifeReminders);
+            }
+            updateReminderDisplay();
+        }
+
+        async function saveLifeReminders() {
+            localStorage.setItem('lifeReminders', JSON.stringify(lifeReminders));
+            await syncToFirebase('lifeReminders', lifeReminders);
+        }
+
+        function getNextNotifyDate(reminder) {
+            const today = new Date();
+            const currentYear = today.getFullYear();
+            
+            if (reminder.snoozedUntil) {
+                const snoozed = new Date(reminder.snoozedUntil);
+                if (snoozed > today) return snoozed;
+            }
+            
+            const nd = reminder.notifyDate;
+            let notifyDate = new Date(currentYear, nd.month - 1, nd.day);
+            
+            if (reminder.frequency === 'yearly') {
+                if (notifyDate < today) {
+                    notifyDate = new Date(currentYear + 1, nd.month - 1, nd.day);
+                }
+            }
+            
+            return notifyDate;
+        }
+
+        function getDaysUntilNotify(reminder) {
+            const notifyDate = getNextNotifyDate(reminder);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const diffTime = notifyDate - today;
+            return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        }
+
+        function formatDueText(daysUntil) {
+            if (daysUntil < 0) {
+                return `${Math.abs(daysUntil)} days overdue`;
+            } else if (daysUntil === 0) {
+                return 'Due today';
+            } else if (daysUntil === 1) {
+                return 'Due tomorrow';
+            } else if (daysUntil <= 14) {
+                return `In ${daysUntil} days`;
+            } else {
+                const notifyDate = new Date();
+                notifyDate.setDate(notifyDate.getDate() + daysUntil);
+                return notifyDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            }
+        }
+
+        function getUpcomingReminders(withinDays = 30) {
+            return lifeReminders
+                .map(r => ({ ...r, daysUntil: getDaysUntilNotify(r) }))
+                .filter(r => r.daysUntil <= withinDays && !r.completed)
+                .sort((a, b) => a.daysUntil - b.daysUntil);
+        }
+
+        function updateReminderDisplay() {
+            const upcoming = getUpcomingReminders(30);
+            const container = document.getElementById('currentReminder');
+            
+            if (upcoming.length === 0) {
+                container.classList.remove('visible');
+                return;
+            }
+            
+            container.classList.add('visible');
+            
+            if (currentReminderIndex >= upcoming.length) {
+                currentReminderIndex = 0;
+            }
+            
+            const reminder = upcoming[currentReminderIndex];
+            
+            document.getElementById('reminderTitle').textContent = reminder.title;
+            document.getElementById('reminderDue').textContent = formatDueText(reminder.daysUntil);
+            
+            const linksContainer = document.getElementById('reminderLinks');
+            linksContainer.innerHTML = '';
+            
+            if (reminder.link) {
+                const linkEl = document.createElement('a');
+                linkEl.href = reminder.link;
+                linkEl.target = '_blank';
+                linkEl.className = 'reminder-link';
+                linkEl.textContent = 'Open Link';
+                linksContainer.appendChild(linkEl);
+            }
+            
+            if (reminder.phone) {
+                const phoneEl = document.createElement('a');
+                phoneEl.href = `tel:${reminder.phone}`;
+                phoneEl.className = 'reminder-link';
+                phoneEl.textContent = `Call: ${reminder.phone}`;
+                linksContainer.appendChild(phoneEl);
+            }
+        }
+
+        function showNextReminder() {
+            const upcoming = getUpcomingReminders(30);
+            if (upcoming.length > 1) {
+                currentReminderIndex = (currentReminderIndex + 1) % upcoming.length;
+                updateReminderDisplay();
+            }
+        }
+
+        async function markCurrentReminderDone() {
+            const upcoming = getUpcomingReminders(30);
+            if (upcoming.length === 0) return;
+            
+            const reminder = upcoming[currentReminderIndex];
+            const index = lifeReminders.findIndex(r => r.id === reminder.id);
+            
+            if (index !== -1) {
+                lifeReminders[index].lastDone = new Date().toISOString();
+                lifeReminders[index].snoozedUntil = null;
+                await saveLifeReminders();
+                currentReminderIndex = 0;
+                updateReminderDisplay();
+            }
+        }
+
+        async function snoozeCurrentReminder(days) {
+            const upcoming = getUpcomingReminders(30);
+            if (upcoming.length === 0) return;
+            
+            const reminder = upcoming[currentReminderIndex];
+            const index = lifeReminders.findIndex(r => r.id === reminder.id);
+            
+            if (index !== -1) {
+                const snoozeDate = new Date();
+                snoozeDate.setDate(snoozeDate.getDate() + days);
+                lifeReminders[index].snoozedUntil = snoozeDate.toISOString();
+                await saveLifeReminders();
+                currentReminderIndex = 0;
+                updateReminderDisplay();
+            }
+        }
+
+        async function addQuickReminder() {
+            const input = document.getElementById('quickReminderInput');
+            const title = input.value.trim();
+            if (!title) return;
+            
+            const today = new Date();
+            const newReminder = {
+                id: Date.now(),
+                title: title,
+                notifyDate: { month: today.getMonth() + 1, day: today.getDate() },
+                frequency: 'once',
+                created: today.toISOString()
+            };
+            
+            lifeReminders.push(newReminder);
+            await saveLifeReminders();
+            input.value = '';
+            updateReminderDisplay();
+        }
+
+        function openReminderModal() {
+            alert('Reminder management modal coming soon!\n\nCurrent reminders:\n' + 
+                lifeReminders.map(r => `• ${r.title}`).join('\n'));
         }
 
         // CALENDAR FUNCTIONS
@@ -1701,7 +1240,7 @@
 
         function calendarCreateMonthDay(date, otherMonth) {
             const dayDiv = document.createElement('div');
-            dayDiv.className = 'calendar-day';
+            dayDiv.className = 'calendar-month-day';
             
             if (otherMonth) {
                 dayDiv.classList.add('other-month');
@@ -1713,22 +1252,157 @@
             }
             
             const dayEvents = calendarGetEventsForDate(date);
+            const eventCount = dayEvents.length;
+            
+            let countHtml = '';
+            if (eventCount > 0) {
+                countHtml = `<div class="day-count"><span class="day-dot"></span>${eventCount}</div>`;
+            }
             
             dayDiv.innerHTML = `
                 <div class="day-number">${date.getDate()}</div>
-                ${dayEvents.length > 0 ? `<div class="day-events">${dayEvents.length} event${dayEvents.length > 1 ? 's' : ''}</div>` : ''}
+                ${countHtml}
             `;
             
             dayDiv.onclick = () => {
-                calendarDate = new Date(date);
-                calendarView = 'twoday';
-                const buttons = document.querySelectorAll('.view-toggle');
-                buttons[0].textContent = 'Full Week';
-                buttons[1].textContent = 'Month View';
-                calendarRender();
+                openDayModal(date);
             };
             
             return dayDiv;
+        }
+
+        // Day Modal Functions
+        let selectedModalDate = null;
+
+        function openDayModal(date) {
+            selectedModalDate = new Date(date);
+            const overlay = document.getElementById('dayModalOverlay');
+            const title = document.getElementById('dayModalTitle');
+            
+            title.textContent = date.toLocaleDateString('en-US', { 
+                weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' 
+            });
+            
+            renderDayModalEvents();
+            hideDayModalForm();
+            overlay.classList.add('visible');
+        }
+
+        function closeDayModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('dayModalOverlay').classList.remove('visible');
+            selectedModalDate = null;
+        }
+
+        function renderDayModalEvents() {
+            const container = document.getElementById('dayModalEvents');
+            const events = calendarGetEventsForDate(selectedModalDate);
+            
+            if (events.length === 0) {
+                container.innerHTML = '<div class="day-modal-empty">No events scheduled</div>';
+                return;
+            }
+            
+            container.innerHTML = events.map(event => {
+                const timeHtml = event.time ? `<div class="day-modal-event-time">${formatTime(event.time)}</div>` : '';
+                const noteHtml = event.note ? `<div class="day-modal-event-note">${event.note}</div>` : '';
+                
+                return `
+                    <div class="day-modal-event">
+                        <div class="day-modal-event-header">
+                            <div class="day-modal-event-title">${event.title}</div>
+                            <div class="day-modal-event-actions">
+                                <button class="day-modal-edit" onclick="editDayModalEvent('${event.id}')">Edit</button>
+                                <button class="day-modal-delete" onclick="deleteDayModalEvent('${event.id}')">×</button>
+                            </div>
+                        </div>
+                        ${timeHtml}
+                        ${noteHtml}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function formatTime(time) {
+            if (!time) return '';
+            const [hours, minutes] = time.split(':');
+            const h = parseInt(hours);
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            const hour12 = h % 12 || 12;
+            return `${hour12}:${minutes} ${ampm}`;
+        }
+
+        function showDayModalForm() {
+            document.getElementById('dayModalForm').classList.add('visible');
+            document.getElementById('dayModalEventTitle').value = '';
+            document.getElementById('dayModalEventTime').value = '';
+            document.getElementById('dayModalEventNote').value = '';
+            document.getElementById('dayModalEditId').value = '';
+            document.getElementById('dayModalEventTitle').focus();
+        }
+
+        function hideDayModalForm() {
+            document.getElementById('dayModalForm').classList.remove('visible');
+        }
+
+        function editDayModalEvent(eventId) {
+            const event = calendarEvents.find(e => e.id === eventId);
+            if (!event) return;
+            
+            document.getElementById('dayModalEventTitle').value = event.title;
+            document.getElementById('dayModalEventTime').value = event.time || '';
+            document.getElementById('dayModalEventNote').value = event.note || '';
+            document.getElementById('dayModalEditId').value = eventId;
+            document.getElementById('dayModalForm').classList.add('visible');
+            document.getElementById('dayModalEventTitle').focus();
+        }
+
+        async function deleteDayModalEvent(eventId) {
+            if (!confirm('Delete this event?')) return;
+            
+            calendarEvents = calendarEvents.filter(e => e.id !== eventId);
+            await calendarSaveEvents();
+            renderDayModalEvents();
+            calendarRender();
+        }
+
+        async function saveDayModalEvent() {
+            const title = document.getElementById('dayModalEventTitle').value.trim();
+            if (!title) {
+                alert('Please enter an event title');
+                return;
+            }
+            
+            const time = document.getElementById('dayModalEventTime').value;
+            const note = document.getElementById('dayModalEventNote').value.trim();
+            const editId = document.getElementById('dayModalEditId').value;
+            
+            const dateStr = selectedModalDate.toISOString().split('T')[0];
+            
+            if (editId) {
+                // Update existing event
+                const index = calendarEvents.findIndex(e => e.id === editId);
+                if (index !== -1) {
+                    calendarEvents[index].title = title;
+                    calendarEvents[index].time = time;
+                    calendarEvents[index].note = note;
+                }
+            } else {
+                // Create new event
+                const newEvent = {
+                    id: Date.now().toString(),
+                    title: title,
+                    date: dateStr,
+                    time: time,
+                    note: note
+                };
+                calendarEvents.push(newEvent);
+            }
+            
+            await calendarSaveEvents();
+            hideDayModalForm();
+            renderDayModalEvents();
+            calendarRender();
         }
 
         function calendarRender() {
@@ -2168,28 +1842,159 @@
             if (!list) return;
             
             if (groceries.length === 0) {
-                list.innerHTML = '<div class="empty-state" style="color: #666; font-size: 0.85rem; padding: 12px;">No items yet</div>';
-                expandBtn.classList.remove('show');
+                list.innerHTML = '<div style="color: rgba(242, 235, 224, 0.4); font-size: 0.85rem; padding: 12px; font-style: italic;">No items yet</div>';
                 return;
             }
 
             list.innerHTML = '';
             groceries.forEach((item, index) => {
                 const itemDiv = document.createElement('div');
-                itemDiv.className = 'sticky-item';
+                itemDiv.className = 'grocery-item' + (item.completed ? ' done' : '');
                 itemDiv.innerHTML = `
-                    <div class="sticky-item-text ${item.completed ? 'completed' : ''}" onclick="toggleGrocery(${index})">${item.text}</div>
+                    <input type="checkbox" ${item.completed ? 'checked' : ''} onchange="toggleGrocery(${index})">
+                    <span onclick="toggleGrocery(${index})">${item.text}</span>
                     <button onclick="deleteGrocery(${index})">×</button>
                 `;
                 list.appendChild(itemDiv);
             });
+        }
 
-            // Show expand button if 5 or more items
-            if (groceries.length >= 5) {
-                expandBtn.classList.add('show');
+        // PHONE BOOK / CONTACTS
+        let contacts = [];
+
+        async function loadContacts() {
+            const firebaseData = await loadFromFirebase('contacts');
+            if (firebaseData) {
+                contacts = firebaseData;
             } else {
-                expandBtn.classList.remove('show');
-                list.classList.remove('collapsed');
+                const saved = localStorage.getItem('contacts');
+                if (saved) {
+                    contacts = JSON.parse(saved);
+                    await syncToFirebase('contacts', contacts);
+                }
+            }
+            renderContacts();
+        }
+
+        async function saveContacts() {
+            localStorage.setItem('contacts', JSON.stringify(contacts));
+            await syncToFirebase('contacts', contacts);
+        }
+
+        function renderContacts() {
+            const list = document.getElementById('contactsList');
+            if (!list) return;
+            
+            const searchTerm = (document.getElementById('phonebookSearch')?.value || '').toLowerCase();
+            const filtered = contacts.filter(c => 
+                c.name.toLowerCase().includes(searchTerm) ||
+                (c.phone && c.phone.includes(searchTerm)) ||
+                (c.notes && c.notes.toLowerCase().includes(searchTerm))
+            );
+            
+            if (filtered.length === 0) {
+                list.innerHTML = contacts.length === 0 
+                    ? '<div style="color: rgba(242, 235, 224, 0.4); font-size: 0.85rem; padding: 12px; font-style: italic;">No contacts yet</div>'
+                    : '<div style="color: rgba(242, 235, 224, 0.4); font-size: 0.85rem; padding: 12px; font-style: italic;">No matches found</div>';
+                return;
+            }
+            
+            list.innerHTML = filtered.map((contact, i) => {
+                const realIndex = contacts.indexOf(contact);
+                let linksHtml = '';
+                if (contact.phone) {
+                    linksHtml += `<a href="tel:${contact.phone}" class="contact-link phone">Call: ${contact.phone}</a>`;
+                }
+                if (contact.email) {
+                    linksHtml += `<a href="mailto:${contact.email}" class="contact-link">Email</a>`;
+                }
+                if (contact.website) {
+                    linksHtml += `<a href="${contact.website}" target="_blank" class="contact-link">Website</a>`;
+                }
+                let notesHtml = contact.notes ? `<div class="contact-notes">${contact.notes}</div>` : '';
+                
+                return `
+                    <div class="contact">
+                        <div class="contact-header">
+                            <div class="contact-name">${contact.name}</div>
+                            <div class="contact-actions">
+                                <button class="contact-edit-btn" onclick="editContact(${realIndex})">Edit</button>
+                                <button class="contact-delete-btn" onclick="deleteContact(${realIndex})">×</button>
+                            </div>
+                        </div>
+                        <div class="contact-links">${linksHtml}</div>
+                        ${notesHtml}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterContacts() {
+            renderContacts();
+        }
+
+        function togglePhonebook() {
+            const content = document.getElementById('phonebookContent');
+            const icon = document.getElementById('phonebookIcon');
+            if (!content || !icon) return;
+            content.classList.toggle('expanded');
+            icon.style.transform = content.classList.contains('expanded') ? 'rotate(0deg)' : 'rotate(-90deg)';
+        }
+
+        function toggleAddContact() {
+            document.getElementById('addContactForm')?.classList.toggle('visible');
+        }
+
+        async function saveContact() {
+            const name = document.getElementById('contactName')?.value.trim();
+            if (!name) {
+                alert('Please enter a name');
+                return;
+            }
+            
+            const contact = {
+                id: Date.now(),
+                name: name,
+                phone: document.getElementById('contactPhone')?.value.trim() || '',
+                email: document.getElementById('contactEmail')?.value.trim() || '',
+                website: document.getElementById('contactWebsite')?.value.trim() || '',
+                notes: document.getElementById('contactNotes')?.value.trim() || ''
+            };
+            
+            contacts.push(contact);
+            await saveContacts();
+            renderContacts();
+            
+            // Clear form
+            ['contactName', 'contactPhone', 'contactEmail', 'contactWebsite', 'contactNotes'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            toggleAddContact();
+        }
+
+        function editContact(index) {
+            const contact = contacts[index];
+            if (!contact) return;
+            
+            document.getElementById('contactName').value = contact.name;
+            document.getElementById('contactPhone').value = contact.phone || '';
+            document.getElementById('contactEmail').value = contact.email || '';
+            document.getElementById('contactWebsite').value = contact.website || '';
+            document.getElementById('contactNotes').value = contact.notes || '';
+            
+            contacts.splice(index, 1);
+            saveContacts();
+            renderContacts();
+            
+            document.getElementById('addContactForm')?.classList.add('visible');
+        }
+
+        async function deleteContact(index) {
+            if (confirm('Delete this contact?')) {
+                contacts.splice(index, 1);
+                await saveContacts();
+                renderContacts();
             }
         }
 
@@ -2332,28 +2137,24 @@
                 renderGroceries();
             });
             
-            setupFirebaseListener('dailyPromptAnswers', (data) => {
-                loadPromptAnswers();
+            setupFirebaseListener('contacts', (data) => {
+                contacts = data;
+                renderContacts();
             });
             
-            setupFirebaseListener('monthlyChallenge', (data) => {
-                loadChallengeStatus();
-            });
-
-            setupFirebaseListener('challengeNotes', (data) => {
-                loadChallengeNotes();
+            setupFirebaseListener('lifeReminders', (data) => {
+                lifeReminders = data;
+                updateReminderDisplay();
             });
         }
 
         // Initialize everything
         document.addEventListener('DOMContentLoaded', async function() {
             await calendarInit();
+            await loadLifeReminders();
             await loadReminders();
             await loadGroceries();
-            setDailyPrompt();
-            await loadPromptAnswers();
-            await setMonthlyChallenge();
-            await loadChallengeNotes();
+            await loadContacts();
             await loadHeaderPhoto();
             
             // Setup photo upload and drag
