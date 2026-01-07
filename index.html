@@ -783,6 +783,7 @@
         // Make Firebase available globally
         window.db = db;
         window.firestoreImports = { collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot };
+        window.firebaseReady = true;
 
         // Update sync status
         function updateSyncStatus(status, message) {
@@ -803,6 +804,9 @@
         updateSyncStatus('synced', 'Synced');
 
         console.log('Firebase initialized successfully!');
+        
+        // Dispatch event when Firebase is ready
+        window.dispatchEvent(new Event('firebaseReady'));
     </script>
 
     <script>
@@ -863,17 +867,38 @@
 
         // FIREBASE FUNCTIONS
         async function syncToFirebase(collectionName, data) {
-            if (!window.db) return;
+            // Wait for Firebase to be ready
+            if (!window.firebaseReady) {
+                await new Promise(resolve => {
+                    if (window.firebaseReady) resolve();
+                    else window.addEventListener('firebaseReady', resolve, { once: true });
+                });
+            }
+            
+            console.log('syncToFirebase called:', collectionName, 'window.db:', !!window.db);
+            if (!window.db) {
+                console.error('window.db is not set!');
+                return;
+            }
             try {
                 const { setDoc, doc } = window.firestoreImports;
                 await setDoc(doc(window.db, collectionName, 'data'), { items: data });
-                console.log(`${collectionName} synced to Firebase`);
+                console.log(`${collectionName} synced to Firebase successfully`);
             } catch (error) {
                 console.error(`Error syncing ${collectionName}:`, error);
+                throw error;
             }
         }
 
         async function loadFromFirebase(collectionName) {
+            // Wait for Firebase to be ready
+            if (!window.firebaseReady) {
+                await new Promise(resolve => {
+                    if (window.firebaseReady) resolve();
+                    else window.addEventListener('firebaseReady', resolve, { once: true });
+                });
+            }
+            
             if (!window.db) return null;
             try {
                 const { getDoc, doc } = window.firestoreImports;
@@ -890,7 +915,15 @@
             }
         }
 
-        function setupFirebaseListener(collectionName, callback) {
+        async function setupFirebaseListener(collectionName, callback) {
+            // Wait for Firebase to be ready
+            if (!window.firebaseReady) {
+                await new Promise(resolve => {
+                    if (window.firebaseReady) resolve();
+                    else window.addEventListener('firebaseReady', resolve, { once: true });
+                });
+            }
+            
             if (!window.db) return;
             try {
                 const { onSnapshot, doc } = window.firestoreImports;
@@ -931,8 +964,15 @@
         }
 
         async function saveLifeReminders() {
+            console.log('saveLifeReminders called, count:', lifeReminders.length);
             localStorage.setItem('lifeReminders', JSON.stringify(lifeReminders));
-            await syncToFirebase('lifeReminders', lifeReminders);
+            try {
+                await syncToFirebase('lifeReminders', lifeReminders);
+                console.log('Life reminders saved successfully');
+            } catch (err) {
+                console.error('Error saving life reminders:', err);
+                alert('Error saving reminders: ' + err.message);
+            }
         }
 
         function getNextNotifyDate(reminder) {
