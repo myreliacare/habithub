@@ -6,7 +6,7 @@
     <title>Charlie's Habit Hub</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -15,7 +15,7 @@
         }
 
         body {
-            font-family: 'Philosopher', Georgia, serif;
+            font-family: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             font-weight: 700;
             background: #3d2f31;
             min-height: 100vh;
@@ -670,14 +670,14 @@
         }
         .habits-modal-overlay.visible { display: flex; }
         .habits-modal {
-            background: #3d2f31; border: 1px solid rgba(163, 184, 153, 0.4);
+            background: #3d2f31; border: 1px solid rgba(123, 168, 134, 0.4);
             width: 100%; max-width: 500px; max-height: 85vh;
             overflow-y: auto; padding: 24px;
         }
         .habits-modal-header {
             display: flex; justify-content: space-between; align-items: center;
             margin-bottom: 20px; padding-bottom: 12px;
-            border-bottom: 1px solid rgba(163, 184, 153, 0.2);
+            border-bottom: 1px solid rgba(123, 168, 134, 0.2);
         }
         .habits-modal-title { font-size: 1.1rem; color: #f2ebe0; }
         .habits-modal-close {
@@ -685,12 +685,12 @@
             font-size: 1.5rem; cursor: pointer; padding: 0; line-height: 1;
         }
         .habits-modal-close:hover { color: #f2ebe0; }
-        .habits-list { margin-bottom: 20px; }
+        .habits-list { margin-bottom: 20px; max-height: 400px; overflow-y: auto; }
         .habit-item {
             display: flex; align-items: center; gap: 10px;
             padding: 10px 12px; margin-bottom: 6px;
             background: rgba(20, 20, 20, 0.4);
-            border-left: 2px solid #a3b899;
+            border-left: 2px solid #7ba886;
         }
         .habit-item input {
             flex: 1; background: transparent; border: none;
@@ -709,31 +709,31 @@
         }
         .add-habit-row input {
             flex: 1; background: rgba(20, 20, 20, 0.5);
-            border: 1px solid rgba(163, 184, 153, 0.3); color: #f2ebe0;
+            border: 1px solid rgba(123, 168, 134, 0.3); color: #f2ebe0;
             padding: 10px 12px; font-size: 0.9rem; font-family: inherit;
         }
-        .add-habit-row input:focus { outline: none; border-color: rgba(163, 184, 153, 0.5); }
+        .add-habit-row input:focus { outline: none; border-color: rgba(123, 168, 134, 0.5); }
         .add-habit-row input::placeholder { color: rgba(242, 235, 224, 0.4); }
         .add-habit-btn {
-            background: #a3b899; border: none; color: #1c1c1c;
+            background: #7ba886; border: none; color: #1c1c1c;
             padding: 10px 16px; cursor: pointer; font-size: 0.9rem; font-family: inherit;
         }
-        .add-habit-btn:hover { background: #b4c9aa; }
+        .add-habit-btn:hover { background: #a3b899; }
         .habits-modal-actions {
             display: flex; gap: 10px; justify-content: flex-end;
-            padding-top: 16px; border-top: 1px solid rgba(163, 184, 153, 0.2);
+            padding-top: 16px; border-top: 1px solid rgba(123, 168, 134, 0.2);
         }
         .habits-save-btn {
-            background: #a3b899; border: none; color: #1c1c1c;
+            background: #7ba886; border: none; color: #1c1c1c;
             padding: 10px 20px; cursor: pointer; font-size: 0.85rem; font-family: inherit;
         }
-        .habits-save-btn:hover { background: #b4c9aa; }
+        .habits-save-btn:hover { background: #a3b899; }
         .habits-cancel-btn {
-            background: transparent; border: 1px solid rgba(163, 184, 153, 0.4);
+            background: transparent; border: 1px solid rgba(123, 168, 134, 0.4);
             color: #a3b899; padding: 10px 20px; cursor: pointer;
             font-size: 0.85rem; font-family: inherit;
         }
-        .habits-cancel-btn:hover { border-color: rgba(163, 184, 153, 0.6); }
+        .habits-cancel-btn:hover { border-color: rgba(123, 168, 134, 0.6); }
         .habit-count { font-size: 0.75rem; color: rgba(242, 235, 224, 0.5); margin-bottom: 12px; }
     </style>
 </head>
@@ -1016,29 +1016,6 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getFirestore, collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCDda9sPwSY-RQ5rrM5THOvcLtHvcPRYd4",
-            authDomain: "our-habit-hub.firebaseapp.com",
-            projectId: "our-habit-hub",
-            storageBucket: "our-habit-hub.firebasestorage.app",
-            messagingSenderId: "78555830496",
-            appId: "1:78555830496:web:3e457e54729cc11b825885"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        window.db = db;
-        window.firestoreImports = { collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot };
-
-        console.log('Firebase initialized successfully!');
-    </script>
-
     <script>
         const defaultCharlieHabits = [
             "Exercise 30+ Minutes",
@@ -1056,15 +1033,22 @@
             "30 Mins of Guitar",
             "EFT Tapping",
             "Time in Nature",
-            "Acts of Kindness",
-            "Drink 8 Glasses of Water",
-            "Take Vitamins",
-            "No Phone First Hour",
-            "Connect with a Friend"
+            "Acts of Kindness"
         ];
 
         let charlieHabits = [...defaultCharlieHabits];
         let editingHabits = [];
+
+        // Load custom habits from localStorage
+        function loadCustomHabits() {
+            const saved = localStorage.getItem('charlieCustomHabits');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                if (parsed && parsed.length >= 16) {
+                    charlieHabits = parsed;
+                }
+            }
+        }
 
         // Habits Editor Functions
         function openHabitsEditor() {
@@ -1113,7 +1097,7 @@
             renderHabitsList();
         }
 
-        async function saveHabitsChanges() {
+        function saveHabitsChanges() {
             editingHabits = editingHabits.filter(h => h.trim() !== '');
             
             if (editingHabits.length < 16) {
@@ -1122,16 +1106,9 @@
             }
             
             charlieHabits = [...editingHabits];
-            await syncToFirebase('charlieCustomHabits', charlieHabits);
-            await shuffleBoard();
+            localStorage.setItem('charlieCustomHabits', JSON.stringify(charlieHabits));
+            shuffleBoard();
             closeHabitsEditor();
-        }
-
-        async function loadCustomHabits() {
-            const customHabits = await loadFromFirebase('charlieCustomHabits');
-            if (customHabits && customHabits.length >= 16) {
-                charlieHabits = customHabits;
-            }
         }
 
         const dailyPrompts = [
@@ -1208,47 +1185,14 @@
         let pendingResourceFile = null;
         let pendingVideoFile = null;
 
-        async function syncToFirebase(collectionName, data) {
-            if (!window.db) return;
-            try {
-                const { setDoc, doc } = window.firestoreImports;
-                await setDoc(doc(window.db, collectionName, 'data'), { items: data });
-            } catch (error) {
-                console.error(`Error syncing ${collectionName}:`, error);
-            }
+        // Storage functions (localStorage only)
+        function saveData(key, data) {
+            localStorage.setItem(key, JSON.stringify(data));
         }
 
-        async function loadFromFirebase(collectionName) {
-            if (!window.db) return null;
-            try {
-                const { getDoc, doc } = window.firestoreImports;
-                const docRef = doc(window.db, collectionName, 'data');
-                const docSnap = await getDoc(docRef);
-                
-                if (docSnap.exists()) {
-                    return docSnap.data().items;
-                }
-                return null;
-            } catch (error) {
-                console.error(`Error loading ${collectionName}:`, error);
-                return null;
-            }
-        }
-
-        function setupFirebaseListener(collectionName, callback) {
-            if (!window.db) return;
-            try {
-                const { onSnapshot, doc } = window.firestoreImports;
-                const docRef = doc(window.db, collectionName, 'data');
-                
-                onSnapshot(docRef, (doc) => {
-                    if (doc.exists()) {
-                        callback(doc.data().items);
-                    }
-                });
-            } catch (error) {
-                console.error(`Error setting up listener for ${collectionName}:`, error);
-            }
+        function loadData(key) {
+            const saved = localStorage.getItem(key);
+            return saved ? JSON.parse(saved) : null;
         }
 
         function switchTabFromDropdown() {
@@ -1273,52 +1217,34 @@
                 localStorage.removeItem('bingoState_charlie');
                 localStorage.setItem('bingoVersion_charlie', '4x4');
                 localStorage.setItem('bingoDate_charlie', today);
-                await shuffleBoard();
+                shuffleBoard();
             } else if (savedDate !== today) {
                 localStorage.removeItem('bingoState_charlie');
                 localStorage.setItem('bingoDate_charlie', today);
-                await shuffleBoard();
+                shuffleBoard();
             } else {
-                const firebaseData = await loadFromFirebase('bingoState_charlie');
-                if (firebaseData && firebaseData.habits && firebaseData.habits.length === 16) {
-                    currentHabits = firebaseData.habits;
-                    boardState = firebaseData.state;
-                } else {
-                    const saved = localStorage.getItem('bingoState_charlie');
-                    if (saved) {
-                        const data = JSON.parse(saved);
-                        // Only use saved data if it has exactly 16 habits
-                        if (data.habits && data.habits.length === 16) {
-                            currentHabits = data.habits;
-                            boardState = data.state;
-                            await syncToFirebase('bingoState_charlie', data);
-                        } else {
-                            // Wrong number of habits, force shuffle
-                            await shuffleBoard();
-                        }
+                const saved = localStorage.getItem('bingoState_charlie');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    if (data.habits && data.habits.length === 16) {
+                        currentHabits = data.habits;
+                        boardState = data.state;
                     } else {
-                        await shuffleBoard();
+                        shuffleBoard();
                     }
+                } else {
+                    shuffleBoard();
                 }
             }
             
             // Final safety check - if we somehow still don't have 16 habits, shuffle
             if (!currentHabits || currentHabits.length !== 16) {
-                await shuffleBoard();
+                shuffleBoard();
             }
             
             updateDateDisplay();
             renderBoard();
             updateStats();
-            
-            setupFirebaseListener('bingoState_charlie', (data) => {
-                if (data.habits && data.habits.length === 16) {
-                    currentHabits = data.habits;
-                    boardState = data.state;
-                    renderBoard();
-                    updateStats();
-                }
-            });
         }
 
         function updateDateDisplay() {
@@ -1389,7 +1315,7 @@
                 state: boardState
             };
             localStorage.setItem('bingoState_charlie', JSON.stringify(data));
-            await syncToFirebase('bingoState_charlie', data);
+            saveData(data);
         }
 
         function updateStats() {
@@ -1450,30 +1376,18 @@
             }
         }
 
-        async function loadResources() {
-            const firebaseData = await loadFromFirebase('resources_charlie');
-            if (firebaseData) {
-                resources = firebaseData;
+        function loadResources() {
+            const saved = localStorage.getItem('resources_charlie');
+            if (saved) {
+                resources = JSON.parse(saved);
             } else {
-                const saved = localStorage.getItem('resources_charlie');
-                if (saved) {
-                    resources = JSON.parse(saved);
-                } else {
-                    resources = JSON.parse(JSON.stringify(defaultResources));
-                }
-                await saveResources();
+                resources = JSON.parse(JSON.stringify(defaultResources));
             }
             renderAllResources();
-            
-            setupFirebaseListener('resources_charlie', (data) => {
-                resources = data;
-                renderAllResources();
-            });
         }
 
-        async function saveResources() {
+        function saveResources() {
             localStorage.setItem('resources_charlie', JSON.stringify(resources));
-            await syncToFirebase('resources_charlie', resources);
         }
 
         function handleResourceUpload() {
@@ -1609,30 +1523,18 @@
             }
         }
 
-        async function loadVideos() {
-            const firebaseData = await loadFromFirebase('videos_charlie');
-            if (firebaseData) {
-                videos = firebaseData;
+        function loadVideos() {
+            const saved = localStorage.getItem('videos_charlie');
+            if (saved) {
+                videos = JSON.parse(saved);
             } else {
-                const saved = localStorage.getItem('videos_charlie');
-                if (saved) {
-                    videos = JSON.parse(saved);
-                    await syncToFirebase('videos_charlie', videos);
-                } else {
-                    videos = [];
-                }
+                videos = [];
             }
             renderVideos();
-            
-            setupFirebaseListener('videos_charlie', (data) => {
-                videos = data;
-                renderVideos();
-            });
         }
 
-        async function saveVideos() {
+        function saveVideos() {
             localStorage.setItem('videos_charlie', JSON.stringify(videos));
-            await syncToFirebase('videos_charlie', videos);
         }
 
         function toggleVideoForm() {
@@ -1715,30 +1617,18 @@
         }
 
         // TO-DO LIST FUNCTIONS
-        async function loadTodos() {
-            const firebaseData = await loadFromFirebase('todos_charlie');
-            if (firebaseData) {
-                todos = firebaseData;
+        function loadTodos() {
+            const saved = localStorage.getItem('todos_charlie');
+            if (saved) {
+                todos = JSON.parse(saved);
             } else {
-                const saved = localStorage.getItem('todos_charlie');
-                if (saved) {
-                    todos = JSON.parse(saved);
-                    await syncToFirebase('todos_charlie', todos);
-                } else {
-                    todos = [];
-                }
+                todos = [];
             }
             renderTodos();
-            
-            setupFirebaseListener('todos_charlie', (data) => {
-                todos = data;
-                renderTodos();
-            });
         }
 
-        async function saveTodos() {
+        function saveTodos() {
             localStorage.setItem('todos_charlie', JSON.stringify(todos));
-            await syncToFirebase('todos_charlie', todos);
         }
 
         function toggleTodoForm() {
@@ -1749,7 +1639,7 @@
             }
         }
 
-        async function addTodo(e) {
+        function addTodo(e) {
             e.preventDefault();
             const formData = new FormData(e.target);
             
@@ -1760,7 +1650,7 @@
             };
 
             todos.push(todo);
-            await saveTodos();
+            saveTodos();
             renderTodos();
             e.target.reset();
             toggleTodoForm();
@@ -1812,7 +1702,8 @@
             const promptIndex = dayOfYear % dailyPrompts.length;
             document.getElementById('promptQuestionHub').textContent = dailyPrompts[promptIndex];
 
-            const savedAnswers = await loadFromFirebase('dailyPromptAnswers') || {};
+            const saved = localStorage.getItem('dailyPromptAnswers');
+            const savedAnswers = saved ? JSON.parse(saved) : {};
             
             // If there's a saved answer for today, populate the textarea
             if (savedAnswers.date === today.toDateString() && savedAnswers.charlie) {
@@ -1822,27 +1713,27 @@
             }
         }
 
-        async function saveAnswer(e) {
+        function saveAnswer(e) {
             e.preventDefault();
             const answer = new FormData(e.target).get('answer');
             const today = new Date().toDateString();
 
-            let savedAnswers = await loadFromFirebase('dailyPromptAnswers') || {};
+            const saved = localStorage.getItem('dailyPromptAnswers');
+            let savedAnswers = saved ? JSON.parse(saved) : {};
             savedAnswers.date = today;
             savedAnswers.charlie = answer;
             localStorage.setItem('dailyPromptAnswers', JSON.stringify(savedAnswers));
-            await syncToFirebase('dailyPromptAnswers', savedAnswers);
             
             loadHubPrompt();
             alert('Your answer has been saved! It will appear on the homepage.');
         }
 
-        document.addEventListener('DOMContentLoaded', async function() {
-            await loadCustomHabits();
-            await initBoard();
-            await loadVideos();
-            await loadResources();
-            await loadTodos();
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCustomHabits();
+            initBoard();
+            loadVideos();
+            loadResources();
+            loadTodos();
         });
     </script>
 </body>
