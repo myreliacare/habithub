@@ -8,7 +8,7 @@
     <title>Kasey's Habit Hub</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -23,7 +23,7 @@
         }
 
         body {
-            font-family: 'Philosopher', Georgia, serif;
+            font-family: 'Cormorant', Georgia, 'Times New Roman', serif;
             background: #3d2f31;
             min-height: 100vh;
             padding: 16px;
@@ -871,7 +871,7 @@
             font-size: 1.5rem; cursor: pointer; padding: 0; line-height: 1;
         }
         .habits-modal-close:hover { color: #f2ebe0; }
-        .habits-list { margin-bottom: 20px; }
+        .habits-list { margin-bottom: 20px; max-height: 400px; overflow-y: auto; }
         .habit-item {
             display: flex; align-items: center; gap: 10px;
             padding: 10px 12px; margin-bottom: 6px;
@@ -890,9 +890,7 @@
             font-size: 1rem; padding: 4px 8px;
         }
         .habit-delete:hover { color: #c9a9a6; }
-        .add-habit-row {
-            display: flex; gap: 8px; margin-bottom: 16px;
-        }
+        .add-habit-row { display: flex; gap: 8px; margin-bottom: 16px; }
         .add-habit-row input {
             flex: 1; background: rgba(20, 20, 20, 0.5);
             border: 1px solid rgba(181, 145, 151, 0.3); color: #f2ebe0;
@@ -1206,43 +1204,6 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getFirestore, collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCDda9sPwSY-RQ5rrM5THOvcLtHvcPRYd4",
-            authDomain: "our-habit-hub.firebaseapp.com",
-            projectId: "our-habit-hub",
-            storageBucket: "our-habit-hub.firebasestorage.app",
-            messagingSenderId: "78555830496",
-            appId: "1:78555830496:web:3e457e54729cc11b825885"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        window.db = db;
-        window.firestoreImports = { collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot };
-
-        function updateSyncStatus(status, message) {
-            const statusEl = document.getElementById('syncStatus');
-            
-            statusEl.className = 'sync-status';
-            if (status === 'synced') {
-                statusEl.classList.add('synced');
-            } else if (status === 'connecting') {
-                statusEl.classList.add('connecting');
-            } else if (status === 'error') {
-                statusEl.classList.add('error');
-            }
-        }
-
-        updateSyncStatus('synced');
-        console.log('Firebase initialized successfully!');
-    </script>
-
     <script>
         const defaultKaseyHabits = [
             "Drink 8 Glasses of Water",
@@ -1269,6 +1230,17 @@
 
         let kaseyHabits = [...defaultKaseyHabits];
         let editingHabits = [];
+
+        // Load custom habits from localStorage
+        function loadCustomHabits() {
+            const saved = localStorage.getItem('kaseyCustomHabits');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                if (parsed && parsed.length >= 16) {
+                    kaseyHabits = parsed;
+                }
+            }
+        }
 
         // Habits Editor Functions
         function openHabitsEditor() {
@@ -1317,8 +1289,7 @@
             renderHabitsList();
         }
 
-        async function saveHabitsChanges() {
-            // Filter out empty habits
+        function saveHabitsChanges() {
             editingHabits = editingHabits.filter(h => h.trim() !== '');
             
             if (editingHabits.length < 16) {
@@ -1327,21 +1298,9 @@
             }
             
             kaseyHabits = [...editingHabits];
-            
-            // Save to Firebase
-            await syncToFirebase('kaseyCustomHabits', kaseyHabits);
-            
-            // Reshuffle to use new habits
-            await shuffleBoard();
-            
+            localStorage.setItem('kaseyCustomHabits', JSON.stringify(kaseyHabits));
+            shuffleBoard();
             closeHabitsEditor();
-        }
-
-        async function loadCustomHabits() {
-            const customHabits = await loadFromFirebase('kaseyCustomHabits');
-            if (customHabits && customHabits.length >= 16) {
-                kaseyHabits = customHabits;
-            }
         }
 
         const dailyPrompts = [
@@ -1418,30 +1377,30 @@
         let pendingVideoFile = null;
 
         // TO-DO LIST FUNCTIONS
-        async function loadTodos() {
-            const firebaseData = await loadFromFirebase('todos_kasey');
-            if (firebaseData) {
-                todos = firebaseData;
+        function loadTodos() {
+            const savedData = loadFromStorage('todos_kasey');
+            if (savedData) {
+                todos = savedData;
             } else {
                 const saved = localStorage.getItem('todos_kasey');
                 if (saved) {
                     todos = JSON.parse(saved);
-                    await syncToFirebase('todos_kasey', todos);
+                    saveToStorage('todos_kasey', todos);
                 } else {
                     todos = [];
                 }
             }
             renderTodos();
             
-            setupFirebaseListener('todos_kasey', (data) => {
+            setupStorageListener('todos_kasey', (data) => {
                 todos = data;
                 renderTodos();
             });
         }
 
-        async function saveTodos() {
+        function saveTodos() {
             localStorage.setItem('todos_kasey', JSON.stringify(todos));
-            await syncToFirebase('todos_kasey', todos);
+            saveToStorage('todos_kasey', todos);
         }
 
         function addTodo() {
@@ -1463,19 +1422,19 @@
             input.value = '';
         }
 
-        async function toggleTodo(id) {
+        function toggleTodo(id) {
             const todo = todos.find(t => t.id === id);
             if (todo) {
                 todo.completed = !todo.completed;
-                await saveTodos();
+                saveTodos();
                 renderTodos();
             }
         }
 
-        async function deleteTodo(id) {
+        function deleteTodo(id) {
             if (confirm('Delete this task?')) {
                 todos = todos.filter(t => t.id !== id);
-                await saveTodos();
+                saveTodos();
                 renderTodos();
             }
         }
@@ -1508,48 +1467,18 @@
             });
         }
 
-        // FIREBASE FUNCTIONS
-        async function syncToFirebase(collectionName, data) {
-            if (!window.db) return;
-            try {
-                const { setDoc, doc } = window.firestoreImports;
-                await setDoc(doc(window.db, collectionName, 'data'), { items: data });
-            } catch (error) {
-                console.error(`Error syncing ${collectionName}:`, error);
-            }
+        // STORAGE FUNCTIONS (localStorage)
+        function saveToStorage(collectionName, data) {
+            localStorage.setItem(collectionName, JSON.stringify(data));
         }
 
-        async function loadFromFirebase(collectionName) {
-            if (!window.db) return null;
-            try {
-                const { getDoc, doc } = window.firestoreImports;
-                const docRef = doc(window.db, collectionName, 'data');
-                const docSnap = await getDoc(docRef);
-                
-                if (docSnap.exists()) {
-                    return docSnap.data().items;
-                }
-                return null;
-            } catch (error) {
-                console.error(`Error loading ${collectionName}:`, error);
-                return null;
-            }
+        function loadFromStorage(collectionName) {
+            const saved = localStorage.getItem(collectionName);
+            return saved ? JSON.parse(saved) : null;
         }
 
-        function setupFirebaseListener(collectionName, callback) {
-            if (!window.db) return;
-            try {
-                const { onSnapshot, doc } = window.firestoreImports;
-                const docRef = doc(window.db, collectionName, 'data');
-                
-                onSnapshot(docRef, (doc) => {
-                    if (doc.exists()) {
-                        callback(doc.data().items);
-                    }
-                });
-            } catch (error) {
-                console.error(`Error setting up listener for ${collectionName}:`, error);
-            }
+        function setupStorageListener(collectionName, callback) {
+            // No-op for localStorage (no real-time sync)
         }
 
         function switchTab(e, tab) {
@@ -1571,7 +1500,7 @@
             else if (selectedTab === 'resources') renderAllResources();
         }
 
-        async function initBoard() {
+        function initBoard() {
             const today = new Date().toDateString();
             const savedDate = localStorage.getItem('bingoDate_kasey');
             const boardVersion = localStorage.getItem('bingoVersion_kasey');
@@ -1581,16 +1510,16 @@
                 localStorage.removeItem('bingoState_kasey');
                 localStorage.setItem('bingoVersion_kasey', '4x4');
                 localStorage.setItem('bingoDate_kasey', today);
-                await shuffleBoard();
+                shuffleBoard();
             } else if (savedDate !== today) {
                 localStorage.removeItem('bingoState_kasey');
                 localStorage.setItem('bingoDate_kasey', today);
-                await shuffleBoard();
+                shuffleBoard();
             } else {
-                const firebaseData = await loadFromFirebase('bingoState_kasey');
-                if (firebaseData && firebaseData.habits && firebaseData.habits.length === 16) {
-                    currentHabits = firebaseData.habits;
-                    boardState = firebaseData.state;
+                const savedData = loadFromStorage('bingoState_kasey');
+                if (savedData && savedData.habits && savedData.habits.length === 16) {
+                    currentHabits = savedData.habits;
+                    boardState = savedData.state;
                 } else {
                     const saved = localStorage.getItem('bingoState_kasey');
                     if (saved) {
@@ -1598,12 +1527,12 @@
                         if (data.habits && data.habits.length === 16) {
                             currentHabits = data.habits;
                             boardState = data.state;
-                            await syncToFirebase('bingoState_kasey', data);
+                            saveToStorage('bingoState_kasey', data);
                         } else {
-                            await shuffleBoard();
+                            shuffleBoard();
                         }
                     } else {
-                        await shuffleBoard();
+                        shuffleBoard();
                     }
                 }
             }
@@ -1612,7 +1541,7 @@
             renderBoard();
             updateStats();
             
-            setupFirebaseListener('bingoState_kasey', (data) => {
+            setupStorageListener('bingoState_kasey', (data) => {
                 if (data.habits && data.habits.length === 16) {
                     currentHabits = data.habits;
                     boardState = data.state;
@@ -1627,7 +1556,7 @@
             document.getElementById('dateDisplay').textContent = new Date().toLocaleDateString('en-US', options);
         }
 
-        async function shuffleBoard() {
+        function shuffleBoard() {
             // Save which habits are currently completed
             const completedHabits = new Set();
             currentHabits.forEach((habit, index) => {
@@ -1648,7 +1577,7 @@
                 }
             });
 
-            await saveState();
+            saveState();
             renderBoard();
             updateStats();
         }
@@ -1669,28 +1598,28 @@
             });
         }
 
-        async function toggleCell(index) {
+        function toggleCell(index) {
             boardState[index] = !boardState[index];
-            await saveState();
+            saveState();
             renderBoard();
             updateStats();
             checkBingo();
         }
 
-        async function resetBoard() {
+        function resetBoard() {
             boardState = new Array(16).fill(false);
-            await saveState();
+            saveState();
             renderBoard();
             updateStats();
         }
 
-        async function saveState() {
+        function saveState() {
             const data = {
                 habits: currentHabits,
                 state: boardState
             };
             localStorage.setItem('bingoState_kasey', JSON.stringify(data));
-            await syncToFirebase('bingoState_kasey', data);
+            saveToStorage('bingoState_kasey', data);
         }
 
         function updateStats() {
@@ -1751,10 +1680,10 @@
             }
         }
 
-        async function loadResources() {
-            const firebaseData = await loadFromFirebase('resources_kasey');
-            if (firebaseData) {
-                resources = firebaseData;
+        function loadResources() {
+            const savedData = loadFromStorage('resources_kasey');
+            if (savedData) {
+                resources = savedData;
             } else {
                 const saved = localStorage.getItem('resources_kasey');
                 if (saved) {
@@ -1762,19 +1691,19 @@
                 } else {
                     resources = JSON.parse(JSON.stringify(defaultResources));
                 }
-                await saveResources();
+                saveResources();
             }
             renderAllResources();
             
-            setupFirebaseListener('resources_kasey', (data) => {
+            setupStorageListener('resources_kasey', (data) => {
                 resources = data;
                 renderAllResources();
             });
         }
 
-        async function saveResources() {
+        function saveResources() {
             localStorage.setItem('resources_kasey', JSON.stringify(resources));
-            await syncToFirebase('resources_kasey', resources);
+            saveToStorage('resources_kasey', resources);
         }
 
         function handleResourceUpload() {
@@ -1857,7 +1786,7 @@
             pendingResourceFile = null;
         }
 
-        async function addResource(e) {
+        function addResource(e) {
             e.preventDefault();
             const formData = new FormData(e.target);
             const category = formData.get('category');
@@ -1871,15 +1800,15 @@
 
             if (!resources[category]) resources[category] = [];
             resources[category].push(resource);
-            await saveResources();
+            saveResources();
             renderResourceCategory(category);
             hideAddResourceForm();
         }
 
-        async function deleteResource(category, index) {
+        function deleteResource(category, index) {
             if (confirm('Delete this resource?')) {
                 resources[category].splice(index, 1);
-                await saveResources();
+                saveResources();
                 renderResourceCategory(category);
             }
         }
@@ -1910,30 +1839,30 @@
             }
         }
 
-        async function loadVideos() {
-            const firebaseData = await loadFromFirebase('videos_kasey');
-            if (firebaseData) {
-                videos = firebaseData;
+        function loadVideos() {
+            const savedData = loadFromStorage('videos_kasey');
+            if (savedData) {
+                videos = savedData;
             } else {
                 const saved = localStorage.getItem('videos_kasey');
                 if (saved) {
                     videos = JSON.parse(saved);
-                    await syncToFirebase('videos_kasey', videos);
+                    saveToStorage('videos_kasey', videos);
                 } else {
                     videos = [];
                 }
             }
             renderVideos();
             
-            setupFirebaseListener('videos_kasey', (data) => {
+            setupStorageListener('videos_kasey', (data) => {
                 videos = data;
                 renderVideos();
             });
         }
 
-        async function saveVideos() {
+        function saveVideos() {
             localStorage.setItem('videos_kasey', JSON.stringify(videos));
-            await syncToFirebase('videos_kasey', videos);
+            saveToStorage('videos_kasey', videos);
         }
 
         function toggleVideoForm() {
@@ -1945,7 +1874,7 @@
             }
         }
 
-        async function addVideo(e) {
+        function addVideo(e) {
             e.preventDefault();
             const formData = new FormData(e.target);
             
@@ -1958,7 +1887,7 @@
             };
 
             videos.push(video);
-            await saveVideos();
+            saveVideos();
             renderVideos();
             e.target.reset();
             pendingVideoFile = null;
@@ -2007,21 +1936,21 @@
             });
         }
 
-        async function deleteVideo(index) {
+        function deleteVideo(index) {
             if (confirm('Delete this video?')) {
                 videos.splice(index, 1);
-                await saveVideos();
+                saveVideos();
                 renderVideos();
             }
         }
 
-        async function loadHubPrompt() {
+        function loadHubPrompt() {
             const today = new Date();
             const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 86400000);
             const promptIndex = dayOfYear % dailyPrompts.length;
             document.getElementById('promptQuestionHub').textContent = dailyPrompts[promptIndex];
 
-            const savedAnswers = await loadFromFirebase('dailyPromptAnswers') || {};
+            const savedAnswers = loadFromStorage('dailyPromptAnswers') || {};
             
             if (savedAnswers.date === today.toDateString() && savedAnswers.kasey) {
                 document.getElementById('currentAnswerBox').style.display = 'block';
@@ -2035,24 +1964,24 @@
             }
         }
 
-        async function saveAnswer(e) {
+        function saveAnswer(e) {
             e.preventDefault();
             const answer = new FormData(e.target).get('answer');
             const today = new Date().toDateString();
 
-            let savedAnswers = await loadFromFirebase('dailyPromptAnswers') || {};
+            let savedAnswers = loadFromStorage('dailyPromptAnswers') || {};
             savedAnswers.date = today;
             savedAnswers.kasey = answer;
             localStorage.setItem('dailyPromptAnswers', JSON.stringify(savedAnswers));
-            await syncToFirebase('dailyPromptAnswers', savedAnswers);
+            saveToStorage('dailyPromptAnswers', savedAnswers);
             
             loadHubPrompt();
             alert('Your answer has been saved! It will appear on the homepage.');
         }
 
-        document.addEventListener('DOMContentLoaded', async function() {
+        document.addEventListener('DOMContentLoaded', function() {
             // Load custom habits first
-            await loadCustomHabits();
+            loadCustomHabits();
             
             // Force clear old cached habits if they don't match current list
             const saved = localStorage.getItem('bingoState_kasey');
@@ -2071,10 +2000,10 @@
                 }
             }
             
-            await initBoard();
-            await loadVideos();
-            await loadResources();
-            await loadTodos();
+            initBoard();
+            loadVideos();
+            loadResources();
+            loadTodos();
         });
     </script>
 </body>
