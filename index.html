@@ -334,6 +334,22 @@
         }
         .event-title { color: #f2ebe0; font-size: 0.9rem; margin-bottom: 2px; font-weight: 600; }
         .event-note { color: rgba(242, 235, 224, 0.5); font-size: 0.8rem; font-style: italic; }
+        
+        /* CRM Event Styles */
+        .crm-event {
+            background: rgba(61, 107, 107, 0.15) !important;
+            border-left-color: #3d6b6b !important;
+        }
+        .crm-badge {
+            font-size: 0.7rem;
+            color: #3d6b6b;
+            background: rgba(61, 107, 107, 0.2);
+            padding: 3px 8px;
+            border-radius: 3px;
+            margin-top: 6px;
+            display: inline-block;
+        }
+        
         .empty-state { color: rgba(242, 235, 224, 0.4); font-size: 0.85rem; font-style: italic; padding: 8px 0; }
         
         /* Day Detail Modal */
@@ -693,6 +709,7 @@
             </div>
             <div class="manage-link">
                 <button onclick="openReminderModal()">Manage All Reminders</button>
+                <button onclick="window.clearAllSnoozes()" style="margin-left: 8px;">Clear All Snoozes</button>
             </div>
         </div>
 
@@ -1287,20 +1304,31 @@
             console.log('showNextReminder called');
             const upcoming = getUpcomingReminders(30);
             console.log('Upcoming reminders:', upcoming.length);
+            
+            if (upcoming.length === 0) {
+                console.log('❌ No upcoming reminders to cycle through');
+                console.log('💡 Click "Clear All Snoozes" button to reset reminders');
+                return;
+            }
+            
             if (upcoming.length > 1) {
                 currentReminderIndex = (currentReminderIndex + 1) % upcoming.length;
-                console.log('New reminder index:', currentReminderIndex);
+                console.log('✓ New reminder index:', currentReminderIndex);
+                console.log('✓ Now showing:', upcoming[currentReminderIndex].title);
                 updateReminderDisplay();
             } else {
-                console.log('Only one or no reminders available');
+                console.log('❌ Only 1 reminder - cannot cycle to next');
             }
         }
 
         async function markCurrentReminderDone() {
             console.log('markCurrentReminderDone called');
             const upcoming = getUpcomingReminders(30);
+            console.log('Upcoming reminders found:', upcoming.length);
+            
             if (upcoming.length === 0) {
-                console.log('No upcoming reminders');
+                console.log('❌ No upcoming reminders - cannot mark done');
+                console.log('💡 Click "Clear All Snoozes" button to reset reminders');
                 return;
             }
             
@@ -1311,18 +1339,23 @@
             if (index !== -1) {
                 lifeReminders[index].lastDone = new Date().toISOString();
                 lifeReminders[index].snoozedUntil = null;
-                console.log('Updated reminder:', lifeReminders[index]);
+                console.log('✓ Updated reminder:', lifeReminders[index]);
                 await saveLifeReminders();
                 currentReminderIndex = 0;
                 updateReminderDisplay();
+                console.log('✓ Reminder marked done successfully!');
+            } else {
+                console.error('❌ Could not find reminder in array');
             }
         }
 
         async function snoozeCurrentReminder(days) {
             console.log('snoozeCurrentReminder called, days:', days);
             const upcoming = getUpcomingReminders(30);
+            console.log('Upcoming reminders found:', upcoming.length);
+            
             if (upcoming.length === 0) {
-                console.log('No upcoming reminders');
+                console.log('❌ No upcoming reminders to snooze');
                 return;
             }
             
@@ -1334,12 +1367,53 @@
                 const snoozeDate = new Date();
                 snoozeDate.setDate(snoozeDate.getDate() + days);
                 lifeReminders[index].snoozedUntil = snoozeDate.toISOString();
-                console.log('Snoozed until:', snoozeDate);
+                console.log('✓ Snoozed until:', snoozeDate.toLocaleDateString());
                 await saveLifeReminders();
                 currentReminderIndex = 0;
                 updateReminderDisplay();
+                console.log('✓ Reminder snoozed successfully!');
+            } else {
+                console.error('❌ Could not find reminder in array');
             }
         }
+
+        // DEBUG FUNCTIONS - Use in console to reset reminders
+        window.clearAllSnoozes = async function() {
+            console.log('Clearing all snoozes...');
+            lifeReminders.forEach(r => {
+                r.snoozedUntil = null;
+                r.lastDone = null;
+            });
+            await saveLifeReminders();
+            updateReminderDisplay();
+            console.log('✓ All snoozes and completion dates cleared!');
+        };
+
+        window.showAllReminders = function() {
+            console.log('=== ALL LIFE REMINDERS ===');
+            lifeReminders.forEach((r, i) => {
+                console.log(`${i + 1}. ${r.title}`);
+                console.log(`   Notify: ${r.notifyDate.month}/${r.notifyDate.day}`);
+                console.log(`   Snoozed: ${r.snoozedUntil || 'No'}`);
+                console.log(`   Last Done: ${r.lastDone || 'Never'}`);
+                console.log('');
+            });
+        };
+
+        window.testReminderButtons = function() {
+            console.log('=== TESTING REMINDER BUTTONS ===');
+            console.log('Current reminder index:', currentReminderIndex);
+            console.log('Total reminders:', lifeReminders.length);
+            
+            const upcoming = getUpcomingReminders(30);
+            console.log('Upcoming reminders (within 30 days):', upcoming.length);
+            
+            if (upcoming.length > 0) {
+                console.log('Current reminder:', upcoming[currentReminderIndex]);
+            } else {
+                console.log('No upcoming reminders to display');
+            }
+        };
 
         async function addQuickReminder() {
             const input = document.getElementById('quickReminderInput');
@@ -1618,6 +1692,35 @@
             calendarRender();
         }
 
+        // Helper function to render an event (handles both regular and CRM events)
+        function renderEventHTML(event, eventIndex) {
+            const displayTime = event.time ? formatTime12Hour(event.time) : '';
+            
+            if (event.fromCRM) {
+                // CRM event - read-only with badge
+                return `
+                    <div class="event-item crm-event">
+                        <div>
+                            <div class="event-title">${displayTime ? displayTime + ' - ' : ''}${event.title}</div>
+                            ${event.note ? `<div class="event-note">${event.note}</div>` : ''}
+                            <div class="crm-badge">📅 From CRM</div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Regular event with delete button
+                return `
+                    <div class="event-item">
+                        <div>
+                            <div class="event-title">${displayTime ? displayTime + ' - ' : ''}${event.title}</div>
+                            ${event.note ? `<div class="event-note">${event.note}</div>` : ''}
+                        </div>
+                        <button class="btn" onclick="calendarDeleteEvent(${eventIndex})" style="padding: 6px 12px; font-size: 0.75rem;">Delete</button>
+                    </div>
+                `;
+            }
+        }
+
         function calendarRenderTwoDay() {
             const container = document.getElementById('calendarContainer');
             container.innerHTML = '';
@@ -1648,16 +1751,7 @@
                 if (dayEvents.length > 0) {
                     dayEvents.forEach((event) => {
                         const eventIndex = calendarEvents.indexOf(event);
-                        const displayTime = event.time ? formatTime12Hour(event.time) : '';
-                        eventsHTML += `
-                            <div class="event-item">
-                                <div>
-                                    <div class="event-title">${displayTime ? displayTime + ' - ' : ''}${event.title}</div>
-                                    ${event.note ? `<div class="event-note">${event.note}</div>` : ''}
-                                </div>
-                                <button class="btn" onclick="calendarDeleteEvent(${eventIndex})" style="padding: 6px 12px; font-size: 0.75rem;">Delete</button>
-                            </div>
-                        `;
+                        eventsHTML += renderEventHTML(event, eventIndex);
                     });
                 } else {
                     eventsHTML = '<div class="empty-state">No events</div>';
@@ -1706,16 +1800,7 @@
                 if (dayEvents.length > 0) {
                     dayEvents.forEach((event) => {
                         const eventIndex = calendarEvents.indexOf(event);
-                        const displayTime = event.time ? formatTime12Hour(event.time) : '';
-                        eventsHTML += `
-                            <div class="event-item">
-                                <div>
-                                    <div class="event-title">${displayTime ? displayTime + ' - ' : ''}${event.title}</div>
-                                    ${event.note ? `<div class="event-note">${event.note}</div>` : ''}
-                                </div>
-                                <button class="btn" onclick="calendarDeleteEvent(${eventIndex})" style="padding: 6px 12px; font-size: 0.75rem;">Delete</button>
-                            </div>
-                        `;
+                        eventsHTML += renderEventHTML(event, eventIndex);
                     });
                 } else {
                     eventsHTML = '<div class="empty-state">No events</div>';
@@ -1850,19 +1935,33 @@
                 const timeHtml = event.time ? `<div class="day-modal-event-time">${formatTime(event.time)}</div>` : '';
                 const noteHtml = event.note ? `<div class="day-modal-event-note">${event.note}</div>` : '';
                 
-                return `
-                    <div class="day-modal-event">
-                        <div class="day-modal-event-header">
-                            <div class="day-modal-event-title">${event.title}</div>
-                            <div class="day-modal-event-actions">
-                                <button class="day-modal-edit" onclick="editDayModalEvent('${event.id}')">Edit</button>
-                                <button class="day-modal-delete" onclick="deleteDayModalEvent('${event.id}')">×</button>
+                // Handle CRM events differently
+                if (event.fromCRM) {
+                    return `
+                        <div class="day-modal-event crm-event">
+                            <div class="day-modal-event-header">
+                                <div class="day-modal-event-title">${event.title}</div>
+                                <div class="crm-badge">From CRM</div>
                             </div>
+                            ${timeHtml}
+                            ${noteHtml}
                         </div>
-                        ${timeHtml}
-                        ${noteHtml}
-                    </div>
-                `;
+                    `;
+                } else {
+                    return `
+                        <div class="day-modal-event">
+                            <div class="day-modal-event-header">
+                                <div class="day-modal-event-title">${event.title}</div>
+                                <div class="day-modal-event-actions">
+                                    <button class="day-modal-edit" onclick="editDayModalEvent('${event.id}')">Edit</button>
+                                    <button class="day-modal-delete" onclick="deleteDayModalEvent('${event.id}')">×</button>
+                                </div>
+                            </div>
+                            ${timeHtml}
+                            ${noteHtml}
+                        </div>
+                    `;
+                }
             }).join('');
         }
 
