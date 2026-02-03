@@ -509,7 +509,7 @@
             display: none; background: rgba(20, 20, 20, 0.5);
             padding: 20px; margin-top: 16px;
         }
-        .event-form.visible { display: block; }
+        .event-form.active { display: block; }
         .form-group { margin-bottom: 16px; }
         .form-group label { display: block; font-size: 0.75rem; color: #a3b899; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.1em; }
         .form-group input, .form-group select, .form-group textarea {
@@ -2650,7 +2650,7 @@
             
             if (groceries.length === 0) {
                 list.innerHTML = '<div class="empty-state" style="color: #666; font-size: 0.85rem; padding: 12px;">No items yet</div>';
-                expandBtn.classList.remove('show');
+                if (expandBtn) expandBtn.classList.remove('show');
                 return;
             }
 
@@ -2666,11 +2666,13 @@
             });
 
             // Show expand button if 5 or more items
-            if (groceries.length >= 5) {
-                expandBtn.classList.add('show');
-            } else {
-                expandBtn.classList.remove('show');
-                list.classList.remove('collapsed');
+            if (expandBtn) {
+                if (groceries.length >= 5) {
+                    expandBtn.classList.add('show');
+                } else {
+                    expandBtn.classList.remove('show');
+                    list.classList.remove('collapsed');
+                }
             }
         }
 
