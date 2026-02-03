@@ -1169,7 +1169,7 @@
                 
                 let linkHtml = '';
                 if (reminder.link) {
-                    linkHtml = `<a href="${reminder.link}" target="_blank" class="reminder-list-link">🔗 ${new URL(reminder.link).hostname}</a>`;
+                    linkHtml = `<a href="${reminder.link}" target="_blank" class="reminder-list-link"> ${new URL(reminder.link).hostname}</a>`;
                 }
                 
                 return `
@@ -2122,7 +2122,7 @@
             }
         }
 
-        async function toggleGrocery(index) {
+                async function toggleGrocery(index) {
             if (index >= 0 && index < groceries.length) {
                 groceries[index].completed = !groceries[index].completed;
                 await saveGroceries();
@@ -2144,21 +2144,29 @@
             if (!list) return;
             
             if (groceries.length === 0) {
-                list.innerHTML = '<div style="color: rgba(242, 235, 224, 0.4); font-size: 0.85rem; padding: 12px; font-style: italic;">No items yet</div>';
+                list.innerHTML = '<div class="empty-state" style="color: #666; font-size: 0.85rem; padding: 12px;">No items yet</div>';
+                expandBtn.classList.remove('show');
                 return;
             }
 
             list.innerHTML = '';
             groceries.forEach((item, index) => {
                 const itemDiv = document.createElement('div');
-                itemDiv.className = 'grocery-item' + (item.completed ? ' done' : '');
+                itemDiv.className = 'sticky-item';
                 itemDiv.innerHTML = `
-                    <input type="checkbox" ${item.completed ? 'checked' : ''} onchange="toggleGrocery(${index})">
-                    <span onclick="toggleGrocery(${index})">${item.text}</span>
+                    <div class="sticky-item-text ${item.completed ? 'completed' : ''}" onclick="toggleGrocery(${index})">${item.text}</div>
                     <button onclick="deleteGrocery(${index})">×</button>
                 `;
                 list.appendChild(itemDiv);
             });
+
+            // Show expand button if 5 or more items
+            if (groceries.length >= 5) {
+                expandBtn.classList.add('show');
+            } else {
+                expandBtn.classList.remove('show');
+                list.classList.remove('collapsed');
+            }
         }
 
         // PHONE BOOK / CONTACTS
