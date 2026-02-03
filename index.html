@@ -200,7 +200,11 @@
             font-family: inherit; transition: all 0.2s ease;
         }
         .quick-add button:hover { background: #4a7a7a; }
-        .manage-link { text-align: right; }
+        .manage-link { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+        }
         .manage-link button {
             background: transparent; border: none;
             color: rgba(242, 235, 224, 0.4); font-size: 0.7rem;
@@ -339,15 +343,6 @@
         .crm-event {
             background: rgba(61, 107, 107, 0.15) !important;
             border-left-color: #3d6b6b !important;
-        }
-        .crm-badge {
-            font-size: 0.7rem;
-            color: #3d6b6b;
-            background: rgba(61, 107, 107, 0.2);
-            padding: 3px 8px;
-            border-radius: 3px;
-            margin-top: 6px;
-            display: inline-block;
         }
         
         .empty-state { color: rgba(242, 235, 224, 0.4); font-size: 0.85rem; font-style: italic; padding: 8px 0; }
@@ -709,7 +704,7 @@
             </div>
             <div class="manage-link">
                 <button onclick="openReminderModal()">Manage All Reminders</button>
-                <button onclick="window.clearAllSnoozes()" style="margin-left: 8px;">Clear All Snoozes</button>
+                <button onclick="window.clearAllSnoozes()">Clear All Snoozes</button>
             </div>
         </div>
 
@@ -1178,25 +1173,32 @@
 
         function getNextNotifyDate(reminder) {
             const today = new Date();
+            today.setHours(0, 0, 0, 0);
             const currentYear = today.getFullYear();
             
             // Check if snoozed
             if (reminder.snoozedUntil) {
                 const snoozed = new Date(reminder.snoozedUntil);
+                snoozed.setHours(0, 0, 0, 0);
                 if (snoozed > today) return snoozed;
             }
             
             const nd = reminder.notifyDate;
             let notifyDate = new Date(currentYear, nd.month - 1, nd.day);
+            notifyDate.setHours(0, 0, 0, 0);
             
-            if (reminder.frequency === 'yearly') {
-                // If it was completed this year, next notification is next year
+            if (reminder.frequency === 'once') {
+                // One-time reminder - just return the notify date
+                // If it's in the past, it will show as overdue
+                return notifyDate;
+            } else if (reminder.frequency === 'yearly') {
+                // If it was completed this year, next notification is ALWAYS next year
                 if (reminder.lastDone) {
                     const lastDoneDate = new Date(reminder.lastDone);
                     const lastDoneYear = lastDoneDate.getFullYear();
                     
-                    // If completed this year, move to next year
-                    if (lastDoneYear === currentYear && notifyDate <= today) {
+                    // If completed this year, ALWAYS move to next year
+                    if (lastDoneYear === currentYear) {
                         notifyDate = new Date(currentYear + 1, nd.month - 1, nd.day);
                     }
                 } else {
@@ -1234,7 +1236,7 @@
             }
         }
 
-        function getUpcomingReminders(withinDays = 30) {
+        function getUpcomingReminders(withinDays = 90) {
             const now = new Date();
             now.setHours(0, 0, 0, 0);
             
@@ -1244,7 +1246,12 @@
                     return { ...r, daysUntil };
                 })
                 .filter(r => {
-                    // Only show if within the days window
+                    // Show if overdue (negative days) OR within the days window
+                    if (r.daysUntil < 0) {
+                        // Show overdue reminders (up to 30 days overdue)
+                        return r.daysUntil >= -30;
+                    }
+                    
                     if (r.daysUntil > withinDays) return false;
                     
                     // Check if currently snoozed
@@ -1260,15 +1267,27 @@
         }
 
         function updateReminderDisplay() {
-            const upcoming = getUpcomingReminders(30);
+            const upcoming = getUpcomingReminders(90);
             const container = document.getElementById('currentReminder');
             
             if (upcoming.length === 0) {
-                container.classList.remove('visible');
+                // Show happy message when no reminders
+                container.classList.add('visible');
+                document.getElementById('reminderTitle').textContent = 'yay! no reminders';
+                document.getElementById('reminderDue').textContent = 'Nothing due in the next 90 days';
+                document.getElementById('reminderLinks').innerHTML = '';
+                
+                // Hide action buttons when showing no reminders message
+                const actions = container.querySelector('.reminder-actions');
+                if (actions) actions.style.display = 'none';
                 return;
             }
             
             container.classList.add('visible');
+            
+            // Show action buttons
+            const actions = container.querySelector('.reminder-actions');
+            if (actions) actions.style.display = 'flex';
             
             if (currentReminderIndex >= upcoming.length) {
                 currentReminderIndex = 0;
@@ -1302,7 +1321,7 @@
 
         function showNextReminder() {
             console.log('showNextReminder called');
-            const upcoming = getUpcomingReminders(30);
+            const upcoming = getUpcomingReminders(90);
             console.log('Upcoming reminders:', upcoming.length);
             
             if (upcoming.length === 0) {
@@ -1323,7 +1342,7 @@
 
         async function markCurrentReminderDone() {
             console.log('markCurrentReminderDone called');
-            const upcoming = getUpcomingReminders(30);
+            const upcoming = getUpcomingReminders(90);
             console.log('Upcoming reminders found:', upcoming.length);
             
             if (upcoming.length === 0) {
@@ -1337,9 +1356,17 @@
             const index = lifeReminders.findIndex(r => r.id === reminder.id);
             
             if (index !== -1) {
-                lifeReminders[index].lastDone = new Date().toISOString();
-                lifeReminders[index].snoozedUntil = null;
-                console.log('✓ Updated reminder:', lifeReminders[index]);
+                if (reminder.frequency === 'yearly') {
+                    // Yearly reminder - set lastDone to move to next year
+                    lifeReminders[index].lastDone = new Date().toISOString();
+                    lifeReminders[index].snoozedUntil = null;
+                    console.log('✓ Updated yearly reminder:', lifeReminders[index]);
+                } else {
+                    // One-time reminder - remove it completely
+                    console.log('✓ Removing one-time reminder:', lifeReminders[index].title);
+                    lifeReminders.splice(index, 1);
+                }
+                
                 await saveLifeReminders();
                 currentReminderIndex = 0;
                 updateReminderDisplay();
@@ -1351,7 +1378,7 @@
 
         async function snoozeCurrentReminder(days) {
             console.log('snoozeCurrentReminder called, days:', days);
-            const upcoming = getUpcomingReminders(30);
+            const upcoming = getUpcomingReminders(90);
             console.log('Upcoming reminders found:', upcoming.length);
             
             if (upcoming.length === 0) {
@@ -1405,7 +1432,7 @@
             console.log('Current reminder index:', currentReminderIndex);
             console.log('Total reminders:', lifeReminders.length);
             
-            const upcoming = getUpcomingReminders(30);
+            const upcoming = getUpcomingReminders(90);
             console.log('Upcoming reminders (within 30 days):', upcoming.length);
             
             if (upcoming.length > 0) {
@@ -1416,9 +1443,15 @@
         };
 
         async function addQuickReminder() {
+            console.log('addQuickReminder called');
             const input = document.getElementById('quickReminderInput');
             const title = input.value.trim();
-            if (!title) return;
+            console.log('Quick reminder title:', title);
+            
+            if (!title) {
+                console.log('No title entered, aborting');
+                return;
+            }
             
             const today = new Date();
             const newReminder = {
@@ -1429,10 +1462,12 @@
                 created: today.toISOString()
             };
             
+            console.log('Creating new reminder:', newReminder);
             lifeReminders.push(newReminder);
             await saveLifeReminders();
             input.value = '';
             updateReminderDisplay();
+            console.log('✓ Quick reminder added successfully!');
         }
 
         // REMINDER MODAL FUNCTIONS
@@ -1697,25 +1732,27 @@
             const displayTime = event.time ? formatTime12Hour(event.time) : '';
             
             if (event.fromCRM) {
-                // CRM event - read-only with badge
+                // CRM event - read-only with heart emoji after title
                 return `
                     <div class="event-item crm-event">
                         <div>
-                            <div class="event-title">${displayTime ? displayTime + ' - ' : ''}${event.title}</div>
+                            <div class="event-title">${displayTime ? displayTime + ' - ' : ''}${event.title} 💗</div>
                             ${event.note ? `<div class="event-note">${event.note}</div>` : ''}
-                            <div class="crm-badge">📅 From CRM</div>
                         </div>
                     </div>
                 `;
             } else {
-                // Regular event with delete button
+                // Regular event with edit and delete buttons
                 return `
                     <div class="event-item">
                         <div>
                             <div class="event-title">${displayTime ? displayTime + ' - ' : ''}${event.title}</div>
                             ${event.note ? `<div class="event-note">${event.note}</div>` : ''}
                         </div>
-                        <button class="btn" onclick="calendarDeleteEvent(${eventIndex})" style="padding: 6px 12px; font-size: 0.75rem;">Delete</button>
+                        <div style="display: flex; gap: 6px;">
+                            <button class="btn" onclick="calendarEditEvent(${eventIndex})" style="padding: 6px 12px; font-size: 0.75rem;">Edit</button>
+                            <button class="btn" onclick="calendarDeleteEvent(${eventIndex})" style="padding: 6px 12px; font-size: 0.75rem;">Delete</button>
+                        </div>
                     </div>
                 `;
             }
@@ -1940,8 +1977,7 @@
                     return `
                         <div class="day-modal-event crm-event">
                             <div class="day-modal-event-header">
-                                <div class="day-modal-event-title">${event.title}</div>
-                                <div class="crm-badge">From CRM</div>
+                                <div class="day-modal-event-title">${event.title} 💗</div>
                             </div>
                             ${timeHtml}
                             ${noteHtml}
@@ -2058,10 +2094,13 @@
         }
 
         function calendarShowAddForm() {
+            console.log('calendarShowAddForm called');
             const form = document.getElementById('calendarEventForm');
+            console.log('Form element:', form);
             form.classList.add('active');
             const today = new Date();
             document.getElementById('calendarEventDate').value = today.toISOString().split('T')[0];
+            console.log('✓ Add event form opened');
         }
 
         function toggleRepeatOptions() {
@@ -2143,11 +2182,14 @@
 
         async function calendarAddEvent(e) {
             e.preventDefault();
+            console.log('calendarAddEvent called');
             
             const title = document.getElementById('calendarEventTitle').value;
             const repeatMode = document.getElementById('calendarRepeatMode').value;
             const time = document.getElementById('calendarEventTime').value;
             const note = document.getElementById('calendarEventNote').value;
+            
+            console.log('Form values:', { title, repeatMode, time, note });
             
             if (!title) {
                 alert('Please fill in the event title.');
@@ -2200,8 +2242,10 @@
             const isMultiDay = datesToAdd.length > 1;
             const eventGroup = isMultiDay ? Date.now().toString() : null;
             
+            console.log(`Creating ${datesToAdd.length} event(s)...`);
             datesToAdd.forEach(date => {
                 const event = {
+                    id: Date.now().toString() + '_' + Math.random(),
                     title: title,
                     date: date,
                     time: time || null,
@@ -2211,11 +2255,13 @@
                     repeatMode: repeatMode
                 };
                 calendarEvents.push(event);
+                console.log('Added event:', event);
             });
             
             await calendarSaveEvents();
             calendarHideAddForm();
             calendarRender();
+            console.log('✓ Event(s) added successfully!');
         }
 
         async function calendarDeleteEvent(index) {
@@ -2244,6 +2290,34 @@
                     calendarRender();
                 }
             }
+        }
+
+        function calendarEditEvent(index) {
+            if (index < 0 || index >= calendarEvents.length) return;
+            
+            const event = calendarEvents[index];
+            
+            // Set the selected modal date to the event's date
+            selectedModalDate = new Date(event.date + 'T00:00:00');
+            
+            // Pre-fill the form with event details
+            document.getElementById('dayModalEventTitle').value = event.title;
+            document.getElementById('dayModalEventTime').value = event.time || '';
+            document.getElementById('dayModalEventNote').value = event.note || '';
+            document.getElementById('dayModalEditId').value = event.id;
+            
+            // Open the modal
+            const overlay = document.getElementById('dayModalOverlay');
+            const title = document.getElementById('dayModalTitle');
+            
+            title.textContent = 'Edit Event - ' + selectedModalDate.toLocaleDateString('en-US', { 
+                weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' 
+            });
+            
+            // Show the form in edit mode
+            document.getElementById('dayModalForm').classList.add('visible');
+            overlay.classList.add('visible');
+            document.getElementById('dayModalEventTitle').focus();
         }
 
         async function calendarInit() {
