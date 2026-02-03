@@ -865,51 +865,106 @@
         </div>
     </div>
 
+    <script>
+        // Initialize Firebase status to false before module loads
+        window.firebaseReady = false;
+        window.firebaseError = null;
+        console.log('Page script loaded, firebaseReady initially false');
+    </script>
+
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getFirestore, collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-        // Your Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyCDda9sPwSY-RQ5rrM5THOvcLtHvcPRYd4",
-            authDomain: "our-habit-hub.firebaseapp.com",
-            projectId: "our-habit-hub",
-            storageBucket: "our-habit-hub.firebasestorage.app",
-            messagingSenderId: "78555830496",
-            appId: "1:78555830496:web:3e457e54729cc11b825885"
-        };
+        console.log('Firebase modules imported successfully');
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        try {
+            console.log('Starting Firebase initialization...');
 
-        // Make Firebase available globally
-        window.db = db;
-        window.firestoreImports = { collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot };
-        window.firebaseReady = true;
+            // Your Firebase configuration
+            const firebaseConfig = {
+                apiKey: "AIzaSyCDda9sPwSY-RQ5rrM5THOvcLtHvcPRYd4",
+                authDomain: "our-habit-hub.firebaseapp.com",
+                projectId: "our-habit-hub",
+                storageBucket: "our-habit-hub.firebasestorage.app",
+                messagingSenderId: "78555830496",
+                appId: "1:78555830496:web:3e457e54729cc11b825885"
+            };
 
-        // Update sync status
-        function updateSyncStatus(status, message) {
-            const statusEl = document.getElementById('syncStatus');
-            const textEl = document.getElementById('syncText');
+            console.log('Firebase config set');
+
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            console.log('Firebase app initialized');
             
-            statusEl.className = 'sync-status';
-            if (status === 'synced') {
-                statusEl.classList.add('synced');
-            } else if (status === 'error') {
-                statusEl.classList.add('error');
+            const db = getFirestore(app);
+            console.log('Firestore initialized');
+
+            // Make Firebase available globally
+            window.db = db;
+            window.firestoreImports = { collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot };
+            window.firebaseReady = true;
+
+            console.log('Firebase ready flag set to true');
+
+            // Update sync status
+            function updateSyncStatus(status, message) {
+                const statusEl = document.getElementById('syncStatus');
+                const textEl = document.getElementById('syncText');
+                
+                if (!statusEl || !textEl) {
+                    console.warn('Sync status elements not found yet');
+                    return;
+                }
+                
+                statusEl.className = 'sync-status';
+                if (status === 'synced') {
+                    statusEl.classList.add('synced');
+                } else if (status === 'error') {
+                    statusEl.classList.add('error');
+                } else if (status === 'connecting') {
+                    statusEl.classList.add('connecting');
+                }
+                
+                textEl.textContent = message;
             }
+
+            // Wait for DOM to be ready before updating status
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => {
+                    updateSyncStatus('synced', 'Synced');
+                });
+            } else {
+                updateSyncStatus('synced', 'Synced');
+            }
+
+            console.log('Firebase initialized successfully!');
             
-            textEl.textContent = message;
+            // Dispatch event when Firebase is ready
+            window.dispatchEvent(new Event('firebaseReady'));
+            console.log('firebaseReady event dispatched');
+            
+        } catch (error) {
+            console.error('❌ Firebase initialization error:', error);
+            console.error('Error details:', error.message);
+            console.error('Stack:', error.stack);
+            
+            // Set firebaseReady to false explicitly so the app knows Firebase failed
+            window.firebaseReady = false;
+            window.firebaseError = error.message;
+            
+            // Try to update sync status
+            setTimeout(() => {
+                try {
+                    const statusEl = document.getElementById('syncStatus');
+                    if (statusEl) {
+                        statusEl.className = 'sync-status error';
+                    }
+                } catch (e) {
+                    console.error('Could not update sync status:', e);
+                }
+            }, 100);
         }
-
-        // Initialize sync status
-        updateSyncStatus('synced', 'Synced');
-
-        console.log('Firebase initialized successfully!');
-        
-        // Dispatch event when Firebase is ready
-        window.dispatchEvent(new Event('firebaseReady'));
     </script>
 
     <script>
@@ -970,39 +1025,55 @@
 
         // FIREBASE FUNCTIONS
         async function syncToFirebase(collectionName, data) {
-            // Wait for Firebase to be ready
+            // Wait for Firebase to be ready (with timeout)
             if (!window.firebaseReady) {
-                await new Promise(resolve => {
-                    if (window.firebaseReady) resolve();
-                    else window.addEventListener('firebaseReady', resolve, { once: true });
-                });
+                await Promise.race([
+                    new Promise(resolve => {
+                        if (window.firebaseReady) resolve();
+                        else window.addEventListener('firebaseReady', resolve, { once: true });
+                    }),
+                    new Promise(resolve => setTimeout(() => {
+                        console.warn('Firebase not ready after 5s, continuing anyway');
+                        resolve();
+                    }, 5000))
+                ]);
             }
             
-            console.log('syncToFirebase called:', collectionName, 'window.db:', !!window.db);
-            if (!window.db) {
-                console.error('window.db is not set!');
+            if (!window.firebaseReady || !window.db) {
+                console.warn('Firebase not available, skipping sync for:', collectionName);
                 return;
             }
+            
             try {
                 const { setDoc, doc } = window.firestoreImports;
                 await setDoc(doc(window.db, collectionName, 'data'), { items: data });
                 console.log(`${collectionName} synced to Firebase successfully`);
             } catch (error) {
                 console.error(`Error syncing ${collectionName}:`, error);
-                throw error;
+                // Don't throw - just log the error so the app continues
             }
         }
 
         async function loadFromFirebase(collectionName) {
-            // Wait for Firebase to be ready
+            // Wait for Firebase to be ready (with timeout)
             if (!window.firebaseReady) {
-                await new Promise(resolve => {
-                    if (window.firebaseReady) resolve();
-                    else window.addEventListener('firebaseReady', resolve, { once: true });
-                });
+                await Promise.race([
+                    new Promise(resolve => {
+                        if (window.firebaseReady) resolve();
+                        else window.addEventListener('firebaseReady', resolve, { once: true });
+                    }),
+                    new Promise(resolve => setTimeout(() => {
+                        console.warn('Firebase not ready after 5s for load');
+                        resolve();
+                    }, 5000))
+                ]);
             }
             
-            if (!window.db) return null;
+            if (!window.firebaseReady || !window.db) {
+                console.warn('Firebase not available, returning null for:', collectionName);
+                return null;
+            }
+            
             try {
                 const { getDoc, doc } = window.firestoreImports;
                 const docRef = doc(window.db, collectionName, 'data');
@@ -1019,15 +1090,25 @@
         }
 
         async function setupFirebaseListener(collectionName, callback) {
-            // Wait for Firebase to be ready
+            // Wait for Firebase to be ready (with timeout)
             if (!window.firebaseReady) {
-                await new Promise(resolve => {
-                    if (window.firebaseReady) resolve();
-                    else window.addEventListener('firebaseReady', resolve, { once: true });
-                });
+                await Promise.race([
+                    new Promise(resolve => {
+                        if (window.firebaseReady) resolve();
+                        else window.addEventListener('firebaseReady', resolve, { once: true });
+                    }),
+                    new Promise(resolve => setTimeout(() => {
+                        console.warn('Firebase not ready after 5s for listener');
+                        resolve();
+                    }, 5000))
+                ]);
             }
             
-            if (!window.db) return;
+            if (!window.firebaseReady || !window.db) {
+                console.warn('Firebase not available, skipping listener for:', collectionName);
+                return;
+            }
+            
             try {
                 const { onSnapshot, doc } = window.firestoreImports;
                 const docRef = doc(window.db, collectionName, 'data');
@@ -1082,6 +1163,7 @@
             const today = new Date();
             const currentYear = today.getFullYear();
             
+            // Check if snoozed
             if (reminder.snoozedUntil) {
                 const snoozed = new Date(reminder.snoozedUntil);
                 if (snoozed > today) return snoozed;
@@ -1091,8 +1173,20 @@
             let notifyDate = new Date(currentYear, nd.month - 1, nd.day);
             
             if (reminder.frequency === 'yearly') {
-                if (notifyDate < today) {
-                    notifyDate = new Date(currentYear + 1, nd.month - 1, nd.day);
+                // If it was completed this year, next notification is next year
+                if (reminder.lastDone) {
+                    const lastDoneDate = new Date(reminder.lastDone);
+                    const lastDoneYear = lastDoneDate.getFullYear();
+                    
+                    // If completed this year, move to next year
+                    if (lastDoneYear === currentYear && notifyDate <= today) {
+                        notifyDate = new Date(currentYear + 1, nd.month - 1, nd.day);
+                    }
+                } else {
+                    // Not completed yet, if date passed this year, next year
+                    if (notifyDate < today) {
+                        notifyDate = new Date(currentYear + 1, nd.month - 1, nd.day);
+                    }
                 }
             }
             
@@ -1124,9 +1218,27 @@
         }
 
         function getUpcomingReminders(withinDays = 30) {
+            const now = new Date();
+            now.setHours(0, 0, 0, 0);
+            
             return lifeReminders
-                .map(r => ({ ...r, daysUntil: getDaysUntilNotify(r) }))
-                .filter(r => r.daysUntil <= withinDays && !r.completed)
+                .map(r => {
+                    const daysUntil = getDaysUntilNotify(r);
+                    return { ...r, daysUntil };
+                })
+                .filter(r => {
+                    // Only show if within the days window
+                    if (r.daysUntil > withinDays) return false;
+                    
+                    // Check if currently snoozed
+                    if (r.snoozedUntil) {
+                        const snoozedDate = new Date(r.snoozedUntil);
+                        snoozedDate.setHours(0, 0, 0, 0);
+                        if (snoozedDate > now) return false;
+                    }
+                    
+                    return true;
+                })
                 .sort((a, b) => a.daysUntil - b.daysUntil);
         }
 
@@ -1172,23 +1284,34 @@
         }
 
         function showNextReminder() {
+            console.log('showNextReminder called');
             const upcoming = getUpcomingReminders(30);
+            console.log('Upcoming reminders:', upcoming.length);
             if (upcoming.length > 1) {
                 currentReminderIndex = (currentReminderIndex + 1) % upcoming.length;
+                console.log('New reminder index:', currentReminderIndex);
                 updateReminderDisplay();
+            } else {
+                console.log('Only one or no reminders available');
             }
         }
 
         async function markCurrentReminderDone() {
+            console.log('markCurrentReminderDone called');
             const upcoming = getUpcomingReminders(30);
-            if (upcoming.length === 0) return;
+            if (upcoming.length === 0) {
+                console.log('No upcoming reminders');
+                return;
+            }
             
             const reminder = upcoming[currentReminderIndex];
+            console.log('Marking reminder done:', reminder.title);
             const index = lifeReminders.findIndex(r => r.id === reminder.id);
             
             if (index !== -1) {
                 lifeReminders[index].lastDone = new Date().toISOString();
                 lifeReminders[index].snoozedUntil = null;
+                console.log('Updated reminder:', lifeReminders[index]);
                 await saveLifeReminders();
                 currentReminderIndex = 0;
                 updateReminderDisplay();
@@ -1196,16 +1319,22 @@
         }
 
         async function snoozeCurrentReminder(days) {
+            console.log('snoozeCurrentReminder called, days:', days);
             const upcoming = getUpcomingReminders(30);
-            if (upcoming.length === 0) return;
+            if (upcoming.length === 0) {
+                console.log('No upcoming reminders');
+                return;
+            }
             
             const reminder = upcoming[currentReminderIndex];
+            console.log('Snoozing reminder:', reminder.title);
             const index = lifeReminders.findIndex(r => r.id === reminder.id);
             
             if (index !== -1) {
                 const snoozeDate = new Date();
                 snoozeDate.setDate(snoozeDate.getDate() + days);
                 lifeReminders[index].snoozedUntil = snoozeDate.toISOString();
+                console.log('Snoozed until:', snoozeDate);
                 await saveLifeReminders();
                 currentReminderIndex = 0;
                 updateReminderDisplay();
@@ -2617,19 +2746,55 @@
 
         // Initialize everything
         document.addEventListener('DOMContentLoaded', async function() {
-            await calendarInit();
-            await loadLifeReminders();
-            await loadReminders();
-            await loadGroceries();
-            await loadContacts();
-            await loadHeaderPhoto();
-            
-            // Setup photo upload and drag
-            document.getElementById('photoUpload').addEventListener('change', handlePhotoUpload);
-            setupPhotoDrag();
-            
-            // Setup real-time listeners
-            setTimeout(setupAllListeners, 1000);
+            try {
+                console.log('Starting initialization...');
+                
+                // Set a timeout for the entire initialization
+                const initTimeout = setTimeout(() => {
+                    console.warn('⚠️ Initialization timeout after 10 seconds');
+                    console.log('Firebase status:', window.firebaseReady ? 'Connected' : 'NOT CONNECTED - app will use localStorage only');
+                    document.body.style.opacity = '1'; // Make page visible anyway
+                }, 10000); // 10 second timeout
+                
+                await calendarInit();
+                console.log('Calendar initialized');
+                
+                await loadLifeReminders();
+                console.log('Life reminders loaded');
+                
+                await loadReminders();
+                console.log('Reminders loaded');
+                
+                await loadGroceries();
+                console.log('Groceries loaded');
+                
+                await loadContacts();
+                console.log('Contacts loaded');
+                
+                await loadHeaderPhoto();
+                console.log('Header photo loaded');
+                
+                // Setup photo upload and drag
+                document.getElementById('photoUpload').addEventListener('change', handlePhotoUpload);
+                setupPhotoDrag();
+                
+                // Setup real-time listeners
+                setTimeout(setupAllListeners, 1000);
+                
+                clearTimeout(initTimeout);
+                console.log('Initialization complete!');
+                console.log('Firebase status:', window.firebaseReady ? '✓ Connected' : '✗ Not connected');
+                if (!window.firebaseReady && window.firebaseError) {
+                    console.error('Firebase error:', window.firebaseError);
+                }
+            } catch (error) {
+                console.error('❌ Initialization error:', error);
+                console.error('Error details:', error.message);
+                // Show page anyway even if there's an error
+                document.body.style.opacity = '1';
+                console.warn('⚠️ App loaded with errors - check console above for details');
+                console.log('💡 The app will work with localStorage only (no sync between devices)');
+            }
         });
 
         let photoPosition = { x: 0, y: 0 };
