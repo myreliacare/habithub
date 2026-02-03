@@ -8,7 +8,7 @@
     <title>Kasey's Habit Hub</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@300;400;500;600;700&family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -27,7 +27,7 @@
             background: #3d2f31;
             min-height: 100vh;
             padding: 16px;
-            color: #4a3a3c;
+            color: #e0e0e0;
             position: relative;
             width: 100%;
             overflow-x: hidden;
@@ -45,7 +45,7 @@
             top: 90px;
             right: 24px;
             background: #EBE0D6;
-            border: 1px solid #d4b5b8;
+            border: 1px solid #444;
             padding: 8px;
             border-radius: 50%;
             z-index: 1000;
@@ -84,8 +84,8 @@
 
         .btn {
             background: transparent;
-            border: 1px solid #d4b5b8;
-            color: #7a6668;
+            border: 1px solid #444;
+            color: #999;
             padding: 8px 16px;
             cursor: pointer;
             font-size: 0.95rem;
@@ -98,7 +98,7 @@
 
         .btn:hover {
             background: #b59197;
-            color: #2a2a2a;
+            color: #EBE0D6;
             border-color: #b59197;
         }
 
@@ -110,7 +110,7 @@
             width: 100%;
             background: #EBE0D6;
             border: 1px solid #b59197;
-            color: #4a3a3c;
+            color: #b59197;
             padding: 14px 16px;
             font-size: 1rem;
             font-weight: 600;
@@ -136,7 +136,7 @@
 
         .section-dropdown option {
             background: #EBE0D6;
-            color: #4a3a3c;
+            color: #b59197;
             padding: 10px;
         }
 
@@ -173,7 +173,7 @@
 
         h1 {
             text-align: center;
-            color: #4a3a3c;
+            color: #b59197;
             margin-bottom: 4px;
             font-size: 0.9rem;
             font-weight: 600;
@@ -193,7 +193,7 @@
 
         .subtitle {
             text-align: center;
-            color: #7a6668;
+            color: #999999;
             margin-bottom: 16px;
             font-size: 0.95rem;
             font-weight: 500;
@@ -201,7 +201,7 @@
 
         .date-display {
             text-align: center;
-            color: #7a6668;
+            color: #999999;
             margin-bottom: 20px;
             font-size: 0.95rem;
             font-weight: 500;
@@ -212,7 +212,7 @@
             grid-template-columns: repeat(4, 1fr);
             gap: 2px;
             margin-bottom: 20px;
-            background: #EBE0D6;
+            background: #F2EBE0;
             max-width: 500px;
             margin-left: auto;
             margin-right: auto;
@@ -230,19 +230,19 @@
             transition: all 0.2s ease;
             padding: 8px;
             background: #E0D5CB;
-            color: #4a3a3c;
+            color: #b59197;
             position: relative;
             line-height: 1.3;
         }
 
         .bingo-cell.completed {
             background: #b59197;
-            color: #2a2a2a;
+            color: #EBE0D6;
         }
 
         .bingo-cell.free-space {
             background: #b59197;
-            color: #2a2a2a;
+            color: #EBE0D6;
             font-weight: 700;
             cursor: default;
             text-transform: uppercase;
@@ -269,14 +269,14 @@
         .stats {
             text-align: center;
             padding: 16px;
-            background: #EBE0D6;
+            background: #F2EBE0;
             display: flex;
             justify-content: space-around;
             gap: 20px;
         }
 
         .stats-item {
-            color: #7a6668;
+            color: #999999;
             font-size: 0.95rem;
             font-weight: 600;
         }
@@ -316,7 +316,7 @@
         }
 
         .celebration p {
-            color: #7a6668;
+            color: #999;
             margin-bottom: 24px;
         }
 
@@ -350,7 +350,7 @@
             justify-content: space-between;
             align-items: center;
             transition: background 0.2s;
-            border: 1px solid #e8d5d8;
+            border: 1px solid #333;
         }
 
         .resource-header:hover {
@@ -358,13 +358,13 @@
         }
 
         .resource-name {
-            color: #4a3a3c;
+            color: #b59197;
             font-size: 1.1rem;
             font-weight: 600;
         }
 
         .resource-arrow {
-            color: #7a6668;
+            color: #999;
             transition: transform 0.2s;
         }
 
@@ -375,9 +375,9 @@
 
         .resource-content {
             display: none;
-            background: #EBE0D6;
+            background: #F2EBE0;
             padding: 16px 20px;
-            border: 1px solid #e8d5d8;
+            border: 1px solid #333;
             border-top: none;
         }
 
@@ -400,7 +400,7 @@
         }
 
         .resource-item-title {
-            color: #4a3a3c;
+            color: #b59197;
             font-size: 1rem;
             font-weight: 600;
             margin-bottom: 4px;
@@ -421,15 +421,15 @@
         }
 
         .resource-item-note {
-            color: #7a6668;
+            color: #999;
             font-size: 0.9rem;
             line-height: 1.4;
         }
 
         .add-resource-btn {
             background: transparent;
-            border: 1px solid #d4b5b8;
-            color: #7a6668;
+            border: 1px solid #444;
+            color: #999;
             padding: 8px 16px;
             cursor: pointer;
             font-size: 0.85rem;
@@ -440,13 +440,13 @@
 
         .add-resource-btn:hover {
             background: #b59197;
-            color: #2a2a2a;
+            color: #EBE0D6;
             border-color: #b59197;
         }
 
         .empty-state {
             text-align: center;
-            color: #5a4a4c;
+            color: #666;
             padding: 20px;
         }
 
@@ -454,8 +454,8 @@
             width: 100%;
             margin-top: 12px;
             background: transparent;
-            border: 1px solid #d4b5b8;
-            color: #7a6668;
+            border: 1px solid #444;
+            color: #999;
             padding: 8px 16px;
             cursor: pointer;
             font-size: 0.85rem;
@@ -465,16 +465,16 @@
 
         .add-event-btn:hover {
             background: #b59197;
-            color: #2a2a2a;
+            color: #EBE0D6;
             border-color: #b59197;
         }
 
         .event-form {
             display: none;
-            background: #EBE0D6;
+            background: #F2EBE0;
             padding: 20px;
             margin-top: 15px;
-            border: 1px solid #e8d5d8;
+            border: 1px solid #333;
         }
 
         .event-form.active {
@@ -487,7 +487,7 @@
 
         .form-group label {
             display: block;
-            color: #7a6668;
+            color: #999;
             font-size: 0.9rem;
             font-weight: 600;
             margin-bottom: 6px;
@@ -499,8 +499,8 @@
         .form-group textarea {
             width: 100%;
             background: #EBE0D6;
-            border: 1px solid #d4b5b8;
-            color: #4a3a3c;
+            border: 1px solid #444;
+            color: #b59197;
             padding: 10px;
             font-size: 1rem;
             font-family: inherit;
@@ -525,11 +525,11 @@
 
         .form-actions button[type="submit"]:hover {
             background: #b59197;
-            color: #2a2a2a;
+            color: #EBE0D6;
         }
 
         .video-item {
-            background: #EBE0D6;
+            background: #F2EBE0;
             padding: 16px;
             margin-bottom: 12px;
             display: flex;
@@ -543,7 +543,7 @@
         }
 
         .video-title {
-            color: #4a3a3c;
+            color: #b59197;
             font-size: 1.05rem;
             font-weight: 600;
             margin-bottom: 6px;
@@ -572,14 +572,14 @@
 
         .video-tag {
             background: #EBE0D6;
-            color: #7a6668;
+            color: #999;
             padding: 4px 10px;
             font-size: 0.75rem;
-            border: 1px solid #d4b5b8;
+            border: 1px solid #444;
         }
 
         .prompt-question {
-            background: #EBE0D6;
+            background: #F2EBE0;
             padding: 20px;
             margin-bottom: 20px;
             border-left: 3px solid #b59197;
@@ -588,14 +588,14 @@
         .prompt-label {
             font-size: 0.85rem;
             font-weight: 600;
-            color: #7a6668;
+            color: #999;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             margin-bottom: 8px;
         }
 
         .prompt-text {
-            color: #4a3a3c;
+            color: #b59197;
             font-size: 1.25rem;
             font-weight: 500;
             line-height: 1.5;
@@ -603,7 +603,7 @@
         }
 
         .answer-box {
-            background: #EBE0D6;
+            background: #F2EBE0;
             padding: 20px;
             margin-bottom: 20px;
         }
@@ -618,7 +618,7 @@
         }
 
         .answer-text {
-            color: #4a3a3c;
+            color: #e0e0e0;
             line-height: 1.6;
             font-size: 1.05rem;
             white-space: pre-wrap;
@@ -639,9 +639,9 @@
 
         .todo-input {
             flex: 1;
-            background: #EBE0D6;
-            border: 1px solid #d4b5b8;
-            color: #4a3a3c;
+            background: #F2EBE0;
+            border: 1px solid #444;
+            color: #b59197;
             padding: 12px;
             font-size: 1rem;
             font-family: inherit;
@@ -661,7 +661,7 @@
 
         .todo-add-btn:hover {
             background: #b59197;
-            color: #2a2a2a;
+            color: #EBE0D6;
         }
 
         .todo-list {
@@ -671,7 +671,7 @@
         }
 
         .todo-item {
-            background: #EBE0D6;
+            background: #F2EBE0;
             padding: 16px;
             display: flex;
             align-items: center;
@@ -682,7 +682,7 @@
 
         .todo-item.completed {
             opacity: 0.6;
-            border-left-color: #5a4a4c;
+            border-left-color: #666;
         }
 
         .todo-checkbox {
@@ -694,20 +694,20 @@
 
         .todo-text {
             flex: 1;
-            color: #4a3a3c;
+            color: #e0e0e0;
             font-size: 1rem;
             line-height: 1.4;
         }
 
         .todo-item.completed .todo-text {
             text-decoration: line-through;
-            color: #5a4a4c;
+            color: #666;
         }
 
         .todo-delete {
             background: transparent;
-            border: 1px solid #d4b5b8;
-            color: #7a6668;
+            border: 1px solid #444;
+            color: #999;
             padding: 6px 12px;
             cursor: pointer;
             font-size: 0.85rem;
@@ -718,13 +718,13 @@
 
         .todo-delete:hover {
             background: #d67373;
-            color: #2a2a2a;
+            color: #EBE0D6;
             border-color: #d67373;
         }
 
         .todo-empty {
             text-align: center;
-            color: #5a4a4c;
+            color: #666;
             padding: 40px 20px;
             font-size: 1rem;
             font-style: italic;
@@ -856,7 +856,7 @@
         }
         .habits-modal-overlay.visible { display: flex; }
         .habits-modal {
-            background: #EBE0D6; border: 1px solid rgba(181, 145, 151, 0.4);
+            background: #F2EBE0; border: 1px solid rgba(181, 145, 151, 0.4);
             width: 100%; max-width: 500px; max-height: 85vh;
             overflow-y: auto; padding: 24px;
         }
@@ -899,7 +899,7 @@
         .add-habit-row input:focus { outline: none; border-color: rgba(181, 145, 151, 0.5); }
         .add-habit-row input::placeholder { color: rgba(242, 235, 224, 0.4); }
         .add-habit-btn {
-            background: #b59197; border: none; color: #1c1c1c;
+            background: #b59197; border: none; color: #F2EBE0;
             padding: 10px 16px; cursor: pointer; font-size: 0.9rem; font-family: inherit;
         }
         .add-habit-btn:hover { background: #c9a9a6; }
@@ -908,7 +908,7 @@
             padding-top: 16px; border-top: 1px solid rgba(181, 145, 151, 0.2);
         }
         .habits-save-btn {
-            background: #b59197; border: none; color: #1c1c1c;
+            background: #b59197; border: none; color: #F2EBE0;
             padding: 10px 20px; cursor: pointer; font-size: 0.85rem; font-family: inherit;
         }
         .habits-save-btn:hover { background: #c9a9a6; }
@@ -919,6 +919,232 @@
         }
         .habits-cancel-btn:hover { border-color: rgba(181, 145, 151, 0.6); }
         .habit-count { font-size: 0.75rem; color: rgba(242, 235, 224, 0.5); margin-bottom: 12px; }
+
+        /* Journal styles */
+        .journal-locked {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(235, 224, 214, 0.98);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+
+        .journal-password-box {
+            background: #fff;
+            padding: 40px;
+            border: 2px solid #b59197;
+            box-shadow: 0 10px 40px rgba(181, 145, 151, 0.3);
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .journal-lock-icon-DISABLED {
+            font-size: 3rem;
+            color: #b59197;
+            margin-bottom: 20px;
+        }
+
+        .journal-password-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: #b59197;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .journal-password-subtitle {
+            color: #999;
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+        }
+
+        .journal-password-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #b59197;
+            background: #EBE0D6;
+            color: #F2EBE0;
+            font-size: 1rem;
+            text-align: center;
+            font-family: inherit;
+            margin-bottom: 16px;
+        }
+
+        .journal-password-input:focus {
+            outline: none;
+            border-color: #b59197;
+            box-shadow: 0 0 0 2px rgba(181, 145, 151, 0.2);
+        }
+
+        .journal-unlock-btn {
+            background: #b59197;
+            color: #b59197;
+            border: none;
+            padding: 12px 32px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .journal-unlock-btn:hover {
+            background: #c5a1a7;
+        }
+
+        .journal-error {
+            color: #d67373;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .journal-error.show {
+            display: block;
+        }
+
+        .journal-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .journal-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: #b59197;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .journal-subtitle {
+            color: #7ba886;
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        .journal-entry-form {
+            background: #fff;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 2px solid #b59197;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .journal-form-date {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            color: #b59197;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .journal-textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 16px;
+            border: 1px solid #b59197;
+            background: #EBE0D6;
+            color: #F2EBE0;
+            font-size: 1rem;
+            line-height: 1.8;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .journal-textarea:focus {
+            outline: none;
+            border-color: #b59197;
+            box-shadow: 0 0 0 2px rgba(181, 145, 151, 0.2);
+        }
+
+        .journal-save-btn {
+            background: #b59197;
+            color: #b59197;
+            border: none;
+            padding: 12px 28px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            margin-top: 12px;
+        }
+
+        .journal-save-btn:hover {
+            background: #c5a1a7;
+        }
+
+        .journal-entries {
+            margin-top: 32px;
+        }
+
+        .journal-entry {
+            background: #fff;
+            padding: 24px;
+            margin-bottom: 20px;
+            border-left: 4px solid #b59197;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .journal-entry-date {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.3rem;
+            color: #b59197;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .journal-entry-time {
+            font-size: 0.8rem;
+            color: #7ba886;
+            margin-left: 8px;
+        }
+
+        .journal-entry-text {
+            color: #F2EBE0;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            font-size: 1rem;
+        }
+
+        .journal-entry-delete {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: transparent;
+            border: 1px solid #b59197;
+            color: #b59197;
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .journal-entry-delete:hover {
+            background: #d67373;
+            color: #b59197;
+            border-color: #d67373;
+        }
+
+        .journal-empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+            font-style: italic;
+        }
+
+        .journal-heart {
+            color: #b59197;
+            margin: 0 4px;
+        }
+
     </style>
 </head>
 <body>
@@ -932,6 +1158,7 @@
                 <option value="resources">Resources</option>
                 <option value="videos">Video Hub</option>
                 <option value="prompt">Daily Prompt</option>
+                <option value="journal">My Journal</option>
             </select>
         </div>
 
@@ -1001,7 +1228,7 @@
                         <div class="form-group">
                             <label>Upload Image/Video (optional)</label>
                             <input type="file" name="file" accept="image/*,video/*" id="resourceFile" onchange="handleResourceUpload()">
-                            <div style="text-align: center; color: #7a6668; margin: 8px 0; font-size: 0.85rem;">&mdash; OR &mdash;</div>
+                            <div style="text-align: center; color: #999; margin: 8px 0; font-size: 0.85rem;">&mdash; OR &mdash;</div>
                         </div>
                         <div class="form-group">
                             <label>Link (optional)</label>
@@ -1123,7 +1350,7 @@
                         <div class="form-group">
                             <label>Upload Video from Phone</label>
                             <input type="file" name="video" accept="video/*" id="videoFile" onchange="handleVideoUpload()">
-                            <div style="text-align: center; color: #7a6668; margin: 8px 0; font-size: 0.85rem;">&mdash; OR &mdash;</div>
+                            <div style="text-align: center; color: #999; margin: 8px 0; font-size: 0.85rem;">&mdash; OR &mdash;</div>
                         </div>
                         <div class="form-group">
                             <label>Video Link (TikTok, YouTube, etc)</label>
@@ -1142,6 +1369,40 @@
 
                 <div id="videosList" style="margin-top: 20px;">
                     <div class="empty-state">No videos yet. Add your first motivational video!</div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- JOURNAL TAB -->
+        <div id="journal-tab" class="hub-tab">
+            <div class="journal-locked" id="journalLocked">
+                <div class="journal-password-box">
+                    
+                    <div class="journal-password-title">My Private Journal</div>
+                    <div class="journal-password-subtitle">Enter password to unlock</div>
+                    <input type="password" id="journalPassword" class="journal-password-input" placeholder="Password" onkeypress="if(event.key==='Enter') unlockJournal()">
+                    <button class="journal-unlock-btn" onclick="unlockJournal()">Unlock</button>
+                    <div class="journal-error" id="journalError">Incorrect password. Try again.</div>
+                </div>
+            </div>
+
+            <div class="todo-container" style="display: none;" id="journalContent">
+                <div class="journal-header">
+                    <div class="journal-title">My Journal</div>
+                    <div class="journal-subtitle">A space for your thoughts <span class="journal-heart">♡</span></div>
+                </div>
+
+                <div class="journal-entry-form">
+                    <div class="journal-form-date" id="journalFormDate"></div>
+                    <textarea id="journalTextarea" class="journal-textarea" placeholder="Dear Journal,
+
+What's on my mind today..."></textarea>
+                    <button class="journal-save-btn" onclick="saveJournalEntry()">Save Entry</button>
+                </div>
+
+                <div class="journal-entries" id="journalEntries">
+                    <div class="journal-empty">No entries yet. Start writing! <span class="journal-heart">♡</span></div>
                 </div>
             </div>
         </div>
@@ -1979,6 +2240,108 @@
             alert('Your answer has been saved! It will appear on the homepage.');
         }
 
+        // Journal functionality
+        let journalEntries = [];
+
+        function unlockJournal() {
+            const password = document.getElementById('journalPassword').value;
+            if (password === 'bunnies333') {
+                document.getElementById('journalLocked').style.display = 'none';
+                document.getElementById('journalContent').style.display = 'block';
+                document.getElementById('journalPassword').value = '';
+                document.getElementById('journalError').classList.remove('show');
+                loadJournalEntries();
+                updateJournalFormDate();
+            } else {
+                document.getElementById('journalError').classList.add('show');
+                document.getElementById('journalPassword').value = '';
+            }
+        }
+
+        function updateJournalFormDate() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('journalFormDate').textContent = now.toLocaleDateString('en-US', options);
+        }
+
+        async function saveJournalEntry() {
+            const text = document.getElementById('journalTextarea').value.trim();
+            if (!text) {
+                alert('Please write something first!');
+                return;
+            }
+
+            const now = new Date();
+            const entry = {
+                id: now.getTime(),
+                text: text,
+                date: now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
+                time: now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }),
+                timestamp: now.toISOString()
+            };
+
+            journalEntries.unshift(entry);
+            await saveJournalToFirebase();
+            renderJournalEntries();
+            document.getElementById('journalTextarea').value = '';
+        }
+
+        async function deleteJournalEntry(id) {
+            if (confirm('Delete this journal entry? This cannot be undone.')) {
+                journalEntries = journalEntries.filter(e => e.id !== id);
+                await saveJournalToFirebase();
+                renderJournalEntries();
+            }
+        }
+
+        async function saveJournalToFirebase() {
+            localStorage.setItem('journalEntries_kasey', JSON.stringify(journalEntries));
+            await syncToFirebase('journalEntries_kasey', journalEntries);
+        }
+
+        async function loadJournalEntries() {
+            const firebaseData = await loadFromFirebase('journalEntries_kasey');
+            if (firebaseData) {
+                journalEntries = firebaseData;
+            } else {
+                const saved = localStorage.getItem('journalEntries_kasey');
+                if (saved) {
+                    journalEntries = JSON.parse(saved);
+                    await syncToFirebase('journalEntries_kasey', journalEntries);
+                }
+            }
+            renderJournalEntries();
+            
+            setupFirebaseListener('journalEntries_kasey', (data) => {
+                journalEntries = data;
+                renderJournalEntries();
+            });
+        }
+
+        function renderJournalEntries() {
+            const container = document.getElementById('journalEntries');
+            
+            if (journalEntries.length === 0) {
+                container.innerHTML = '<div class="journal-empty">No entries yet. Start writing!</div>';
+                return;
+            }
+
+            container.innerHTML = '';
+            journalEntries.forEach(entry => {
+                const entryDiv = document.createElement('div');
+                entryDiv.className = 'journal-entry';
+                entryDiv.innerHTML = `
+                    <button class="journal-entry-delete" onclick="deleteJournalEntry(${entry.id})">Delete</button>
+                    <div class="journal-entry-date">
+                        ${entry.date}
+                        <span class="journal-entry-time">${entry.time}</span>
+                    </div>
+                    <div class="journal-entry-text">${entry.text}</div>
+                `;
+                container.appendChild(entryDiv);
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             // Load custom habits first
             loadCustomHabits();
@@ -2006,29 +2369,5 @@
             loadTodos();
         });
     </script>
-
-    <!-- Firebase SDK -->
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getFirestore, collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCDda9sPwSY-RQ5rrM5THOvcLtHvcPRYd4",
-            authDomain: "our-habit-hub.firebaseapp.com",
-            projectId: "our-habit-hub",
-            storageBucket: "our-habit-hub.firebasestorage.app",
-            messagingSenderId: "78555830496",
-            appId: "1:78555830496:web:3e457e54729cc11b825885"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        window.db = db;
-        window.firestoreImports = { collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot };
-
-        console.log('Firebase initialized successfully!');
-    </script>
-
 </body>
 </html>
