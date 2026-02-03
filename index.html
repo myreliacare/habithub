@@ -2160,11 +2160,27 @@
             });
             
             // Setup real-time listener for MyReliaCare CRM calendar events
-            setupFirebaseListener('crmCalendarEvents', (data) => {
-                if (data && data.events) {
-                    syncWithCRMEvents(data.events);
+            // This uses a special listener because CRM data structure is different
+            if (window.firebaseReady && window.db) {
+                try {
+                    const { onSnapshot, doc } = window.firestoreImports;
+                    const docRef = doc(window.db, 'crmCalendarEvents', 'appointments');
+                    
+                    onSnapshot(docRef, (docSnap) => {
+                        if (docSnap.exists()) {
+                            const data = docSnap.data();
+                            if (data.events && Array.isArray(data.events)) {
+                                console.log(`[Life Hub] Real-time update: ${data.events.length} CRM appointments`);
+                                syncWithCRMEvents(data.events);
+                            }
+                        }
+                    });
+                    
+                    console.log('[Life Hub] CRM real-time listener active');
+                } catch (error) {
+                    console.error('[Life Hub] Error setting up CRM listener:', error);
                 }
-            });
+            }
             
             // Initial sync with MyReliaCare CRM
             await loadCRMEvents();
@@ -2173,21 +2189,48 @@
         // Load CRM events from Firebase
         async function loadCRMEvents() {
             try {
-                const crmData = await loadFromFirebase('crmCalendarEvents');
-                if (crmData && crmData.events) {
-                    syncWithCRMEvents(crmData.events);
+                console.log('[Life Hub] Loading CRM calendar events...');
+                
+                // Wait for Firebase
+                if (!window.firebaseReady || !window.db) {
+                    console.log('[Life Hub] Firebase not ready, skipping CRM load');
+                    return;
+                }
+                
+                const { getDoc, doc } = window.firestoreImports;
+                const docRef = doc(window.db, 'crmCalendarEvents', 'appointments');
+                const docSnap = await getDoc(docRef);
+                
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    console.log('[Life Hub] CRM data loaded:', data);
+                    
+                    if (data.events && Array.isArray(data.events)) {
+                        console.log(`[Life Hub] Found ${data.events.length} CRM appointments`);
+                        syncWithCRMEvents(data.events);
+                    } else {
+                        console.log('[Life Hub] No events array in CRM data');
+                    }
+                } else {
+                    console.log('[Life Hub] No CRM calendar data found yet');
                 }
             } catch (error) {
-                console.log('No CRM events to sync:', error.message);
+                console.error('[Life Hub] Error loading CRM events:', error);
             }
         }
 
         // Sync CRM events into local calendar
         function syncWithCRMEvents(crmEvents) {
+            console.log(`[Life Hub] Syncing ${crmEvents.length} CRM events...`);
+            
             // Remove old CRM events from calendar
+            const beforeCount = calendarEvents.length;
             calendarEvents = calendarEvents.filter(e => !e.fromCRM);
+            const removedCount = beforeCount - calendarEvents.length;
+            console.log(`[Life Hub] Removed ${removedCount} old CRM events`);
             
             // Add new CRM events
+            let addedCount = 0;
             crmEvents.forEach(crmEvent => {
                 // Make sure we don't add duplicates
                 const exists = calendarEvents.some(e => 
@@ -2197,12 +2240,15 @@
                 
                 if (!exists) {
                     calendarEvents.push(crmEvent);
+                    addedCount++;
+                    console.log(`[Life Hub] Added CRM event: ${crmEvent.title} on ${crmEvent.date}`);
                 }
             });
             
+            console.log(`[Life Hub] ✓ Sync complete: ${addedCount} CRM events added to calendar`);
+            
             // Re-render calendar with CRM events
             calendarRender();
-            console.log(`Synced ${crmEvents.length} appointments from MyReliaCare CRM`);
         }
 
         // DAILY PROMPT FUNCTIONS
