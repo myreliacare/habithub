@@ -14,15 +14,16 @@
             background: #3d2f31;
             color: #e0d2d0;
             font-family: 'Philosopher', Georgia, serif;
+            font-weight: 500;
             min-height: 100vh;
             line-height: 1.6;
         }
 
-        .container { max-width: 680px; margin: 0 auto; padding: 70px 24px 80px; }
+        .container { max-width: 680px; margin: 0 auto; padding: 100px 24px 80px; }
 
         /* Sync Status */
         .sync-status {
-            position: fixed; top: 16px; right: 16px;
+            position: fixed; top: 70px; right: 16px;
             background: rgba(40, 30, 31, 0.95);
             padding: 8px 14px; font-size: 0.65rem;
             display: flex; align-items: center; gap: 8px;
@@ -33,6 +34,66 @@
         .sync-dot { width: 5px; height: 5px; background: #a3b899; border-radius: 50%; }
         .sync-status.synced .sync-dot { background: #a3b899; }
         .sync-status.error .sync-dot { background: #c9a9a6; }
+
+        /* Top Navigation Bar */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(30, 22, 23, 0.98);
+            border-bottom: 1px solid rgba(163, 184, 153, 0.15);
+            z-index: 999;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 24px;
+        }
+
+        .nav-link {
+            color: #a3b899;
+            text-decoration: none;
+            padding: 8px 14px;
+            font-size: 0.8rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+            border-bottom: 2px solid transparent;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            border-bottom-color: #a3b899;
+            color: #b5c5a8;
+        }
+
+        .nav-link.special {
+            color: #c9a9a6;
+        }
+
+        .nav-link.special:hover {
+            border-bottom-color: #c9a9a6;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 10px 16px;
+                flex-wrap: wrap;
+                gap: 8px;
+                justify-content: center;
+            }
+            .nav-link {
+                font-size: 0.7rem;
+                padding: 6px 10px;
+            }
+        }
+
 
         /* Header */
         .home-header { text-align: center; padding: 0 0 24px; }
@@ -191,7 +252,7 @@
         .calendar-month-day.other-month { opacity: 0.4; }
         .calendar-month-day .day-number {
             font-size: 0.9rem; color: #f2ebe0; margin-bottom: 4px;
-        }
+         font-weight: 600;}
         .calendar-month-day.today .day-number { color: #a3b899; font-weight: 700; }
         .calendar-month-day .day-count {
             font-size: 0.7rem; color: #c9a9a6; 
@@ -230,14 +291,14 @@
             margin-bottom: 12px; padding-bottom: 10px;
             border-bottom: 1px solid rgba(61, 107, 107, 0.15);
         }
-        .week-day-name { color: #f2ebe0; font-size: 0.95rem; }
+        .week-day-name { color: #f2ebe0; font-size: 0.95rem;  font-weight: 600;}
         .week-day-date { color: #a3b899; font-size: 0.85rem; }
         .event-item {
             display: flex; justify-content: space-between; align-items: flex-start;
             background: rgba(163, 184, 153, 0.15); padding: 10px 14px;
             margin-bottom: 8px; border-left: 2px solid #a3b899;
         }
-        .event-title { color: #f2ebe0; font-size: 0.9rem; margin-bottom: 2px; }
+        .event-title { color: #f2ebe0; font-size: 0.9rem; margin-bottom: 2px; font-weight: 600; }
         .event-note { color: rgba(242, 235, 224, 0.5); font-size: 0.8rem; font-style: italic; }
         .empty-state { color: rgba(242, 235, 224, 0.4); font-size: 0.85rem; font-style: italic; padding: 8px 0; }
         
@@ -538,6 +599,18 @@
     </style>
 </head>
 <body>
+        <!-- Top Navigation Bar -->
+        <nav class="top-nav">
+            <div class="nav-container">
+                <a href="kasey-hub.html" class="nav-link">Kasey's Hub</a>
+                <a href="charlie-hub.html" class="nav-link">Charlie's Hub</a>
+                <a href="our-dreams.html" class="nav-link special">Our Life</a>
+                <a href="meal-plan.html" class="nav-link">Meal Plan</a>
+                <a href="settings.html" class="nav-link">Settings</a>
+            </div>
+        </nav>
+
+
     <div class="sync-status" id="syncStatus">
         <span class="sync-dot"></span>
         <span id="syncText">Connecting...</span>
@@ -585,30 +658,17 @@
             </div>
         </div>
 
-        <!-- Navigation -->
-        <div class="nav-buttons">
-            <a href="kasey-hub.html" class="hub-nav-btn">Kasey's Habit Hub</a>
-            <a href="charlie-hub.html" class="hub-nav-btn charlie">Charlie's Habit Hub</a>
-        </div>
-
-        <a href="our-dreams.html" class="hub-nav-btn dreams" style="margin-bottom: 16px;">Our Life Together</a>
-
-        <div class="nav-buttons" style="margin-bottom: 24px;">
-            <a href="meal-plan.html" class="hub-nav-btn">Meal Plan</a>
-            <a href="settings.html" class="hub-nav-btn">Settings</a>
-        </div>
-
-        <!-- Calendar -->
+        <!-- Calendar Section -->
         <div class="section">
             <div class="calendar-header">
                 <div class="calendar-nav">
                     <button onclick="calendarPrevious()">←</button>
-                    <span class="calendar-title" id="calendarTitle"></span>
+                    <span class="calendar-title" id="calendarTitle">Loading...</span>
                     <button onclick="calendarNext()">→</button>
                 </div>
-                <div style="display: flex; gap: 8px;">
-                    <button class="view-toggle" onclick="calendarToggleView()">Full Week</button>
-                    <button class="view-toggle" onclick="calendarToggleMonthView()">Month View</button>
+                <div class="calendar-view-toggle">
+                    <button class="view-toggle-btn active" data-view="twoday" onclick="calendarChangeView('twoday')">Full Week</button>
+                    <button class="view-toggle-btn" data-view="month" onclick="calendarChangeView('month')">Month View</button>
                 </div>
             </div>
             <div id="calendarContainer"></div>
@@ -1377,6 +1437,20 @@
             calendarRender();
         }
 
+        function calendarChangeView(view) {
+            calendarView = view;
+            
+            // Update button states
+            document.querySelectorAll('.view-toggle-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-view') === view) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            calendarRender();
+        }
+
         function calendarRenderTwoDay() {
             const container = document.getElementById('calendarContainer');
             container.innerHTML = '';
@@ -1912,11 +1986,56 @@
             calendarView = 'twoday';
             calendarRender();
             
-            // Setup real-time listener
+            // Setup real-time listener for local calendar events
             setupFirebaseListener('calendarEvents', (data) => {
                 calendarEvents = data;
                 calendarRender();
             });
+            
+            // Setup real-time listener for MyReliaCare CRM calendar events
+            setupFirebaseListener('crmCalendarEvents', (data) => {
+                if (data && data.events) {
+                    syncWithCRMEvents(data.events);
+                }
+            });
+            
+            // Initial sync with MyReliaCare CRM
+            await loadCRMEvents();
+        }
+
+        // Load CRM events from Firebase
+        async function loadCRMEvents() {
+            try {
+                const crmData = await loadFromFirebase('crmCalendarEvents');
+                if (crmData && crmData.events) {
+                    syncWithCRMEvents(crmData.events);
+                }
+            } catch (error) {
+                console.log('No CRM events to sync:', error.message);
+            }
+        }
+
+        // Sync CRM events into local calendar
+        function syncWithCRMEvents(crmEvents) {
+            // Remove old CRM events from calendar
+            calendarEvents = calendarEvents.filter(e => !e.fromCRM);
+            
+            // Add new CRM events
+            crmEvents.forEach(crmEvent => {
+                // Make sure we don't add duplicates
+                const exists = calendarEvents.some(e => 
+                    e.crmId === crmEvent.crmId || 
+                    (e.title === crmEvent.title && e.date === crmEvent.date && e.time === crmEvent.time)
+                );
+                
+                if (!exists) {
+                    calendarEvents.push(crmEvent);
+                }
+            });
+            
+            // Re-render calendar with CRM events
+            calendarRender();
+            console.log(`Synced ${crmEvents.length} appointments from MyReliaCare CRM`);
         }
 
         // DAILY PROMPT FUNCTIONS
