@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal Plan | Kasey & Charlie</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --dark-teal: #01403E;
+            --muted-teal: #3d6b6b;
+            --soft-sage: #B9DBC7;
+            --muted-olive: #6b7c5e;
+            --cream: #FDF8F4;
+            --plum: #6B2D5C;
+            --chocolate-plum: #654C4F;
+            --dusty-mauve: #c9a9a6;
+            --light-mauve: #e0d2d0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Philosopher', serif;
+            background: var(--cream);
+            min-height: 100vh;
+            padding: 16px;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            background: transparent;
+            border: 1px solid var(--dusty-mauve);
+            color: var(--chocolate-plum);
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-family: 'Philosopher', serif;
+        }
+        
+        .back-btn:hover {
+            background: var(--dark-teal);
+            color: var(--cream);
+            border-color: var(--dark-teal);
+        }
+        
+        .back-btn {
+            display: inline-block;
+            background: transparent;
+            border: 1px solid var(--dusty-mauve);
+            color: var(--chocolate-plum);
+            padding: 8px 16px;
+            margin-bottom: 16px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        
+        .back-btn:hover {
+            background: var(--dark-teal);
+            color: var(--cream);
+            border-color: var(--dark-teal);
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        
+        .header h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: var(--dark-teal);
+            font-weight: 400;
+        }
+        
+        .header p {
+            color: var(--muted-teal);
+            font-size: 0.875rem;
+            letter-spacing: 0.05em;
+            margin-top: 4px;
+        }
+        
+        .toggle-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .toggle-btn {
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-family: 'Philosopher', serif;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid var(--dusty-mauve);
+            background: var(--cream);
+            color: var(--chocolate-plum);
+            letter-spacing: 0.05em;
+        }
+        
+        .toggle-btn.active {
+            background: var(--dark-teal);
+            color: var(--cream);
+            border: none;
+        }
+        
+        .goals {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            font-size: 0.875rem;
+            border: 1px solid var(--light-mauve);
+        }
+        
+        .goals span {
+            color: var(--muted-teal);
+        }
+        
+        .goals strong {
+            color: var(--dark-teal);
+        }
+        
+        .calendar {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid var(--light-mauve);
+        }
+        
+        .week-label {
+            font-size: 0.7rem;
+            color: var(--muted-olive);
+            letter-spacing: 0.15em;
+            margin-bottom: 10px;
+        }
+        
+        .week-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+        
+        .week-grid:last-child {
+            margin-bottom: 0;
+        }
+        
+        .day-btn {
+            padding: 10px 4px;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-family: 'Philosopher', serif;
+        }
+        
+        .day-btn .day-letter {
+            font-size: 0.65rem;
+            opacity: 0.8;
+            margin-bottom: 2px;
+        }
+        
+        .day-btn .day-number {
+            font-size: 1.125rem;
+            font-weight: 700;
+        }
+        
+        .day-detail {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--light-mauve);
+        }
+        
+        .day-header {
+            padding: 20px;
+            color: var(--cream);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .day-header .label {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            letter-spacing: 0.15em;
+        }
+        
+        .day-header .theme {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            margin-top: 4px;
+        }
+        
+        .day-header .protein {
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+        
+        .day-header .calories {
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+        
+        .meal-btn {
+            width: 100%;
+            padding: 16px;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border: none;
+            border-bottom: 1px solid var(--light-mauve);
+            background: transparent;
+            font-family: 'Philosopher', serif;
+            transition: background-color 0.2s;
+        }
+        
+        .meal-btn:last-child {
+            border-bottom: none;
+        }
+        
+        .meal-btn:hover {
+            background: var(--cream);
+        }
+        
+        .meal-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.125rem;
+        }
+        
+        .meal-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .meal-type {
+            font-size: 0.65rem;
+            color: var(--muted-olive);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        .meal-name {
+            color: var(--chocolate-plum);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .meal-portion {
+            font-size: 0.75rem;
+            color: var(--muted-teal);
+            margin-top: 2px;
+        }
+        
+        .meal-arrow {
+            color: var(--dusty-mauve);
+            font-size: 1.25rem;
+        }
+        
+        .prep-section {
+            margin-top: 16px;
+            background: var(--soft-sage);
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid var(--muted-olive);
+        }
+        
+        .prep-section h3 {
+            color: var(--dark-teal);
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 12px;
+        }
+        
+        .prep-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .prep-grid h4 {
+            color: var(--dark-teal);
+            font-weight: 700;
+            margin-bottom: 6px;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+        
+        .prep-grid ul {
+            list-style: none;
+            color: var(--muted-teal);
+            font-size: 0.8rem;
+            line-height: 1.6;
+        }
+        
+        .footer-note {
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--muted-teal);
+            margin-top: 16px;
+            letter-spacing: 0.05em;
+        }
+        
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(1, 64, 62, 0.4);
+            z-index: 50;
+            overflow-y: auto;
+        }
+        
+        .modal-overlay.active {
+            display: block;
+        }
+        
+        .modal-container {
+            min-height: 100%;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 32px 16px;
+        }
+        
+        .modal {
+            background: var(--cream);
+            border-radius: 12px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+        }
+        
+        .modal-header {
+            padding: 20px;
+            color: var(--cream);
+            border-radius: 12px 12px 0 0;
+        }
+        
+        .modal-header h3 {
+            font-size: 1.25rem;
+            line-height: 1.3;
+            margin-bottom: 8px;
+            font-weight: 400;
+        }
+        
+        .modal-header .meta {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--cream);
+            opacity: 0.8;
+            font-size: 1.5rem;
+            cursor: pointer;
+            float: right;
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .modal-section {
+            margin-bottom: 20px;
+        }
+        
+        .modal-section h4 {
+            color: var(--dark-teal);
+            margin-bottom: 12px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        .modal-section ul {
+            list-style: none;
+        }
+        
+        .modal-section li {
+            color: var(--chocolate-plum);
+            font-size: 0.875rem;
+            margin-bottom: 6px;
+        }
+        
+        .modal-section li span {
+            color: var(--soft-sage);
+            margin-right: 8px;
+        }
+        
+        .step-number {
+            background: var(--dark-teal);
+            color: var(--cream);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .tip-box {
+            background: var(--soft-sage);
+            border-radius: 8px;
+            padding: 12px 16px;
+            border: 1px solid var(--muted-olive);
+        }
+        
+        .tip-box p {
+            font-size: 0.875rem;
+            color: var(--dark-teal);
+            margin: 0;
+        }
+        
+        .portions-row {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid var(--light-mauve);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .portion-tag {
+            background: var(--light-mauve);
+            border-radius: 9999px;
+            padding: 6px 12px;
+            color: var(--chocolate-plum);
+            font-size: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-btn">← Back to Home</a>
+        
+        <div class="header">
+            <h1>Meal Plan</h1>
+            <p>Kasey & Charlie • 2 Weeks</p>
+        </div>
+        
+        <div class="toggle-container">
+            <button class="toggle-btn active" data-person="kasey">Kasey</button>
+            <button class="toggle-btn" data-person="charlie">Charlie</button>
+        </div>
+        
+        <div class="goals">
+            <div><span>Protein:</span> <strong id="goal-protein">140-165g</strong></div>
+            <div><span>Calories:</span> <strong id="goal-calories">1,500-1,700</strong></div>
+        </div>
+        
+        <div class="calendar">
+            <div class="week-label">WEEK 1</div>
+            <div class="week-grid" id="week1"></div>
+            <div class="week-label">WEEK 2</div>
+            <div class="week-grid" id="week2"></div>
+        </div>
+        
+        <div class="day-detail">
+            <div class="day-header" id="day-header">
+                <div>
+                    <div class="label">DAY <span id="day-num">1</span></div>
+                    <div class="theme" id="day-theme">Mexican</div>
+                </div>
+                <div style="text-align: right;">
+                    <div class="protein" id="day-protein">145g</div>
+                    <div class="calories" id="day-calories">1620 cal</div>
+                </div>
+            </div>
+            <div id="meals-container"></div>
+        </div>
+        
+        <div class="prep-section">
+            <h3>SUNDAY MEAL PREP</h3>
+            <div class="prep-grid">
+                <div>
+                    <h4>Breakfast:</h4>
+                    <ul>
+                        <li>• 10-12 Freezer Burritos</li>
+                        <li>• 5 jars Overnight Oats</li>
+                        <li>• 12 Egg Muffin Cups</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Lunch Proteins:</h4>
+                    <ul>
+                        <li>• 2 lbs seasoned chicken</li>
+                        <li>• 1.5 lbs taco turkey</li>
+                        <li>• 1 lb Korean beef</li>
+                        <li>• 6 cups cooked rice</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <p class="footer-note">Tap any meal to see the recipe</p>
+    </div>
+    
+    <div class="modal-overlay" id="modal">
+        <div class="modal-container">
+            <div class="modal">
+                <div class="modal-header" id="modal-header">
+                    <button class="modal-close" onclick="closeModal()">×</button>
+                    <h3 id="modal-title">Recipe Name</h3>
+                    <div class="meta" id="modal-meta">28g protein • 340 cal • 90 sec</div>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-section">
+                        <h4>Ingredients</h4>
+                        <ul id="modal-ingredients"></ul>
+                    </div>
+                    <div class="modal-section">
+                        <h4>Instructions</h4>
+                        <ul id="modal-steps"></ul>
+                    </div>
+                    <div class="tip-box" id="modal-tip">
+                        <p></p>
+                    </div>
+                    <div class="portions-row" id="modal-portions"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const wvc = {
+            darkTeal: '#01403E',
+            mutedTeal: '#3d6b6b',
+            softSage: '#B9DBC7',
+            mutedOlive: '#6b7c5e',
+            cream: '#FDF8F4',
+            plum: '#6B2D5C',
+            chocolatePlum: '#654C4F',
+            dustyMauve: '#c9a9a6',
+            lightMauve: '#e0d2d0',
+        };
+
+        const themeColors = {
+            'Mexican': { accent: wvc.plum, light: wvc.lightMauve },
+            'Asian': { accent: wvc.darkTeal, light: wvc.softSage },
+            'Italian': { accent: wvc.chocolatePlum, light: wvc.lightMauve },
+            'American': { accent: wvc.mutedTeal, light: wvc.softSage },
+            'Prep Day': { accent: wvc.mutedOlive, light: wvc.softSage },
+            'Fusion': { accent: wvc.plum, light: wvc.dustyMauve },
+            'Comfort': { accent: wvc.chocolatePlum, light: wvc.dustyMauve }
+        };
+
+        const goals = {
+            kasey: { protein: '140-165g', calories: '1,500-1,700' },
+            charlie: { protein: '140-175g', calories: '2,400-2,700' }
+        };
+
+        const recipes = {
+            'Freezer Breakfast Burritos': {
+                protein: 28, calories: 340, time: '90 sec reheat',
+                ingredients: ['12 large eggs', '1 lb turkey sausage, cooked and crumbled', '1 can black beans, drained', '2 cups shredded Mexican cheese', '10-12 large flour tortillas', 'Salt, pepper, garlic powder', 'Hot sauce (optional)'],
+                steps: ['SUNDAY PREP: Scramble eggs in large batch with salt, pepper, garlic powder.', 'Cook and crumble turkey sausage.', 'Lay out tortillas, divide eggs, sausage, beans, and cheese evenly.', 'Fold burrito style: sides in, then roll tightly.', 'Wrap each individually in foil or plastic wrap.', 'Freeze flat in gallon bags.', 'TO EAT: Remove wrapper, wrap in damp paper towel, microwave 90 sec. Flip, 60 more sec.'],
+                tips: 'Make 10-14 on Sunday = breakfast for 1-2 weeks. Freezes 3 months. Air fryer works too: 350°F for 8-10 min.'
+            },
+            'Overnight Oats': {
+                protein: 27, calories: 375, time: 'Grab from fridge',
+                ingredients: ['½ cup rolled oats', '½ cup Greek yogurt', '½ cup milk', '1 tbsp chia seeds', '1 tsp maple syrup', '½ tsp vanilla', 'Pinch cinnamon', 'Toppings: berries, almonds'],
+                steps: ['SUNDAY PREP: Combine oats, yogurt, milk, chia, maple, vanilla, cinnamon in mason jar.', 'Stir well, cover, refrigerate.', 'TO EAT: Grab jar from fridge, stir, eat.', 'Add toppings if you have 30 extra seconds.'],
+                tips: 'Make 5-7 jars Sunday. Lasts 5 days. Chocolate PB version: add 1 tbsp cocoa + 1 tbsp PB.'
+            },
+            'Egg Muffin Cups': {
+                protein: 24, calories: 260, time: '30 sec reheat',
+                ingredients: ['12 large eggs', '½ cup milk', '1 cup cooked turkey sausage, crumbled', '1 cup shredded cheddar', '½ cup diced onion (optional)', '1 cup spinach, chopped (optional)', 'Salt and pepper'],
+                steps: ['SUNDAY PREP: Preheat oven to 350°F. Spray 12-cup muffin tin.', 'Whisk eggs, milk, salt, pepper.', 'Divide sausage, cheese, veggies among cups.', 'Pour egg mixture evenly (¾ full each).', 'Bake 20-25 minutes until set.', 'Cool, store in container.', 'TO EAT: Grab 2-3 cups, eat cold OR microwave 30 sec.'],
+                tips: 'Make 12 Sunday. Fridge 5 days, freezer 3 months. Kasey eats 2, Charlie eats 3.'
+            },
+            'Protein Shake': {
+                protein: 30, calories: 280, time: '2 min',
+                ingredients: ['1 scoop protein powder (chocolate collagen or banana)', '1 cup milk or almond milk', '1 banana', '1 tbsp peanut butter (optional +4g protein)', 'Handful ice', 'Optional: spinach, chia seeds'],
+                steps: ['Add milk and protein powder to blender.', 'Add banana, peanut butter, ice.', 'Blend 30 seconds.', 'Pour and drink, or take in to-go cup.'],
+                tips: 'Chocolate + banana + PB is amazing. Make it thick = feels more like food.'
+            },
+            'Protein Bar + Banana': {
+                protein: 22, calories: 310, time: '0 min',
+                ingredients: ['Barebells protein bar (your fave)', '1 banana or cheese stick', 'OR: Built Bar (lower cal)', 'OR: Quest Bar (more filling)', 'OR: RXBAR (cleaner ingredients)'],
+                steps: ['Grab bar from pantry.', 'Grab banana.', 'Eat both.', 'Done.'],
+                tips: 'Emergency backup option. Keep bars at home AND in your bag.'
+            },
+            'Greek Yogurt + Granola': {
+                protein: 24, calories: 320, time: '2 min',
+                ingredients: ['1 cup plain Greek yogurt', '¼ cup low-sugar granola', '½ cup berries', '1 tbsp honey (optional)', '1 tbsp chia seeds'],
+                steps: ['Scoop yogurt into container or bowl.', 'Top with granola and berries.', 'Drizzle honey if desired.', 'Eat.'],
+                tips: 'Pre-portion yogurt into containers Sunday for true grab-and-go.'
+            },
+            'Spicy Ground Turkey Taco Skillet': {
+                protein: 38, calories: 420, time: '2 min reheat',
+                ingredients: ['1 lb 93% lean ground turkey', '1 tbsp olive oil', '½ cup diced onion', '2 tbsp taco seasoning', '1 can black beans, drained', '1 cup frozen corn', '½ cup chicken broth', '½ cup shredded Mexican cheese', '2 cups cooked rice', 'Hot sauce'],
+                steps: ['SUNDAY: Heat oil in large skillet over medium.', 'Add turkey, break apart, cook 4-5 min until browned.', 'Add onion, cook 2-3 min.', 'Stir in taco seasoning, beans, corn.', 'Add broth, simmer 5 min.', 'Divide into 4 meal prep containers with rice.', 'TO EAT: Microwave 2 min, top with cheese and hot sauce.'],
+                tips: 'Makes 4 lunches. Add cheese AFTER reheating so it melts fresh. Keeps 5 days.'
+            },
+            'Korean Beef Rice Bowls': {
+                protein: 40, calories: 450, time: '2 min reheat',
+                ingredients: ['1 lb 93% lean ground beef', '¼ cup soy sauce', '2 tbsp water', '2 tsp brown sugar', '1 tsp sesame oil', '½ tsp red pepper flakes', '¼ cup chopped onion', '2 garlic cloves, minced', '1 tsp grated ginger', '3 cups cooked rice', 'Cucumber, gochujang, sesame seeds, scallions'],
+                steps: ['SUNDAY: Mix soy sauce, water, brown sugar, sesame oil, red pepper.', 'Cook beef over high heat, 5 min, breaking up.', 'Add onion, garlic, ginger, cook 1 min.', 'Pour sauce over, simmer 10 min covered.', 'Divide beef and rice into 4 containers.', 'TO EAT: Microwave 2 min, top with cucumber, gochujang, sesame, scallions.'],
+                tips: 'Makes 4 lunches. Keeps 5 days fridge. Add fried egg for +7g protein.'
+            },
+            'Juicy Turkey Burgers': {
+                protein: 35, calories: 351, time: '10 min',
+                ingredients: ['1 lb 93% lean ground turkey', '¼ cup breadcrumbs', '¼ cup dried onion flakes', '1 tbsp ketchup', '1 tbsp mustard', '1 tsp Worcestershire', '1 clove garlic, grated', '1 tsp salt', 'Buns, cheese, lettuce, pickles'],
+                steps: ['SUNDAY: Mix turkey, breadcrumbs, onion, ketchup, mustard, Worcestershire, garlic, salt.', 'Form 4 patties, ½ inch thick.', 'OPTION 1: Refrigerate raw patties, cook fresh in 10 min.', 'OPTION 2: Cook all patties, refrigerate, reheat in skillet 3 min.', 'Cook in skillet on medium-low, 4-5 min per side.', 'Toast buns, assemble.'],
+                tips: 'Form patties Sunday = quick weekday lunch. Kasey: lettuce wrap. Charlie: bun.'
+            },
+            'Air Fryer Chicken & Roasted Carrots': {
+                protein: 53, calories: 377, time: '2 min reheat',
+                ingredients: ['1.5 lbs chicken breast, cubed', '2 tbsp soy sauce', '1 tbsp honey', '1 tbsp hoisin', '1 tsp sesame oil', '1 tsp garlic, minced', '1 tsp ginger, minced', 'Red pepper flakes', '1 lb carrots, cut in chunks', '1 tbsp olive oil', '3 cups cooked rice'],
+                steps: ['SUNDAY: Mix soy, honey, hoisin, sesame oil, garlic, ginger, pepper flakes.', 'Toss chicken in marinade 10 min.', 'Toss carrots with olive oil, salt, pepper.', 'Air fry carrots 400°F, 8-10 min.', 'Air fry chicken 10 min, flip halfway.', 'Divide into 4 containers with rice.', 'TO EAT: Microwave 2 min, stir, enjoy.'],
+                tips: 'Makes 4 lunches. For crispier chicken, reheat in air fryer 3-4 min.'
+            },
+            'Chicken Quesadillas with Black Beans': {
+                protein: 53, calories: 487, time: '3 min reheat',
+                ingredients: ['1.5 lbs chicken breast (from Sunday batch)', '2 tsp cumin', '1 tsp smoked paprika', '1 tsp garlic powder', '1 tsp onion powder', 'Salt, pepper', '1 can black beans, drained', '4 large flour tortillas', '2 cups Mexican cheese', 'Sour cream'],
+                steps: ['USE PREPPED CHICKEN from Sunday batch.', 'Dice or shred chicken.', 'Layer tortilla: cheese, chicken, beans, cheese.', 'Fold, cook 3-4 min per side until golden.', 'OR assemble and refrigerate - reheat in air fryer 400°F 3 min.', 'Cut and serve with sour cream.'],
+                tips: 'Quick assembly with Sunday prepped chicken. Air fryer keeps them crispy!'
+            },
+            'Turkey Taco Lettuce Wraps': {
+                protein: 35, calories: 320, time: '5 min',
+                ingredients: ['1 lb ground turkey (from Sunday taco meat batch)', '2 tbsp taco seasoning', '2 cloves garlic', '¼ cup onion, diced', '½ cup chicken broth', '1 head butter lettuce', '½ cup shredded cheese', 'Sour cream, hot sauce, lime'],
+                steps: ['USE PREPPED TACO MEAT from Sunday batch.', 'Reheat meat in microwave 90 sec or skillet 3 min.', 'Separate lettuce leaves.', 'Fill with meat, cheese, sour cream, hot sauce.', 'Squeeze lime over.'],
+                tips: 'Super fast with prepped taco meat! Low-carb, great for Kasey.'
+            },
+            'BBQ Chicken Quesadillas': {
+                protein: 48, calories: 470, time: '5 min',
+                ingredients: ['2 cups shredded chicken (from crockpot BBQ)', '½ cup BBQ sauce', '2 cups shredded cheddar', '4 large flour tortillas', '¼ red onion, sliced thin', 'Sour cream'],
+                steps: ['USE PREPPED CHICKEN - toss with BBQ sauce.', 'Heat skillet over medium, spray with oil.', 'Add tortilla, layer cheese, BBQ chicken, onion, more cheese.', 'Fold, cook 2-3 min per side until golden.', 'Cut into wedges, serve with sour cream.'],
+                tips: 'Perfect use for Sunday crockpot chicken!'
+            },
+            'One-Pan Chicken Piccata': {
+                protein: 42, calories: 380, time: '2 min reheat',
+                ingredients: ['1.5 lbs chicken breast, pounded thin', '¼ cup flour', 'Salt, pepper', '3 tbsp butter', '2 tbsp olive oil', '½ cup chicken broth', '¼ cup lemon juice', '¼ cup capers', 'Parsley', 'Prepped rice from Sunday'],
+                steps: ['SUNDAY: Season chicken, dredge in flour.', 'Cook in butter and oil, 3-4 min per side. Remove.', 'Add broth and lemon to pan, scrape up bits.', 'Simmer 2 min, add remaining butter and capers.', 'Return chicken, spoon sauce over.', 'Divide into containers with rice.', 'TO EAT: Microwave 2 min, garnish with parsley.'],
+                tips: 'Makes 4 lunches. The lemon-caper sauce reheats beautifully.'
+            },
+            'Spinach & Cheese Stuffed Chicken': {
+                protein: 42, calories: 280, time: '2 min reheat',
+                ingredients: ['4 chicken breasts (6 oz each)', '1 cup spinach, chopped', '2 slices cheddar, halved', '2 oz cream cheese', 'Salt, pepper, garlic powder', '1 egg + 1 tbsp water', '½ cup breadcrumbs'],
+                steps: ['SUNDAY: Preheat oven 425°F or air fryer 370°F.', 'Mix spinach with cream cheese and garlic powder.', 'Pound chicken thin, season.', 'Add cheese and spinach mixture, roll tight.', 'Dip in egg, then breadcrumbs.', 'Bake 25 min or air fry 15 min.', 'Slice and store in containers.', 'TO EAT: Microwave 2 min or air fry 350°F 4 min.'],
+                tips: 'Makes 4 lunches. Slice before storing for faster reheating.'
+            },
+            'Asian Ground Chicken Rice Bowls': {
+                protein: 28, calories: 414, time: '2 min reheat',
+                ingredients: ['1.5 lbs ground chicken', '3 tbsp soy sauce', '2 tbsp hoisin', '1 tbsp honey', '1 tsp sesame oil', '1 tsp rice vinegar', '2 cups cauliflower florets', '2 green onions', '2 cloves garlic', '4 cups cooked jasmine rice', 'Sriracha mayo, sesame seeds'],
+                steps: ['SUNDAY: Mix soy, hoisin, honey, sesame oil, vinegar.', 'Steam cauliflower 5 min, season with salt.', 'Cook chicken in skillet 5-6 min.', 'Add garlic and green onions, cook 1 min.', 'Pour sauce over, toss, cook 2 min.', 'Divide into 4-5 containers with rice and cauliflower.', 'TO EAT: Microwave 2 min, drizzle sriracha mayo.'],
+                tips: 'Makes 4-5 lunches. Add sriracha mayo after reheating. Keeps 5 days.'
+            },
+            'Garlic Butter Shrimp Rice Bowls': {
+                protein: 40, calories: 478, time: '10 min fresh',
+                ingredients: ['1 lb large shrimp, peeled', '4 cloves garlic, minced', '2 tbsp sake or white wine', '¼ tsp salt', '2 tbsp butter', '1.5 tbsp soy sauce', 'Prepped rice from Sunday', 'Green onions, lemon, sesame seeds'],
+                steps: ['USE PREPPED RICE from Sunday.', 'Thaw shrimp under cold water 5 min.', 'Marinate shrimp with half the garlic, sake, salt for 5 min.', 'Cook shrimp over high heat, 1-2 min per side. Remove.', 'Add butter and remaining garlic, cook 30 sec.', 'Add soy sauce, return shrimp, toss.', 'Serve over rice with green onions, lemon, sesame.'],
+                tips: 'Shrimp cooks so fast it\'s worth making fresh!'
+            },
+            'Italian Baked Chicken & Potatoes': {
+                protein: 45, calories: 400, time: '30 min',
+                ingredients: ['4 chicken breasts (6-8 oz)', '½ cup breadcrumbs', '½ cup Parmesan', '1 tsp Italian seasoning', '½ tsp garlic powder', 'Salt, pepper', '3 tbsp melted butter', '1.5 lbs baby potatoes, halved'],
+                steps: ['Preheat oven 400°F.', 'Mix breadcrumbs, Parmesan, Italian seasoning, garlic, salt, pepper.', 'Dip chicken tops in butter, then crumb mixture.', 'Toss potatoes with remaining butter, salt, pepper.', 'Arrange on sheet pan, bake 25-30 min.'],
+                tips: 'Slice chicken before storing. Reheat in oven 350°F, 15 min.'
+            },
+            'Ground Turkey Tacos': {
+                protein: 40, calories: 450, time: '30 min',
+                ingredients: ['1.5 lbs ground turkey', '2 tbsp taco seasoning', '3 cloves garlic', '½ onion, diced', '1 cup water or broth', '8 flour tortillas', '1 cup cheddar cheese', '2 cups lettuce', 'Sour cream, hot sauce'],
+                steps: ['Brown turkey over medium-high, 5 min.', 'Add garlic and onion, cook 3 min.', 'Add taco seasoning and water, stir.', 'Simmer 10-15 min until thick.', 'Warm tortillas, fill with meat.', 'Top with cheese, lettuce, sour cream.'],
+                tips: 'Meat stores 4 days fridge, 3 months freezer.'
+            },
+            'Teriyaki Chicken with Steamed Cauliflower': {
+                protein: 45, calories: 480, time: '25 min',
+                ingredients: ['1.5 lbs chicken breast, cubed', '¼ cup soy sauce', '2 tbsp honey', '1 tbsp rice vinegar', '1 tsp sesame oil', '2 cloves garlic', '1 tsp ginger', '1 tbsp cornstarch + 2 tbsp water', '3 cups rice', '2 cups cauliflower', 'Sesame seeds'],
+                steps: ['Mix soy, honey, vinegar, sesame oil, garlic, ginger.', 'Season chicken, cook until golden, 6-8 min.', 'Add sauce, simmer 2 min.', 'Add cornstarch slurry, cook until thick.', 'Steam cauliflower 5 min.', 'Serve chicken over rice with cauliflower.'],
+                tips: 'Excellent meal prep. Divide into containers.'
+            },
+            'Creamy Ground Turkey Pasta': {
+                protein: 42, calories: 520, time: '30 min',
+                ingredients: ['1.5 lbs ground turkey', '12 oz pasta', '1 cup marinara', '½ cup heavy cream', '½ cup Parmesan', '2 tbsp olive oil', '4 cloves garlic', '½ onion', '1 tsp Italian seasoning', 'Red pepper flakes'],
+                steps: ['Cook pasta, reserve 1 cup water.', 'Sauté onion 3 min, add garlic 1 min.', 'Add turkey and Italian seasoning, brown 7 min.', 'Add marinara and cream, simmer 5 min.', 'Toss with pasta and Parmesan.', 'Add pasta water if needed.'],
+                tips: 'Keeps 4 days. Reheat with extra sauce or pasta water.'
+            },
+            'Smothered Chicken with Mashed Potatoes': {
+                protein: 45, calories: 500, time: '30 min',
+                ingredients: ['1.5 lbs chicken breast, pounded thin', 'Salt, pepper, garlic powder', '2 tbsp olive oil', '4 tbsp butter', '¼ cup flour', '2 cups chicken broth', '½ cup half-and-half', '2 lbs russet potatoes', '½ cup milk'],
+                steps: ['Boil potatoes 15 min, mash with milk and 2 tbsp butter.', 'Season and brown chicken in oil, 4 min per side. Remove.', 'Melt 2 tbsp butter, whisk in flour, cook 1 min.', 'Add broth gradually, simmer until thick.', 'Stir in half-and-half, return chicken.', 'Serve over mashed potatoes.'],
+                tips: 'Gravy thickens when stored. Thin with broth when reheating.'
+            },
+            'Spicy Turkey Burrito Bowls': {
+                protein: 42, calories: 520, time: '25 min',
+                ingredients: ['1.5 lbs ground turkey', '2 tbsp taco seasoning', '1 can black beans', '2 cups rice', '1 cup corn', '½ cup cheese', 'Hot sauce', 'Sour cream, lime'],
+                steps: ['Brown turkey with taco seasoning, 6-8 min.', 'Add beans and corn, heat 3 min.', 'Prep rice.', 'Assemble: rice, turkey mix, cheese, sour cream.', 'Add hot sauce and lime.'],
+                tips: 'Stores 4 days. Keep components separate until serving.'
+            },
+            'Spaghetti with Turkey Meat Sauce': {
+                protein: 40, calories: 480, time: '30 min',
+                ingredients: ['1.5 lbs ground turkey', '12 oz spaghetti', '2 cups marinara', '2 tbsp olive oil', '4 cloves garlic', '½ onion', '1 tsp Italian seasoning', '½ cup Parmesan'],
+                steps: ['Cook spaghetti, reserve pasta water.', 'Sauté onion 3 min, add garlic 1 min.', 'Add turkey and Italian seasoning, brown 7 min.', 'Add marinara, simmer 10 min.', 'Toss with pasta.', 'Top with Parmesan.'],
+                tips: 'Classic comfort food. Freezes well 3 months.'
+            },
+            'Crockpot BBQ Pulled Chicken': {
+                protein: 50, calories: 420, time: '4-6 hours',
+                ingredients: ['2 lbs chicken breast', '1 cup BBQ sauce', '¼ cup chicken broth', '2 tbsp brown sugar', '1 tbsp Worcestershire', '1 tsp garlic powder', '1 tsp onion powder', '½ tsp smoked paprika', '½ tsp cayenne (optional)'],
+                steps: ['Place chicken in crockpot.', 'Mix BBQ sauce, broth, sugar, Worcestershire, spices.', 'Pour over chicken.', 'Cook LOW 6 hours or HIGH 3-4 hours.', 'Shred chicken, mix with sauce.', 'Serve on buns or over rice.'],
+                tips: 'Freezes perfectly 3 months. Great Sunday meal prep.'
+            },
+            'Loaded Turkey Burgers': {
+                protein: 35, calories: 400, time: '25 min',
+                ingredients: ['1 lb ground turkey', '¼ cup breadcrumbs', '¼ cup onion flakes', '1 tbsp ketchup', '1 tbsp mustard', '1 tsp Worcestershire', 'Cheddar slices', 'Lettuce, pickles, onion', 'Buns or lettuce wraps'],
+                steps: ['Mix turkey with breadcrumbs, onion, ketchup, mustard, Worcestershire.', 'Form patties.', 'Cook 4-5 min per side.', 'Add cheese last minute.', 'Serve on bun (Charlie) or lettuce wrap (Kasey).'],
+                tips: 'Kasey: skip bun. Charlie: add fries.'
+            },
+            'Spicy Gochujang Chicken Thighs': {
+                protein: 45, calories: 358, time: '25 min',
+                ingredients: ['1.5 lbs boneless skinless chicken thighs', '2 tbsp gochujang', '1 tbsp gochugaru', '1 tbsp brown sugar', '1 tbsp soy sauce', '1 tsp sesame oil', '½ tsp garlic powder', 'Salt', 'Rice, roasted carrots'],
+                steps: ['Mix gochujang, gochugaru, sugar, soy, sesame oil, garlic, salt.', 'Coat chicken with marinade.', 'Marinate 30 min (or overnight).', 'Air fry 400°F, 10 min, flip, 6-8 more min.', 'Serve over rice with roasted carrots.'],
+                tips: 'Marinate night before for deeper flavor. Stores 4 days.'
+            },
+            'Air Fryer Spicy Chicken Thighs': {
+                protein: 40, calories: 450, time: '25 min',
+                ingredients: ['2 lbs bone-in chicken thighs', 'Juice of ½ lemon', '1 tsp smoked paprika', '1 tsp garlic powder', '1 tsp onion powder', '½ tsp cayenne', 'Salt, pepper', '1 lb baby potatoes', '2 tbsp olive oil'],
+                steps: ['Pat chicken dry, season with lemon and all spices.', 'Toss potatoes with oil, salt, pepper.', 'Air fry potatoes 400°F, 10 min.', 'Add chicken skin-down, cook 12 min.', 'Flip chicken, cook 8-10 more min.', 'Rest 5 min before serving.'],
+                tips: 'Reheat in air fryer to keep crispy.'
+            },
+            'Asian Chicken Bowl (Hoisin-Soy)': {
+                protein: 48, calories: 556, time: '20 min',
+                ingredients: ['1.5 lbs ground chicken', '2 tbsp soy sauce', '2 tbsp hoisin', '1 tbsp sweet chili sauce', '1 tsp ginger', '1 tsp garlic powder', '¼ cup onion', '3 cups jasmine rice', 'Shredded carrots, cucumber', 'Sesame seeds, green onions'],
+                steps: ['Sauté onion 2 min.', 'Add chicken, cook 5-6 min.', 'Add soy, hoisin, sweet chili, ginger, garlic.', 'Toss, cook 2 more min.', 'Serve over rice with carrots, cucumber, sesame, green onions.'],
+                tips: 'Perfect weekly prep. Stores 4-5 days.'
+            },
+            'Creamy Chicken Cauliflower Rice': {
+                protein: 42, calories: 380, time: '25 min',
+                ingredients: ['1.5 lbs chicken breast, cubed', '4 cups cauliflower rice', '1 cup chicken broth', '½ cup heavy cream', '½ cup Parmesan', '2 cloves garlic', '1 tsp Italian seasoning', 'Salt, pepper', '2 tbsp olive oil'],
+                steps: ['Season chicken, cook 6-7 min. Remove.', 'Add garlic, cook 30 sec.', 'Add cauliflower rice, cook 5 min.', 'Add broth and cream, simmer 5 min.', 'Stir in Parmesan, return chicken.', 'Season and serve.'],
+                tips: 'Low-carb comfort. Charlie can add regular rice on side.'
+            },
+            'Turkey Burgers + Sweet Potato Fries': {
+                protein: 35, calories: 480, time: '30 min',
+                ingredients: ['1 lb ground turkey', '¼ cup breadcrumbs', '1 tbsp Worcestershire', '1 tsp garlic powder', 'Salt, pepper', '2 large sweet potatoes', '2 tbsp olive oil', '1 tsp smoked paprika', 'Cheese, lettuce, buns'],
+                steps: ['Cut sweet potatoes into fries, toss with oil, paprika, salt.', 'Air fry 400°F, 15-18 min, shake halfway.', 'Mix turkey with breadcrumbs, Worcestershire, garlic, salt, pepper.', 'Form patties, cook 4-5 min per side.', 'Add cheese last minute.', 'Serve with sweet potato fries.'],
+                tips: 'Kasey: lettuce wrap. Sweet potato fries are more nutritious!'
+            },
+            'Frozen Chocolate PB Banana Bites': {
+                protein: 5, calories: 130, time: '45 min (mostly freezing)',
+                ingredients: ['2 bananas, sliced ½ inch', '3 tbsp peanut butter', '½ cup dark chocolate chips', '1 tsp coconut oil', '2 tbsp chopped peanuts'],
+                steps: ['Place banana slices on parchment-lined tray.', 'Add PB dollop on each slice.', 'Freeze 30 min.', 'Melt chocolate with coconut oil.', 'Dip bites in chocolate, sprinkle peanuts.', 'Freeze 30 more min.'],
+                tips: 'Freezer 2 months. Perfect sweet treat.'
+            },
+            "TJ's Gone Bananas!": {
+                protein: 2, calories: 100, time: '0 min',
+                ingredients: ['Trader Joe\'s Gone Bananas! frozen chocolate banana slices'],
+                steps: ['Open bag.', 'Eat from freezer.', 'Enjoy.'],
+                tips: 'Store-bought shortcut. Keep stocked.'
+            },
+            'Greek Yogurt Berry Parfait': {
+                protein: 14, calories: 200, time: '5 min',
+                ingredients: ['1 cup Greek yogurt', '½ cup mixed berries', '2 tbsp granola', '1 tsp honey'],
+                steps: ['Layer yogurt, berries, granola.', 'Repeat.', 'Drizzle honey.'],
+                tips: 'Simple, satisfying, bonus protein.'
+            },
+            'No-Bake Chocolate PB Bars': {
+                protein: 6, calories: 149, time: '1 hour (chilling)',
+                ingredients: ['1 cup peanut butter', '⅓ cup maple syrup', '1 cup oat flour', '1 cup chocolate chips', '⅓ cup peanut butter (topping)'],
+                steps: ['Mix 1 cup PB, maple syrup, oat flour.', 'Press into 8x8 parchment-lined pan.', 'Melt chocolate with ⅓ cup PB.', 'Pour over base.', 'Freeze 1 hour, slice into 24 bars.'],
+                tips: 'Fridge 2 weeks, freezer 2 months.'
+            },
+            'Yasso Greek Yogurt Bar': {
+                protein: 5, calories: 100, time: '0 min',
+                ingredients: ['Yasso Greek Yogurt Bars'],
+                steps: ['Unwrap.', 'Eat.', 'Feel good.'],
+                tips: 'Real protein! Keep in freezer.'
+            },
+            "TJ's Dark Chocolate Almonds": {
+                protein: 3, calories: 150, time: '0 min',
+                ingredients: ['Trader Joe\'s Dark Chocolate Almonds'],
+                steps: ['Pour into bowl (portion control).', 'Enjoy.'],
+                tips: 'Pre-portion to avoid overeating.'
+            },
+            'Ricotta with Berries & Honey': {
+                protein: 8, calories: 180, time: '5 min',
+                ingredients: ['½ cup ricotta', '1 tbsp honey', '½ tsp vanilla', '½ cup berries', 'Cocoa powder (optional)'],
+                steps: ['Whip ricotta with honey and vanilla.', 'Top with berries.', 'Dust with cocoa if desired.'],
+                tips: 'Light, creamy, Italian-inspired.'
+            },
+            'Apple with PB & Chocolate': {
+                protein: 5, calories: 200, time: '5 min',
+                ingredients: ['1 apple, sliced', '2 tbsp peanut butter', '1 oz dark chocolate, melted'],
+                steps: ['Slice apple.', 'Dip in peanut butter.', 'Drizzle with chocolate.'],
+                tips: 'Fiber in apple keeps you full.'
+            },
+            "TJ's Gone Berry Crazy!": {
+                protein: 2, calories: 90, time: '0 min',
+                ingredients: ['Trader Joe\'s Gone Berry Crazy! chocolate strawberries'],
+                steps: ['Open.', 'Eat.'],
+                tips: 'Another great TJ\'s freezer staple.'
+            },
+            'Chocolate PB Greek Yogurt Cups': {
+                protein: 16, calories: 169, time: '2 hours (freezing)',
+                ingredients: ['1 cup Greek yogurt', '2 tbsp peanut butter', '1 tbsp honey', '2 oz dark chocolate', '1 tsp coconut oil'],
+                steps: ['Mix yogurt, PB, honey.', 'Spoon dollops on parchment.', 'Freeze 1.5-2 hours.', 'Melt chocolate with coconut oil.', 'Dip frozen bites.', 'Freeze 15 more min.'],
+                tips: 'Protein-packed! Make a batch Sunday.'
+            },
+            'Healthy Choice Fudge Bar': {
+                protein: 3, calories: 80, time: '0 min',
+                ingredients: ['Healthy Choice Fudge Bars'],
+                steps: ['Unwrap.', 'Eat.'],
+                tips: 'Only 80 cal! Satisfies chocolate cravings.'
+            },
+            "TJ's Peanut & Date Bar": {
+                protein: 5, calories: 180, time: '0 min',
+                ingredients: ['Trader Joe\'s Peanut & Date Bars'],
+                steps: ['Unwrap.', 'Eat.'],
+                tips: 'Natural ingredients, good fiber.'
+            }
+        };
+
+        const mealPlan = {
+            1: { theme: 'Mexican', meals: { breakfast: 'Freezer Breakfast Burritos', lunch: 'Spicy Ground Turkey Taco Skillet', dinner: 'Chicken Quesadillas with Black Beans', dessert: 'Frozen Chocolate PB Banana Bites' }, portions: { kasey: { breakfast: '1 burrito', lunch: '1 cup + ½ cup rice', dinner: '1 large quesadilla', dessert: '4-5 bites' }, charlie: { breakfast: '1.5 burritos', lunch: '1.5 cups + 1 cup rice', dinner: '1.5 quesadillas', dessert: '6-7 bites' } }, totals: { kasey: { protein: 145, calories: 1620 }, charlie: { protein: 170, calories: 2450 } } },
+            2: { theme: 'Asian', meals: { breakfast: 'Overnight Oats', lunch: 'Korean Beef Rice Bowls', dinner: 'Teriyaki Chicken with Steamed Cauliflower', dessert: "TJ's Gone Bananas!" }, portions: { kasey: { breakfast: '1 jar', lunch: '1 bowl + egg', dinner: '6 oz + ¾ cup rice', dessert: '4 pieces' }, charlie: { breakfast: '1.5 jars', lunch: '1.5 bowls + egg', dinner: '8 oz + 1.5 cups rice', dessert: '6 pieces' } }, totals: { kasey: { protein: 149, calories: 1590 }, charlie: { protein: 175, calories: 2510 } } },
+            3: { theme: 'Italian', meals: { breakfast: 'Egg Muffin Cups', lunch: 'Juicy Turkey Burgers', dinner: 'Creamy Ground Turkey Pasta', dessert: 'Greek Yogurt Berry Parfait' }, portions: { kasey: { breakfast: '2 cups', lunch: '1 patty + salad', dinner: '1.5 cups', dessert: '1 parfait' }, charlie: { breakfast: '3 cups', lunch: '1 patty + bun + potatoes', dinner: '2 cups', dessert: '1 large parfait' } }, totals: { kasey: { protein: 143, calories: 1550 }, charlie: { protein: 166, calories: 2400 } } },
+            4: { theme: 'American', meals: { breakfast: 'Protein Shake', lunch: 'Air Fryer Chicken & Roasted Carrots', dinner: 'Smothered Chicken with Mashed Potatoes', dessert: 'Yasso Greek Yogurt Bar' }, portions: { kasey: { breakfast: '1 shake', lunch: '6 oz + ½ cup rice', dinner: '6 oz + ½ cup potatoes', dessert: '1 bar' }, charlie: { breakfast: '1 large shake + banana', lunch: '8 oz + 1 cup rice', dinner: '8 oz + 1 cup potatoes', dessert: '2 bars' } }, totals: { kasey: { protein: 153, calories: 1610 }, charlie: { protein: 182, calories: 2550 } } },
+            5: { theme: 'Mexican', meals: { breakfast: 'Freezer Breakfast Burritos', lunch: 'Turkey Taco Lettuce Wraps', dinner: 'Spicy Turkey Burrito Bowls', dessert: 'No-Bake Chocolate PB Bars' }, portions: { kasey: { breakfast: '1 burrito', lunch: '3 wraps', dinner: '1 bowl', dessert: '1 bar' }, charlie: { breakfast: '1.5 burritos', lunch: '4 wraps + chips', dinner: '1.5 bowls', dessert: '2 bars' } }, totals: { kasey: { protein: 145, calories: 1560 }, charlie: { protein: 173, calories: 2430 } } },
+            6: { theme: 'Italian', meals: { breakfast: 'Overnight Oats', lunch: 'Italian Baked Chicken & Potatoes', dinner: 'Spaghetti with Turkey Meat Sauce', dessert: 'Ricotta with Berries & Honey' }, portions: { kasey: { breakfast: '1 jar', lunch: '1 breast + ½ cup potatoes', dinner: '1.5 cups', dessert: '1 serving' }, charlie: { breakfast: '1.5 jars', lunch: '1 breast + 1 cup potatoes', dinner: '2.5 cups', dessert: '1 large serving' } }, totals: { kasey: { protein: 140, calories: 1530 }, charlie: { protein: 168, calories: 2500 } } },
+            7: { theme: 'Prep Day', meals: { breakfast: 'Protein Bar + Banana', lunch: 'Loaded Turkey Burgers', dinner: 'Crockpot BBQ Pulled Chicken', dessert: "TJ's Dark Chocolate Almonds" }, portions: { kasey: { breakfast: '1 bar + banana', lunch: '1 burger (lettuce wrap)', dinner: '1 sandwich/bowl', dessert: '1 oz' }, charlie: { breakfast: '1 bar + banana + yogurt', lunch: '1 burger + bun + fries', dinner: '1.5 sandwiches', dessert: '1.5 oz' } }, totals: { kasey: { protein: 147, calories: 1590 }, charlie: { protein: 175, calories: 2580 } } },
+            8: { theme: 'Asian', meals: { breakfast: 'Egg Muffin Cups', lunch: 'Asian Ground Chicken Rice Bowls', dinner: 'Spicy Gochujang Chicken Thighs', dessert: 'Apple with PB & Chocolate' }, portions: { kasey: { breakfast: '2 cups', lunch: '1 bowl', dinner: '2 thighs + ½ cup rice', dessert: '1 apple' }, charlie: { breakfast: '3 cups', lunch: '1.5 bowls', dinner: '3 thighs + 1 cup rice', dessert: '1 large apple' } }, totals: { kasey: { protein: 144, calories: 1580 }, charlie: { protein: 172, calories: 2480 } } },
+            9: { theme: 'Mexican', meals: { breakfast: 'Protein Shake', lunch: 'Chicken Quesadillas with Black Beans', dinner: 'Ground Turkey Tacos', dessert: "TJ's Gone Berry Crazy!" }, portions: { kasey: { breakfast: '1 shake', lunch: '1 quesadilla', dinner: '3 tacos', dessert: '6 pieces' }, charlie: { breakfast: '1 large shake', lunch: '1.5 quesadillas', dinner: '4 tacos', dessert: '8 pieces' } }, totals: { kasey: { protein: 148, calories: 1560 }, charlie: { protein: 177, calories: 2460 } } },
+            10: { theme: 'American', meals: { breakfast: 'Greek Yogurt + Granola', lunch: 'Spinach & Cheese Stuffed Chicken', dinner: 'Air Fryer Spicy Chicken Thighs', dessert: 'Chocolate PB Greek Yogurt Cups' }, portions: { kasey: { breakfast: '1 bowl', lunch: '1 breast', dinner: '2 thighs + ½ cup potatoes', dessert: '2 cups' }, charlie: { breakfast: '1.5 bowls', lunch: '1.5 breasts', dinner: '3 thighs + 1 cup potatoes', dessert: '3 cups' } }, totals: { kasey: { protein: 152, calories: 1600 }, charlie: { protein: 180, calories: 2520 } } },
+            11: { theme: 'Italian', meals: { breakfast: 'Freezer Breakfast Burritos', lunch: 'One-Pan Chicken Piccata', dinner: 'Italian Baked Chicken & Potatoes', dessert: 'Healthy Choice Fudge Bar' }, portions: { kasey: { breakfast: '1 burrito', lunch: '6 oz + ½ cup rice', dinner: '1 breast + ½ cup potatoes', dessert: '1 bar' }, charlie: { breakfast: '1.5 burritos', lunch: '8 oz + 1 cup rice', dinner: '1 breast + 1 cup potatoes + bread', dessert: '2 bars' } }, totals: { kasey: { protein: 146, calories: 1570 }, charlie: { protein: 174, calories: 2490 } } },
+            12: { theme: 'Asian', meals: { breakfast: 'Overnight Oats', lunch: 'Garlic Butter Shrimp Rice Bowls', dinner: 'Asian Chicken Bowl (Hoisin-Soy)', dessert: "TJ's Peanut & Date Bar" }, portions: { kasey: { breakfast: '1 jar', lunch: '8 oz shrimp + ½ cup rice', dinner: '1 bowl', dessert: '1 bar' }, charlie: { breakfast: '1.5 jars', lunch: '10 oz shrimp + 1 cup rice', dinner: '1.5 bowls', dessert: '1.5 bars' } }, totals: { kasey: { protein: 142, calories: 1590 }, charlie: { protein: 169, calories: 2510 } } },
+            13: { theme: 'Fusion', meals: { breakfast: 'Egg Muffin Cups', lunch: 'BBQ Chicken Quesadillas', dinner: 'Creamy Chicken Cauliflower Rice', dessert: 'Greek Yogurt Berry Parfait' }, portions: { kasey: { breakfast: '2 cups', lunch: '1 quesadilla', dinner: '1.5 cups', dessert: '1 parfait' }, charlie: { breakfast: '3 cups', lunch: '1.5 quesadillas', dinner: '2 cups + side rice', dessert: '1 large parfait' } }, totals: { kasey: { protein: 150, calories: 1560 }, charlie: { protein: 176, calories: 2510 } } },
+            14: { theme: 'Comfort', meals: { breakfast: 'Protein Shake', lunch: 'Korean Beef Rice Bowls', dinner: 'Turkey Burgers + Sweet Potato Fries', dessert: 'Frozen Chocolate PB Banana Bites' }, portions: { kasey: { breakfast: '1 shake', lunch: '1 bowl', dinner: '1 burger (lettuce wrap)', dessert: '5 bites' }, charlie: { breakfast: '1 large shake', lunch: '1.5 bowls', dinner: '1.5 burgers + buns', dessert: '7 bites' } }, totals: { kasey: { protein: 145, calories: 1600 }, charlie: { protein: 173, calories: 2540 } } }
+        };
+
+        let selectedDay = 1;
+        let activePerson = 'kasey';
+
+        function init() {
+            renderCalendar();
+            renderDay();
+            setupToggle();
+        }
+
+        function setupToggle() {
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    activePerson = btn.dataset.person;
+                    updateGoals();
+                    renderDay();
+                });
+            });
+        }
+
+        function updateGoals() {
+            document.getElementById('goal-protein').textContent = goals[activePerson].protein;
+            document.getElementById('goal-calories').textContent = goals[activePerson].calories;
+        }
+
+        function renderCalendar() {
+            const week1 = document.getElementById('week1');
+            const week2 = document.getElementById('week2');
+            const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+
+            for (let i = 1; i <= 7; i++) {
+                week1.appendChild(createDayBtn(i, days[i - 1]));
+            }
+            for (let i = 8; i <= 14; i++) {
+                week2.appendChild(createDayBtn(i, days[(i - 1) % 7]));
+            }
+        }
+
+        function createDayBtn(day, letter) {
+            const btn = document.createElement('button');
+            btn.className = 'day-btn';
+            btn.innerHTML = `<div class="day-letter">${letter}</div><div class="day-number">${day}</div>`;
+            btn.addEventListener('click', () => {
+                selectedDay = day;
+                renderCalendar();
+                renderDay();
+            });
+            updateDayBtnStyle(btn, day);
+            return btn;
+        }
+
+        function updateDayBtnStyle(btn, day) {
+            const theme = mealPlan[day].theme;
+            const colors = themeColors[theme];
+            if (day === selectedDay) {
+                btn.style.backgroundColor = colors.accent;
+                btn.style.color = wvc.cream;
+            } else {
+                btn.style.backgroundColor = colors.light;
+                btn.style.color = colors.accent;
+            }
+        }
+
+        function renderDay() {
+            const day = mealPlan[selectedDay];
+            const colors = themeColors[day.theme];
+
+            document.getElementById('day-num').textContent = selectedDay;
+            document.getElementById('day-theme').textContent = day.theme;
+            document.getElementById('day-protein').textContent = day.totals[activePerson].protein + 'g';
+            document.getElementById('day-calories').textContent = day.totals[activePerson].calories + ' cal';
+            document.getElementById('day-header').style.backgroundColor = colors.accent;
+
+            const container = document.getElementById('meals-container');
+            container.innerHTML = '';
+
+            const mealTypes = ['breakfast', 'lunch', 'dinner', 'dessert'];
+            const icons = { breakfast: '☀️', lunch: '🌿', dinner: '🌙', dessert: '✨' };
+
+            mealTypes.forEach((type, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'meal-btn';
+                if (idx === mealTypes.length - 1) btn.style.borderBottom = 'none';
+                btn.innerHTML = `
+                    <div class="meal-icon" style="background-color: ${colors.light}">${icons[type]}</div>
+                    <div class="meal-info">
+                        <div class="meal-type">${type}</div>
+                        <div class="meal-name">${day.meals[type]}</div>
+                        <div class="meal-portion">${day.portions[activePerson][type]}</div>
+                    </div>
+                    <div class="meal-arrow">→</div>
+                `;
+                btn.addEventListener('click', () => openModal(day.meals[type], type));
+                container.appendChild(btn);
+            });
+
+            // Update calendar styles
+            document.querySelectorAll('.day-btn').forEach((btn, idx) => {
+                const dayNum = idx < 7 ? idx + 1 : idx + 1;
+                updateDayBtnStyle(btn, dayNum);
+            });
+
+            document.getElementById('week1').innerHTML = '';
+            document.getElementById('week2').innerHTML = '';
+            renderCalendar();
+        }
+
+        function openModal(recipeName, mealType) {
+            const recipe = recipes[recipeName];
+            if (!recipe) return;
+
+            const day = mealPlan[selectedDay];
+            const colors = themeColors[day.theme];
+
+            document.getElementById('modal-header').style.backgroundColor = colors.accent;
+            document.getElementById('modal-title').textContent = recipeName;
+            document.getElementById('modal-meta').textContent = `${recipe.protein}g protein • ${recipe.calories} cal • ${recipe.time}`;
+
+            const ingredientsList = document.getElementById('modal-ingredients');
+            ingredientsList.innerHTML = recipe.ingredients.map(ing => `<li><span>•</span>${ing}</li>`).join('');
+
+            const stepsList = document.getElementById('modal-steps');
+            stepsList.innerHTML = recipe.steps.map((step, i) => `<li style="display: flex; gap: 12px; margin-bottom: 10px;"><span class="step-number">${i + 1}</span>${step}</li>`).join('');
+
+            const tipBox = document.getElementById('modal-tip');
+            if (recipe.tips) {
+                tipBox.style.display = 'block';
+                tipBox.querySelector('p').innerHTML = `<strong>Tip:</strong> ${recipe.tips}`;
+            } else {
+                tipBox.style.display = 'none';
+            }
+
+            const portions = document.getElementById('modal-portions');
+            portions.innerHTML = `
+                <span class="portion-tag"><strong>Kasey:</strong> ${day.portions.kasey[mealType]}</span>
+                <span class="portion-tag"><strong>Charlie:</strong> ${day.portions.charlie[mealType]}</span>
+            `;
+
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target.id === 'modal' || e.target.classList.contains('modal-container')) {
+                closeModal();
+            }
+        });
+
+        init();
+    </script>
+</body>
+</html>
