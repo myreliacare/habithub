@@ -1039,6 +1039,50 @@
         let charlieHabits = [...defaultCharlieHabits];
         let editingHabits = [];
 
+        // Firebase sync functions
+        async function syncToFirebase(collectionName, data) {
+            if (!window.db) return;
+            try {
+                const { setDoc, doc } = window.firestoreImports;
+                await setDoc(doc(window.db, collectionName, 'data'), { items: data });
+            } catch (error) {
+                console.error(`Error syncing ${collectionName}:`, error);
+            }
+        }
+
+        async function loadFromFirebase(collectionName) {
+            if (!window.db) return null;
+            try {
+                const { getDoc, doc } = window.firestoreImports;
+                const docRef = doc(window.db, collectionName, 'data');
+                const docSnap = await getDoc(docRef);
+                
+                if (docSnap.exists()) {
+                    return docSnap.data().items;
+                }
+                return null;
+            } catch (error) {
+                console.error(`Error loading ${collectionName}:`, error);
+                return null;
+            }
+        }
+
+        function setupFirebaseListener(collectionName, callback) {
+            if (!window.db) return;
+            try {
+                const { onSnapshot, doc } = window.firestoreImports;
+                const docRef = doc(window.db, collectionName, 'data');
+                
+                onSnapshot(docRef, (doc) => {
+                    if (doc.exists()) {
+                        callback(doc.data().items);
+                    }
+                });
+            } catch (error) {
+                console.error(`Error setting up listener for ${collectionName}:`, error);
+            }
+        }
+
         // Load custom habits from localStorage
         function loadCustomHabits() {
             const saved = localStorage.getItem('charlieCustomHabits');
