@@ -23,17 +23,32 @@
 
         /* Sync Status */
         .sync-status {
-            position: fixed; top: 70px; right: 16px;
-            background: rgba(40, 30, 31, 0.95);
-            padding: 8px 14px; font-size: 0.65rem;
-            display: flex; align-items: center; gap: 8px;
-            z-index: 1000; border: 1px solid rgba(61, 107, 107, 0.4);
-            letter-spacing: 0.08em; text-transform: uppercase;
-            color: rgba(242, 235, 224, 0.6);
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #666;
+            position: absolute;
+            right: 24px;
+            transition: background 0.3s;
         }
-        .sync-dot { width: 5px; height: 5px; background: #a3b899; border-radius: 50%; }
-        .sync-status.synced .sync-dot { background: #a3b899; }
-        .sync-status.error .sync-dot { background: #c9a9a6; }
+        .sync-status.synced {
+            background: #a3b899;
+            animation: pulse 2s infinite;
+        }
+        .sync-status.connecting {
+            background: #999;
+            animation: pulse 1s infinite;
+        }
+        .sync-status.error {
+            background: #c9a9a6;
+        }
+        .sync-dot { display: none; }
+        #syncText { display: none; }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
 
         /* Top Navigation Bar */
         .top-nav {
@@ -51,9 +66,15 @@
             max-width: 900px;
             margin: 0 auto;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             padding: 14px 24px;
+            position: relative;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 0;
         }
 
         .nav-link {
@@ -84,6 +105,8 @@
         @media (max-width: 768px) {
             .nav-container {
                 padding: 10px 16px;
+            }
+            .nav-links {
                 flex-wrap: wrap;
                 gap: 8px;
                 justify-content: center;
@@ -91,6 +114,9 @@
             .nav-link {
                 font-size: 0.7rem;
                 padding: 6px 10px;
+            }
+            .sync-status {
+                right: 16px;
             }
         }
 
@@ -225,6 +251,14 @@
         }
         .calendar-nav button:hover { background: rgba(61, 107, 107, 0.15); }
         .calendar-title { color: #f2ebe0; font-size: 1rem; letter-spacing: 0.1em; }
+        .calendar-view-toggle { display: flex; gap: 8px; }
+        .view-toggle-btn {
+            background: transparent; border: 1px solid rgba(61, 107, 107, 0.3);
+            color: rgba(163, 184, 153, 0.7); padding: 6px 12px; cursor: pointer;
+            font-size: 0.75rem; font-family: inherit; transition: all 0.2s;
+        }
+        .view-toggle-btn:hover { border-color: rgba(61, 107, 107, 0.5); color: #a3b899; }
+        .view-toggle-btn.active { background: rgba(61, 107, 107, 0.2); border-color: #3d6b6b; color: #a3b899; }
         .view-toggle {
             background: transparent; border: 1px solid rgba(61, 107, 107, 0.3);
             color: rgba(163, 184, 153, 0.7); padding: 6px 12px; cursor: pointer;
@@ -595,6 +629,8 @@
             .reminder-btn { width: 100%; text-align: center; }
             .add-contact-form .form-row { grid-template-columns: 1fr; }
             .calendar-header { flex-direction: column; align-items: stretch; }
+            .calendar-view-toggle { width: 100%; }
+            .view-toggle-btn { flex: 1; text-align: center; }
         }
     </style>
 </head>
@@ -602,21 +638,23 @@
         <!-- Top Navigation Bar -->
         <nav class="top-nav">
             <div class="nav-container">
-                <a href="kasey-hub.html" class="nav-link">Kasey's Hub</a>
-                <a href="charlie-hub.html" class="nav-link">Charlie's Hub</a>
-                <a href="our-dreams.html" class="nav-link special">Our Life</a>
-                <a href="meal-plan.html" class="nav-link">Meal Plan</a>
-                <a href="settings.html" class="nav-link">Settings</a>
+                <div class="nav-links">
+                    <a href="kasey-hub.html" class="nav-link">Kasey's Hub</a>
+                    <a href="charlie-hub.html" class="nav-link">Charlie's Hub</a>
+                    <a href="our-dreams.html" class="nav-link special">Our Life</a>
+                    <a href="meal-plan.html" class="nav-link">Meal Plan</a>
+                    <a href="settings.html" class="nav-link">Settings</a>
+                </div>
+                <div class="sync-status" id="syncStatus">
+                    <span class="sync-dot"></span>
+                    <span id="syncText">Connecting...</span>
+                </div>
             </div>
         </nav>
 
 
-    <div class="sync-status" id="syncStatus">
-        <span class="sync-dot"></span>
-        <span id="syncText">Connecting...</span>
-    </div>
-
     <div class="container">
+        
         <div class="home-header">
             <div class="header-photo-container">
                 <div class="header-photo-inner" id="photoInner">
