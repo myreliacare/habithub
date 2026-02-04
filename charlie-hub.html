@@ -169,7 +169,7 @@
             transition: all 0.2s ease;
             padding: 8px 4px;
             background: #E0D5CB;
-            color: #e0d2d0;
+            color: #3d2f31;
             position: relative;
             line-height: 1.2;
             font-weight: 600;
@@ -177,7 +177,7 @@
 
         .bingo-cell.completed {
             background: #7ba886;
-            color: #e0d2d0;
+            color: #ffffff;
         }
 
 
@@ -663,7 +663,7 @@
 
         /* Habits Editor Modal */
         .habits-modal-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            position: fixed; top: 0; right: 0; bottom: 0;
             background: rgba(0, 0, 0, 0.8); z-index: 2000;
             display: none; align-items: center; justify-content: center;
             padding: 20px;
@@ -826,8 +826,8 @@
             .nav-links {
                 position: fixed;
                 top: 60px;
-                left: 0;
                 right: 0;
+                width: 250px;
                 background: #2a1f21;
                 flex-direction: column;
                 gap: 0;
@@ -890,8 +890,6 @@
 
 
     <div class="container">
-        <a href="index.html" class="btn" style="margin-bottom: 24px;">&larr; Back to Home</a>
-        
         <div class="section-nav">
             <select id="sectionDropdown" onchange="switchTabFromDropdown()" class="section-dropdown">
                 <option value="bingo">Bingo Card</option>
@@ -905,7 +903,6 @@
         <!-- BINGO TAB -->
         <div id="bingo-tab" class="hub-tab active">
             <div class="bingo-section">
-                <h1>The Ultimate</h1>
                 <div class="main-title">DAILY HABITS<br>BINGO</div>
                 <p class="subtitle">Click squares to mark complete &bull; Get 4 in a row to win</p>
                 <div class="date-display" id="dateDisplay"></div>
