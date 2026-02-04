@@ -22,8 +22,7 @@
             min-height: 100vh;
             line-height: 1.6;
         }
-
-        .container { max-width: 680px; margin: 0 auto; padding: 120px 24px 80px; }
+        .container { max-width: 680px; margin: 0 auto; padding: 70px 24px 80px; }
 
         /* Sync Status */
         .sync-status {
@@ -100,18 +99,88 @@
             color: #a3b899;
         }
 
+        
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            z-index: 1001;
+            padding: 8px;
+        }
+
+        .hamburger span {
+            width: 24px;
+            height: 2px;
+            background: #a3b899;
+            transition: all 0.3s;
+            border-radius: 2px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
         .nav-link.active {
             color: #a3b899;
         }
 
+        
         @media (max-width: 768px) {
-            .nav-links {
-                gap: 16px;
+            .hamburger {
+                display: flex;
             }
+
+            .nav-links {
+                position: fixed;
+                top: 60px;
+                left: 0;
+                right: 0;
+                background: #2a1f21;
+                flex-direction: column;
+                gap: 0;
+                padding: 0;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+                border-bottom: 1px solid rgba(163, 184, 153, 0.2);
+            }
+
+            .nav-links.active {
+                max-height: 400px;
+            }
+
             .nav-link {
-                font-size: 0.85rem;
+                width: 100%;
+                padding: 16px 24px;
+                border-bottom: 1px solid rgba(163, 184, 153, 0.1);
+                font-size: 1rem;
+            }
+
+            .nav-link:last-child {
+                border-bottom: none;
+            }
+
+            .container {
+                padding-top: 70px;
             }
         }
+
+        @media (max-width: 480px) {
+            .nav-logo {
+                font-size: 1rem;
+            }
+        }
+
 
         /* Header */
         .home-header { text-align: center; padding: 10px 0 24px; }
@@ -300,7 +369,7 @@
             background: transparent; border: 1px solid rgba(242, 235, 224, 0.4);
             color: #f2ebe0; margin-bottom: 24px;
         }
-        .hub-nav-btn.dreams:hover { background: rgba(242, 235, 224, 0.1); border-color: #f2ebe0; }
+        .hub-nav-btn.dreams:hover { background: rgba(242, 235, 224, 0.1); border-color: #3d2f31; }
 
         /* Section Cards */
         .section {
@@ -480,7 +549,7 @@
             font-size: 1.8rem; cursor: pointer; padding: 0; line-height: 1;
         }
         .modal-close:hover { color: #f2ebe0; }
-        .modal-body { padding: 24px; }
+        .modal-Npx; }
         
         .day-modal {
             background: #3d2f31; border: 1px solid rgba(61, 107, 107, 0.4);
@@ -836,7 +905,12 @@
         <nav class="top-nav">
             <div class="nav-container">
                 <a href="index.html" class="nav-logo">Our Life Hub</a>
-                <div class="nav-links">
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+                <div class="nav-links" id="navLinks">
                     <a href="index.html" class="nav-link active">Home</a>
                     <a href="kasey-hub.html" class="nav-link">Kasey</a>
                     <a href="charlie-hub.html" class="nav-link">Charlie</a>
@@ -1152,6 +1226,34 @@
             // Wait for DOM to be ready before updating status
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', () => {
+
+        // Hamburger menu toggle
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+
+        if (hamburger && navLinks) {
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+
+            // Close mobile menu when a link is clicked
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    navLinks.classList.remove('active');
+                });
+            });
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
+                    hamburger.classList.remove('active');
+                    navLinks.classList.remove('active');
+                }
+            });
+        }
+
                     updateSyncStatus('synced', 'Synced');
                 });
             } else {
@@ -3209,6 +3311,34 @@
 
         // Initialize everything
         document.addEventListener('DOMContentLoaded', async function() {
+
+        // Hamburger menu toggle
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+
+        if (hamburger && navLinks) {
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+
+            // Close mobile menu when a link is clicked
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    navLinks.classList.remove('active');
+                });
+            });
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
+                    hamburger.classList.remove('active');
+                    navLinks.classList.remove('active');
+                }
+            });
+        }
+
             try {
                 // console.log('Starting initialization...');
                 
