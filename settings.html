@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Our Life Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400&family=Cormorant:wght@300;400;500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html { background: #3d2f31 !important; }
+        
+        body {
+            background: #3d2f31 !important;
+            color: #e0d2d0;
+            font-family: 'Philosopher', Georgia, serif;
+            font-weight: 500;
+            min-height: 100vh;
+            line-height: 1.6;
+            padding-top: 76px;
+        }
+        
+        /* Navigation Bar */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #2a1f21;
+            border-bottom: 1px solid rgba(163, 184, 153, 0.2);
+            z-index: 1000;
+            padding: 0 24px;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+        }
+        
+        .nav-logo {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #a3b899;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+        
+        .nav-link {
+            color: rgba(242, 235, 224, 0.7);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+            font-weight: 500;
+        }
+        
+        .nav-link:hover {
+            color: #a3b899;
+        }
+        
+        .nav-link.active {
+            color: #a3b899;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 16px;
+            }
+            .nav-link {
+                font-size: 0.85rem;
+            }
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 24px 24px 80px;
+        }
+        
+        .page-header {
+            margin-bottom: 40px;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            color: #a3b899;
+            margin-bottom: 8px;
+        }
+        
+        .page-subtitle {
+            color: rgba(242, 235, 224, 0.6);
+            font-size: 1rem;
+        }
+        
+        .settings-section {
+            background: #2a1f21;
+            border: 1px solid rgba(163, 184, 153, 0.2);
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+        
+        .section-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #a3b899;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .setting-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(163, 184, 153, 0.1);
+        }
+        
+        .setting-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .setting-label {
+            display: block;
+            color: #f2ebe0;
+            font-size: 1rem;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+        
+        .setting-description {
+            color: rgba(242, 235, 224, 0.5);
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+        }
+        
+        .setting-input {
+            width: 100%;
+            background: rgba(61, 47, 49, 0.3);
+            border: 1px solid rgba(163, 184, 153, 0.25);
+            color: #f2ebe0;
+            padding: 12px 16px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        
+        .setting-input:focus {
+            outline: none;
+            border-color: #a3b899;
+            background: rgba(61, 47, 49, 0.5);
+        }
+        
+        .setting-select {
+            width: 100%;
+            background: rgba(61, 47, 49, 0.3);
+            border: 1px solid rgba(163, 184, 153, 0.25);
+            color: #f2ebe0;
+            padding: 12px 16px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .setting-select:focus {
+            outline: none;
+            border-color: #a3b899;
+            background: rgba(61, 47, 49, 0.5);
+        }
+        
+        .setting-toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            background: rgba(163, 184, 153, 0.2);
+            border-radius: 13px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .toggle-switch.active {
+            background: #a3b899;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            background: #f2ebe0;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+        
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(24px);
+        }
+        
+        .btn {
+            background: #a3b899;
+            border: 1px solid #a3b899;
+            color: #1c1c1c;
+            padding: 12px 24px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        
+        .btn:hover {
+            background: #b4c9aa;
+            border-color: #b4c9aa;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid rgba(163, 184, 153, 0.4);
+            color: #a3b899;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(163, 184, 153, 0.1);
+        }
+        
+        .btn-danger {
+            background: transparent;
+            border: 1px solid rgba(201, 169, 166, 0.4);
+            color: #c9a9a6;
+        }
+        
+        .btn-danger:hover {
+            background: rgba(201, 169, 166, 0.1);
+        }
+        
+        .info-box {
+            background: rgba(163, 184, 153, 0.1);
+            padding: 12px 16px;
+            border-left: 3px solid #a3b899;
+            font-size: 0.9rem;
+            color: rgba(242, 235, 224, 0.8);
+        }
+        
+        .warning-box {
+            background: rgba(201, 169, 166, 0.1);
+            padding: 12px 16px;
+            border-left: 3px solid #c9a9a6;
+            font-size: 0.9rem;
+            color: rgba(242, 235, 224, 0.8);
+        }
+        
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+        
+        .color-option {
+            border: 2px solid transparent;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: rgba(61, 47, 49, 0.3);
+        }
+        
+        .color-option:hover {
+            background: rgba(61, 47, 49, 0.5);
+        }
+        
+        .color-option.selected {
+            border-color: #a3b899;
+            background: rgba(163, 184, 153, 0.1);
+        }
+        
+        .color-swatch {
+            width: 100%;
+            height: 40px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(242, 235, 224, 0.2);
+        }
+        
+        .color-name {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #f2ebe0;
+        }
+        
+        .habit-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid rgba(163, 184, 153, 0.2);
+            padding: 12px;
+            margin-top: 12px;
+            background: rgba(61, 47, 49, 0.3);
+        }
+        
+        .habit-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            margin-bottom: 8px;
+            background: rgba(61, 47, 49, 0.5);
+            border-left: 2px solid #a3b899;
+        }
+        
+        .habit-text {
+            flex: 1;
+            color: #f2ebe0;
+            font-size: 0.9rem;
+        }
+        
+        .habit-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn-small {
+            padding: 4px 12px;
+            font-size: 0.8rem;
+        }
+        
+        textarea.setting-input {
+            min-height: 100px;
+            resize: vertical;
+        }
+    </style>
+</head>
+<body>
+<nav class="top-nav">
+<div class="nav-container">
+<a href="index.html" class="nav-logo">Our Life Hub</a>
+<div class="nav-links">
+<a href="index.html" class="nav-link">Home</a>
+<a href="kasey-hub.html" class="nav-link">Kasey</a>
+<a href="charlie-hub.html" class="nav-link">Charlie</a>
+<a href="our-dreams.html" class="nav-link">Dreams</a>
+<a href="meal-plan.html" class="nav-link">Meals</a>
+<a href="settings.html" class="nav-link active">Settings</a>
+</div>
+</div>
+</nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">Settings</h1>
+            <p class="page-subtitle">Customize your Life Hub experience</p>
+        </div>
+
+        <!-- Branding & Identity -->
+        <div class="settings-section">
+            <h2 class="section-title">Branding & Identity</h2>
+            
+            <div class="setting-item">
+                <label class="setting-label">App Name</label>
+                <p class="setting-description">Customize the name displayed across all pages</p>
+                <input type="text" id="appName" class="setting-input" placeholder="Our Life Hub">
+                <button class="btn" onclick="saveAppName()" style="margin-top: 8px;">Save App Name</button>
+            </div>
+            
+            <div class="setting-item">
+                <label class="setting-label">Person 1 Name</label>
+                <input type="text" id="name1" class="setting-input" placeholder="Kasey">
+            </div>
+            
+            <div class="setting-item">
+                <label class="setting-label">Person 2 Name</label>
+                <input type="text" id="name2" class="setting-input" placeholder="Charlie">
+                <button class="btn" onclick="saveNames()" style="margin-top: 8px;">Save Names</button>
+            </div>
+        </div>
+
+        <!-- Appearance -->
+        <div class="settings-section">
+            <h2 class="section-title">Appearance</h2>
+            
+            <div class="setting-item">
+                <label class="setting-label">Accent Color</label>
+                <p class="setting-description">Choose the primary color used throughout the app</p>
+                <div class="color-grid">
+                    <div class="color-option" data-color="sage" onclick="setAccentColor('sage')">
+                        <div class="color-swatch" style="background: #a3b899;"></div>
+                        <div class="color-name">Sage Green</div>
+                    </div>
+                    <div class="color-option" data-color="rose" onclick="setAccentColor('rose')">
+                        <div class="color-swatch" style="background: #c9a9a6;"></div>
+                        <div class="color-name">Dusty Rose</div>
+                    </div>
+                    <div class="color-option" data-color="lavender" onclick="setAccentColor('lavender')">
+                        <div class="color-swatch" style="background: #b4a7d6;"></div>
+                        <div class="color-name">Lavender</div>
+                    </div>
+                    <div class="color-option" data-color="teal" onclick="setAccentColor('teal')">
+                        <div class="color-swatch" style="background: #7ba8a1;"></div>
+                        <div class="color-name">Soft Teal</div>
+                    </div>
+                    <div class="color-option" data-color="peach" onclick="setAccentColor('peach')">
+                        <div class="color-swatch" style="background: #d4a59a;"></div>
+                        <div class="color-name">Peachy</div>
+                    </div>
+                    <div class="color-option" data-color="gold" onclick="setAccentColor('gold')">
+                        <div class="color-swatch" style="background: #c9b77c;"></div>
+                        <div class="color-name">Warm Gold</div>
+                    </div>
+                </div>
+                <div class="info-box" style="margin-top: 16px;">
+                    Current: <span id="currentColor" style="font-weight: 600;">Sage Green</span>
+                </div>
+            </div>
+            
+            <div class="setting-item">
+                <label class="setting-label">Background Color</label>
+                <p class="setting-description">Choose the background color for all pages</p>
+                <div class="color-grid">
+                    <div class="color-option" data-bgcolor="dark" onclick="setBackgroundColor('dark')">
+                        <div class="color-swatch" style="background: #3d2f31;"></div>
+                        <div class="color-name">Dark Plum</div>
+                    </div>
+                    <div class="color-option" data-bgcolor="charcoal" onclick="setBackgroundColor('charcoal')">
+                        <div class="color-swatch" style="background: #1a1a1a;"></div>
+                        <div class="color-name">Charcoal</div>
+                    </div>
+                    <div class="color-option" data-bgcolor="navy" onclick="setBackgroundColor('navy')">
+                        <div class="color-swatch" style="background: #1e2638;"></div>
+                        <div class="color-name">Deep Navy</div>
+                    </div>
+                    <div class="color-option" data-bgcolor="forest" onclick="setBackgroundColor('forest')">
+                        <div class="color-swatch" style="background: #1f2e2a;"></div>
+                        <div class="color-name">Forest Green</div>
+                    </div>
+                </div>
+                <div class="info-box" style="margin-top: 16px;">
+                    Current: <span id="currentBgColor" style="font-weight: 600;">Dark Plum</span>
+                </div>
+            </div>
+            
+            <div class="setting-item">
+                <label class="setting-label">Font Family</label>
+                <p class="setting-description">Change the primary font used throughout the app</p>
+                <select id="fontFamily" class="setting-select" onchange="setFontFamily()">
+                    <option value="philosopher">Philosopher (Current Default)</option>
+                    <option value="cormorant">Cormorant (Elegant Serif)</option>
+                    <option value="worksans">Work Sans (Modern Sans)</option>
+                    <option value="georgia">Georgia (Classic Serif)</option>
+                    <option value="arial">Arial (Clean Sans)</option>
+                </select>
+            </div>
+            
+            <div class="setting-item">
+                <label class="setting-label">Font Size</label>
+                <p class="setting-description">Adjust the base font size for better readability</p>
+                <div style="display: flex; align-items: center; gap: 16px; margin-top: 12px;">
+                    <button class="btn-secondary btn" onclick="adjustFontSize(-1)" style="padding: 8px 16px;">A-</button>
+                    <span id="fontSizeDisplay" style="color: #a3b899; font-weight: 600;">100%</span>
+                    <button class="btn-secondary btn" onclick="adjustFontSize(1)" style="padding: 8px 16px;">A+</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features & Pages -->
+        <div class="settings-section">
+            <h2 class="section-title">Features & Pages</h2>
+            <p class="setting-description" style="margin-bottom: 16px;">Toggle features on/off for your Life Hub</p>
+            
+            <div class="setting-item">
+                <div class="setting-toggle">
+                    <div class="toggle-switch active" id="toggleBingo" onclick="toggleFeature('bingo')">
+                        <div class="toggle-slider"></div>
+                    </div>
+                    <label class="setting-label" style="margin: 0;">Bingo Cards</label>
+                </div>
+            </div>
+            
+            <div class="setting-item">
+                <div class="setting-toggle">
+                    <div class="toggle-switch active" id="toggleDreams" onclick="toggleFeature('dreams')">
+                        <div class="toggle-slider"></div>
+                    </div>
+                    <label class="setting-label" style="margin: 0;">Dreams & Goals Page</label>
+                </div>
+            </div>
+            
+            <div class="setting-item">
+                <div class="setting-toggle">
+                    <div class="toggle-switch active" id="toggleMeals" onclick="toggleFeature('meals')">
+                        <div class="toggle-slider"></div>
+                    </div>
+                    <label class="setting-label" style="margin: 0;">Meal Planning</label>
+                </div>
+            </div>
+            
+            <div class="setting-item">
+                <div class="setting-toggle">
+                    <div class="toggle-switch active" id="togglePrompts" onclick="toggleFeature('prompts')">
+                        <div class="toggle-slider"></div>
+                    </div>
+                    <label class="setting-label" style="margin: 0;">Daily Prompts</label>
+                </div>
+            </div>
+            
+            <div class="setting-item">
+                <div class="setting-toggle">
+                    <div class="toggle-switch active" id="toggleChallenges" onclick="toggleFeature('challenges')">
+                        <div class="toggle-slider"></div>
+                    </div>
+                    <label class="setting-label" style="margin: 0;">Monthly Challenges</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Habit Customization -->
+        <div class="settings-section">
+            <h2 class="section-title">Habit Customization</h2>
+            
+            <div class="setting-item">
+                <label class="setting-label">Person 1 Habits</label>
+                <p class="setting-description">Customize the habit list for the first person's bingo card</p>
+                <div id="habits1List" class="habit-list"></div>
+                <div style="display: flex; gap: 8px; margin-top: 12px;">
+                    <input type="text" id="newHabit1" class="setting-input" placeholder="Add new habit..." style="flex: 1;">
+                    <button class="btn" onclick="addHabit('person1')">Add</button>
+                </div>
+            </div>
+            
+            <div class="setting-item">
+                <label class="setting-label">Person 2 Habits</label>
+                <p class="setting-description">Customize the habit list for the second person's bingo card</p>
+                <div id="habits2List" class="habit-list"></div>
+                <div style="display: flex; gap: 8px; margin-top: 12px;">
+                    <input type="text" id="newHabit2" class="setting-input" placeholder="Add new habit..." style="flex: 1;">
+                    <button class="btn" onclick="addHabit('person2')">Add</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Customization -->
+        <div class="settings-section">
+            <h2 class="section-title">Content Customization</h2>
+            
+            <div class="setting-item">
+                <label class="setting-label">Custom Daily Prompts</label>
+                <p class="setting-description">Add your own relationship prompts (one per line, minimum 10 prompts)</p>
+                <textarea id="customPrompts" class="setting-input" placeholder="What's one thing I did today that made you smile?
+What's your favorite memory of us from this past month?
+What's one way I can support you better this week?"></textarea>
+                <button class="btn" onclick="saveCustomPrompts()" style="margin-top: 8px;">Save Prompts</button>
+                <div class="info-box" style="margin-top: 8px;">
+                    <span id="promptCount">0</span> custom prompts saved
+                </div>
+            </div>
+            
+            <div class="setting-item">
+                <label class="setting-label">Custom Monthly Challenges</label>
+                <p class="setting-description">Add your own challenges (one per line, exactly 12 for each month)</p>
+                <textarea id="customChallenges" class="setting-input" placeholder="Write each other a love letter
+Go on a walk together 3 times per week
+Try a new restaurant"></textarea>
+                <button class="btn" onclick="saveCustomChallenges()" style="margin-top: 8px;">Save Challenges</button>
+                <div class="info-box" style="margin-top: 8px;">
+                    <span id="challengeCount">0</span> custom challenges saved
+                </div>
+            </div>
+        </div>
+
+        <!-- Preferences -->
+        <div class="settings-section">
+            <h2 class="section-title">Preferences</h2>
+            
+            <div class="setting-item">
+                <label class="setting-label">Time Zone</label>
+                <p class="setting-description">Set your timezone for accurate date/time display</p>
+                <select id="timezone" class="setting-select" onchange="saveTimezone()">
+                    <option value="America/New_York">Eastern (ET)</option>
+                    <option value="America/Chicago">Central (CT)</option>
+                    <option value="America/Denver">Mountain (MT)</option>
+                    <option value="America/Los_Angeles">Pacific (PT)</option>
+                    <option value="America/Anchorage">Alaska (AKT)</option>
+                    <option value="Pacific/Honolulu">Hawaii (HST)</option>
+                </select>
+            </div>
+            
+            <div class="setting-item">
+                <label class="setting-label">Week Start Day</label>
+                <p class="setting-description">Choose which day your week starts on</p>
+                <select id="weekStart" class="setting-select" onchange="saveWeekStart()">
+                    <option value="0">Sunday</option>
+                    <option value="1">Monday</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Data Management -->
+        <div class="settings-section">
+            <h2 class="section-title">Data Management</h2>
+            
+            <div class="setting-item">
+                <label class="setting-label">Export All Data</label>
+                <p class="setting-description">Download a complete backup of all your Life Hub data</p>
+                <button class="btn-secondary btn" onclick="exportData()">Download Backup</button>
+            </div>
+            
+            <div class="setting-item">
+                <label class="setting-label">Import Data</label>
+                <p class="setting-description">Restore from a previous backup file</p>
+                <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
+                <button class="btn-secondary btn" onclick="document.getElementById('importFile').click()">Import Backup</button>
+            </div>
+            
+            <div class="setting-item">
+                <label class="setting-label">Reset All Settings</label>
+                <p class="setting-description">Reset all customizations to default (keeps your data)</p>
+                <button class="btn-danger btn" onclick="resetSettings()">Reset to Defaults</button>
+            </div>
+        </div>
+
+        <!-- App Info -->
+        <div class="settings-section">
+            <h2 class="section-title">About</h2>
+            
+            <div class="setting-item">
+                <label class="setting-label">Our Life Hub</label>
+                <p class="setting-description">Version 1.0 - Fully Customizable</p>
+                <div class="info-box">
+                    Your personal habit tracking and life management system. All data is stored locally in your browser and synced to Firebase for backup and multi-device access.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, doc, setDoc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCDda9sPwSY-RQ5rrM5THOvcLtHvcPRYd4",
+            authDomain: "our-habit-hub.firebaseapp.com",
+            projectId: "our-habit-hub",
+            storageBucket: "our-habit-hub.firebasestorage.app",
+            messagingSenderId: "78555830496",
+            appId: "1:78555830496:web:3e457e54729cc11b825885"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.db = db;
+        window.firestoreImports = { doc, setDoc, getDoc };
+
+        // Default habits
+        const defaultHabits = {
+            person1: [
+                "Drink 8 Glasses of Water",
+                "Exercise 30+ Minutes",
+                "Eat a Healthy Meal",
+                "Read 10+ Pages",
+                "Meditate",
+                "Subliminals & Rampages",
+                "Journal",
+                "Walk 8k Steps",
+                "Stretch",
+                "Vibration Plate",
+                "Take Vitamins & Supplements",
+                "Morning Routine",
+                "Evening Routine",
+                "Do Laundry",
+                "Altar Time",
+                "Tidy Living Space",
+                "Dry Brushing & Face Massage",
+                "EFT Tapping",
+                "Spend Time Outside",
+                "No Social Media in the Morning"
+            ],
+            person2: [
+                "Exercise 30+ Minutes",
+                "Eat a Healthy Meal",
+                "Read 10+ Pages",
+                "Meditate",
+                "Sleep 7+ Hours",
+                "Journal",
+                "Walk 10k Steps",
+                "Vibration Plate",
+                "Learn Something New",
+                "Practice Gratitude",
+                "Acupuncture Mat",
+                "Tidy Living Space",
+                "30 Mins of Guitar",
+                "EFT Tapping",
+                "Time in Nature",
+                "Acts of Kindness"
+            ]
+        };
+
+        // Color maps
+        const colorMap = {
+            sage: { name: 'Sage Green', hex: '#a3b899' },
+            rose: { name: 'Dusty Rose', hex: '#c9a9a6' },
+            lavender: { name: 'Lavender', hex: '#b4a7d6' },
+            teal: { name: 'Soft Teal', hex: '#7ba8a1' },
+            peach: { name: 'Peachy', hex: '#d4a59a' },
+            gold: { name: 'Warm Gold', hex: '#c9b77c' }
+        };
+
+        const bgColorMap = {
+            dark: { name: 'Dark Plum', hex: '#3d2f31' },
+            charcoal: { name: 'Charcoal', hex: '#1a1a1a' },
+            navy: { name: 'Deep Navy', hex: '#1e2638' },
+            forest: { name: 'Forest Green', hex: '#1f2e2a' }
+        };
+
+        // App Name
+        window.saveAppName = function() {
+            const appName = document.getElementById('appName').value || 'Our Life Hub';
+            localStorage.setItem('appName', appName);
+            alert('App name saved! Refresh pages to see changes.');
+        };
+
+        // Names
+        window.saveNames = function() {
+            const names = {
+                name1: document.getElementById('name1').value || 'Kasey',
+                name2: document.getElementById('name2').value || 'Charlie'
+            };
+            localStorage.setItem('userNames', JSON.stringify(names));
+            alert('Names saved! Refresh pages to see changes.');
+        };
+
+        // Colors
+        window.setAccentColor = function(colorKey) {
+            localStorage.setItem('accentColor', colorKey);
+            document.getElementById('currentColor').textContent = colorMap[colorKey].name;
+            
+            document.querySelectorAll('.color-option[data-color]').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            document.querySelector(`[data-color="${colorKey}"]`).classList.add('selected');
+            
+            alert(`Accent color changed to ${colorMap[colorKey].name}! Refresh pages to see changes.`);
+        };
+
+        window.setBackgroundColor = function(bgKey) {
+            localStorage.setItem('bgColor', bgKey);
+            document.getElementById('currentBgColor').textContent = bgColorMap[bgKey].name;
+            
+            document.querySelectorAll('.color-option[data-bgcolor]').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            document.querySelector(`[data-bgcolor="${bgKey}"]`).classList.add('selected');
+            
+            // Apply immediately
+            document.documentElement.style.background = bgColorMap[bgKey].hex;
+            document.body.style.background = bgColorMap[bgKey].hex;
+            
+            alert(`Background color changed to ${bgColorMap[bgKey].name}! Refresh pages to see changes.`);
+        };
+
+        // Font
+        window.setFontFamily = function() {
+            const fontFamily = document.getElementById('fontFamily').value;
+            localStorage.setItem('fontFamily', fontFamily);
+            
+            const fontMap = {
+                philosopher: "'Philosopher', Georgia, serif",
+                cormorant: "'Cormorant', Georgia, serif",
+                worksans: "'Work Sans', sans-serif",
+                georgia: "Georgia, serif",
+                arial: "Arial, sans-serif"
+            };
+            
+            document.body.style.fontFamily = fontMap[fontFamily];
+            alert('Font changed! Refresh pages to see changes throughout the app.');
+        };
+
+        window.adjustFontSize = function(direction) {
+            let currentSize = parseInt(localStorage.getItem('fontSize') || '100');
+            currentSize += (direction * 10);
+            currentSize = Math.max(80, Math.min(120, currentSize));
+            
+            localStorage.setItem('fontSize', currentSize.toString());
+            document.getElementById('fontSizeDisplay').textContent = currentSize + '%';
+            document.documentElement.style.fontSize = (16 * currentSize / 100) + 'px';
+        };
+
+        // Feature toggles
+        window.toggleFeature = function(feature) {
+            const toggle = document.getElementById(`toggle${feature.charAt(0).toUpperCase() + feature.slice(1)}`);
+            toggle.classList.toggle('active');
+            
+            const isActive = toggle.classList.contains('active');
+            const features = JSON.parse(localStorage.getItem('features') || '{}');
+            features[feature] = isActive;
+            localStorage.setItem('features', JSON.stringify(features));
+        };
+
+        // Habits management
+        window.addHabit = function(person) {
+            const input = document.getElementById(person === 'person1' ? 'newHabit1' : 'newHabit2');
+            const habitText = input.value.trim();
+            
+            if (!habitText) {
+                alert('Please enter a habit name');
+                return;
+            }
+            
+            const habits = JSON.parse(localStorage.getItem(`customHabits_${person}`) || JSON.stringify(defaultHabits[person]));
+            habits.push(habitText);
+            localStorage.setItem(`customHabits_${person}`, JSON.stringify(habits));
+            
+            input.value = '';
+            renderHabits(person);
+        };
+
+        window.deleteHabit = function(person, index) {
+            if (!confirm('Delete this habit?')) return;
+            
+            const habits = JSON.parse(localStorage.getItem(`customHabits_${person}`) || JSON.stringify(defaultHabits[person]));
+            habits.splice(index, 1);
+            localStorage.setItem(`customHabits_${person}`, JSON.stringify(habits));
+            renderHabits(person);
+        };
+
+        function renderHabits(person) {
+            const listId = person === 'person1' ? 'habits1List' : 'habits2List';
+            const habits = JSON.parse(localStorage.getItem(`customHabits_${person}`) || JSON.stringify(defaultHabits[person]));
+            const list = document.getElementById(listId);
+            
+            list.innerHTML = habits.map((habit, index) => `
+                <div class="habit-item">
+                    <div class="habit-text">${habit}</div>
+                    <div class="habit-actions">
+                        <button class="btn-danger btn btn-small" onclick="deleteHabit('${person}', ${index})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Custom prompts
+        window.saveCustomPrompts = function() {
+            const prompts = document.getElementById('customPrompts').value.trim();
+            const promptArray = prompts.split('\n').filter(p => p.trim());
+            
+            if (promptArray.length < 10) {
+                alert('Please enter at least 10 prompts (one per line)');
+                return;
+            }
+            
+            localStorage.setItem('customPrompts', JSON.stringify(promptArray));
+            document.getElementById('promptCount').textContent = promptArray.length;
+            alert(`${promptArray.length} custom prompts saved!`);
+        };
+
+        // Custom challenges
+        window.saveCustomChallenges = function() {
+            const challenges = document.getElementById('customChallenges').value.trim();
+            const challengeArray = challenges.split('\n').filter(c => c.trim());
+            
+            if (challengeArray.length !== 12) {
+                alert('Please enter exactly 12 challenges (one per line, for each month)');
+                return;
+            }
+            
+            localStorage.setItem('customChallenges', JSON.stringify(challengeArray));
+            document.getElementById('challengeCount').textContent = challengeArray.length;
+            alert('12 custom challenges saved!');
+        };
+
+        // Timezone
+        window.saveTimezone = function() {
+            const timezone = document.getElementById('timezone').value;
+            localStorage.setItem('timezone', timezone);
+            alert('Timezone saved!');
+        };
+
+        // Week start
+        window.saveWeekStart = function() {
+            const weekStart = document.getElementById('weekStart').value;
+            localStorage.setItem('weekStart', weekStart);
+            alert('Week start day saved! Refresh pages to see changes.');
+        };
+
+        // Export data
+        window.exportData = function() {
+            const data = {
+                version: '1.0',
+                exportDate: new Date().toISOString(),
+                localStorage: {}
+            };
+
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                data.localStorage[key] = localStorage.getItem(key);
+            }
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `lifehub-backup-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        };
+
+        // Import data
+        window.importData = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    if (!data.localStorage) {
+                        alert('Invalid backup file format.');
+                        return;
+                    }
+
+                    if (confirm('This will replace all current data with the backup. Continue?')) {
+                        localStorage.clear();
+                        
+                        Object.keys(data.localStorage).forEach(key => {
+                            localStorage.setItem(key, data.localStorage[key]);
+                        });
+
+                        alert('Data restored successfully! The page will now reload.');
+                        window.location.reload();
+                    }
+                } catch (err) {
+                    alert('Error reading backup file: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+        };
+
+        // Reset settings
+        window.resetSettings = function() {
+            if (!confirm('Reset all customizations to default? This will NOT delete your data (calendar, habits, etc.), only your appearance and feature settings.')) {
+                return;
+            }
+            
+            const settingsKeys = ['appName', 'userNames', 'accentColor', 'bgColor', 'fontFamily', 'fontSize', 'features', 'customHabits_person1', 'customHabits_person2', 'customPrompts', 'customChallenges', 'timezone', 'weekStart'];
+            settingsKeys.forEach(key => localStorage.removeItem(key));
+            
+            alert('Settings reset to defaults! The page will now reload.');
+            window.location.reload();
+        };
+
+        // Load all settings
+        function loadSettings() {
+            // App name
+            const appName = localStorage.getItem('appName') || 'Our Life Hub';
+            document.getElementById('appName').value = appName;
+            
+            // Names
+            const savedNames = localStorage.getItem('userNames');
+            if (savedNames) {
+                const names = JSON.parse(savedNames);
+                document.getElementById('name1').value = names.name1 || 'Kasey';
+                document.getElementById('name2').value = names.name2 || 'Charlie';
+            }
+            
+            // Accent color
+            const savedColor = localStorage.getItem('accentColor') || 'sage';
+            document.getElementById('currentColor').textContent = colorMap[savedColor].name;
+            document.querySelector(`[data-color="${savedColor}"]`).classList.add('selected');
+            
+            // Background color
+            const savedBgColor = localStorage.getItem('bgColor') || 'dark';
+            document.getElementById('currentBgColor').textContent = bgColorMap[savedBgColor].name;
+            document.querySelector(`[data-bgcolor="${savedBgColor}"]`).classList.add('selected');
+            document.documentElement.style.background = bgColorMap[savedBgColor].hex;
+            document.body.style.background = bgColorMap[savedBgColor].hex;
+            
+            // Font family
+            const savedFont = localStorage.getItem('fontFamily') || 'philosopher';
+            document.getElementById('fontFamily').value = savedFont;
+            
+            // Font size
+            const savedFontSize = localStorage.getItem('fontSize') || '100';
+            document.getElementById('fontSizeDisplay').textContent = savedFontSize + '%';
+            document.documentElement.style.fontSize = (16 * parseInt(savedFontSize) / 100) + 'px';
+            
+            // Features
+            const features = JSON.parse(localStorage.getItem('features') || '{"bingo":true,"dreams":true,"meals":true,"prompts":true,"challenges":true}');
+            Object.keys(features).forEach(feature => {
+                const toggle = document.getElementById(`toggle${feature.charAt(0).toUpperCase() + feature.slice(1)}`);
+                if (toggle) {
+                    if (features[feature]) {
+                        toggle.classList.add('active');
+                    } else {
+                        toggle.classList.remove('active');
+                    }
+                }
+            });
+            
+            // Habits
+            renderHabits('person1');
+            renderHabits('person2');
+            
+            // Custom prompts
+            const customPrompts = localStorage.getItem('customPrompts');
+            if (customPrompts) {
+                const promptArray = JSON.parse(customPrompts);
+                document.getElementById('customPrompts').value = promptArray.join('\n');
+                document.getElementById('promptCount').textContent = promptArray.length;
+            }
+            
+            // Custom challenges
+            const customChallenges = localStorage.getItem('customChallenges');
+            if (customChallenges) {
+                const challengeArray = JSON.parse(customChallenges);
+                document.getElementById('customChallenges').value = challengeArray.join('\n');
+                document.getElementById('challengeCount').textContent = challengeArray.length;
+            }
+            
+            // Timezone
+            const savedTimezone = localStorage.getItem('timezone') || 'America/New_York';
+            document.getElementById('timezone').value = savedTimezone;
+            
+            // Week start
+            const savedWeekStart = localStorage.getItem('weekStart') || '0';
+            document.getElementById('weekStart').value = savedWeekStart;
+        }
+
+        loadSettings();
+    </script>
+</body>
+</html>
