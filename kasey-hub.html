@@ -26,7 +26,7 @@
             font-family: 'Cormorant', Georgia, 'Times New Roman', serif;
             background: #3d2f31;
             min-height: 100vh;
-            padding: 16px;
+            padding: 76px 16px 16px;
             color: #e0e0e0;
             position: relative;
             width: 100%;
@@ -42,7 +42,7 @@
 
         .sync-status {
             position: absolute;
-            top: 90px;
+            top: 140px;
             right: 24px;
             background: #EBE0D6;
             border: 1px solid #444;
@@ -921,6 +921,25 @@
         .habits-cancel-btn:hover { border-color: rgba(181, 145, 151, 0.6); }
         .habit-count { font-size: 0.75rem; color: rgba(242, 235, 224, 0.5); margin-bottom: 12px; }
 
+
+        .journal-back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: transparent;
+            border: 1px solid #b59197;
+            color: #b59197;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+
+        .journal-back-btn:hover {
+            background: #b59197;
+            color: #fff;
+        }
         /* Journal styles */
         .journal-locked {
             position: fixed;
@@ -1150,9 +1169,85 @@
             margin: 0 4px;
         }
 
+    
+        /* Top Navigation Bar */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #2a1f21;
+            border-bottom: 1px solid rgba(163, 184, 153, 0.2);
+            z-index: 1000;
+            padding: 0 24px;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+        }
+        
+        .nav-logo {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #a3b899;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: rgba(242, 235, 224, 0.7);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            color: #a3b899;
+        }
+
+        .nav-link.active {
+            color: #a3b899;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 16px;
+            }
+            .nav-link {
+                font-size: 0.85rem;
+            }
+        }
+
     </style>
 </head>
 <body>
+    <!-- Top Navigation Bar -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Our Life Hub</a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                    <a href="kasey-hub.html" class="nav-link active">Kasey</a>
+                    <a href="charlie-hub.html" class="nav-link">Charlie</a>
+                    <a href="our-dreams.html" class="nav-link">Dreams</a>
+                    <a href="meal-plan.html" class="nav-link">Meals</a>
+                    <a href="settings.html" class="nav-link">Settings</a>
+            </div>
+        </div>
+    </nav>
+
+
     <div class="container">
         <a href="index.html" class="btn" style="margin-bottom: 24px;">&larr; Back to Home</a>
         
@@ -1382,6 +1477,7 @@
         <!-- JOURNAL TAB -->
         <div id="journal-tab" class="hub-tab">
             <div class="journal-locked" id="journalLocked">
+                <a href="kasey-hub.html" class="journal-back-btn">← Back to Hub</a>
                 <div class="journal-password-box">
                     
                     <div class="journal-password-title">My Private Journal</div>
