@@ -153,7 +153,12 @@
         }
 
         /* Reminder Section */
-        .reminder-section { margin-bottom: 28px; }
+        .reminder-section {
+            margin-bottom: 28px;
+            padding: 8px;
+            background: rgba(163, 184, 153, 0.03);
+            border-radius: 2px;
+        }
         .elemental-divider {
             display: flex;
             align-items: center;
@@ -172,9 +177,12 @@
             opacity: 0.5;
         }
         .current-reminder {
-            background: #2a1f21;
-            border: 1px solid rgba(61, 107, 107, 0.3);
-            padding: 22px 26px; margin-bottom: 14px; display: none;
+            background: rgba(163, 184, 153, 0.08);
+            border: 2px solid #a3b899;
+            padding: 24px 28px;
+            margin-bottom: 14px;
+            display: none;
+            box-shadow: 0 4px 12px rgba(163, 184, 153, 0.15);
         }
         .current-reminder.visible { display: block; }
         .reminder-content {
@@ -186,50 +194,93 @@
         }
         .reminder-info { flex: 1; }
         .reminder-eyebrow {
-            font-size: 0.6rem; text-transform: uppercase;
+            font-size: 0.65rem; text-transform: uppercase;
             letter-spacing: 0.25em; color: #a3b899; margin-bottom: 10px;
+            font-weight: 600;
         }
         .reminder-title {
-            font-size: 1.1rem; color: #f2ebe0; font-weight: 400;
+            font-size: 1.25rem; color: #f2ebe0; font-weight: 500;
             margin-bottom: 6px; line-height: 1.4;
         }
-        .reminder-due { font-size: 0.85rem; color: #c9a9a6; margin-bottom: 0; }
+        .reminder-due { font-size: 0.95rem; color: #c9a9a6; margin-bottom: 0; font-weight: 500; }
         .reminder-links { display: flex; gap: 10px; flex-direction: column; align-items: flex-end; }
         .reminder-links:empty { display: none; }
         .reminder-link {
-            background: rgba(163, 184, 153, 0.15);
-            border: 1px solid rgba(163, 184, 153, 0.4);
-            color: #a3b899; padding: 9px 16px; text-decoration: none;
-            font-size: 0.8rem; font-family: inherit; transition: all 0.2s ease;
+            background: rgba(163, 184, 153, 0.2);
+            border: 1px solid rgba(163, 184, 153, 0.5);
+            color: #a3b899;
+            padding: 10px 18px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            font-family: inherit;
+            transition: all 0.2s ease;
             white-space: nowrap;
         }
-        .reminder-link:hover { background: rgba(163, 184, 153, 0.25); }
+        .reminder-link:hover {
+            background: rgba(163, 184, 153, 0.3);
+            border-color: #a3b899;
+        }
         .reminder-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .reminder-btn {
-            background: transparent; border: 1px solid rgba(163, 184, 153, 0.4);
-            color: #a3b899; padding: 10px 20px; cursor: pointer;
-            font-size: 0.8rem; font-family: inherit; transition: all 0.2s ease;
+            background: transparent;
+            border: 1px solid rgba(163, 184, 153, 0.5);
+            color: #a3b899;
+            padding: 11px 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            font-family: inherit;
+            transition: all 0.2s ease;
         }
-        .reminder-btn:hover { background: rgba(163, 184, 153, 0.15); }
-        .reminder-btn.primary { background: #3d6b6b; border-color: #3d6b6b; color: #f2ebe0; }
-        .reminder-btn.primary:hover { background: #4a7a7a; }
+        }
+        .reminder-btn:hover {
+            background: rgba(163, 184, 153, 0.2);
+            border-color: #a3b899;
+        }
+        .reminder-btn.primary {
+            background: #a3b899;
+            border-color: #a3b899;
+            color: #1c1c1c;
+            font-weight: 600;
+        }
+        .reminder-btn.primary:hover {
+            background: #b4c9aa;
+            border-color: #b4c9aa;
+        }
         .reminder-btn.subtle { border-color: rgba(224, 210, 208, 0.2); color: rgba(224, 210, 208, 0.6); }
         .reminder-btn.subtle:hover { border-color: rgba(224, 210, 208, 0.4); color: #e0d2d0; }
 
         .quick-add { display: flex; gap: 0; margin-bottom: 6px; }
         .quick-add input {
-            flex: 1; background: #2a1f21;
-            border: 1px solid rgba(61, 107, 107, 0.25); border-right: none;
-            color: #f2ebe0; padding: 13px 16px; font-size: 0.9rem; font-family: inherit;
+            flex: 1;
+            background: rgba(61, 47, 49, 0.3);
+            border: 1px solid rgba(163, 184, 153, 0.3);
+            border-right: none;
+            color: #f2ebe0;
+            padding: 13px 16px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
         }
-        .quick-add input:focus { outline: none; border-color: rgba(61, 107, 107, 0.5); }
+        .quick-add input:focus {
+            outline: none;
+            border-color: rgba(163, 184, 153, 0.6);
+            background: rgba(61, 47, 49, 0.5);
+        }
         .quick-add input::placeholder { color: rgba(242, 235, 224, 0.35); font-style: italic; }
         .quick-add button {
-            background: #3d6b6b; border: 1px solid #3d6b6b; color: #f2ebe0;
-            padding: 13px 18px; cursor: pointer; font-size: 1rem;
-            font-family: inherit; transition: all 0.2s ease;
+            background: #a3b899;
+            border: 1px solid #a3b899;
+            color: #1c1c1c;
+            padding: 13px 18px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: inherit;
+            transition: all 0.2s ease;
         }
-        .quick-add button:hover { background: #4a7a7a; }
+        .quick-add button:hover { background: #b4c9aa; border-color: #b4c9aa; }
         .manage-link { 
             display: flex; 
             justify-content: space-between; 
@@ -369,6 +420,37 @@
         .event-title { color: #f2ebe0; font-size: 0.9rem; margin-bottom: 2px; font-weight: 600; }
         .event-note { color: rgba(242, 235, 224, 0.5); font-size: 0.8rem; font-style: italic; }
         
+        /* Event Action Buttons */
+        .event-actions {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .event-edit-btn, .event-delete-btn {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            border: 1px solid;
+            background: transparent;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+        .event-edit-btn {
+            color: #a3b899;
+            border-color: #a3b899;
+        }
+        .event-edit-btn:hover {
+            background: rgba(163, 184, 153, 0.2);
+        }
+        .event-delete-btn {
+            color: #c9a9a6;
+            border-color: #c9a9a6;
+        }
+        .event-delete-btn:hover {
+            background: rgba(201, 169, 166, 0.2);
+        }
+        
         /* CRM Event Styles */
         .crm-event {
             background: rgba(61, 107, 107, 0.15) !important;
@@ -500,10 +582,25 @@
         .reminder-modal-close:hover { color: #f2ebe0; }
         .reminder-list { margin-bottom: 20px; }
         .reminder-list-item {
-            background: #2a1f21; padding: 14px;
-            margin-bottom: 10px; border-left: 2px solid #a3b899;
+            background: rgba(163, 184, 153, 0.08);
+            padding: 16px;
+            margin-bottom: 12px;
+            border-left: 3px solid #a3b899;
+            border: 1px solid rgba(163, 184, 153, 0.25);
+            border-left: 3px solid #a3b899;
+            transition: all 0.2s ease;
         }
-        .reminder-list-item.overdue { border-left-color: #c9a9a6; }
+        .reminder-list-item:hover {
+            background: rgba(163, 184, 153, 0.12);
+            border-color: rgba(163, 184, 153, 0.4);
+        }
+        .reminder-list-item.overdue {
+            border-left-color: #c9a9a6;
+            background: rgba(201, 169, 166, 0.08);
+        }
+        .reminder-list-item.overdue:hover {
+            background: rgba(201, 169, 166, 0.12);
+        }
         .reminder-list-header {
             display: flex; justify-content: space-between; align-items: flex-start;
             margin-bottom: 8px;
@@ -598,11 +695,19 @@
             border: 1px solid rgba(61, 107, 107, 0.2);
             margin-bottom: 8px;
             gap: 12px;
-            transition: all 0.2s ease;
+            transition: all 0.6s ease;
         }
         .grocery-item:hover {
             background: rgba(61, 47, 49, 0.5);
             border-color: rgba(163, 184, 153, 0.3);
+        }
+        .grocery-item.done span {
+            text-decoration: line-through;
+            color: #7ba886;
+        }
+        .grocery-item.fading {
+            opacity: 0;
+            transform: translateX(-20px);
         }
         .grocery-item:last-of-type { margin-bottom: 0; }
         .grocery-item input[type="checkbox"] {
@@ -616,10 +721,6 @@
             color: #f2ebe0;
             font-size: 1rem;
             line-height: 1.4;
-        }
-        .grocery-item.done span {
-            text-decoration: line-through;
-            color: rgba(242, 235, 224, 0.4);
         }
         .add-input { display: flex; gap: 8px; margin-top: 16px; }
         .add-input input {
@@ -1260,12 +1361,45 @@
         let currentReminderIndex = 0;
 
         const defaultLifeReminders = [
+            // Tax reminders
             { id: 1, title: "Q4 estimated taxes", notifyDate: { month: 1, day: 15 }, frequency: "yearly", link: "https://www.irs.gov/payments" },
             { id: 2, title: "Q1 estimated taxes", notifyDate: { month: 4, day: 15 }, frequency: "yearly", link: "https://www.irs.gov/payments" },
             { id: 3, title: "Q2 estimated taxes", notifyDate: { month: 6, day: 15 }, frequency: "yearly", link: "https://www.irs.gov/payments" },
             { id: 4, title: "Q3 estimated taxes", notifyDate: { month: 9, day: 15 }, frequency: "yearly", link: "https://www.irs.gov/payments" },
-            { id: 5, title: "Renew car registration", notifyDate: { month: 6, day: 1 }, frequency: "yearly" },
-            { id: 6, title: "Schedule annual vet checkup", notifyDate: { month: 3, day: 1 }, frequency: "yearly" }
+            
+            // Tag renewals
+            { id: 5, title: "Kasey - Renew vehicle registration online", notifyDate: { month: 5, day: 25 }, frequency: "yearly", link: "https://drive.ky.gov/" },
+            { id: 6, title: "Charlie - Renew vehicle registration online", notifyDate: { month: 3, day: 25 }, frequency: "yearly", link: "https://drive.ky.gov/" },
+            
+            // Birthday reminders (2 months prior for planning)
+            { id: 7, title: "🎂 Kasey's Birthday Coming Up - Plan & Shop!", notifyDate: { month: 5, day: 1 }, frequency: "yearly" },
+            { id: 8, title: "🎂 Charlie's Birthday Coming Up - Plan & Shop!", notifyDate: { month: 7, day: 29 }, frequency: "yearly" },
+            
+            // Anniversary reminder (2 months prior)
+            { id: 9, title: "💕 Anniversary Coming Up - Plan Something Special!", notifyDate: { month: 12, day: 14 }, frequency: "yearly" },
+            
+            // Mom's birthday (1 month prior)
+            { id: 10, title: "🎁 Mom's Birthday - Get Card & Gift", notifyDate: { month: 9, day: 29 }, frequency: "yearly" },
+            
+            // Health & wellness
+            { id: 11, title: "Schedule annual physical checkup", notifyDate: { month: 1, day: 15 }, frequency: "yearly" },
+            { id: 12, title: "Schedule dental cleaning", notifyDate: { month: 2, day: 1 }, frequency: "yearly" },
+            { id: 13, title: "Get flu shots", notifyDate: { month: 9, day: 1 }, frequency: "yearly" },
+            { id: 14, title: "Schedule annual vet checkup", notifyDate: { month: 3, day: 1 }, frequency: "yearly" },
+            
+            // Home maintenance
+            { id: 15, title: "Change HVAC filters", notifyDate: { month: 1, day: 1 }, frequency: "yearly" },
+            { id: 16, title: "Change HVAC filters", notifyDate: { month: 4, day: 1 }, frequency: "yearly" },
+            { id: 17, title: "Change HVAC filters", notifyDate: { month: 7, day: 1 }, frequency: "yearly" },
+            { id: 18, title: "Change HVAC filters", notifyDate: { month: 10, day: 1 }, frequency: "yearly" },
+            { id: 19, title: "Test & replace smoke detector batteries", notifyDate: { month: 3, day: 1 }, frequency: "yearly" },
+            { id: 20, title: "Test & replace smoke detector batteries", notifyDate: { month: 9, day: 1 }, frequency: "yearly" },
+            { id: 21, title: "Spring home maintenance check", notifyDate: { month: 4, day: 1 }, frequency: "yearly" },
+            { id: 22, title: "Winterize home & check heating system", notifyDate: { month: 10, day: 15 }, frequency: "yearly" },
+            
+            // Financial
+            { id: 23, title: "Check free annual credit report", notifyDate: { month: 1, day: 31 }, frequency: "yearly", link: "https://www.annualcreditreport.com" },
+            { id: 24, title: "Review & update insurance policies", notifyDate: { month: 11, day: 1 }, frequency: "yearly" }
         ];
 
         async function loadLifeReminders() {
@@ -1850,32 +1984,21 @@
         // Helper function to render an event (handles both regular and CRM events)
         function renderEventHTML(event, eventIndex) {
             const displayTime = event.time ? formatTime12Hour(event.time) : '';
+            const heartEmoji = event.fromCRM ? ' 💗' : '';
+            const itemClass = event.fromCRM ? 'event-item crm-event' : 'event-item';
             
-            if (event.fromCRM) {
-                // CRM event - read-only with heart emoji after title
-                return `
-                    <div class="event-item crm-event">
-                        <div>
-                            <div class="event-title">${displayTime ? displayTime + ' - ' : ''}${event.title} 💗</div>
-                            ${event.note ? `<div class="event-note">${event.note}</div>` : ''}
-                        </div>
+            return `
+                <div class="${itemClass}">
+                    <div style="flex: 1;">
+                        <div class="event-title">${displayTime ? displayTime + ' - ' : ''}${event.title}${heartEmoji}</div>
+                        ${event.note ? `<div class="event-note">${event.note}</div>` : ''}
                     </div>
-                `;
-            } else {
-                // Regular event with edit and delete buttons
-                return `
-                    <div class="event-item">
-                        <div>
-                            <div class="event-title">${displayTime ? displayTime + ' - ' : ''}${event.title}</div>
-                            ${event.note ? `<div class="event-note">${event.note}</div>` : ''}
-                        </div>
-                        <div style="display: flex; gap: 6px;">
-                            <button class="btn" onclick="calendarEditEvent(${eventIndex})" style="padding: 6px 12px; font-size: 0.75rem;">Edit</button>
-                            <button class="btn" onclick="calendarDeleteEvent(${eventIndex})" style="padding: 6px 12px; font-size: 0.75rem;">Delete</button>
-                        </div>
+                    <div class="event-actions">
+                        <button class="event-edit-btn" onclick="calendarEditEvent(${eventIndex})">Edit</button>
+                        <button class="event-delete-btn" onclick="calendarDeleteEvent(${eventIndex})">Delete</button>
                     </div>
-                `;
-            }
+                </div>
+            `;
         }
 
         function calendarRenderTwoDay() {
@@ -2173,22 +2296,22 @@
             
             const time = document.getElementById('dayModalEventTime').value;
             const note = document.getElementById('dayModalEventNote').value.trim();
-            const editId = document.getElementById('dayModalEditId').value;
+            const editIndexStr = document.getElementById('dayModalEditId').value;
             
             const dateStr = selectedModalDate.toISOString().split('T')[0];
             
-            if (editId) {
-                // Update existing event
-                const index = calendarEvents.findIndex(e => e.id === editId);
-                if (index !== -1) {
+            if (editIndexStr !== '') {
+                // Update existing event by index
+                const index = parseInt(editIndexStr);
+                if (index >= 0 && index < calendarEvents.length) {
                     calendarEvents[index].title = title;
                     calendarEvents[index].time = time;
                     calendarEvents[index].note = note;
+                    calendarEvents[index].date = dateStr;
                 }
             } else {
                 // Create new event
                 const newEvent = {
-                    id: Date.now().toString(),
                     title: title,
                     date: dateStr,
                     time: time,
@@ -2429,7 +2552,8 @@
             document.getElementById('dayModalEventTitle').value = event.title;
             document.getElementById('dayModalEventTime').value = event.time || '';
             document.getElementById('dayModalEventNote').value = event.note || '';
-            document.getElementById('dayModalEditId').value = event.id;
+            // Store the index for editing
+            document.getElementById('dayModalEditId').value = index;
             
             // Open the modal
             const overlay = document.getElementById('dayModalOverlay');
@@ -2749,14 +2873,32 @@
                 await saveGroceries();
                 renderGroceries();
                 input.value = '';
+                input.focus(); // Keep focus on input for quick entry
             }
         }
 
-                async function toggleGrocery(index) {
+        async function toggleGrocery(index) {
             if (index >= 0 && index < groceries.length) {
-                groceries[index].completed = !groceries[index].completed;
-                await saveGroceries();
+                // Mark as completed first to show the checkmark and strikethrough
+                groceries[index].completed = true;
                 renderGroceries();
+                
+                // Wait 800ms to show the checkmark, then start fade-out
+                setTimeout(() => {
+                    const items = document.querySelectorAll('.grocery-item');
+                    if (items[index]) {
+                        items[index].classList.add('fading');
+                    }
+                }, 800);
+                
+                // After fade-out animation completes, remove the item
+                setTimeout(async () => {
+                    if (index < groceries.length) {
+                        groceries.splice(index, 1);
+                        await saveGroceries();
+                        renderGroceries();
+                    }
+                }, 1400); // 800ms delay + 600ms fade
             }
         }
 
