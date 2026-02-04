@@ -29,8 +29,8 @@
             font-family: 'Philosopher', Georgia, serif;
             background: #3d2f31;
             min-height: 100vh;
-            padding: 76px 16px 16px;
-            color: #4a3a3c;
+            padding: 64px 16px 16px;
+            color: #e0d2d0;
             position: relative;
             width: 100%;
             height: 100%;
@@ -60,14 +60,14 @@
 
         .btn:hover {
             background: #b59197;
-            color: #4a3a3c;
+            color: #e0d2d0;
             border-color: #b59197;
         }
 
         .page-header {
             text-align: center;
             margin-bottom: 32px;
-            margin-top: 24px;
+            
         }
 
         .page-title {
@@ -94,7 +94,7 @@
 
         #sectionSelect {
             width: 100%;
-            background: #EBE0D6;
+            background: #3d2f31;
             border: 1px solid #7ba886;
             color: #7ba886;
             padding: 16px;
@@ -124,8 +124,8 @@
         }
 
         #sectionSelect option {
-            background: #EBE0D6;
-            color: #4a3a3c;
+            background: #3d2f31;
+            color: #e0d2d0;
             padding: 12px;
         }
 
@@ -158,7 +158,7 @@
         }
 
         .dream-list-toggle {
-            background: #EBE0D6;
+            background: #3d2f31;
             padding: 12px 16px;
             cursor: pointer;
             display: flex;
@@ -221,7 +221,7 @@
         }
 
         .dream-item-title {
-            color: #4a3a3c;
+            color: #e0d2d0;
             font-size: 1rem;
             margin-bottom: 6px;
             font-weight: 500;
@@ -272,7 +272,7 @@
 
         .image-upload-label:hover {
             background: #b59197;
-            color: #4a3a3c;
+            color: #e0d2d0;
             border-color: #b59197;
         }
 
@@ -308,7 +308,7 @@
             position: absolute;
             top: 20px;
             right: 20px;
-            color: #4a3a3c;
+            color: #e0d2d0;
             font-size: 2rem;
             cursor: pointer;
             background: none;
@@ -389,7 +389,7 @@
 
         .icon-btn:hover {
             background: #7ba886;
-            color: #4a3a3c;
+            color: #e0d2d0;
             border-color: #7ba886;
         }
 
@@ -400,7 +400,7 @@
 
         .icon-btn.achieved:hover {
             background: #7ba886;
-            color: #4a3a3c;
+            color: #e0d2d0;
         }
 
         .add-dream-btn {
@@ -418,13 +418,13 @@
 
         .add-dream-btn:hover {
             background: #b59197;
-            color: #4a3a3c;
+            color: #e0d2d0;
             border-color: #b59197;
         }
 
         .dream-form {
             display: none;
-            background: #EBE0D6;
+            background: #3d2f31;
             padding: 20px;
             margin-top: 15px;
             margin-bottom: 20px;
@@ -452,9 +452,9 @@
         .form-group textarea,
         .form-group select {
             width: 100%;
-            background: #EBE0D6;
+            background: #3d2f31;
             border: 1px solid #d4b5b8;
-            color: #4a3a3c;
+            color: #e0d2d0;
             padding: 10px;
             font-size: 0.9rem;
             font-family: inherit;
@@ -486,9 +486,9 @@
             cursor: pointer;
             font-size: 0.85rem;
             text-transform: none;
-            color: #4a3a3c;
+            color: #e0d2d0;
             padding: 8px;
-            background: #EBE0D6;
+            background: #3d2f31;
             border: 1px solid #d4b5b8;
             transition: all 0.2s ease;
         }
@@ -522,7 +522,7 @@
 
         .form-actions button[type="submit"]:hover {
             background: #b59197;
-            color: #4a3a3c;
+            color: #e0d2d0;
         }
 
         .empty-state {
@@ -537,7 +537,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: #EBE0D6;
+            background: #3d2f31;
             padding: 40px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
             text-align: center;
@@ -552,7 +552,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: #EBE0D6;
+            background: #3d2f31;
             padding: 40px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
             text-align: center;
@@ -579,7 +579,7 @@
         }
 
         .random-choice-title {
-            color: #4a3a3c;
+            color: #e0d2d0;
             font-size: 1.8rem;
             margin-bottom: 16px;
             font-weight: 600;
@@ -713,18 +713,88 @@
             color: #a3b899;
         }
 
+        
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            z-index: 1001;
+            padding: 8px;
+        }
+
+        .hamburger span {
+            width: 24px;
+            height: 2px;
+            background: #a3b899;
+            transition: all 0.3s;
+            border-radius: 2px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
         .nav-link.active {
             color: #a3b899;
         }
 
+        
         @media (max-width: 768px) {
-            .nav-links {
-                gap: 16px;
+            .hamburger {
+                display: flex;
             }
+
+            .nav-links {
+                position: fixed;
+                top: 60px;
+                left: 0;
+                right: 0;
+                background: #2a1f21;
+                flex-direction: column;
+                gap: 0;
+                padding: 0;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+                border-bottom: 1px solid rgba(163, 184, 153, 0.2);
+            }
+
+            .nav-links.active {
+                max-height: 400px;
+            }
+
             .nav-link {
-                font-size: 0.85rem;
+                width: 100%;
+                padding: 16px 24px;
+                border-bottom: 1px solid rgba(163, 184, 153, 0.1);
+                font-size: 1rem;
+            }
+
+            .nav-link:last-child {
+                border-bottom: none;
+            }
+
+            .container {
+                padding-top: 16px;
             }
         }
+
+        @media (max-width: 480px) {
+            .nav-logo {
+                font-size: 1rem;
+            }
+        }
+
 
     </style>
 </head>
@@ -733,7 +803,12 @@
     <nav class="top-nav">
         <div class="nav-container">
             <a href="index.html" class="nav-logo">Our Life Hub</a>
-            <div class="nav-links">
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="nav-links" id="navLinks">
                 <a href="index.html" class="nav-link">Home</a>
                     <a href="kasey-hub.html" class="nav-link">Kasey</a>
                     <a href="charlie-hub.html" class="nav-link">Charlie</a>
@@ -1725,6 +1800,34 @@
 
         // Initialize
         initFirebaseListeners();
+    
+        // Hamburger menu toggle
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+
+        if (hamburger && navLinks) {
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+
+            // Close mobile menu when a link is clicked
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    navLinks.classList.remove('active');
+                });
+            });
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
+                    hamburger.classList.remove('active');
+                    navLinks.classList.remove('active');
+                }
+            });
+        }
+
     </script>
 </body>
 </html>
