@@ -29,7 +29,7 @@
             font-family: 'Philosopher', Georgia, serif;
             background: #3d2f31;
             min-height: 100vh;
-            padding: 16px;
+            padding: 76px 16px 16px;
             color: #4a3a3c;
             position: relative;
             width: 100%;
@@ -666,9 +666,85 @@
                 font-size: 2rem;
             }
         }
+    
+        /* Top Navigation Bar */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #2a1f21;
+            border-bottom: 1px solid rgba(163, 184, 153, 0.2);
+            z-index: 1000;
+            padding: 0 24px;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+        }
+        
+        .nav-logo {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #a3b899;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: rgba(242, 235, 224, 0.7);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            color: #a3b899;
+        }
+
+        .nav-link.active {
+            color: #a3b899;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 16px;
+            }
+            .nav-link {
+                font-size: 0.85rem;
+            }
+        }
+
     </style>
 </head>
 <body>
+    <!-- Top Navigation Bar -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Our Life Hub</a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                    <a href="kasey-hub.html" class="nav-link">Kasey</a>
+                    <a href="charlie-hub.html" class="nav-link">Charlie</a>
+                    <a href="our-dreams.html" class="nav-link active">Dreams</a>
+                    <a href="meal-plan.html" class="nav-link">Meals</a>
+                    <a href="settings.html" class="nav-link">Settings</a>
+            </div>
+        </div>
+    </nav>
+
+
     
     <div class="container">
         <div class="page-header">
@@ -1263,6 +1339,7 @@
         const firebaseConfig = {
             apiKey: "AIzaSyCDda9sPwSY-RQ5rrM5THOvcLtHvcPRYd4",
             authDomain: "our-habit-hub.firebaseapp.com",
+            databaseURL: "https://our-habit-hub-default-rtdb.firebaseio.com",
             projectId: "our-habit-hub",
             storageBucket: "our-habit-hub.firebasestorage.app",
             messagingSenderId: "78555830496",
@@ -1272,6 +1349,9 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
+        
+        console.log('Firebase initialized successfully!');
+        console.log('Database:', database);
 
         // Global variables
         const categories = ['restaurants', 'places', 'kasey-wishlist', 'charlie-wishlist', 'travel', 'bucket', 'home', 'pets', 'traditions', 'shows-movies'];
@@ -1365,6 +1445,7 @@
         // Add dream
         window.addDream = async function(e, category) {
             e.preventDefault();
+            console.log('Adding dream to category:', category);
             const formData = new FormData(e.target);
             
             const dream = {
@@ -1400,12 +1481,16 @@
 
             // Push to Firebase
             try {
+                console.log('Attempting to save dream:', dream);
                 const dreamsRef = ref(database, `dreams/${category}`);
-                await push(dreamsRef, dream);
+                console.log('Database ref:', dreamsRef);
+                const result = await push(dreamsRef, dream);
+                console.log('Dream saved successfully!', result);
                 window.hideForm(category);
             } catch (error) {
                 console.error('Error saving dream:', error);
-                alert('Failed to save. Please try again.');
+                console.error('Error details:', error.message);
+                alert('Failed to save. Please try again. Error: ' + error.message);
             }
         };
 
