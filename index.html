@@ -2314,12 +2314,16 @@
                 const timeHtml = event.time ? `<div class="day-modal-event-time">${formatTime(event.time)}</div>` : '';
                 const noteHtml = event.note ? `<div class="day-modal-event-note">${event.note}</div>` : '';
                 
-                // Handle CRM events differently
+                // Handle CRM events - now with delete button for bidirectional sync
                 if (event.fromCRM) {
+                    const deleteId = event.crmId || event.id;
                     return `
                         <div class="day-modal-event crm-event">
                             <div class="day-modal-event-header">
                                 <div class="day-modal-event-title">${event.title} 💗</div>
+                                <div class="day-modal-event-actions">
+                                    <button class="day-modal-delete" onclick="deleteDayModalEvent('${deleteId}')">×</button>
+                                </div>
                             </div>
                             ${timeHtml}
                             ${noteHtml}
@@ -2380,7 +2384,15 @@
         async function deleteDayModalEvent(eventId) {
             if (!confirm('Delete this event?')) return;
             
-            calendarEvents = calendarEvents.filter(e => e.id !== eventId);
+            // Find the event before removing it so we can check if it's a CRM event
+            const event = calendarEvents.find(e => e.id === eventId || e.crmId === eventId);
+            
+            // If it's a CRM event, also delete from CRM Firebase
+            if (event && event.fromCRM) {
+                await deleteCRMEventFromFirebase(event);
+            }
+            
+            calendarEvents = calendarEvents.filter(e => e.id !== eventId && e.crmId !== eventId);
             await calendarSaveEvents();
             renderDayModalEvents();
             calendarRender();
@@ -2626,12 +2638,20 @@
                 }).join(', ');
                 
                 if (confirm(`This event appears on multiple dates (${dateList}). Delete "${eventTitle}" from all dates?\n\nThis cannot be undone.`)) {
+                    // If any of the group events are CRM events, delete from CRM too
+                    for (const ge of groupEvents) {
+                        if (ge.fromCRM) await deleteCRMEventFromFirebase(ge);
+                    }
                     calendarEvents = calendarEvents.filter(e => e.eventGroup !== event.eventGroup);
                     await calendarSaveEvents();
                     calendarRender();
                 }
             } else {
                 if (confirm(`Are you sure you want to delete "${eventTitle}"?\n\nThis cannot be undone.`)) {
+                    // If it's a CRM event, also delete from CRM Firebase
+                    if (event.fromCRM) {
+                        await deleteCRMEventFromFirebase(event);
+                    }
                     calendarEvents.splice(index, 1);
                     await calendarSaveEvents();
                     calendarRender();
@@ -2770,6 +2790,35 @@
             
             // Re-render calendar with CRM events
             calendarRender();
+        }
+
+        // Delete a CRM event from the CRM Firebase collection (bidirectional sync)
+        async function deleteCRMEventFromFirebase(event) {
+            if (!window.firebaseReady || !window.db) return;
+            
+            try {
+                const { getDoc, setDoc, doc } = window.firestoreImports;
+                const docRef = doc(window.db, 'crmCalendarEvents', 'appointments');
+                const docSnap = await getDoc(docRef);
+                
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    if (data.events && Array.isArray(data.events)) {
+                        // Filter out the matching event by crmId, or by title+date+time
+                        const updatedEvents = data.events.filter(e => {
+                            if (event.crmId && e.crmId) {
+                                return e.crmId !== event.crmId;
+                            }
+                            // Fallback: match by title + date + time
+                            return !(e.title === event.title && e.date === event.date && e.time === event.time);
+                        });
+                        
+                        await setDoc(docRef, { events: updatedEvents });
+                    }
+                }
+            } catch (error) {
+                // Silently fail - local delete still works
+            }
         }
 
         // DAILY PROMPT FUNCTIONS
