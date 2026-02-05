@@ -21,11 +21,12 @@
  html {
  width: 100%;
  height: 100%;
+ background: #3d2f31 !important;
  }
 
  body {
  font-family: 'Cormorant', Georgia, 'Times New Roman', serif;
- background: #3d2f31;
+ background: #3d2f31 !important;
  min-height: 100vh;
  padding: 80px 16px 16px;
  color: #e0e0e0;
@@ -359,6 +360,55 @@
  }
 
  .resource-category.active .resource-content {
+ display: block;
+ }
+
+ /* Exercise Day Collapsible Sections */
+ .exercise-day {
+ margin-bottom: 12px;
+ }
+
+ .exercise-day-header {
+ background: #EBE0D6;
+ padding: 16px 20px;
+ border-left: 4px solid #b59197;
+ cursor: pointer;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ transition: background 0.2s;
+ }
+
+ .exercise-day-header:hover {
+ background: #f2ebe0;
+ }
+
+ .exercise-day-title {
+ color: #b59197;
+ font-size: 1.3rem;
+ font-weight: 600;
+ margin: 0;
+ }
+
+ .exercise-day-arrow {
+ color: #b59197;
+ font-size: 1.2rem;
+ transition: transform 0.3s;
+ }
+
+ .exercise-day.active .exercise-day-arrow {
+ transform: rotate(180deg);
+ }
+
+ .exercise-day-content {
+ display: none;
+ background: #EBE0D6;
+ padding: 20px;
+ border-left: 4px solid #b59197;
+ border-top: none;
+ }
+
+ .exercise-day.active .exercise-day-content {
  display: block;
  }
 
@@ -1204,27 +1254,55 @@
 
  
  @media (max-width: 768px) {
- .nav-links {
- gap: 16px;
+ .nav-container {
+ height: auto;
+ min-height: 60px;
+ padding: 8px 0;
+ flex-wrap: wrap;
  }
+
+ .nav-logo {
+ width: 100%;
+ text-align: center;
+ margin-bottom: 8px;
+ }
+
+ .nav-links {
+ gap: 12px;
+ width: 100%;
+ justify-content: center;
+ flex-wrap: wrap;
+ }
+ 
  .nav-link {
- font-size: 0.85rem;
+ font-size: 0.8rem;
+ padding: 4px 8px;
+ }
+
+ body {
+ padding-top: 100px;
  }
 
  .btn, button {
  font-size: 0.85rem;
  padding: 8px 12px;
  }
- }
 
- .container {
- padding-top: 16px;
+ #currentDayDisplay {
+ min-width: 180px !important;
+ font-size: 1rem !important;
  }
  }
 
  @media (max-width: 480px) {
- .nav-logo {
- font-size: 1rem;
+ .nav-link {
+ font-size: 0.75rem;
+ padding: 4px 6px;
+ }
+
+ #currentDayDisplay {
+ min-width: 160px !important;
+ font-size: 0.95rem !important;
  }
  }
 
@@ -1472,13 +1550,12 @@
  <!-- My Daily Wellness Schedule -->
  <div class="section" style="margin-bottom: 24px;">
  <h2 class="section-title">My Daily Wellness Schedule</h2>
- <p style="color: #3d2f31; text-align: center; margin-bottom: 12px; font-style: italic;">Wake 8 AM • Leave 10–10:30 • Lunch 2–3 • Dinner 7:30 • Bed 11</p>
  
  <!-- Day Navigation -->
- <div style="display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 20px;">
- <button onclick="changeDay(-1)" style="background: transparent; border: 1px solid #b59197; color: #b59197; padding: 6px 12px; cursor: pointer; font-size: 0.85rem; font-family: inherit;">← Previous</button>
- <div id="currentDayDisplay" style="color: #b59197; font-weight: 600; font-size: 1.1rem; min-width: 120px; text-align: center;"></div>
- <button onclick="changeDay(1)" style="background: transparent; border: 1px solid #b59197; color: #b59197; padding: 6px 12px; cursor: pointer; font-size: 0.85rem; font-family: inherit;">Next →</button>
+ <div style="display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;">
+ <button onclick="changeDay(-1)" style="background: transparent; border: 1px solid #b59197; color: #b59197; padding: 6px 12px; cursor: pointer; font-size: 0.85rem; font-family: inherit; white-space: nowrap;">← Previous</button>
+ <div id="currentDayDisplay" style="color: #b59197; font-weight: 600; font-size: 1.1rem; min-width: 220px; text-align: center;"></div>
+ <button onclick="changeDay(1)" style="background: transparent; border: 1px solid #b59197; color: #b59197; padding: 6px 12px; cursor: pointer; font-size: 0.85rem; font-family: inherit; white-space: nowrap;">Next →</button>
  </div>
 
  <!-- Day-specific schedules -->
@@ -1586,106 +1663,386 @@
  <span class="resource-arrow">&#9660;</span>
  </div>
  <div class="resource-content" id="exercise-content">
- <!-- Warm-Up Exercises -->
- <div style="background: #EBE0D6; padding: 20px; border-left: 3px solid #b59197; margin-bottom: 16px;">
- <h3 style="color: #3d2f31; margin-bottom: 16px; font-size: 1.1rem;">Warm-Up (5 min)</h3>
+ 
+ <!-- Daily Corrective Warm-Up (Do Before Every Workout) -->
+ <div style="background: #b59197; padding: 20px; margin-bottom: 16px;">
+ <h3 style="color: #f2ebe0; margin-bottom: 16px; font-size: 1.2rem; text-align: center; letter-spacing: 0.05em;">DAILY CORRECTIVE WARM-UP</h3>
+ <p style="color: #f2ebe0; text-align: center; margin-bottom: 16px; font-style: italic;">Perform before all workouts (8 minutes)</p>
+ <div style="background: #EBE0D6; padding: 16px;">
+ <ol style="color: #3d2f31; line-height: 2; padding-left: 20px;">
+ <li><strong>Diaphragmatic breathing + TrA engagement</strong> — Supine, knees bent. Inhale through nose, ribcage expands laterally. Exhale, gently draw belly to spine (20% effort). Hold 5 sec. <em>10 breaths</em></li>
+ <li><strong>Chin tucks</strong> — Supine, tongue on roof of mouth. Gentle "double chin" nodding. Hold 10 sec. <em>10 reps</em></li>
+ <li><strong>Pelvic tilts</strong> — Supine, knees bent. Flatten low back to floor, then release. <em>10 reps, 5-sec holds</em></li>
+ <li><strong>Cat-cow with Schroth breathing</strong> — Quadruped. Cow: breathe into concave side. Cat: exhale fully. <em>8 slow cycles</em></li>
+ <li><strong>Scapular setting</strong> — Prone, arms at sides. Squeeze shoulder blades "back and down." Hold 6 sec. <em>10 reps</em></li>
+ </ol>
+ </div>
+ </div>
+
+ <!-- MONDAY -->
+ <div class="exercise-day">
+ <div class="exercise-day-header" onclick="this.parentElement.classList.toggle('active')">
+ <div>
+ <h3 class="exercise-day-title">MONDAY: Corrective + Pilates Core</h3>
+ <p style="color: #7a6668; margin: 4px 0 0 0; font-style: italic; font-size: 0.9rem;">45 min | Foam roller, band, yoga block</p>
+ </div>
+ <span class="exercise-day-arrow">&#9660;</span>
+ </div>
+ <div class="exercise-day-content">
+ <div style="background: #fff; padding: 16px; margin-bottom: 12px; border: 1px solid #d4b5ba;">
+ <h4 style="color: #3d2f31; margin-bottom: 10px; font-size: 1.05rem;">Myofascial Release (8 min)</h4>
+ <ul style="color: #3d2f31; line-height: 1.8; padding-left: 20px;">
+ <li><strong>Thoracic spine foam rolling</strong> — Roller under shoulder blades, gentle extensions. <em>3 min</em></li>
+ <li><strong>Pec release with lacrosse ball</strong> — Against wall at chest height. <em>90 sec each side</em></li>
+ <li><strong>Upper trap/levator release</strong> — Ball between shoulder blade and spine. <em>2 min</em></li>
+ </ul>
+ </div>
+
+ <div style="background: #fff; padding: 16px; margin-bottom: 12px; border: 1px solid #d4b5ba;">
+ <h4 style="color: #3d2f31; margin-bottom: 10px; font-size: 1.05rem;">Corrective Stretches (6 min)</h4>
+ <ul style="color: #3d2f31; line-height: 1.8; padding-left: 20px;">
+ <li><strong>Doorway pec stretch</strong> — Forearm on frame at 90°. <em>30 sec × 2 each side</em></li>
+ <li><strong>Upper trap stretch</strong> — Ear to shoulder, gentle hand assist. <em>30 sec each side</em></li>
+ <li><strong>Chin tuck with levator stretch</strong> — Tuck chin, rotate toward armpit. <em>30 sec each side</em></li>
+ </ul>
+ </div>
+
+ <div style="background: #fff; padding: 16px; margin-bottom: 12px; border: 1px solid #d4b5ba;">
+ <h4 style="color: #3d2f31; margin-bottom: 10px; font-size: 1.05rem;">Pilates Core Activation (20 min)</h4>
+ <ul style="color: #3d2f31; line-height: 1.8; padding-left: 20px;">
+ <li><strong>Dead bug with TrA</strong> — Maintain low back contact with floor. <em>3 sets × 8 each side</em></li>
+ <li><strong>Modified hundred</strong> — Knees at 90°. Arm pumps: inhale 5, exhale 5. <em>50-100 pumps</em></li>
+ <li><strong>Bird-dog</strong> — No rotation through pelvis. 5-sec holds. <em>3 sets × 10 each side</em></li>
+ <li><strong>Modified side plank (from knee)</strong> — Keep body straight. <em>Hold 20-30 sec × 3 each side</em></li>
+ <li><strong>Bridge with marching</strong> — Lift hips, alternate lifting feet 2 inches. <em>3 sets × 8 each side</em></li>
+ <li><strong>Prone Y raises</strong> — Lift arms 2-3 inches, squeeze lower traps. <em>Hold 3 sec × 12 reps</em></li>
+ </ul>
+ </div>
+
+ <div style="background: #fff; padding: 16px; margin-bottom: 12px; border: 1px solid #d4b5ba;">
+ <h4 style="color: #3d2f31; margin-bottom: 10px; font-size: 1.05rem;">Scoliosis-Specific Work (8 min)</h4>
+ <ul style="color: #3d2f31; line-height: 1.8; padding-left: 20px;">
+ <li><strong>Schroth elongation stretch</strong> — Stand tall, arms overhead. Breathe into concave side. <em>5 breaths × 3 sets</em></li>
+ <li><strong>Side-lying rotation</strong> — Convex side down, top arm reaches up. <em>8 reps each side</em></li>
+ <li><strong>Asymmetrical kneeling stretch</strong> — Opposite arm overhead, lean away. <em>30 sec × 2 each side</em></li>
+ </ul>
+ </div>
+
+ <div style="background: #f5f0ed; padding: 12px; border-left: 3px solid #b59197;">
+ <p style="color: #3d2f31; margin: 0;"><strong>Cool-down (3 min):</strong> Child's pose (60 sec), partial hang from pull-up bar (30-60 sec)</p>
+ </div>
+ </div>
+ </div>
+
+ <!-- TUESDAY -->
+ <div class="exercise-day">
+ <div class="exercise-day-header" onclick="this.parentElement.classList.toggle('active')">
+ <div>
+ <h3 class="exercise-day-title">TUESDAY: Upper Body Strength + Mobility</h3>
+ <p style="color: #7a6668; margin: 4px 0 0 0; font-style: italic; font-size: 0.9rem;">45 min | Dumbbells, band, pull-up bar, parallel bars</p>
+ </div>
+ <span class="exercise-day-arrow">&#9660;</span>
+ </div>
+ <div class="exercise-day-content">
+ <div style="background: #fff; padding: 16px; margin-bottom: 12px; border: 1px solid #d4b5ba;">
+ <h4 style="color: #3d2f31; margin-bottom: 10px; font-size: 1.05rem;">Myofascial Release (4 min)</h4>
+ <ul style="color: #3d2f31; line-height: 1.8; padding-left: 20px;">
+ <li><strong>Lat foam rolling</strong> — Side-lying, armpit to mid-ribcage. <em>90 sec each side</em></li>
+ <li><strong>Posterior shoulder ball release</strong> — Rear delt/infraspinatus. <em>60 sec each side</em></li>
+ </ul>
+ </div>
+
+ <div style="background: #fff; padding: 16px; margin-bottom: 12px; border: 1px solid #d4b5ba;">
+ <h4 style="color: #3d2f31; margin-bottom: 10px; font-size: 1.05rem;">Strength Circuit (25 min) — 3 rounds, 60-90 sec rest</h4>
+ <ol style="color: #3d2f31; line-height: 1.8; padding-left: 20px;">
+ <li><strong>Band pull-aparts</strong> — Squeeze shoulder blades. <em>15 reps</em></li>
+ <li><strong>Dumbbell rows (single arm, supported)</strong> — Keep core braced, no rotation. <em>10 reps each arm</em></li>
+ <li><strong>Wall slides</strong> — Arms in "goal post," maintain wall contact. <em>12 reps</em></li>
+ <li><strong>Face pulls with band</strong> — Pull to face, externally rotate shoulders. <em>12 reps</em></li>
+ <li><strong>Assisted pull-up negatives or inverted rows</strong> — 5-sec slow lowers OR inverted rows. <em>5 negatives or 8 rows</em></li>
+ <li><strong>Prone T raises</strong> — Arms out, thumbs up. Squeeze middle traps. <em>12 reps, 2-sec holds</em></li>
+ </ol>
+ </div>
+
+ <div style="background: #fff; padding: 16px; margin-bottom: 12px; border: 1px solid #d4b5ba;">
+ <h4 style="color: #3d2f31; margin-bottom: 10px; font-size: 1.05rem;">Deep Neck Flexor Strengthening (5 min)</h4>
+ <ul style="color: #3d2f31; line-height: 1.8; padding-left: 20px;">
+ <li><strong>Supine chin tuck with head lift</strong> — Lift head 1 inch. <em>Hold 5-10 sec × 8 reps</em></li>
+ <li><strong>Prone chin tuck</strong> — Forehead on block, tuck against gravity. <em>8 reps × 5-sec holds</em></li>
+ </ul>
+ </div>
+
+ <div style="background: #f5f0ed; padding: 12px; border-left: 3px solid #b59197;">
+ <p style="color: #3d2f31; margin: 0;"><strong>Cool-down (3 min):</strong> Thread the needle (8 reps each side), chest opener over foam roller (60 sec)</p>
+ </div>
+ </div>
+ </div>
+
+ <!-- WEDNESDAY -->
+ <div class="exercise-day">
+ <div class="exercise-day-header" onclick="this.parentElement.classList.toggle('active')">
+ <div>
+ <h3 class="exercise-day-title">WEDNESDAY: Active Recovery Yoga Flow</h3>
+ <p style="color: #7a6668; margin: 4px 0 0 0; font-style: italic; font-size: 0.9rem;">40 min | Yoga blocks (2), foam roller | Hold 5-8 breaths</p>
+ </div>
+ <span class="exercise-day-arrow">&#9660;</span>
+ </div>
+ <div class="exercise-day-content">
+ <div style="background: #fff; padding: 16px; margin-bottom: 12px; border: 1px solid #d4b5ba;">
+ <h4 style="color: #3d2f31; margin-bottom: 10px; font-size: 1.05rem;">Sequence 1: Spinal Mobility</h4>
+ <ul style="color: #3d2f31; line-height: 1.8; padding-left: 20px;">
+ <li><strong>Tabletop circles</strong> — Make circles with ribcage. <em>8 each direction</em></li>
+ <li><strong>Puppy pose</strong> — Chest toward floor, blocks under forehead if needed</li>
+ <li><strong>Thread the needle</strong> — Each side, 5 breaths</li>
+ <li><strong>Modified sphinx pose</strong> — Gentle thoracic extension, avoid lumbar hyperextension</li>
+ </ul>
+ </div>
+
+ <div style="background: #fff; padding: 16px; margin-bottom: 12px; border: 1px solid #d4b5ba;">
+ <h4 style="color: #3d2f31; margin-bottom: 10px; font-size: 1.05rem;">Sequence 2: Hip Opening (Toe-Safe)</h4>
+ <ul style="color: #3d2f31; line-height: 1.8; padding-left: 20px;">
+ <li><strong>90-90 hip stretch</strong> — Both legs at 90°, lean toward front shin. <em>5 breaths each side</em></li>
+ <li><strong>Figure-four stretch</strong> — Supine, ankle crossed over knee. <em>8 breaths each side</em></li>
+ <li><strong>Happy baby</strong> — Hold outer feet, gentle rock side to side</li>
+ <li><strong>Supine spinal twist</strong> — Knees to one side, arms in T. <em>5 breaths each side</em></li>
+ </ul>
+ </div>
+
+ <div style="background: #fff; padding: 16px; margin-bottom: 12px; border: 1px solid #d4b5ba;">
+ <h4 style="color: #3d2f31; margin-bottom: 10px; font-size: 1.05rem;">Sequence 3: Standing Balance (Modified)</h4>
+ <ul style="color: #3d2f31; line-height: 1.8; padding-left: 20px;">
+ <li><strong>Tree pose</strong> — Foot on ankle/calf (NOT knee). Keep standing foot flat. <em>30 sec each side</em></li>
+ <li><strong>Warrior II</strong> — Back foot flat, toes forward. <em>5 breaths each side</em></li>
+ </ul>
+ </div>
+
+ <div style="background: #fff; padding: 16px; margin-bottom: 12px; border: 1px solid #d4b5ba;">
+ <h4 style="color: #3d2f31; margin-bottom: 10px; font-size: 1.05rem;">Restorative Holds (8 min)</h4>
+ <ul style="color: #3d2f31; line-height: 1.8; padding-left: 20px;">
+ <li><strong>Legs up the wall</strong> — <em>3 minutes</em></li>
+ <li><strong>Supported fish pose</strong> — Roller under thoracic spine, knees bent. <em>3 minutes</em></li>
+ <li><strong>Savasana with breathing</strong> — <em>2 minutes</em></li>
+ </ul>
+ </div>
+
+ <div style="background: #f5f0ed; padding: 12px; border-left: 3px solid #b59197;">
+ <p style="color: #3d2f31; margin: 0;"><strong>Foot Mobility (2 min):</strong> Ankle circles (10 each direction), towel scrunches (1 min), toe spreads (5 sec × 5 reps)</p>
+ </div>
+ </div>
+ </div>
+
+ <!-- THURSDAY -->
+ <div class="exercise-day">
+ <div class="exercise-day-header" onclick="this.parentElement.classList.toggle('active')">
+ <div>
+ <h3 class="exercise-day-title">THURSDAY: Corrective + Lower Body Strength</h3>
+ <p style="color: #7a6668; margin: 4px 0 0 0; font-style: italic; font-size: 0.9rem;">50 min | Dumbbells, band, stepper platform, yoga block</p>
+ </div>
+ <span class="exercise-day-arrow">&#9660;</span>
+ </div>
+ <div class="exercise-day-content">
+ <div style="background: #fff; padding: 16px; margin-bottom: 12px; border: 1px solid #d4b5ba;">
+ <h4 style="color: #3d2f31; margin-bottom: 10px; font-size: 1.05rem;">Myofascial Release (6 min)</h4>
+ <ul style="color: #3d2f31; line-height: 1.8; padding-left: 20px;">
+ <li><strong>Glute/piriformis with ball</strong> — Sit on ball, cross ankle over knee. <em>2 min each side</em></li>
+ <li><strong>Hip flexor/TFL foam rolling</strong> — Side-lying, roller at hip. <em>90 sec each side</em></li>
+ </ul>
+ </div>
+
+ <div style="background: #fff; padding: 16px; margin-bottom: 12px; border: 1px solid #d4b5ba;">
+ <h4 style="color: #3d2f31; margin-bottom: 10px; font-size: 1.05rem;">Hip Mobility (6 min)</h4>
+ <ul style="color: #3d2f31; line-height: 1.8; padding-left: 20px;">
+ <li><strong>Kneeling hip flexor stretch</strong> — Tuck pelvis, lean forward. <em>30 sec × 2 each side</em></li>
+ <li><strong>90-90 hip transitions</strong> — Flow between rotations. <em>8 transitions</em></li>
+ <li><strong>Frog stretch</strong> — Knees wide, rock hips back. <em>60 seconds</em></li>
+ </ul>
+ </div>
+
+ <div style="background: #fff; padding: 16px; margin-bottom: 12px; border: 1px solid #d4b5ba;">
+ <h4 style="color: #3d2f31; margin-bottom: 10px; font-size: 1.05rem;">Strength Circuit (22 min) — 3 rounds, 60 sec rest</h4>
+ <ol style="color: #3d2f31; line-height: 1.8; padding-left: 20px;">
+ <li><strong>Glute bridges</strong> — Drive through heels, squeeze at top. <em>15 reps</em></li>
+ <li><strong>Clamshells with band</strong> — Band above knees, open top knee. <em>15 reps each side</em></li>
+ <li><strong>Wall sit</strong> — Feet flat, no toe push. <em>Hold 30-45 seconds</em></li>
+ <li><strong>Side-lying hip abduction</strong> — Lift and lower with control. <em>12 reps each side</em></li>
+ <li><strong>Step-up (heel emphasis)</strong> — Push through heel, not toes. <em>10 each leg</em></li>
+ <li><strong>Romanian deadlift</strong> — Light weight, hinge at hips. <em>10 reps</em></li>
+ </ol>
+ </div>
+
+ <div style="background: #fff; padding: 16px; margin-bottom: 12px; border: 1px solid #d4b5ba;">
+ <h4 style="color: #3d2f31; margin-bottom: 10px; font-size: 1.05rem;">Scoliosis-Specific Hip Work (5 min)</h4>
+ <ul style="color: #3d2f31; line-height: 1.8; padding-left: 20px;">
+ <li><strong>Single-leg bridge</strong> — Keep pelvis level, hold 3 sec at top. <em>8 reps each side</em></li>
+ <li><strong>Side plank hip dips (from knee)</strong> — Lower and lift hip. <em>8 reps each side</em></li>
+ </ul>
+ </div>
+
+ <div style="background: #f5f0ed; padding: 12px; border-left: 3px solid #b59197;">
+ <p style="color: #3d2f31; margin: 0;"><strong>Cool-down (3 min):</strong> Modified pigeon (block under hip, 60 sec each side), supine twist (30 sec each side), partial hang (45 sec)</p>
+ </div>
+ </div>
+ </div>
+
+ <!-- FRIDAY -->
+ <div class="exercise-day">
+ <div class="exercise-day-header" onclick="this.parentElement.classList.toggle('active')">
+ <div>
+ <h3 class="exercise-day-title">FRIDAY: Rest or Gentle Walking</h3>
+ <p style="color: #7a6668; margin: 4px 0 0 0; font-style: italic; font-size: 0.9rem;">Rest day or 20-30 min walk</p>
+ </div>
+ <span class="exercise-day-arrow">&#9660;</span>
+ </div>
+ <div class="exercise-day-content">
+ <p style="color: #3d2f31; margin-bottom: 12px;">Complete rest day OR optional 20-30 minute comfortable treadmill walk with minimal incline.</p>
  <div style="background: #fff; padding: 16px; border: 1px solid #d4b5ba;">
- <ul style="color: #3d2f31; line-height: 1.8; list-style-type: none; padding-left: 0;">
- <li><strong>Arm circles:</strong> 10 forward + 10 backward</li>
- <li><strong>Leg swings:</strong> 10 each leg, front-to-back + side-to-side</li>
- <li><strong>Bodyweight squats:</strong> 10 reps, slow, no weight</li>
+ <p style="color: #3d2f31; margin-bottom: 10px;"><strong>If walking:</strong> Wear supportive shoes with rocker soles. Keep pace conversational.</p>
+ <p style="color: #3d2f31; margin-bottom: 0;"><strong>Optional pain-relief:</strong> Heat on tight areas, 5 min diaphragmatic breathing, gentle chin tucks (10 reps)</p>
+ </div>
+ </div>
+ </div>
+
+ <!-- SATURDAY -->
+ <div class="exercise-day">
+ <div class="exercise-day-header" onclick="this.parentElement.classList.toggle('active')">
+ <div>
+ <h3 class="exercise-day-title">SATURDAY: Full Body Calisthenics + Cardio</h3>
+ <p style="color: #7a6668; margin: 4px 0 0 0; font-style: italic; font-size: 0.9rem;">50 min | Parallel bars, band, dumbbells, treadmill</p>
+ </div>
+ <span class="exercise-day-arrow">&#9660;</span>
+ </div>
+ <div class="exercise-day-content">
+ <div style="background: #fff; padding: 16px; margin-bottom: 12px; border: 1px solid #d4b5ba;">
+ <h4 style="color: #3d2f31; margin-bottom: 10px; font-size: 1.05rem;">Low-Impact Cardio (12 min)</h4>
+ <p style="color: #3d2f31; margin: 0;">Choose one: Treadmill incline walk (3-5%, moderate pace) • Cycling • Rebounder gentle bounce (keep feet flat)</p>
+ </div>
+
+ <div style="background: #fff; padding: 16px; margin-bottom: 12px; border: 1px solid #d4b5ba;">
+ <h4 style="color: #3d2f31; margin-bottom: 10px; font-size: 1.05rem;">Calisthenics Circuit (22 min) — 4 rounds, 45 sec rest</h4>
+ <ol style="color: #3d2f31; line-height: 1.8; padding-left: 20px;">
+ <li><strong>Supported squat</strong> — Hold bars for balance, drive through heels. <em>12 reps</em></li>
+ <li><strong>Incline push-up on bars</strong> — Feet on floor, lower chest to bar level. <em>10 reps</em></li>
+ <li><strong>Bent-over reverse fly</strong> — Light dumbbells, fly arms out. <em>12 reps</em></li>
+ <li><strong>Pallof press (anti-rotation)</strong> — Band at chest height, resist rotation. <em>10 reps each side</em></li>
+ <li><strong>Single-leg Romanian deadlift</strong> — Light dumbbell, hinge on one leg. <em>8 each side</em></li>
+ <li><strong>Supported dips (partial)</strong> — Lower 1/4 depth OR tricep dips on platform. <em>8 reps</em></li>
+ </ol>
+ </div>
+
+ <div style="background: #fff; padding: 16px; margin-bottom: 12px; border: 1px solid #d4b5ba;">
+ <h4 style="color: #3d2f31; margin-bottom: 10px; font-size: 1.05rem;">Core Finisher (5 min)</h4>
+ <ul style="color: #3d2f31; line-height: 1.8; padding-left: 20px;">
+ <li><strong>Plank</strong> — From forearms, modify from knees if needed. <em>30-45 sec × 2</em></li>
+ <li><strong>Dead bug</strong> — Slow, controlled. <em>10 each side</em></li>
+ <li><strong>Side plank holds</strong> — <em>20 seconds each side</em></li>
+ </ul>
+ </div>
+
+ <div style="background: #f5f0ed; padding: 12px; border-left: 3px solid #b59197;">
+ <p style="color: #3d2f31; margin: 0;"><strong>Cool-down (3 min):</strong> Standing forward fold (soft knees), chest opener against wall, neck stretches</p>
+ </div>
+ </div>
+ </div>
+
+ <!-- SUNDAY -->
+ <div class="exercise-day">
+ <div class="exercise-day-header" onclick="this.parentElement.classList.toggle('active')">
+ <div>
+ <h3 class="exercise-day-title">SUNDAY: Deep Mobility + Myofascial Release</h3>
+ <p style="color: #7a6668; margin: 4px 0 0 0; font-style: italic; font-size: 0.9rem;">40 min | Foam roller, ball, yoga blocks, band | 2 min per area</p>
+ </div>
+ <span class="exercise-day-arrow">&#9660;</span>
+ </div>
+ <div class="exercise-day-content">
+ <div style="background: #fff; padding: 16px; margin-bottom: 12px; border: 1px solid #d4b5ba;">
+ <h4 style="color: #3d2f31; margin-bottom: 10px; font-size: 1.05rem;">Full-Body Myofascial Release (20 min)</h4>
+ <p style="color: #3d2f31; margin-bottom: 12px;"><strong>Neck/Upper Back:</strong></p>
+ <ul style="color: #3d2f31; line-height: 1.8; padding-left: 20px; margin-bottom: 12px;">
+ <li>Suboccipital release — 2 balls at skull base, gentle nod "yes" and "no" • <em>2 min</em></li>
+ <li>Upper trap/levator release — Ball against wall • <em>2 min each side</em></li>
+ <li>Thoracic spine rolling — Roller mid-back, arms crossed, gentle extensions • <em>3 min</em></li>
+ </ul>
+ 
+ <p style="color: #3d2f31; margin-bottom: 12px;"><strong>Shoulders/Chest:</strong></p>
+ <ul style="color: #3d2f31; line-height: 1.8; padding-left: 20px; margin-bottom: 12px;">
+ <li>Pec minor release — Ball below collarbone • <em>90 sec each side</em></li>
+ <li>Lat release — Side-lying on roller • <em>90 sec each side</em></li>
+ </ul>
+ 
+ <p style="color: #3d2f31; margin-bottom: 12px;"><strong>Lower Back/Hips:</strong> (Never roll directly on lumbar spine)</p>
+ <ul style="color: #3d2f31; line-height: 1.8; padding-left: 20px;">
+ <li>Glute max release — Sit on roller, lean to side • <em>2 min each side</em></li>
+ <li>Piriformis with ball — Seated, ankle crossed over knee • <em>2 min each side</em></li>
+ <li>TFL/IT band — Side-lying, hip to above knee • <em>90 sec each side</em></li>
+ <li>Hip flexor release — Prone, ball below hip crease • <em>90 sec each side</em></li>
+ </ul>
+ </div>
+
+ <div style="background: #fff; padding: 16px; margin-bottom: 12px; border: 1px solid #d4b5ba;">
+ <h4 style="color: #3d2f31; margin-bottom: 10px; font-size: 1.05rem;">Mobility Flow (15 min)</h4>
+ <p style="color: #3d2f31; margin-bottom: 8px;"><strong>Thoracic:</strong> Open book (8 each side) • Foam roller extension (10 reps) • Cat-cow (10 cycles)</p>
+ <p style="color: #3d2f31; margin-bottom: 8px;"><strong>Hip:</strong> World's greatest stretch modified (5 each side) • Frog pose (60 sec) • Pigeon supported (60 sec each side)</p>
+ <p style="color: #3d2f31; margin: 0;"><strong>Spinal Decompression:</strong> Child's pose with reach (30 sec each side) • Dead hang partial (2 × 30 sec)</p>
+ </div>
+
+ <div style="background: #f5f0ed; padding: 12px; border-left: 3px solid #b59197;">
+ <p style="color: #3d2f31; margin: 0;"><strong>Closing (5 min):</strong> Supine twist (60 sec each side), happy baby (60 sec), legs up wall (2 min), 10 diaphragmatic breaths</p>
+ </div>
+ </div>
+ </div>
+
+ <!-- FLARE DAY PROTOCOL -->
+ <div style="background: #d67373; padding: 20px; margin-bottom: 16px;">
+ <h3 style="color: #f2ebe0; margin-bottom: 12px; font-size: 1.2rem; text-align: center;">⚠️ PAIN FLARE DAY PROTOCOL</h3>
+ <p style="color: #f2ebe0; text-align: center; margin-bottom: 16px; font-style: italic;">When pain increases, do this 20-min relief protocol instead</p>
+ <div style="background: #EBE0D6; padding: 16px;">
+ <ol style="color: #3d2f31; line-height: 2; padding-left: 20px;">
+ <li>Heat application — 10 min on most painful area</li>
+ <li>Diaphragmatic breathing — 3 minutes</li>
+ <li>Gentle cat-cow — 10 very slow cycles</li>
+ <li>Supine twist — 60 sec each side</li>
+ <li>Targeted myofascial release — 3-4 min on most painful area</li>
+ <li>Legs up wall — 5 minutes</li>
+ <li>Ice application — 10 min post-movement if inflammation present</li>
+ </ol>
+ <p style="color: #3d2f31; margin-top: 12px; font-weight: 600;">Skip strength entirely. Return to normal programming when pain returns to baseline (24-48 hours).</p>
+ </div>
+ </div>
+
+ <!-- EXERCISES TO AVOID -->
+ <div style="background: #EBE0D6; padding: 20px; border-left: 4px solid #d67373; margin-bottom: 16px;">
+ <h3 style="color: #d67373; margin-bottom: 12px; font-size: 1.2rem;">⛔ EXERCISES TO STRICTLY AVOID</h3>
+ <div style="background: #fff; padding: 16px; border: 1px solid #d4b5ba;">
+ <p style="color: #3d2f31; margin-bottom: 12px;"><strong>Scoliosis Contraindications:</strong></p>
+ <ul style="color: #3d2f31; line-height: 1.8; padding-left: 20px; margin-bottom: 16px;">
+ <li>Heavy axial loading (back squats, heavy overhead press)</li>
+ <li>Russian twists or loaded rotation</li>
+ <li>Deep backbends/hyperextension</li>
+ <li>Traditional sit-ups/crunches</li>
+ <li>Inversion tables (without medical guidance)</li>
+ </ul>
+ 
+ <p style="color: #3d2f31; margin-bottom: 12px;"><strong>Toe Arthritis Contraindications:</strong></p>
+ <ul style="color: #3d2f31; line-height: 1.8; padding-left: 20px;">
+ <li>Traditional calf raises (pushing through toes)</li>
+ <li>Deep lunges (excessive toe flexion)</li>
+ <li>Jumping/plyometrics</li>
+ <li>Running</li>
+ <li>Downward dog with full toe dorsiflexion</li>
  </ul>
  </div>
  </div>
 
- <!-- Corrective Exercises -->
- <div style="background: #EBE0D6; padding: 20px; border-left: 3px solid #b59197; margin-bottom: 16px;">
- <h3 style="color: #3d2f31; margin-bottom: 16px; font-size: 1.1rem;">Corrective Block (Phase 1: 10 min)</h3>
+ <!-- PROGRESSION TIMELINE -->
+ <div style="background: #EBE0D6; padding: 20px; border-left: 4px solid #7ba886; margin-bottom: 16px;">
+ <h3 style="color: #7ba886; margin-bottom: 12px; font-size: 1.2rem;">📈 PROGRESSION OVER 12 WEEKS</h3>
  <div style="background: #fff; padding: 16px; border: 1px solid #d4b5ba;">
- <table style="width: 100%; color: #3d2f31; font-size: 0.95rem;">
- <tr><td style="padding: 6px 0;"><strong>Chin tucks</strong></td><td>2 x 10 — Hold 5 sec each, squeeze back of neck</td></tr>
- <tr><td style="padding: 6px 0;"><strong>Prone Y-T-W raises</strong></td><td>2 x 8 each — Lying face down, thumbs up</td></tr>
- <tr><td style="padding: 6px 0;"><strong>Face pulls (band)</strong></td><td>2 x 12 — Squeeze shoulder blades together</td></tr>
- <tr><td style="padding: 6px 0;"><strong>Doorway pec stretch</strong></td><td>30 sec each side — Elbow at 90°, lean through</td></tr>
- <tr><td style="padding: 6px 0;"><strong>Wall angels</strong></td><td>2 x 8 — Back flat to wall, arms slide up/down</td></tr>
- <tr><td style="padding: 6px 0;"><strong>Cat-cow</strong></td><td>10 cycles — Slow, breathe through each position</td></tr>
- </table>
+ <p style="color: #3d2f31; margin-bottom: 12px;"><strong>Weeks 1-4 (Foundation):</strong> Perfect form, lightest weights, 2 sets, 20-30 sec holds</p>
+ <p style="color: #3d2f31; margin-bottom: 12px;"><strong>Weeks 5-8 (Building):</strong> 30-45 sec holds, add resistance bands, 3 sets, +2-3 lbs dumbbells</p>
+ <p style="color: #3d2f31; margin: 0;"><strong>Weeks 9-12 (Strengthening):</strong> 45-60 sec holds, single-leg variations, full side planks, tempo work (3-4 sec eccentrics)</p>
  </div>
  </div>
 
- <!-- Strength Exercises - Phase 1 -->
- <div style="background: #EBE0D6; padding: 20px; border-left: 3px solid #b59197; margin-bottom: 16px;">
- <h3 style="color: #3d2f31; margin-bottom: 16px; font-size: 1.1rem;">Strength Block — Phase 1 (15-20 min)</h3>
- <div style="background: #fff; padding: 16px; border: 1px solid #d4b5ba;">
- <table style="width: 100%; color: #3d2f31; font-size: 0.95rem;">
- <tr><td style="padding: 6px 0;"><strong>Incline push-ups</strong></td><td>2 x 8–12 — Hands on kitchen counter or sturdy table</td></tr>
- <tr><td style="padding: 6px 0;"><strong>Band rows</strong></td><td>2 x 8–12 — Anchor band at chest height, pull to ribs</td></tr>
- <tr><td style="padding: 6px 0;"><strong>Goblet squats</strong></td><td>2 x 10 — Hold weight at chest, sit back (bodyweight or light DB)</td></tr>
- <tr><td style="padding: 6px 0;"><strong>Glute bridges</strong></td><td>2 x 12 — Squeeze glutes at top, hold 2 sec</td></tr>
- <tr><td style="padding: 6px 0;"><strong>Dead bug</strong></td><td>2 x 8 each side — Low back stays pressed to floor</td></tr>
- <tr><td style="padding: 6px 0;"><strong>Plank</strong></td><td>2 x 20 sec — On forearms, body straight, breathe</td></tr>
- </table>
- <p style="color: #7a6668; margin-top: 12px; font-style: italic;">When you can hit all reps easily with 2+ in reserve, add 1–2 reps. At 15+ reps, move to next progression (see below).</p>
- </div>
- </div>
-
- <!-- Cool-Down -->
- <div style="background: #EBE0D6; padding: 20px; border-left: 3px solid #b59197; margin-bottom: 16px;">
- <h3 style="color: #3d2f31; margin-bottom: 16px; font-size: 1.1rem;">Cool-Down (5 min)</h3>
- <div style="background: #fff; padding: 16px; border: 1px solid #d4b5ba;">
- <p style="color: #3d2f31; margin: 0;">Gentle stretching: chest opener, child's pose, neck rolls, standing quad stretch, hamstring stretch. Deep breathing.</p>
- </div>
- </div>
-
- <!-- Exercise Progressions -->
- <div style="background: #EBE0D6; padding: 20px; border-left: 3px solid #b59197; margin-bottom: 16px;">
- <h3 style="color: #3d2f31; margin-bottom: 16px; font-size: 1.1rem;">Exercise Progressions</h3>
- <p style="color: #3d2f31; margin-bottom: 20px; font-style: italic;">Follow in order. Don't skip levels. When you can complete all reps with 2+ in reserve, move up.</p>
- 
- <!-- Push-Up Progression -->
- <div style="background: #fff; padding: 16px; margin-bottom: 16px; border: 1px solid #d4b5ba;">
- <h4 style="color: #b59197; margin-bottom: 12px;">Push-Up Progression</h4>
- <table style="width: 100%; color: #3d2f31; font-size: 0.95rem;">
- <tr><td style="padding: 6px 0;"><strong>Level 1 (Week 1):</strong></td><td>Wall push-ups → When 15 reps feels easy</td></tr>
- <tr><td style="padding: 6px 0;"><strong>Level 2 (Weeks 2-3):</strong></td><td>Incline push-ups (counter) → When 12+ reps feels easy</td></tr>
- <tr><td style="padding: 6px 0;"><strong>Level 3 (Weeks 4-5):</strong></td><td>Incline push-ups (chair) → When 12+ reps feels easy</td></tr>
- <tr><td style="padding: 6px 0;"><strong>Level 4 (Weeks 6-8):</strong></td><td>Knee push-ups → When 12+ reps feels easy</td></tr>
- <tr><td style="padding: 6px 0;"><strong>Level 5 (Weeks 9-12):</strong></td><td>Full push-ups → Keep building reps</td></tr>
- </table>
- </div>
-
- <!-- Row Progression -->
- <div style="background: #fff; padding: 16px; margin-bottom: 16px; border: 1px solid #d4b5ba;">
- <h4 style="color: #b59197; margin-bottom: 12px;">Row Progression</h4>
- <table style="width: 100%; color: #3d2f31; font-size: 0.95rem;">
- <tr><td style="padding: 6px 0;"><strong>Level 1 (Weeks 1-3):</strong></td><td>Band rows (standing) → When 12+ reps feels easy</td></tr>
- <tr><td style="padding: 6px 0;"><strong>Level 2 (Weeks 4-6):</strong></td><td>Australian rows (body at 45°) → When 12+ reps feels easy</td></tr>
- <tr><td style="padding: 6px 0;"><strong>Level 3 (Weeks 7-9):</strong></td><td>Australian rows (more horizontal) → When 12+ reps feels easy</td></tr>
- <tr><td style="padding: 6px 0;"><strong>Level 4 (Weeks 10-12):</strong></td><td>Negative pull-ups → Keep building control</td></tr>
- </table>
- </div>
-
- <!-- Squat Progression -->
- <div style="background: #fff; padding: 16px; margin-bottom: 16px; border: 1px solid #d4b5ba;">
- <h4 style="color: #b59197; margin-bottom: 12px;">Squat Progression</h4>
- <table style="width: 100%; color: #3d2f31; font-size: 0.95rem;">
- <tr><td style="padding: 6px 0;"><strong>Level 1 (Weeks 1-2):</strong></td><td>Chair squats → When 12 reps feels easy</td></tr>
- <tr><td style="padding: 6px 0;"><strong>Level 2 (Weeks 3-5):</strong></td><td>Air squats → When 15 reps feels easy</td></tr>
- <tr><td style="padding: 6px 0;"><strong>Level 3 (Weeks 6-8):</strong></td><td>Goblet squats → When 12+ reps feels easy</td></tr>
- <tr><td style="padding: 6px 0;"><strong>Level 4 (Weeks 9-12):</strong></td><td>Bulgarian split squats → Keep building reps</td></tr>
- </table>
- </div>
-
- <!-- Plank Progression -->
- <div style="background: #fff; padding: 16px; border: 1px solid #d4b5ba;">
- <h4 style="color: #b59197; margin-bottom: 12px;">Plank Progression</h4>
- <table style="width: 100%; color: #3d2f31; font-size: 0.95rem;">
- <tr><td style="padding: 6px 0;"><strong>Level 1 (Weeks 1-2):</strong></td><td>Plank on knees: 2 x 15 sec → When 30 sec feels easy</td></tr>
- <tr><td style="padding: 6px 0;"><strong>Level 2 (Weeks 3-4):</strong></td><td>Full plank: 2 x 20 sec → When 30 sec feels easy</td></tr>
- <tr><td style="padding: 6px 0;"><strong>Level 3 (Weeks 5-8):</strong></td><td>Full plank: 2-3 x 30 sec → When 45 sec feels easy</td></tr>
- <tr><td style="padding: 6px 0;"><strong>Level 4 (Weeks 9-12):</strong></td><td>Full plank: 3 x 45 sec → Keep building</td></tr>
- </table>
- </div>
  </div>
  <div id="exercise-items"></div>
  <button class="add-resource-btn" onclick="showAddResourceForm('exercise')">+ Add Resource</button>
@@ -3172,10 +3529,20 @@ What's on my mind today..."></textarea>
  function renderDailySchedule() {
  const day = weeklySchedule[currentViewingDay];
  const dayName = dayNames[currentViewingDay];
- const today = new Date().getDay();
- const isToday = currentViewingDay === today;
+ const today = new Date();
+ const currentDay = today.getDay();
  
- document.getElementById('currentDayDisplay').textContent = dayName;
+ // Calculate the date for the viewing day
+ const dayOffset = currentViewingDay - currentDay;
+ const viewingDate = new Date(today);
+ viewingDate.setDate(today.getDate() + dayOffset);
+ 
+ // Format as "Wednesday, February 5"
+ const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+ 'July', 'August', 'September', 'October', 'November', 'December'];
+ const formattedDate = `${dayName}, ${monthNames[viewingDate.getMonth()]} ${viewingDate.getDate()}`;
+ 
+ document.getElementById('currentDayDisplay').textContent = formattedDate;
  
  const container = document.getElementById('dailyScheduleContainer');
  container.innerHTML = `
