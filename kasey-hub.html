@@ -3,6 +3,10 @@
 <head>
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+ <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+ <meta http-equiv="Pragma" content="no-cache">
+ <meta http-equiv="Expires" content="0">
+ <!-- Version 2.0 - Resources Edit/Delete Fix -->
  <meta name="mobile-web-app-capable" content="yes">
  <meta name="apple-mobile-web-app-capable" content="yes">
  <title>Kasey's Habit Hub</title>
@@ -468,6 +472,7 @@
  justify-content: space-between;
  align-items: flex-start;
  gap: 12px;
+ border-left: 3px solid #b59197;
  }
 
  .resource-item-content {
@@ -482,7 +487,7 @@
  }
 
  .resource-item-link {
- color: #b59197;
+ color: #7a6668;
  font-size: 0.85rem;
  font-weight: 500;
  word-break: break-all;
@@ -496,9 +501,15 @@
  }
 
  .resource-item-note {
- color: #999;
+ color: #7a6668;
  font-size: 0.85rem;
  line-height: 1.4;
+ font-style: italic;
+ }
+
+ .resource-item-actions {
+ display: flex;
+ gap: 4px;
  }
 
  .add-resource-btn {
@@ -1429,6 +1440,7 @@
  max-width: 760px;
  margin-left: auto;
  margin-right: auto;
+ text-align: left;
  }
 
  .day-header {
@@ -1589,7 +1601,20 @@
 
  </style>
 </head>
-<body>
+<body data-version="2.1-resources-fix">
+ <script>
+ // IMMEDIATE VERSION CHECK - Runs before anything else
+ (function() {
+ const CURRENT_VERSION = '2.1';
+ const saved = localStorage.getItem('resources_version_kasey');
+ if (saved !== CURRENT_VERSION) {
+ console.log('🔥 FORCE CLEARING OLD RESOURCES');
+ localStorage.removeItem('resources_kasey');
+ localStorage.removeItem('resources_version_kasey');
+ localStorage.setItem('resources_version_kasey', CURRENT_VERSION);
+ }
+ })();
+ </script>
  <!-- Top Navigation Bar -->
  <nav class="top-nav">
  <div class="nav-container">
@@ -2705,6 +2730,7 @@ What's on my mind today..."></textarea>
  window.showAddResourceForm = showAddResourceForm;
  window.hideAddResourceForm = hideAddResourceForm;
  window.addResource = addResource;
+ window.editResource = editResource;
  window.deleteResource = deleteResource;
  window.toggleResource = toggleResource;
  window.handleResourceUpload = handleResourceUpload;
@@ -2966,18 +2992,28 @@ What's on my mind today..."></textarea>
  }
 
  function loadResources() {
- const savedData = loadFromStorage('resources_kasey');
- if (savedData) {
- resources = savedData;
- } else {
- const saved = localStorage.getItem('resources_kasey');
- if (saved) {
- resources = JSON.parse(saved);
- } else {
+ const RESOURCE_VERSION = '2.1'; // Increment version to force reset
+ const savedVersion = localStorage.getItem('resources_version_kasey');
+ 
+ // Force complete reset if version doesn't match
+ if (savedVersion !== RESOURCE_VERSION) {
+ console.log('🔄 RESETTING RESOURCES - Version ' + RESOURCE_VERSION);
+ // Clear everything
+ localStorage.removeItem('resources_kasey');
+ localStorage.removeItem('resources_version_kasey');
+ // Load fresh defaults
  resources = JSON.parse(JSON.stringify(defaultResources));
+ // Save version
+ localStorage.setItem('resources_version_kasey', RESOURCE_VERSION);
+ localStorage.setItem('resources_kasey', JSON.stringify(resources));
+ console.log('✅ Resources reset complete:', resources);
+ } else {
+ // Load saved resources
+ const savedData = localStorage.getItem('resources_kasey');
+ resources = savedData ? JSON.parse(savedData) : JSON.parse(JSON.stringify(defaultResources));
+ console.log('📂 Loaded existing resources:', resources);
  }
- saveResources();
- }
+ 
  renderAllResources();
  
  setupStorageListener('resources_kasey', (data) => {
@@ -3021,18 +3057,26 @@ What's on my mind today..."></textarea>
  }
 
  function renderAllResources() {
- Object.keys(resources).forEach(category => renderResourceCategory(category));
+ console.log('Rendering all resources:', Object.keys(resources));
+ Object.keys(resources).forEach(category => {
+ console.log(`Rendering ${category}:`, resources[category]);
+ renderResourceCategory(category);
+ });
  }
 
  function renderResourceCategory(category) {
  const container = document.getElementById(`${category}-items`);
- if (!container) return;
+ if (!container) {
+ console.error(`Container not found for category: ${category}`);
+ return;
+ }
 
  if (!resources[category] || resources[category].length === 0) {
  container.innerHTML = '<div class="empty-state">No resources yet. Add your first one!</div>';
  return;
  }
 
+ console.log(`Rendering ${resources[category].length} items for ${category}`);
  container.innerHTML = '';
  resources[category].forEach((item, index) => {
  const itemDiv = document.createElement('div');
@@ -3054,10 +3098,14 @@ What's on my mind today..."></textarea>
  ${item.link ? `<a href="${item.link}" target="_blank" class="resource-item-link">${item.link}</a>` : ''}
  ${item.note ? `<div class="resource-item-note">${item.note}</div>` : ''}
  </div>
- <button class="btn" onclick="deleteResource('${category}', ${index})" style="padding: 4px 8px; min-width: auto;">&times;</button>
+ <div class="resource-item-actions">
+ <button class="btn" onclick="editResource('${category}', ${index})" style="padding: 4px 8px; min-width: auto;" title="Edit">✎</button>
+ <button class="btn" onclick="deleteResource('${category}', ${index})" style="padding: 4px 8px; min-width: auto;" title="Delete">&times;</button>
+ </div>
  `;
  container.appendChild(itemDiv);
  });
+ console.log(`Finished rendering ${category}`);
  }
 
  function showAddResourceForm(category) {
@@ -3068,18 +3116,23 @@ What's on my mind today..."></textarea>
  }
 
  function hideAddResourceForm() {
- document.getElementById('resourceForm').classList.remove('active');
+ const form = document.getElementById('resourceForm');
+ form.classList.remove('active');
  document.getElementById('resourceFormOverlay').classList.remove('active');
- document.getElementById('resourceForm').querySelector('form').reset();
+ form.querySelector('form').reset();
  document.body.style.overflow = ''; // Restore scrolling
  pendingResourceFile = null;
+ // Clear edit state
+ delete form.dataset.editIndex;
+ delete form.dataset.editCategory;
  }
 
  function addResource(e) {
  e.preventDefault();
  const formData = new FormData(e.target);
  const category = formData.get('category');
-
+ const form = document.getElementById('resourceForm');
+ 
  const resource = {
  title: formData.get('title'),
  link: formData.get('link') || null,
@@ -3087,8 +3140,22 @@ What's on my mind today..."></textarea>
  file: pendingResourceFile
  };
 
+ // Check if we're editing
+ if (form.dataset.editIndex !== undefined && form.dataset.editIndex !== '') {
+ const index = parseInt(form.dataset.editIndex);
+ // Keep existing file if no new file uploaded
+ if (!resource.file && resources[category][index].file) {
+ resource.file = resources[category][index].file;
+ }
+ resources[category][index] = resource;
+ delete form.dataset.editIndex;
+ delete form.dataset.editCategory;
+ } else {
+ // Adding new resource
  if (!resources[category]) resources[category] = [];
  resources[category].push(resource);
+ }
+ 
  saveResources();
  renderResourceCategory(category);
  hideAddResourceForm();
@@ -3100,6 +3167,23 @@ What's on my mind today..."></textarea>
  saveResources();
  renderResourceCategory(category);
  }
+ }
+
+ function editResource(category, index) {
+ const resource = resources[category][index];
+ 
+ // Populate the form with existing data
+ document.getElementById('resourceCategory').value = category;
+ document.querySelector('#resourceForm input[name="title"]').value = resource.title || '';
+ document.querySelector('#resourceForm input[name="link"]').value = resource.link || '';
+ document.querySelector('#resourceForm textarea[name="note"]').value = resource.note || '';
+ 
+ // Store the index being edited
+ document.getElementById('resourceForm').dataset.editIndex = index;
+ document.getElementById('resourceForm').dataset.editCategory = category;
+ 
+ // Show the form
+ showAddResourceForm(category);
  }
 
  function handleVideoUpload() {
