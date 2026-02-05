@@ -412,6 +412,54 @@
  display: block;
  }
 
+ /* Collapsible Tapping Section */
+ .tapping-collapsible {
+ margin-top: 12px;
+ }
+
+ .tapping-header {
+ background: #b59197;
+ padding: 10px 14px;
+ cursor: pointer;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ border-radius: 3px;
+ transition: background 0.2s;
+ }
+
+ .tapping-header:hover {
+ background: #a57f85;
+ }
+
+ .tapping-header-text {
+ color: #f2ebe0;
+ font-size: 0.9rem;
+ font-weight: 600;
+ margin: 0;
+ }
+
+ .tapping-arrow {
+ color: #f2ebe0;
+ font-size: 1rem;
+ transition: transform 0.3s;
+ }
+
+ .tapping-collapsible.active .tapping-arrow {
+ transform: rotate(180deg);
+ }
+
+ .tapping-content {
+ display: none;
+ padding: 12px;
+ background: #f5f0ed;
+ border-left: 3px solid #b59197;
+ }
+
+ .tapping-collapsible.active .tapping-content {
+ display: block;
+ }
+
  .resource-item {
  background: #EBE0D6;
  padding: 12px;
@@ -3596,7 +3644,15 @@ What's on my mind today..."></textarea>
  <strong>Step 1:</strong> Cyclic sighing (5 min)<br>
  <em>Double inhale through nose (first full, second quick top-off), long slow exhale through mouth. Repeat.</em><br><br>
  <strong>Step 2:</strong> EFT tapping (7-8 min) - tap each point ~7 times<br>
- ${day.morning.tapping ? `<div style="margin-top: 12px; padding: 12px; background: #f5f0ed; border-left: 3px solid #b59197;">${day.morning.tapping}</div>` : '<em>See Resources tab for tapping guide & create your own sequence</em>'}<br>
+ ${day.morning.tapping ? `
+ <div class="tapping-collapsible">
+ <div class="tapping-header" onclick="this.parentElement.classList.toggle('active')">
+ <p class="tapping-header-text">View Today's Tapping Sequence</p>
+ <span class="tapping-arrow">&#9660;</span>
+ </div>
+ <div class="tapping-content">${day.morning.tapping}</div>
+ </div>
+ ` : '<em>See Resources tab for tapping guide & create your own sequence</em>'}<br>
  <strong>Step 3:</strong> Journaling (5-7 min)<br>
  <div style="margin-top: 8px; padding: 10px; background: #faf8f6; border-left: 3px solid #d4a5a5; font-style: italic;">
  <strong style="color: #b59197;">Today's prompt:</strong> ${day.morning.journalPrompt}
