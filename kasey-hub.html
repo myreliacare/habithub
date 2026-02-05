@@ -546,13 +546,37 @@
 
  .event-form {
  display: none;
+ position: fixed;
+ top: 50%;
+ left: 50%;
+ transform: translate(-50%, -50%);
  background: #3d2f31;
  padding: 20px;
- margin-top: 15px;
- border: 1px solid #333;
+ border: 1px solid #b59197;
+ z-index: 1001;
+ max-width: 500px;
+ width: 90%;
+ max-height: 80vh;
+ overflow-y: auto;
+ box-shadow: 0 4px 20px rgba(0,0,0,0.5);
  }
 
  .event-form.active {
+ display: block;
+ }
+
+ .event-form-overlay {
+ display: none;
+ position: fixed;
+ top: 0;
+ left: 0;
+ right: 0;
+ bottom: 0;
+ background: rgba(0, 0, 0, 0.7);
+ z-index: 1000;
+ }
+
+ .event-form-overlay.active {
  display: block;
  }
 
@@ -769,7 +793,7 @@
 
  .todo-text {
  flex: 1;
- color: #e0e0e0;
+ color: #3d2f31;
  font-size: 1rem;
  line-height: 1.4;
  
@@ -777,13 +801,13 @@
 
  .todo-item.completed .todo-text {
  text-decoration: line-through;
- color: #666;
+ color: #7a6668;
  }
 
  .todo-delete {
  background: transparent;
- border: 1px solid #444;
- color: #999;
+ border: 1px solid #b59197;
+ color: #b59197;
  padding: 6px 12px;
  cursor: pointer;
  font-size: 0.85rem;
@@ -1401,6 +1425,7 @@
  margin-bottom: 12px;
  border-radius: 4px;
  overflow: hidden;
+ width: 100%;
  max-width: 760px;
  margin-left: auto;
  margin-right: auto;
@@ -1596,7 +1621,7 @@
  <!-- BINGO TAB -->
  <div id="bingo-tab" class="hub-tab active">
  <!-- My Daily Wellness Schedule -->
- <div class="section" style="margin-bottom: 24px;">
+ <div class="section" style="margin-bottom: 24px; text-align: center;">
  <h2 class="section-title">My Daily Wellness Schedule</h2>
  
  <!-- Day Navigation -->
@@ -1607,7 +1632,7 @@
  </div>
 
  <!-- Day-specific schedules -->
- <div id="dailyScheduleContainer"></div>
+ <div id="dailyScheduleContainer" style="display: flex; flex-direction: column; align-items: center;"></div>
  </div>
 
  <div class="bingo-section">
@@ -1667,6 +1692,7 @@
 
  <!-- Dynamic Resources Heading -->
 
+ <div class="event-form-overlay" id="resourceFormOverlay" onclick="hideAddResourceForm()"></div>
  <div class="event-form" id="resourceForm">
  <form onsubmit="addResource(event)">
  <input type="hidden" id="resourceCategory" name="category">
@@ -1713,10 +1739,16 @@
  <div class="resource-content" id="exercise-content">
  
  <!-- Daily Corrective Warm-Up (Do Before Every Workout) -->
- <div style="background: #b59197; padding: 20px; margin-bottom: 16px;">
- <h3 style="color: #f2ebe0; margin-bottom: 16px; font-size: 1.2rem; text-align: center; letter-spacing: 0.05em;">DAILY CORRECTIVE WARM-UP</h3>
- <p style="color: #f2ebe0; text-align: center; margin-bottom: 16px; font-style: italic;">Perform before all workouts (8 minutes)</p>
- <div style="background: #EBE0D6; padding: 16px;">
+ <div class="exercise-day">
+ <div class="exercise-day-header" onclick="this.parentElement.classList.toggle('active')">
+ <div>
+ <h3 class="exercise-day-title">Daily Corrective Warm-Up</h3>
+ <p style="color: #7a6668; margin: 4px 0 0 0; font-style: italic; font-size: 0.9rem;">8 min | Perform before all workouts</p>
+ </div>
+ <span class="exercise-day-arrow">&#9660;</span>
+ </div>
+ <div class="exercise-day-content">
+ <div style="background: #fff; padding: 16px; border: 1px solid #d4b5ba;">
  <ol style="color: #3d2f31; line-height: 2; padding-left: 20px;">
  <li><strong>Diaphragmatic breathing + TrA engagement</strong> — Supine, knees bent. Inhale through nose, ribcage expands laterally. Exhale, gently draw belly to spine (20% effort). Hold 5 sec. <em>10 breaths</em></li>
  <li><strong>Chin tucks</strong> — Supine, tongue on roof of mouth. Gentle "double chin" nodding. Hold 10 sec. <em>10 reps</em></li>
@@ -1724,6 +1756,7 @@
  <li><strong>Cat-cow with Schroth breathing</strong> — Quadruped. Cow: breathe into concave side. Cat: exhale fully. <em>8 slow cycles</em></li>
  <li><strong>Scapular setting</strong> — Prone, arms at sides. Squeeze shoulder blades "back and down." Hold 6 sec. <em>10 reps</em></li>
  </ol>
+ </div>
  </div>
  </div>
 
@@ -2040,10 +2073,16 @@
  </div>
 
  <!-- FLARE DAY PROTOCOL -->
- <div style="background: #d67373; padding: 20px; margin-bottom: 16px;">
- <h3 style="color: #f2ebe0; margin-bottom: 12px; font-size: 1.2rem; text-align: center;">⚠️ PAIN FLARE DAY PROTOCOL</h3>
- <p style="color: #f2ebe0; text-align: center; margin-bottom: 16px; font-style: italic;">When pain increases, do this 20-min relief protocol instead</p>
- <div style="background: #EBE0D6; padding: 16px;">
+ <div class="exercise-day">
+ <div class="exercise-day-header" onclick="this.parentElement.classList.toggle('active')">
+ <div>
+ <h3 class="exercise-day-title">Pain Flare Day Protocol</h3>
+ <p style="color: #7a6668; margin: 4px 0 0 0; font-style: italic; font-size: 0.9rem;">20 min | When pain increases</p>
+ </div>
+ <span class="exercise-day-arrow">&#9660;</span>
+ </div>
+ <div class="exercise-day-content">
+ <div style="background: #fff; padding: 16px; border: 1px solid #d4b5ba;">
  <ol style="color: #3d2f31; line-height: 2; padding-left: 20px;">
  <li>Heat application — 10 min on most painful area</li>
  <li>Diaphragmatic breathing — 3 minutes</li>
@@ -2056,10 +2095,18 @@
  <p style="color: #3d2f31; margin-top: 12px; font-weight: 600;">Skip strength entirely. Return to normal programming when pain returns to baseline (24-48 hours).</p>
  </div>
  </div>
+ </div>
 
  <!-- EXERCISES TO AVOID -->
- <div style="background: #EBE0D6; padding: 20px; border-left: 4px solid #d67373; margin-bottom: 16px;">
- <h3 style="color: #d67373; margin-bottom: 12px; font-size: 1.2rem;">⛔ EXERCISES TO STRICTLY AVOID</h3>
+ <div class="exercise-day">
+ <div class="exercise-day-header" onclick="this.parentElement.classList.toggle('active')">
+ <div>
+ <h3 class="exercise-day-title">Exercises to Strictly Avoid</h3>
+ <p style="color: #7a6668; margin: 4px 0 0 0; font-style: italic; font-size: 0.9rem;">Scoliosis & toe arthritis contraindications</p>
+ </div>
+ <span class="exercise-day-arrow">&#9660;</span>
+ </div>
+ <div class="exercise-day-content">
  <div style="background: #fff; padding: 16px; border: 1px solid #d4b5ba;">
  <p style="color: #3d2f31; margin-bottom: 12px;"><strong>Scoliosis Contraindications:</strong></p>
  <ul style="color: #3d2f31; line-height: 1.8; padding-left: 20px; margin-bottom: 16px;">
@@ -2080,18 +2127,26 @@
  </ul>
  </div>
  </div>
+ </div>
 
  <!-- PROGRESSION TIMELINE -->
- <div style="background: #EBE0D6; padding: 20px; border-left: 4px solid #7ba886; margin-bottom: 16px;">
- <h3 style="color: #7ba886; margin-bottom: 12px; font-size: 1.2rem;">📈 PROGRESSION OVER 12 WEEKS</h3>
+ <div class="exercise-day">
+ <div class="exercise-day-header" onclick="this.parentElement.classList.toggle('active')">
+ <div>
+ <h3 class="exercise-day-title">Progression Over 12 Weeks</h3>
+ <p style="color: #7a6668; margin: 4px 0 0 0; font-style: italic; font-size: 0.9rem;">How to progress safely</p>
+ </div>
+ <span class="exercise-day-arrow">&#9660;</span>
+ </div>
+ <div class="exercise-day-content">
  <div style="background: #fff; padding: 16px; border: 1px solid #d4b5ba;">
  <p style="color: #3d2f31; margin-bottom: 12px;"><strong>Weeks 1-4 (Foundation):</strong> Perfect form, lightest weights, 2 sets, 20-30 sec holds</p>
  <p style="color: #3d2f31; margin-bottom: 12px;"><strong>Weeks 5-8 (Building):</strong> 30-45 sec holds, add resistance bands, 3 sets, +2-3 lbs dumbbells</p>
  <p style="color: #3d2f31; margin: 0;"><strong>Weeks 9-12 (Strengthening):</strong> 45-60 sec holds, single-leg variations, full side planks, tempo work (3-4 sec eccentrics)</p>
  </div>
  </div>
-
  </div>
+
  <div id="exercise-items"></div>
  <button class="add-resource-btn" onclick="showAddResourceForm('exercise')">+ Add Resource</button>
  </div>
@@ -2150,17 +2205,6 @@
  </div>
  <div id="meals-items"></div>
  <button class="add-resource-btn" onclick="showAddResourceForm('meals')">+ Add Resource</button>
- </div>
- </div>
-
- <div class="resource-category">
- <div class="resource-header" onclick="toggleResource(event, 'journal')">
- <span class="resource-name">Journal</span>
- <span class="resource-arrow">&#9660;</span>
- </div>
- <div class="resource-content" id="journal-content">
- <div id="journal-items"></div>
- <button class="add-resource-btn" onclick="showAddResourceForm('journal')">+ Add Resource</button>
  </div>
  </div>
 
@@ -2567,10 +2611,6 @@ What's on my mind today..."></textarea>
  meals: [
  { title: 'Budget Bytes', link: 'https://www.budgetbytes.com', note: 'Easy, affordable, healthy recipes.' }
  ],
- journal: [
- { title: 'Morning brain dump', link: null, note: 'Write 3 pages of whatever comes to mind. No filtering.' },
- { title: 'What I\'m proud of', link: null, note: 'List 3 things from today you handled well.' }
- ],
  read: [
  { title: 'Atomic Habits by James Clear', link: null, note: 'THE book for building habits.' },
  { title: 'The Mountain Is You by Brianna Wiest', link: null, note: 'About self-sabotage and growth.' }
@@ -2658,6 +2698,32 @@ What's on my mind today..."></textarea>
  }
  }
 
+ // Make functions globally accessible
+ window.addTodo = addTodo;
+ window.toggleTodo = toggleTodo;
+ window.deleteTodo = deleteTodo;
+ window.showAddResourceForm = showAddResourceForm;
+ window.hideAddResourceForm = hideAddResourceForm;
+ window.addResource = addResource;
+ window.deleteResource = deleteResource;
+ window.toggleResource = toggleResource;
+ window.handleResourceUpload = handleResourceUpload;
+ window.addNewHabit = addNewHabit;
+ window.changeDay = changeDay;
+ window.closeCelebration = closeCelebration;
+ window.closeHabitsEditor = closeHabitsEditor;
+ window.deleteHabit = deleteHabit;
+ window.deleteJournalEntry = deleteJournalEntry;
+ window.deleteVideo = deleteVideo;
+ window.resetBoard = resetBoard;
+ window.saveHabitsChanges = saveHabitsChanges;
+ window.saveJournalEntry = saveJournalEntry;
+ window.shuffleBoard = shuffleBoard;
+ window.toggleVideoForm = toggleVideoForm;
+ window.unlockJournal = unlockJournal;
+ window.addVideo = addVideo;
+ window.saveAnswer = saveAnswer;
+
  function renderTodos() {
  const list = document.getElementById('todoList');
  
@@ -2666,24 +2732,24 @@ What's on my mind today..."></textarea>
  return;
  }
  
- list.innerHTML = '';
- todos.forEach(todo => {
- const item = document.createElement('div');
- item.className = 'todo-item' + (todo.completed ? ' completed' : '');
- 
- item.innerHTML = `
+ list.innerHTML = todos.map(todo => `
+ <div class="todo-item${todo.completed ? ' completed' : ''}">
  <input 
  type="checkbox" 
  class="todo-checkbox" 
  ${todo.completed ? 'checked' : ''}
- onchange="toggleTodo(${todo.id})"
+ onchange="window.toggleTodo(${todo.id})"
  >
- <div class="todo-text">${todo.text}</div>
- <button class="todo-delete" onclick="deleteTodo(${todo.id})">Delete</button>
- `;
- 
- list.appendChild(item);
- });
+ <div class="todo-text">${escapeHtml(todo.text)}</div>
+ <button class="todo-delete" onclick="window.deleteTodo(${todo.id})">Delete</button>
+ </div>
+ `).join('');
+ }
+
+ function escapeHtml(text) {
+ const div = document.createElement('div');
+ div.textContent = text;
+ return div.innerHTML;
  }
 
  // STORAGE FUNCTIONS (localStorage)
@@ -2997,11 +3063,15 @@ What's on my mind today..."></textarea>
  function showAddResourceForm(category) {
  document.getElementById('resourceCategory').value = category;
  document.getElementById('resourceForm').classList.add('active');
+ document.getElementById('resourceFormOverlay').classList.add('active');
+ document.body.style.overflow = 'hidden'; // Prevent background scrolling
  }
 
  function hideAddResourceForm() {
  document.getElementById('resourceForm').classList.remove('active');
+ document.getElementById('resourceFormOverlay').classList.remove('active');
  document.getElementById('resourceForm').querySelector('form').reset();
+ document.body.style.overflow = ''; // Restore scrolling
  pendingResourceFile = null;
  }
 
@@ -3601,7 +3671,7 @@ What's on my mind today..."></textarea>
  <div class="day-name"> Morning Routine (8:00 AM - 10:30 AM)</div>
  <div class="day-preview"></div>
  </div>
- <span class="arrow"></span>
+ <span class="arrow">&#9660;</span>
  </div>
  <div class="day-details">
  <div class="schedule-item">
@@ -3713,7 +3783,7 @@ What's on my mind today..."></textarea>
  <div class="day-name"> Daytime Routine (10:30 AM - 7 PM)</div>
  <div class="day-preview"></div>
  </div>
- <span class="arrow"></span>
+ <span class="arrow">&#9660;</span>
  </div>
  <div class="day-details">
  <div class="schedule-item">
@@ -3769,7 +3839,7 @@ What's on my mind today..."></textarea>
  <div class="day-name"> Evening Routine (7 PM - 11 PM)</div>
  <div class="day-preview"></div>
  </div>
- <span class="arrow"></span>
+ <span class="arrow">&#9660;</span>
  </div>
  <div class="day-details">
  <div class="schedule-item">
