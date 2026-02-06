@@ -2,48 +2,46 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meal Plan | Our Life Hub</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --dark-bg: #3d2f31;
+            --card-bg: #2a1f21;
+            --sage-green: #a3b899;
+            --muted-sage: #7d8f76;
+            --light-text: #e0d2d0;
+            --cream: #f2ebe0;
+            --border-color: rgba(163, 184, 153, 0.2);
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
         }
-
-        html, body {
-            background: #3d2f31 !important;
-            color: #e0d2d0;
-            font-family: 'Philosopher', Georgia, serif;
-            font-weight: 500;
+        
+        body {
+            font-family: 'Philosopher', serif;
+            background: var(--dark-bg);
             min-height: 100vh;
-            line-height: 1.6;
+            padding: 90px 16px 16px;
+            color: var(--light-text);
         }
-
-        .container { max-width: 680px; margin: 0 auto; padding: 70px 24px 80px; }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 70px 24px 80px;
-        }
-
-        /* Top Navigation Bar */
+        
+        /* Navigation Bar */
         .top-nav {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            background: #2a1f21;
-            border-bottom: 1px solid rgba(163, 184, 153, 0.2);
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
             z-index: 1000;
             padding: 0 24px;
         }
-
+        
         .nav-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -56,7 +54,7 @@
         .nav-logo {
             font-size: 1.1rem;
             font-weight: 700;
-            color: #a3b899;
+            color: var(--sage-green);
             text-decoration: none;
         }
         
@@ -65,7 +63,7 @@
             gap: 24px;
             align-items: center;
         }
-
+        
         .nav-link {
             color: rgba(242, 235, 224, 0.7);
             text-decoration: none;
@@ -73,842 +71,1288 @@
             transition: color 0.2s;
             font-weight: 500;
         }
-
-        .nav-link:hover {
-            color: #a3b899;
-        }
-
         
-        /* Hamburger Menu */
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            z-index: 1001;
-            padding: 8px;
+        .nav-link:hover {
+            color: var(--sage-green);
         }
-
-        .hamburger span {
-            width: 24px;
-            height: 2px;
-            background: #a3b899;
-            transition: all 0.3s;
-            border-radius: 2px;
-        }
-
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(7px, 7px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
-        }
-
+        
         .nav-link.active {
-            color: #a3b899;
+            color: var(--sage-green);
         }
-
-        /* Header */
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 16px;
+            }
+            .nav-link {
+                font-size: 0.85rem;
+            }
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
         .header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 24px;
         }
-
+        
         .header h1 {
-            font-size: 1.8rem;
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: var(--sage-green);
             font-weight: 400;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            color: #f2ebe0;
-            margin-bottom: 8px;
         }
-
+        
         .header p {
-            color: rgba(242, 235, 224, 0.5);
-            font-size: 0.9rem;
+            color: var(--light-text);
+            font-size: 0.875rem;
             letter-spacing: 0.05em;
+            margin-top: 4px;
+            opacity: 0.7;
         }
-
-        /* Person Toggle */
-        .person-toggle {
+        
+        .toggle-container {
             display: flex;
             justify-content: center;
             gap: 12px;
-            margin-bottom: 32px;
+            margin-bottom: 16px;
         }
-
+        
         .toggle-btn {
-            padding: 12px 32px;
-            background: transparent;
-            border: 1px solid rgba(163, 184, 153, 0.3);
-            color: rgba(242, 235, 224, 0.6);
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-family: 'Philosopher', serif;
             cursor: pointer;
-            font-size: 0.9rem;
-            font-family: 'Philosopher', Georgia, serif;
-            font-weight: 500;
-            transition: all 0.3s;
+            transition: all 0.2s;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--light-text);
             letter-spacing: 0.05em;
         }
-
-        .toggle-btn:hover {
-            border-color: #a3b899;
-            color: #a3b899;
-        }
-
+        
         .toggle-btn.active {
-            background: rgba(163, 184, 153, 0.15);
-            border-color: #a3b899;
-            color: #a3b899;
+            background: var(--sage-green);
+            color: var(--dark-bg);
+            border: 1px solid var(--sage-green);
         }
-
-        /* Goals Display */
-        .goals-card {
-            background: rgba(163, 184, 153, 0.05);
-            border: 1px solid rgba(163, 184, 153, 0.2);
-            padding: 20px;
-            margin-bottom: 32px;
-            text-align: center;
-        }
-
-        .goals-grid {
+        
+        .goals {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
             display: flex;
             justify-content: center;
-            gap: 48px;
+            gap: 32px;
+            font-size: 0.875rem;
+            border: 1px solid var(--border-color);
         }
-
-        .goal-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        
+        .goals span {
+            color: var(--light-text);
+            opacity: 0.7;
         }
-
-        .goal-label {
-            font-size: 0.75rem;
-            color: rgba(242, 235, 224, 0.5);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 6px;
+        
+        .goals strong {
+            color: var(--sage-green);
         }
-
-        .goal-value {
-            font-size: 1.5rem;
-            color: #a3b899;
-            font-weight: 700;
+        
+        .calendar {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border-color);
         }
-
-        /* Calendar */
-        .calendar-section {
-            margin-bottom: 32px;
-        }
-
+        
         .week-label {
             font-size: 0.7rem;
-            color: rgba(242, 235, 224, 0.4);
-            text-transform: uppercase;
+            color: var(--muted-sage);
             letter-spacing: 0.15em;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
-
+        
         .week-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 8px;
-            margin-bottom: 24px;
+            gap: 6px;
+            margin-bottom: 16px;
         }
-
+        
+        .week-grid:last-child {
+            margin-bottom: 0;
+        }
+        
         .day-btn {
-            background: rgba(163, 184, 153, 0.05);
-            border: 1px solid rgba(163, 184, 153, 0.2);
-            padding: 16px 8px;
+            aspect-ratio: 1;
+            border: none;
+            border-radius: 6px;
             cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
+            transition: all 0.2s;
+            font-family: 'Philosopher', serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            font-weight: 500;
         }
-
-        .day-btn:hover {
-            background: rgba(163, 184, 153, 0.1);
-            border-color: #a3b899;
-        }
-
-        .day-btn.active {
-            background: rgba(163, 184, 153, 0.2);
-            border-color: #a3b899;
-        }
-
+        
         .day-letter {
-            font-size: 0.7rem;
-            color: rgba(242, 235, 224, 0.5);
+            font-size: 0.65rem;
             text-transform: uppercase;
-            margin-bottom: 4px;
+            letter-spacing: 0.05em;
+            opacity: 0.8;
         }
-
+        
         .day-number {
-            font-size: 1.1rem;
-            color: #f2ebe0;
+            font-size: 1rem;
             font-weight: 700;
         }
-
-        /* Day Details */
-        .day-details {
-            background: rgba(163, 184, 153, 0.05);
-            border: 1px solid rgba(163, 184, 153, 0.2);
-            padding: 24px;
-            margin-bottom: 32px;
+        
+        .day-detail {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
         }
-
+        
         .day-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid rgba(163, 184, 153, 0.2);
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            color: var(--dark-bg);
         }
-
-        .day-title {
-            font-size: 1.3rem;
-            color: #a3b899;
+        
+        .day-header-left {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+        
+        .day-num {
+            font-size: 1.5rem;
             font-weight: 700;
         }
-
-        .day-stats {
+        
+        .day-theme {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+        
+        .day-header-right {
             display: flex;
-            gap: 20px;
-            font-size: 0.85rem;
+            gap: 16px;
+            font-size: 0.75rem;
         }
-
-        .stat-item {
-            color: rgba(242, 235, 224, 0.6);
+        
+        .meals-container {
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
         }
-
-        .stat-value {
-            color: #a3b899;
-            font-weight: 700;
-        }
-
-        /* Meals List */
-        .meals-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1px;
-        }
-
-        .meal-item {
-            background: rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
+        
+        .meal-btn {
+            width: 100%;
+            background: rgba(61, 47, 49, 0.3);
+            border: none;
+            border-bottom: 1px solid var(--border-color);
+            padding: 14px 16px;
             display: flex;
             align-items: center;
-            gap: 16px;
-            border-left: 3px solid transparent;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            font-family: 'Philosopher', serif;
         }
-
-        .meal-item:hover {
-            background: rgba(163, 184, 153, 0.08);
-            border-left-color: #a3b899;
+        
+        .meal-btn:hover {
+            background: rgba(163, 184, 153, 0.1);
         }
-
+        
         .meal-icon {
-            font-size: 1.5rem;
-            width: 48px;
-            height: 48px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(163, 184, 153, 0.1);
-            border-radius: 50%;
+            font-size: 1.2rem;
         }
-
-        .meal-content {
+        
+        .meal-info {
             flex: 1;
         }
-
+        
         .meal-type {
-            font-size: 0.7rem;
-            color: rgba(242, 235, 224, 0.5);
+            font-size: 0.65rem;
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            margin-bottom: 4px;
+            color: var(--sage-green);
+            margin-bottom: 2px;
         }
-
+        
         .meal-name {
-            font-size: 1rem;
-            color: #f2ebe0;
-            margin-bottom: 4px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--light-text);
+            margin-bottom: 2px;
         }
-
+        
         .meal-portion {
-            font-size: 0.85rem;
-            color: #a3b899;
+            font-size: 0.75rem;
+            color: var(--light-text);
+            opacity: 0.6;
         }
-
+        
         .meal-arrow {
+            color: var(--sage-green);
             font-size: 1.2rem;
-            color: rgba(242, 235, 224, 0.3);
+            opacity: 0.5;
         }
-
+        
         /* Modal */
-        .modal {
-            display: none;
+        .modal-container {
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.9);
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
             z-index: 2000;
-            overflow-y: auto;
             padding: 20px;
         }
-
-        .modal.active {
+        
+        .modal-container.active {
             display: flex;
-            align-items: flex-start;
-            justify-content: center;
         }
-
-        .modal-container {
-            background: #2a1f21;
-            max-width: 600px;
+        
+        .modal {
+            background: var(--card-bg);
+            border-radius: 12px;
+            max-width: 500px;
             width: 100%;
-            margin: 40px auto;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border-color);
+        }
+        
+        .modal-header {
+            padding: 20px;
+            color: var(--dark-bg);
+            border-radius: 12px 12px 0 0;
             position: relative;
         }
-
-        .modal-header {
-            background: rgba(163, 184, 153, 0.2);
-            padding: 24px;
-            border-bottom: 1px solid rgba(163, 184, 153, 0.3);
-        }
-
-        .modal-title {
-            font-size: 1.4rem;
-            color: #f2ebe0;
+        
+        .modal-header h3 {
+            font-size: 1.25rem;
+            line-height: 1.3;
             margin-bottom: 8px;
+            font-weight: 400;
+            padding-right: 40px;
         }
-
-        .modal-meta {
-            font-size: 0.85rem;
-            color: #a3b899;
+        
+        .modal-header .meta {
+            font-size: 0.875rem;
+            opacity: 0.9;
         }
-
+        
         .modal-close {
             position: absolute;
             top: 20px;
             right: 20px;
-            background: transparent;
+            background: none;
             border: none;
-            color: rgba(242, 235, 224, 0.5);
-            font-size: 2rem;
+            color: var(--dark-bg);
+            opacity: 0.8;
+            font-size: 1.5rem;
             cursor: pointer;
-            line-height: 1;
-            transition: color 0.3s;
-        }
-
-        .modal-close:hover {
-            color: #a3b899;
-        }
-
-        .modal-Npx;
-        }
-
-        .container { max-width: 680px; margin: 0 auto; padding: 70px 24px 80px; }
-
-        .modal-section {
-            margin-bottom: 32px;
-        }
-
-        .modal-section:last-child {
-            margin-bottom: 0;
-        }
-
-        .modal-section-title {
-            font-size: 0.8rem;
-            color: #a3b899;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            margin-bottom: 16px;
-        }
-
-        .modal-list {
-            list-style: none;
+            width: 30px;
+            height: 30px;
             display: flex;
-            flex-direction: column;
-            gap: 10px;
+            align-items: center;
+            justify-content: center;
         }
-
-        .modal-list li {
-            color: rgba(242, 235, 224, 0.8);
-            font-size: 0.95rem;
-            line-height: 1.6;
-            padding-left: 20px;
-            position: relative;
+        
+        .modal-close:hover {
+            opacity: 1;
         }
-
-        .modal-list li::before {
-            content: '•';
-            position: absolute;
-            left: 0;
-            color: #a3b899;
+        
+        .modal-body {
+            padding: 20px;
         }
-
+        
+        .modal-section {
+            margin-bottom: 20px;
+        }
+        
+        .modal-section h4 {
+            color: var(--sage-green);
+            margin-bottom: 12px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        .modal-section ul {
+            list-style: none;
+        }
+        
+        .modal-section li {
+            color: var(--light-text);
+            font-size: 0.875rem;
+            margin-bottom: 6px;
+            display: flex;
+            gap: 8px;
+        }
+        
+        .modal-section li span {
+            color: var(--sage-green);
+            min-width: 15px;
+        }
+        
         .step-number {
-            display: inline-block;
-            width: 28px;
-            height: 28px;
-            background: rgba(163, 184, 153, 0.2);
-            color: #a3b899;
+            background: var(--sage-green);
+            color: var(--dark-bg);
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            text-align: center;
-            line-height: 28px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            margin-right: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
             flex-shrink: 0;
         }
-
-        .modal-step {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .modal-tip {
+        
+        .tip-box {
             background: rgba(163, 184, 153, 0.1);
-            border-left: 3px solid #a3b899;
-            padding: 16px;
-            margin-top: 24px;
+            border-radius: 8px;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
         }
-
-        .modal-tip p {
-            color: rgba(242, 235, 224, 0.8);
-            font-size: 0.9rem;
-            line-height: 1.6;
+        
+        .tip-box p {
+            font-size: 0.875rem;
+            color: var(--light-text);
+            margin: 0;
         }
-
-        .modal-portions {
+        
+        .portions-row {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
             display: flex;
-            gap: 12px;
             flex-wrap: wrap;
-            margin-top: 16px;
+            gap: 8px;
         }
-
+        
         .portion-tag {
-            background: rgba(163, 184, 153, 0.15);
-            border: 1px solid rgba(163, 184, 153, 0.3);
-            padding: 8px 16px;
-            font-size: 0.85rem;
-            color: rgba(242, 235, 224, 0.8);
+            background: rgba(163, 184, 153, 0.2);
+            border-radius: 9999px;
+            padding: 6px 12px;
+            color: var(--light-text);
+            font-size: 0.75rem;
+            border: 1px solid var(--border-color);
         }
-
-        .portion-tag strong {
-            color: #a3b899;
-        }
-
-        @media (max-width: 768px) {
-            .hamburger {
-                display: flex;
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 76px 12px 12px;
             }
-
-            .nav-links {
-                position: fixed;
-                top: 60px;
-                left: 0;
-                right: 0;
-                background: #2a1f21;
-                flex-direction: column;
-                gap: 0;
-                padding: 0;
-                max-height: 0;
-                overflow: hidden;
-                transition: max-height 0.3s ease;
-                border-bottom: 1px solid rgba(163, 184, 153, 0.2);
+            
+            .header h1 {
+                font-size: 2rem;
             }
-
-            .nav-links.active {
-                max-height: 400px;
+            
+            .modal {
+                max-height: 80vh;
             }
-
-            .nav-link {
-                width: 100%;
-                padding: 16px 24px;
-                border-bottom: 1px solid rgba(163, 184, 153, 0.1);
-                font-size: 1rem;
-            }
-
-            .nav-link:last-child {
-                border-bottom: none;
-            }
-
-            xpx 16px 60px;
-            }
-
-            .goals-grid {
-                gap: 32px;
-            }
-
-            .week-grid {
-                gap: 4px;
-            }
-
-            .day-btn {
-                padding: 12px 4px;
-            }
-
-            .day-number {
-                font-size: 1rem;
-            }
-
-            .modal-container {
-                margin: 20px auto;
-            }
-
-            .modal-Npx;
-            }
-
-        .container { max-width: 680px; margin: 0 auto; padding: 70px 24px 80px; }
         }
     </style>
 </head>
 <body>
-    <!-- Top Navigation -->
-    <nav class="top-nav">
-        <div class="nav-container">
-            <a href="index.html" class="nav-logo">Our Life Hub</a>
-            <div class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <div class="nav-links" id="navLinks">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="kasey-hub.html" class="nav-link">Kasey</a>
-                <a href="charlie-hub.html" class="nav-link">Charlie</a>
-                <a href="our-dreams.html" class="nav-link">Dreams</a>
-                <a href="meal-plan.html" class="nav-link active">Meals</a>
-                <a href="settings.html" class="nav-link">Settings</a>
-            </div>
-        </div>
-    </nav>
+<nav class="top-nav">
+<div class="nav-container">
+<a href="index.html" class="nav-logo">Our Life Hub</a>
+<div class="nav-links">
+<a href="index.html" class="nav-link">Home</a>
+<a href="kasey-hub.html" class="nav-link">Kasey</a>
+<a href="charlie-hub.html" class="nav-link">Charlie</a>
+<a href="our-dreams.html" class="nav-link">Dreams</a>
+<a href="meal-plan.html" class="nav-link active">Meals</a>
+<a href="settings.html" class="nav-link">Settings</a>
+</div>
+</div>
+</nav>
 
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1>Meal Plan</h1>
-            <p>14-day high-protein meal rotation</p>
-        </div>
-
-        <!-- Person Toggle -->
-        <div class="person-toggle">
-            <button class="toggle-btn active" data-person="kasey">Kasey</button>
-            <button class="toggle-btn" data-person="charlie">Charlie</button>
-        </div>
-
-        <!-- Goals -->
-        <div class="goals-card">
-            <div class="goals-grid">
-                <div class="goal-item">
-                    <div class="goal-label">Daily Protein</div>
-                    <div class="goal-value"><span id="goal-protein">140</span>g</div>
-                </div>
-                <div class="goal-item">
-                    <div class="goal-label">Daily Calories</div>
-                    <div class="goal-value"><span id="goal-calories">1600</span></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Calendar -->
-        <div class="calendar-section">
-            <div class="week-label">Week 1</div>
-            <div class="week-grid" id="week1"></div>
-
-            <div class="week-label">Week 2</div>
-            <div class="week-grid" id="week2"></div>
-        </div>
-
-        <!-- Day Details -->
-        <div class="day-details">
-            <div class="day-header">
-                <div class="day-title">Day <span id="day-num">1</span> - <span id="day-theme">Mexican</span></div>
-                <div class="day-stats">
-                    <div class="stat-item">
-                        <span class="stat-value" id="day-protein">145g</span> protein
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-value" id="day-calories">1580</span> cal
-                    </div>
-                </div>
-            </div>
-
-            <div class="meals-list" id="meals-container">
-                <!-- Meals will be populated here -->
-            </div>
-        </div>
+<div class="container">
+    <div class="header">
+        <h1>Meal Plan</h1>
+        <p>Kasey & Charlie • 2 Weeks • Anti-Cancer Mediterranean</p>
     </div>
-
-    <!-- Recipe Modal -->
-    <div class="modal" id="modal">
-        <div class="modal-container">
-            <div class="modal-header">
-                <h2 class="modal-title" id="modal-title">Recipe Name</h2>
-                <div class="modal-meta" id="modal-meta">30g protein • 450 cal • 25 min</div>
-                <button class="modal-close" onclick="closeModal()">×</button>
-            </div>
-            <div class="modal-body">
-                <div class="modal-section">
-                    <h3 class="modal-section-title">Ingredients</h3>
-                    <ul class="modal-list" id="modal-ingredients"></ul>
-                </div>
-
-                <div class="modal-section">
-                    <h3 class="modal-section-title">Instructions</h3>
-                    <div id="modal-steps"></div>
-                </div>
-
-                <div class="modal-tip" id="modal-tip" style="display: none;">
-                    <p></p>
-                </div>
-
-                <div class="modal-section">
-                    <h3 class="modal-section-title">Portions</h3>
-                    <div class="modal-portions" id="modal-portions"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        const goals = {
-            kasey: { protein: 140, calories: 1600 },
-            charlie: { protein: 175, calories: 2500 }
-        };
-
-        const recipes = {
-            "Freezer Breakfast Burritos": { protein: 18, calories: 320, time: "5 min (reheat)", ingredients: ["6 whole wheat tortillas", "8 eggs, scrambled", "1 cup black beans, rinsed", "1 cup shredded cheese", "1/2 cup salsa", "1 bell pepper, diced", "1/2 onion, diced"], steps: ["Scramble eggs with salt and pepper", "Sauté bell pepper and onion until soft", "Lay out tortillas and divide scrambled eggs evenly", "Top with black beans, cheese, peppers, and salsa", "Roll tightly, folding in sides", "Wrap individually in foil and freeze", "Reheat in microwave for 2-3 minutes or oven at 350°F for 20 min"], tips: "Make a batch of 12-15 on meal prep day. They'll last up to 3 months in the freezer." },
-            "Chicken & Rice Burrito Bowls": { protein: 42, calories: 480, time: "30 min", ingredients: ["1.5 lbs chicken breast", "2 cups white rice, cooked", "1 can black beans", "1 cup corn", "1 cup salsa", "1 cup shredded cheese", "Taco seasoning", "Lime, cilantro for garnish"], steps: ["Cook rice according to package", "Season chicken with taco seasoning, cook until 165°F internal temp", "Dice chicken into bite-sized pieces", "Warm black beans and corn together", "Assemble bowls: rice base, chicken, beans, corn, salsa, cheese", "Garnish with cilantro and lime"], tips: "Meal prep 4-5 bowls at once. Store components separately for best freshness." },
-            "Mexican Chicken Soup": { protein: 32, calories: 280, time: "45 min", ingredients: ["1 lb chicken breast", "4 cups chicken broth", "1 can diced tomatoes", "1 can black beans", "1 cup corn", "1 onion, diced", "2 cloves garlic", "Cumin, chili powder, oregano", "Cilantro, lime"], steps: ["In large pot, sauté onion and garlic", "Add chicken broth, tomatoes, and spices", "Add whole chicken breasts, simmer 20 min", "Remove chicken, shred with forks", "Return chicken to pot with beans and corn", "Simmer 10 more minutes", "Serve with cilantro and lime"], tips: "This freezes beautifully! Make a double batch." },
-            "TJ's Gone Berry Crazy!": { protein: 0, calories: 50, time: "0 min", ingredients: ["Trader Joe's Gone Berry Crazy dried fruit"], steps: ["Open package", "Enjoy as dessert"], tips: "Pre-portion into small bags for easy grab-and-go dessert." },
-            "Egg Muffin Cups": { protein: 24, calories: 280, time: "25 min", ingredients: ["12 eggs", "1 cup diced ham or turkey sausage", "1 cup shredded cheese", "1 bell pepper, diced", "1/2 onion, diced", "Spinach", "Salt, pepper"], steps: ["Preheat oven to 350°F", "Spray muffin tin with cooking spray", "Whisk eggs with salt and pepper", "Divide meat, veggies, and cheese among 12 cups", "Pour egg mixture over fillings", "Bake 20-22 minutes until set", "Cool and store in fridge"], tips: "These last 5 days in the fridge. Reheat for 30-45 seconds." },
-            "Ground Beef Tacos": { protein: 38, calories: 450, time: "20 min", ingredients: ["1 lb 93% lean ground beef", "Taco seasoning", "12 corn tortillas", "Shredded lettuce", "Diced tomatoes", "Shredded cheese", "Salsa", "Greek yogurt (for sour cream)"], steps: ["Brown ground beef in large skillet", "Drain any excess fat", "Add taco seasoning and 1/4 cup water", "Simmer until thickened", "Warm tortillas in microwave", "Assemble tacos with toppings of choice"], tips: "Use Greek yogurt instead of sour cream for extra protein." },
-            "Chocolate Covered Strawberries": { protein: 1, calories: 80, time: "15 min", ingredients: ["1 lb fresh strawberries", "4 oz dark chocolate chips", "1 tsp coconut oil"], steps: ["Wash and dry strawberries completely", "Melt chocolate and coconut oil in microwave (30 sec intervals)", "Dip strawberries in chocolate", "Place on parchment paper", "Refrigerate until set (about 30 min)"], tips: "Make sure strawberries are completely dry or chocolate won't stick." },
-            "Greek Yogurt + Granola": { protein: 20, calories: 350, time: "2 min", ingredients: ["1.5 cups plain Greek yogurt", "1/2 cup granola", "1/4 cup fresh berries", "1 tbsp honey"], steps: ["Spoon yogurt into bowl", "Top with granola and berries", "Drizzle with honey"], tips: "Use Fage Total 0% for highest protein." },
-            "Spinach & Feta Stuffed Chicken": { protein: 48, calories: 380, time: "35 min", ingredients: ["2 large chicken breasts", "1 cup fresh spinach", "1/2 cup crumbled feta", "2 cloves garlic, minced", "Olive oil", "Italian seasoning", "Salt, pepper"], steps: ["Preheat oven to 375°F", "Butterfly chicken breasts to create a pocket", "Sauté spinach and garlic until wilted", "Mix spinach with feta cheese", "Stuff mixture into chicken pockets", "Secure with toothpicks if needed", "Season outside with Italian seasoning, salt, pepper", "Bake 25-30 minutes until 165°F internal"], tips: "Let chicken rest 5 minutes before slicing to keep it juicy." },
-            "Beef & Broccoli Stir Fry": { protein: 42, calories: 480, time: "25 min", ingredients: ["1 lb flank steak, thinly sliced", "4 cups broccoli florets", "3 cloves garlic, minced", "1/4 cup soy sauce", "2 tbsp oyster sauce", "1 tbsp sesame oil", "2 cups white rice, cooked", "Green onions"], steps: ["Cook rice according to package", "Heat sesame oil in large wok or skillet", "Stir fry beef until just cooked, set aside", "Stir fry broccoli until tender-crisp", "Add garlic, cook 30 seconds", "Return beef to pan", "Add soy sauce and oyster sauce", "Toss to coat, serve over rice"], tips: "Slice beef against the grain for most tender results." },
-            "Frozen Chocolate PB Banana Bites": { protein: 3, calories: 120, time: "2 hours (freeze time)", ingredients: ["3 bananas", "1/2 cup peanut butter", "1/2 cup dark chocolate chips", "1 tsp coconut oil"], steps: ["Slice bananas into 1/2 inch rounds", "Spread peanut butter on half the rounds", "Top with remaining banana slices (make sandwiches)", "Freeze for 1 hour", "Melt chocolate and coconut oil", "Dip frozen banana bites in chocolate", "Return to freezer until set"], tips: "Store in freezer in airtight container for up to 1 month." },
-            "Protein Shake": { protein: 30, calories: 280, time: "2 min", ingredients: ["1 scoop protein powder", "1 cup unsweetened almond milk", "1 banana", "1 tbsp peanut butter", "Ice", "Optional: spinach, berries"], steps: ["Add all ingredients to blender", "Blend until smooth", "Adjust consistency with more milk if needed"], tips: "Pre-portion dry ingredients in bags for even quicker prep." },
-            "Loaded Turkey Burgers": { protein: 40, calories: 420, time: "20 min", ingredients: ["1.5 lbs 93% lean ground turkey", "1/4 cup breadcrumbs", "1 egg", "Garlic powder, onion powder", "4 slices cheese", "Lettuce, tomato, onion", "Whole wheat buns or lettuce wraps"], steps: ["Mix turkey, breadcrumbs, egg, and seasonings", "Form into 4 large patties", "Cook on grill or skillet 5-6 min per side until 165°F", "Top with cheese in last minute", "Serve on buns or lettuce wraps with toppings"], tips: "Make a thumb indent in center of patty to prevent puffing." },
-            "Crockpot BBQ Pulled Chicken": { protein: 45, calories: 380, time: "4-6 hours (crockpot)", ingredients: ["2 lbs chicken breast", "1 cup BBQ sauce", "1/4 cup chicken broth", "1 tbsp brown sugar", "1 tsp smoked paprika", "Sandwich buns or rice"], steps: ["Place chicken in crockpot", "Mix BBQ sauce, broth, sugar, and paprika", "Pour over chicken", "Cook on low 4-6 hours", "Shred chicken with forks", "Stir back into sauce", "Serve on buns or over rice"], tips: "This makes great meal prep - portion into containers for the week." },
-            "TJ's Dark Chocolate Almonds": { protein: 4, calories: 160, time: "0 min", ingredients: ["Trader Joe's Dark Chocolate Almonds"], steps: ["Open container", "Portion into 1 oz servings"], tips: "Pre-portion to avoid overeating." },
-            "Asian Ground Chicken Rice Bowls": { protein: 40, calories: 460, time: "25 min", ingredients: ["1.5 lbs ground chicken", "3 cloves garlic, minced", "1 tbsp ginger, minced", "1/4 cup soy sauce", "2 tbsp hoisin sauce", "1 tbsp sesame oil", "2 cups white rice, cooked", "Green onions, sesame seeds"], steps: ["Cook rice according to package", "Heat sesame oil in large skillet", "Cook ground chicken until no longer pink", "Add garlic and ginger, cook 1 minute", "Add soy sauce and hoisin sauce", "Simmer 5 minutes", "Serve over rice with green onions and sesame seeds"], tips: "Add sriracha for extra kick!" },
-            "Spicy Gochujang Chicken Thighs": { protein: 38, calories: 420, time: "35 min", ingredients: ["2 lbs chicken thighs", "3 tbsp gochujang paste", "2 tbsp soy sauce", "1 tbsp honey", "2 cloves garlic, minced", "1 tbsp sesame oil", "White rice for serving"], steps: ["Preheat oven to 400°F", "Mix gochujang, soy sauce, honey, garlic, and sesame oil", "Coat chicken thighs in sauce", "Place on baking sheet", "Bake 30-35 minutes until 165°F internal", "Serve with rice"], tips: "Adjust gochujang amount based on spice preference." },
-            "Apple with PB & Chocolate": { protein: 4, calories: 180, time: "2 min", ingredients: ["1 large apple", "2 tbsp peanut butter", "1 tbsp mini chocolate chips"], steps: ["Slice apple into wedges", "Spread peanut butter on slices", "Sprinkle with chocolate chips"], tips: "Use dark chocolate chips for antioxidant boost." },
-            "Chicken Quesadillas with Black Beans": { protein: 42, calories: 520, time: "20 min", ingredients: ["2 cups cooked chicken, shredded", "1 can black beans, drained", "2 cups shredded cheese", "8 whole wheat tortillas", "Salsa, Greek yogurt for serving"], steps: ["Heat large skillet over medium", "Place tortilla in pan", "Add layer of cheese, chicken, and beans", "Top with more cheese and another tortilla", "Cook 3-4 min per side until golden", "Cut into quarters", "Serve with salsa and Greek yogurt"], tips: "Use rotisserie chicken for fastest prep." },
-            "Ground Turkey Tacos": { protein: 40, calories: 440, time: "20 min", ingredients: ["1.5 lbs 93% lean ground turkey", "Taco seasoning", "12 corn or flour tortillas", "Shredded lettuce", "Diced tomatoes", "Cheese", "Salsa", "Greek yogurt"], steps: ["Brown turkey in large skillet", "Drain any fat", "Add taco seasoning and water per package", "Simmer until thickened", "Warm tortillas", "Assemble tacos with toppings"], tips: "Make taco meat in big batches - freezes perfectly." },
-            "Chocolate PB Greek Yogurt Cups": { protein: 15, calories: 200, time: "5 min + freeze", ingredients: ["2 cups plain Greek yogurt", "2 tbsp cocoa powder", "2 tbsp peanut butter", "2 tbsp honey", "Mini chocolate chips"], steps: ["Mix yogurt, cocoa powder, and honey", "Swirl in peanut butter", "Divide into muffin cups", "Top with chocolate chips", "Freeze for 2 hours"], tips: "These are like healthy ice cream cups!" },
-            "Air Fryer Spicy Chicken Thighs": { protein: 36, calories: 380, time: "25 min", ingredients: ["2 lbs chicken thighs", "2 tbsp olive oil", "Paprika, garlic powder, cayenne", "Salt, pepper", "Roasted potatoes for serving"], steps: ["Preheat air fryer to 400°F", "Pat chicken dry with paper towels", "Rub with oil and spices", "Air fry 12 minutes, flip", "Cook 10-12 more minutes until 165°F", "Serve with roasted potatoes"], tips: "Dry skin = crispy skin! Don't skip the pat dry step." },
-            "One-Pan Chicken Piccata": { protein: 44, calories: 420, time: "30 min", ingredients: ["1.5 lbs chicken breast", "1/4 cup flour", "3 tbsp butter", "1/2 cup chicken broth", "1/4 cup lemon juice", "2 tbsp capers", "Fresh parsley", "White rice"], steps: ["Pound chicken to even thickness", "Dredge in flour, shake off excess", "Melt butter in large skillet over medium-high", "Cook chicken 5-6 min per side until golden", "Remove chicken, set aside", "Add broth and lemon juice to pan", "Simmer 2 minutes, scraping up brown bits", "Add capers, return chicken to pan", "Simmer 2 more minutes", "Garnish with parsley, serve over rice"], tips: "The pan sauce is amazing - make sure to spoon it over everything!" },
-            "Italian Baked Chicken & Potatoes": { protein: 42, calories: 460, time: "45 min", ingredients: ["2 lbs chicken breast", "1.5 lbs baby potatoes, halved", "3 tbsp olive oil", "Italian seasoning", "Garlic powder", "Lemon", "Fresh rosemary"], steps: ["Preheat oven to 425°F", "Toss potatoes with 2 tbsp oil and seasonings", "Spread on baking sheet", "Roast 15 minutes", "Rub chicken with remaining oil and seasonings", "Add chicken to pan with potatoes", "Roast 25-30 more minutes until chicken is 165°F", "Squeeze lemon over everything"], tips: "Use a meat thermometer for perfect chicken every time." },
-            "Healthy Choice Fudge Bar": { protein: 5, calories: 80, time: "0 min", ingredients: ["Healthy Choice Fudge Bar"], steps: ["Remove from freezer", "Enjoy!"], tips: "These are surprisingly satisfying for only 80 calories." },
-            "Overnight Oats": { protein: 15, calories: 340, time: "5 min + overnight", ingredients: ["1/2 cup oats", "1/2 cup Greek yogurt", "1/2 cup milk", "1 tbsp chia seeds", "1 tbsp honey", "Berries", "Nuts"], steps: ["Mix oats, yogurt, milk, chia, and honey in jar", "Stir well", "Refrigerate overnight", "In morning, top with berries and nuts"], tips: "Make 5 jars on Sunday for grab-and-go breakfasts all week." },
-            "Garlic Butter Shrimp Rice Bowls": { protein: 40, calories: 480, time: "20 min", ingredients: ["1.5 lbs large shrimp, peeled", "4 tbsp butter", "6 cloves garlic, minced", "Lemon juice", "Parsley", "2 cups white rice, cooked", "Asparagus or broccoli"], steps: ["Cook rice according to package", "Steam asparagus until tender-crisp", "Melt butter in large skillet", "Add garlic, cook 30 seconds", "Add shrimp, cook 2-3 min per side", "Squeeze lemon juice over shrimp", "Serve over rice with veggies", "Garnish with parsley"], tips: "Don't overcook shrimp - they're done when pink and opaque." },
-            "Asian Chicken Bowl (Hoisin-Soy)": { protein: 44, calories: 500, time: "30 min", ingredients: ["1.5 lbs chicken breast, cubed", "1/4 cup hoisin sauce", "2 tbsp soy sauce", "1 tbsp sesame oil", "2 cups mixed veggies (broccoli, snap peas, carrots)", "2 cups white rice, cooked", "Sesame seeds"], steps: ["Cook rice according to package", "Heat sesame oil in large wok", "Cook chicken until golden", "Remove chicken, set aside", "Stir fry veggies until tender-crisp", "Return chicken to wok", "Add hoisin and soy sauce", "Toss to coat", "Serve over rice with sesame seeds"], tips: "Cut chicken into uniform pieces for even cooking." },
-            "TJ's Peanut & Date Bar": { protein: 5, calories: 180, time: "0 min", ingredients: ["Trader Joe's Peanut & Date Bar"], steps: ["Unwrap", "Enjoy"], tips: "Great source of quick energy before workouts." },
-            "BBQ Chicken Quesadillas": { protein: 38, calories: 480, time: "20 min", ingredients: ["2 cups cooked chicken, shredded", "1/2 cup BBQ sauce", "2 cups shredded cheese", "8 flour tortillas", "Diced red onion", "Cilantro"], steps: ["Mix chicken with BBQ sauce", "Heat large skillet", "Place tortilla in pan", "Layer cheese, BBQ chicken, onion", "Top with more cheese and another tortilla", "Cook 3-4 min per side", "Cut into quarters"], tips: "Add jalapeños for extra kick!" },
-            "Creamy Chicken Cauliflower Rice": { protein: 40, calories: 380, time: "25 min", ingredients: ["1.5 lbs chicken breast, diced", "1 bag cauliflower rice (or 1 head, riced)", "1/2 cup cream cheese", "1 cup chicken broth", "2 cups spinach", "Garlic, Italian seasoning"], steps: ["Cook chicken in large skillet until golden", "Remove chicken, set aside", "Add cauliflower rice to pan", "Cook 5 minutes", "Add cream cheese and broth", "Stir until creamy", "Add spinach, wilt down", "Return chicken to pan", "Season to taste"], tips: "This is a great low-carb option - or serve with regular rice for more calories." },
-            "Greek Yogurt Berry Parfait": { protein: 20, calories: 280, time: "5 min", ingredients: ["1.5 cups Greek yogurt", "1/2 cup granola", "1 cup mixed berries", "1 tbsp honey", "Mint for garnish"], steps: ["Layer yogurt in glass", "Add berries", "Sprinkle granola", "Drizzle honey", "Garnish with mint"], tips: "Prep parfaits in mason jars for easy grab-and-go." },
-            "Korean Beef Rice Bowls": { protein: 40, calories: 520, time: "25 min", ingredients: ["1.5 lbs ground beef (93% lean)", "1/4 cup soy sauce", "2 tbsp brown sugar", "1 tbsp sesame oil", "3 cloves garlic, minced", "1 tsp ginger, minced", "2 cups white rice, cooked", "Green onions, sesame seeds", "Shredded carrots, cucumber"], steps: ["Cook rice according to package", "Brown ground beef in large skillet", "Drain any fat", "Add garlic and ginger, cook 1 minute", "Add soy sauce, brown sugar, and sesame oil", "Simmer 5 minutes", "Serve over rice with fresh veggies", "Top with green onions and sesame seeds"], tips: "The sweet and savory sauce is addictive!" },
-            "Turkey Burgers + Sweet Potato Fries": { protein: 42, calories: 520, time: "35 min", ingredients: ["1.5 lbs ground turkey", "1 egg", "Breadcrumbs", "Seasonings", "2 large sweet potatoes", "Olive oil", "Buns or lettuce wraps"], steps: ["Preheat oven to 425°F for fries", "Cut sweet potatoes into fries", "Toss with oil and salt", "Spread on baking sheet, bake 25-30 min, flipping once", "Meanwhile, mix turkey, egg, breadcrumbs, and seasonings", "Form patties", "Grill or pan fry 5-6 min per side until 165°F", "Serve together"], tips: "For crispier fries, don't crowd the pan - use two sheets if needed." }
-        };
-
-        const mealPlan = {
-            1: { theme: 'Mexican', meals: { breakfast: 'Freezer Breakfast Burritos', lunch: 'Chicken & Rice Burrito Bowls', dinner: 'Mexican Chicken Soup', dessert: "TJ's Gone Berry Crazy!" }, portions: { kasey: { breakfast: '1 burrito', lunch: '1 bowl', dinner: '2 cups soup', dessert: '6 pieces' }, charlie: { breakfast: '1.5 burritos', lunch: '1.5 bowls', dinner: '2.5 cups soup', dessert: '8 pieces' } }, totals: { kasey: { protein: 145, calories: 1580 }, charlie: { protein: 172, calories: 2480 } } },
-            2: { theme: 'Mexican', meals: { breakfast: 'Egg Muffin Cups', lunch: 'Chicken & Rice Burrito Bowls', dinner: 'Ground Beef Tacos', dessert: 'Chocolate Covered Strawberries' }, portions: { kasey: { breakfast: '2 cups', lunch: '1 bowl', dinner: '3 tacos', dessert: '4 strawberries' }, charlie: { breakfast: '3 cups', lunch: '1.5 bowls', dinner: '4 tacos', dessert: '5 strawberries' } }, totals: { kasey: { protein: 148, calories: 1600 }, charlie: { protein: 176, calories: 2520 } } },
-            3: { theme: 'Mediterranean', meals: { breakfast: 'Greek Yogurt + Granola', lunch: 'Spinach & Feta Stuffed Chicken', dinner: 'Beef & Broccoli Stir Fry', dessert: 'Frozen Chocolate PB Banana Bites' }, portions: { kasey: { breakfast: '1 bowl', lunch: '1 breast', dinner: '1 bowl + ½ cup rice', dessert: '4 bites' }, charlie: { breakfast: '1.5 bowls', lunch: '1 breast', dinner: '1.5 bowls + 1 cup rice', dessert: '6 bites' } }, totals: { kasey: { protein: 142, calories: 1570 }, charlie: { protein: 170, calories: 2490 } } },
-            4: { theme: 'Comfort', meals: { breakfast: 'Protein Shake', lunch: 'Spinach & Feta Stuffed Chicken', dinner: 'Beef & Broccoli Stir Fry', dessert: 'Frozen Chocolate PB Banana Bites' }, portions: { kasey: { breakfast: '1 shake', lunch: '1 breast + veggies', dinner: '1 bowl', dessert: '4 bites' }, charlie: { breakfast: '1 large shake', lunch: '1.5 breasts + veggies', dinner: '1.5 bowls', dessert: '6 bites' } }, totals: { kasey: { protein: 150, calories: 1600 }, charlie: { protein: 178, calories: 2540 } } },
-            5: { theme: 'Fusion', meals: { breakfast: 'Greek Yogurt + Granola', lunch: 'Asian Ground Chicken Rice Bowls', dinner: 'Ground Beef Tacos', dessert: 'Apple with PB & Chocolate' }, portions: { kasey: { breakfast: '1 bowl', lunch: '1 bowl', dinner: '3 tacos', dessert: '1 apple' }, charlie: { breakfast: '1.5 bowls', lunch: '1.5 bowls', dinner: '4 tacos', dessert: '1 large apple' } }, totals: { kasey: { protein: 144, calories: 1590 }, charlie: { protein: 171, calories: 2500 } } },
-            6: { theme: 'Classic', meals: { breakfast: 'Freezer Breakfast Burritos', lunch: 'Chicken & Rice Burrito Bowls', dinner: 'Loaded Turkey Burgers', dessert: 'Chocolate Covered Strawberries' }, portions: { kasey: { breakfast: '1 burrito', lunch: '1 bowl', dinner: '1 burger (lettuce wrap)', dessert: '4 strawberries' }, charlie: { breakfast: '1.5 burritos', lunch: '1.5 bowls', dinner: '1.5 burgers + buns', dessert: '5 strawberries' } }, totals: { kasey: { protein: 146, calories: 1580 }, charlie: { protein: 174, calories: 2490 } } },
-            7: { theme: 'Prep Day', meals: { breakfast: 'Protein Bar + Banana', lunch: 'Loaded Turkey Burgers', dinner: 'Crockpot BBQ Pulled Chicken', dessert: "TJ's Dark Chocolate Almonds" }, portions: { kasey: { breakfast: '1 bar + banana', lunch: '1 burger (lettuce wrap)', dinner: '1 sandwich/bowl', dessert: '1 oz' }, charlie: { breakfast: '1 bar + banana + yogurt', lunch: '1 burger + bun + fries', dinner: '1.5 sandwiches', dessert: '1.5 oz' } }, totals: { kasey: { protein: 147, calories: 1590 }, charlie: { protein: 175, calories: 2580 } } },
-            8: { theme: 'Asian', meals: { breakfast: 'Egg Muffin Cups', lunch: 'Asian Ground Chicken Rice Bowls', dinner: 'Spicy Gochujang Chicken Thighs', dessert: 'Apple with PB & Chocolate' }, portions: { kasey: { breakfast: '2 cups', lunch: '1 bowl', dinner: '2 thighs + ½ cup rice', dessert: '1 apple' }, charlie: { breakfast: '3 cups', lunch: '1.5 bowls', dinner: '3 thighs + 1 cup rice', dessert: '1 large apple' } }, totals: { kasey: { protein: 144, calories: 1580 }, charlie: { protein: 172, calories: 2480 } } },
-            9: { theme: 'Mexican', meals: { breakfast: 'Protein Shake', lunch: 'Chicken Quesadillas with Black Beans', dinner: 'Ground Turkey Tacos', dessert: "TJ's Gone Berry Crazy!" }, portions: { kasey: { breakfast: '1 shake', lunch: '1 quesadilla', dinner: '3 tacos', dessert: '6 pieces' }, charlie: { breakfast: '1 large shake', lunch: '1.5 quesadillas', dinner: '4 tacos', dessert: '8 pieces' } }, totals: { kasey: { protein: 148, calories: 1560 }, charlie: { protein: 177, calories: 2460 } } },
-            10: { theme: 'American', meals: { breakfast: 'Greek Yogurt + Granola', lunch: 'Spinach & Feta Stuffed Chicken', dinner: 'Air Fryer Spicy Chicken Thighs', dessert: 'Chocolate PB Greek Yogurt Cups' }, portions: { kasey: { breakfast: '1 bowl', lunch: '1 breast', dinner: '2 thighs + ½ cup potatoes', dessert: '2 cups' }, charlie: { breakfast: '1.5 bowls', lunch: '1.5 breasts', dinner: '3 thighs + 1 cup potatoes', dessert: '3 cups' } }, totals: { kasey: { protein: 152, calories: 1600 }, charlie: { protein: 180, calories: 2520 } } },
-            11: { theme: 'Italian', meals: { breakfast: 'Freezer Breakfast Burritos', lunch: 'One-Pan Chicken Piccata', dinner: 'Italian Baked Chicken & Potatoes', dessert: 'Healthy Choice Fudge Bar' }, portions: { kasey: { breakfast: '1 burrito', lunch: '6 oz + ½ cup rice', dinner: '1 breast + ½ cup potatoes', dessert: '1 bar' }, charlie: { breakfast: '1.5 burritos', lunch: '8 oz + 1 cup rice', dinner: '1 breast + 1 cup potatoes + bread', dessert: '2 bars' } }, totals: { kasey: { protein: 146, calories: 1570 }, charlie: { protein: 174, calories: 2490 } } },
-            12: { theme: 'Asian', meals: { breakfast: 'Overnight Oats', lunch: 'Garlic Butter Shrimp Rice Bowls', dinner: 'Asian Chicken Bowl (Hoisin-Soy)', dessert: "TJ's Peanut & Date Bar" }, portions: { kasey: { breakfast: '1 jar', lunch: '8 oz shrimp + ½ cup rice', dinner: '1 bowl', dessert: '1 bar' }, charlie: { breakfast: '1.5 jars', lunch: '10 oz shrimp + 1 cup rice', dinner: '1.5 bowls', dessert: '1.5 bars' } }, totals: { kasey: { protein: 142, calories: 1590 }, charlie: { protein: 169, calories: 2510 } } },
-            13: { theme: 'Fusion', meals: { breakfast: 'Egg Muffin Cups', lunch: 'BBQ Chicken Quesadillas', dinner: 'Creamy Chicken Cauliflower Rice', dessert: 'Greek Yogurt Berry Parfait' }, portions: { kasey: { breakfast: '2 cups', lunch: '1 quesadilla', dinner: '1.5 cups', dessert: '1 parfait' }, charlie: { breakfast: '3 cups', lunch: '1.5 quesadillas', dinner: '2 cups + side rice', dessert: '1 large parfait' } }, totals: { kasey: { protein: 150, calories: 1560 }, charlie: { protein: 176, calories: 2510 } } },
-            14: { theme: 'Comfort', meals: { breakfast: 'Protein Shake', lunch: 'Korean Beef Rice Bowls', dinner: 'Turkey Burgers + Sweet Potato Fries', dessert: 'Frozen Chocolate PB Banana Bites' }, portions: { kasey: { breakfast: '1 shake', lunch: '1 bowl', dinner: '1 burger (lettuce wrap)', dessert: '5 bites' }, charlie: { breakfast: '1 large shake', lunch: '1.5 bowls', dinner: '1.5 burgers + buns', dessert: '7 bites' } }, totals: { kasey: { protein: 145, calories: 1600 }, charlie: { protein: 173, calories: 2540 } } }
-        };
-
-        let selectedDay = 1;
-        let activePerson = 'kasey';
-
-        function init() {
-            renderCalendar();
-            renderDay();
-            setupToggle();
-        }
-
-        function setupToggle() {
-            document.querySelectorAll('.toggle-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    activePerson = btn.dataset.person;
-                    updateGoals();
-                    renderDay();
-                });
-            });
-        }
-
-        function updateGoals() {
-            document.getElementById('goal-protein').textContent = goals[activePerson].protein;
-            document.getElementById('goal-calories').textContent = goals[activePerson].calories;
-        }
-
-        function renderCalendar() {
-            const week1 = document.getElementById('week1');
-            const week2 = document.getElementById('week2');
-            const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-
-            week1.innerHTML = '';
-            week2.innerHTML = '';
-
-            for (let i = 1; i <= 7; i++) {
-                week1.appendChild(createDayBtn(i, days[i - 1]));
-            }
-            for (let i = 8; i <= 14; i++) {
-                week2.appendChild(createDayBtn(i, days[(i - 1) % 7]));
-            }
-        }
-
-        function createDayBtn(day, letter) {
-            const btn = document.createElement('button');
-            btn.className = 'day-btn';
-            if (day === selectedDay) {
-                btn.classList.add('active');
-            }
-            btn.innerHTML = `<div class="day-letter">${letter}</div><div class="day-number">${day}</div>`;
-            btn.addEventListener('click', () => {
-                selectedDay = day;
-                renderCalendar();
-                renderDay();
-            });
-            return btn;
-        }
-
-        function renderDay() {
-            const day = mealPlan[selectedDay];
-
-            document.getElementById('day-num').textContent = selectedDay;
-            document.getElementById('day-theme').textContent = day.theme;
-            document.getElementById('day-protein').textContent = day.totals[activePerson].protein + 'g';
-            document.getElementById('day-calories').textContent = day.totals[activePerson].calories;
-
-            const container = document.getElementById('meals-container');
-            container.innerHTML = '';
-
-            const mealTypes = ['breakfast', 'lunch', 'dinner', 'dessert'];
-            const icons = { breakfast: '☀️', lunch: '🌿', dinner: '🌙', dessert: '✨' };
-
-            mealTypes.forEach((type) => {
-                const mealDiv = document.createElement('div');
-                mealDiv.className = 'meal-item';
-                mealDiv.innerHTML = `
-                    <div class="meal-icon">${icons[type]}</div>
-                    <div class="meal-content">
-                        <div class="meal-type">${type}</div>
-                        <div class="meal-name">${day.meals[type]}</div>
-                        <div class="meal-portion">${day.portions[activePerson][type]}</div>
-                    </div>
-                    <div class="meal-arrow">→</div>
-                `;
-                mealDiv.addEventListener('click', () => openModal(day.meals[type], type));
-                container.appendChild(mealDiv);
-            });
-        }
-
-        function openModal(recipeName, mealType) {
-            const recipe = recipes[recipeName];
-            if (!recipe) return;
-
-            const day = mealPlan[selectedDay];
-
-            document.getElementById('modal-title').textContent = recipeName;
-            document.getElementById('modal-meta').textContent = `${recipe.protein}g protein • ${recipe.calories} cal • ${recipe.time}`;
-
-            const ingredientsList = document.getElementById('modal-ingredients');
-            ingredientsList.innerHTML = recipe.ingredients.map(ing => `<li>${ing}</li>`).join('');
-
-            const stepsList = document.getElementById('modal-steps');
-            stepsList.innerHTML = recipe.steps.map((step, i) => `
-                <div class="modal-step">
-                    <span class="step-number">${i + 1}</span>
-                    <span>${step}</span>
-                </div>
-            `).join('');
-
-            const tipBox = document.getElementById('modal-tip');
-            if (recipe.tips) {
-                tipBox.style.display = 'block';
-                tipBox.querySelector('p').innerHTML = `<strong>💡 Tip:</strong> ${recipe.tips}`;
-            } else {
-                tipBox.style.display = 'none';
-            }
-
-            const portions = document.getElementById('modal-portions');
-            portions.innerHTML = `
-                <span class="portion-tag"><strong>Kasey:</strong> ${day.portions.kasey[mealType]}</span>
-                <span class="portion-tag"><strong>Charlie:</strong> ${day.portions.charlie[mealType]}</span>
-            `;
-
-            document.getElementById('modal').classList.add('active');
-        }
-
-        function closeModal() {
-            document.getElementById('modal').classList.remove('active');
-        }
-
-        document.getElementById('modal').addEventListener('click', (e) => {
-            if (e.target.id === 'modal') {
-                closeModal();
-            }
-        });
-
-        init();
     
-        // Hamburger menu toggle
-        const hamburger = document.getElementById('hamburger');
-        const navLinks = document.getElementById('navLinks');
+    <div class="toggle-container">
+        <button class="toggle-btn active" data-person="kasey">Kasey</button>
+        <button class="toggle-btn" data-person="charlie">Charlie</button>
+    </div>
+    
+    <div class="goals">
+        <div><span>Protein:</span> <strong id="goal-protein">140-165g</strong></div>
+        <div><span>Calories:</span> <strong id="goal-calories">1,500-1,700</strong></div>
+    </div>
+    
+    <div class="calendar">
+        <div class="week-label">WEEK 1</div>
+        <div class="week-grid" id="week1"></div>
+        <div class="week-label">WEEK 2</div>
+        <div class="week-grid" id="week2"></div>
+    </div>
+    
+    <div class="day-detail">
+        <div class="day-header" id="day-header">
+            <div class="day-header-left">
+                <div class="day-num" id="day-num">1</div>
+                <div class="day-theme" id="day-theme">Italian</div>
+            </div>
+            <div class="day-header-right">
+                <div id="day-protein">145g</div>
+                <div id="day-calories">1,600 cal</div>
+            </div>
+        </div>
+        <div class="meals-container" id="meals-container"></div>
+    </div>
+</div>
 
-        if (hamburger && navLinks) {
-            hamburger.addEventListener('click', () => {
-                hamburger.classList.toggle('active');
-                navLinks.classList.toggle('active');
-            });
+<div class="modal-container" id="modal">
+    <div class="modal">
+        <div class="modal-header" id="modal-header">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <h3 id="modal-title">Recipe Name</h3>
+            <div class="meta" id="modal-meta">25g protein • 350 cal • 25 min</div>
+        </div>
+        <div class="modal-body">
+            <div class="modal-section">
+                <h4>Ingredients</h4>
+                <ul id="modal-ingredients"></ul>
+            </div>
+            <div class="modal-section">
+                <h4>Instructions</h4>
+                <ul id="modal-steps"></ul>
+            </div>
+            <div class="tip-box" id="modal-tip" style="display: none;">
+                <p></p>
+            </div>
+            <div class="portions-row" id="modal-portions"></div>
+        </div>
+    </div>
+</div>
 
-            // Close mobile menu when a link is clicked
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.addEventListener('click', () => {
-                    hamburger.classList.remove('active');
-                    navLinks.classList.remove('active');
-                });
-            });
+<script>
+// SNACK MENU - pick whatever sounds good each day (~150-200 cal)
+const snackMenu = [
+    { name: "Barebell Protein Bar", portion: "20g protein - 200 cal", color: "#7d8f76",
+        ingredients: ["1 Barebell protein bar (any flavor)"],
+        steps: ["Unwrap. Eat."],
+        tip: "High protein, low sugar, zero effort. Keep a box at home and one in your bag.",
+        portions: ["20g protein", "200 cal", "0 min"]
+    },
+    { name: "1 Hard-Boiled Egg", portion: "6g protein - 70 cal", color: "#7d8f76",
+        ingredients: ["1 egg"],
+        steps: ["Boil a batch on Sunday — they keep 7 days in the fridge."],
+        tip: "Complete protein plus choline for DNA repair. Batch-prep a dozen at the start of each week.",
+        portions: ["6g protein", "70 cal", "0g fiber"]
+    },
+    { name: "1/2 Cup Cottage Cheese", portion: "14g protein - 90 cal", color: "#7d8f76",
+        ingredients: ["1/2 cup low-fat cottage cheese"],
+        steps: ["Scoop and eat. Top with anything from this list."],
+        tip: "Casein protein for slow, sustained release. Great base for mixing with any fruit on this list.",
+        portions: ["14g protein", "90 cal", "0g fiber"]
+    },
+    { name: "3/4 Cup Greek Yogurt", portion: "18g protein - 100 cal", color: "#7d8f76",
+        ingredients: ["3/4 cup nonfat Greek yogurt"],
+        steps: ["Scoop into bowl. Add whatever sounds good."],
+        tip: "Probiotics for gut health, which is increasingly linked to cancer prevention. Great with berries, honey, or nuts.",
+        portions: ["18g protein", "100 cal", "0g fiber"]
+    },
+    { name: "3/4 Cup Edamame", portion: "18g protein - 190 cal", color: "#7d8f76",
+        ingredients: ["3/4 cup shelled edamame", "Flaky sea salt"],
+        steps: ["Steam or microwave. Salt. Done."],
+        tip: "Soy isoflavones have documented anti-cancer effects. One of the highest-protein plant snacks you can grab.",
+        portions: ["18g protein", "190 cal", "4g fiber"]
+    },
+    { name: "Chocolate Covered Almonds (10)", portion: "4g protein - 150 cal", color: "#7d8f76",
+        ingredients: ["10 chocolate covered almonds"],
+        steps: ["Eat 10. Try not to eat 30."],
+        tip: "Dark chocolate flavanols plus vitamin E from almonds. Portion into small bags for the week.",
+        portions: ["4g protein", "150 cal", "2g fiber"]
+    },
+    { name: "TJ's Dark Chocolate Almonds (1 oz)", portion: "5g protein - 180 cal", color: "#7d8f76",
+        ingredients: ["1 oz Trader Joe's Dark Chocolate Almonds"],
+        steps: ["Open bag. Try to stop at 1 oz."],
+        tip: "From your old plan. Portion into small bags so you don't demolish the whole container.",
+        portions: ["5g protein", "180 cal", "2g fiber"]
+    },
+    { name: "1/4 Cup Hummus", portion: "5g protein - 100 cal", color: "#7d8f76",
+        ingredients: ["1/4 cup hummus"],
+        steps: ["Scoop with carrots, bell pepper, or a spoon. No judgment."],
+        tip: "Chickpea fiber plus tahini healthy fats. Pairs with any raw veggie on this list.",
+        portions: ["5g protein", "100 cal", "3g fiber"]
+    },
+    { name: "1.5 Tbsp Peanut Butter", portion: "4g protein - 140 cal", color: "#7d8f76",
+        ingredients: ["1.5 tbsp natural peanut butter"],
+        steps: ["Spread on apple slices, banana, or eat off the spoon."],
+        tip: "Peanuts contain resveratrol with anti-cancer properties. Look for ingredients: peanuts, salt. That's it.",
+        portions: ["4g protein", "140 cal", "1g fiber"]
+    },
+    { name: "1.5 Tbsp Walnut Butter", portion: "3g protein - 140 cal", color: "#7d8f76",
+        ingredients: ["1.5 tbsp walnut butter"],
+        steps: ["Spread on fruit or eat straight."],
+        tip: "Walnuts are the only nut with significant omega-3 ALA. Anti-inflammatory powerhouse.",
+        portions: ["3g protein", "140 cal", "1g fiber"]
+    },
+    { name: "1 Medium Apple", portion: "0g protein - 95 cal", color: "#7d8f76",
+        ingredients: ["1 medium apple"],
+        steps: ["Slice or just bite into it."],
+        tip: "Pectin fiber feeds beneficial gut bacteria. Great with PB or walnut butter from this list.",
+        portions: ["0g protein", "95 cal", "4g fiber"]
+    },
+    { name: "1/2 Banana", portion: "1g protein - 50 cal", color: "#7d8f76",
+        ingredients: ["1/2 banana"],
+        steps: ["Peel. Eat. Or slice and dip in PB."],
+        tip: "Prebiotic fiber for gut health. Potassium for blood pressure. Goes with PB or chocolate.",
+        portions: ["1g protein", "50 cal", "1g fiber"]
+    },
+    { name: "1/2 Cup Mango", portion: "1g protein - 50 cal", color: "#7d8f76",
+        ingredients: ["1/2 cup diced mango (fresh or frozen, thawed)"],
+        steps: ["Dice fresh or thaw frozen."],
+        tip: "Beta-carotene and vitamin C from whole food. Great with cottage cheese or yogurt.",
+        portions: ["1g protein", "50 cal", "1g fiber"]
+    },
+    { name: "1/2 Cup Mixed Berries", portion: "0g protein - 40 cal", color: "#7d8f76",
+        ingredients: ["1/2 cup mixed berries (fresh or frozen, thawed)"],
+        steps: ["Rinse fresh or thaw frozen."],
+        tip: "Anthocyanins and ellagic acid — two of the most studied anti-cancer compounds in fruit.",
+        portions: ["0g protein", "40 cal", "2g fiber"]
+    },
+    { name: "1/2 Cup Strawberries", portion: "0g protein - 25 cal", color: "#7d8f76",
+        ingredients: ["1/2 cup sliced strawberries"],
+        steps: ["Slice and enjoy."],
+        tip: "Ellagic acid has been shown to suppress cancer cell growth in lab studies. Also just delicious.",
+        portions: ["0g protein", "25 cal", "2g fiber"]
+    },
+    { name: "1/2 Cup Pineapple", portion: "0g protein - 40 cal", color: "#7d8f76",
+        ingredients: ["1/2 cup diced pineapple"],
+        steps: ["Dice fresh or use pre-cut."],
+        tip: "Bromelain enzyme has anti-inflammatory and potential anti-cancer properties.",
+        portions: ["0g protein", "40 cal", "1g fiber"]
+    },
+    { name: "1/4 Cup Pomegranate Seeds", portion: "1g protein - 35 cal", color: "#7d8f76",
+        ingredients: ["1/4 cup pomegranate seeds"],
+        steps: ["Pop the seeds out or buy pre-seeded."],
+        tip: "Punicalagins and ellagic acid — heavily studied for prostate cancer prevention especially.",
+        portions: ["1g protein", "35 cal", "2g fiber"]
+    },
+    { name: "1 Cup Carrot Sticks", portion: "1g protein - 50 cal", color: "#7d8f76",
+        ingredients: ["1 cup carrot sticks (or baby carrots)"],
+        steps: ["Dip in hummus, PB, or eat plain."],
+        tip: "Beta-carotene from food is safely protective (unlike supplements). Great dipper.",
+        portions: ["1g protein", "50 cal", "4g fiber"]
+    },
+    { name: "1 Cup Green Tea", portion: "0g protein - 0 cal", color: "#7d8f76",
+        ingredients: ["1 cup brewed green tea"],
+        steps: ["Steep 3 min in hot (not boiling) water."],
+        tip: "EGCG is one of the most studied anti-cancer compounds. Free calories, real protection.",
+        portions: ["0g protein", "0 cal", "0g fiber"]
+    },
+    { name: "1 Tbsp Pumpkin Seeds", portion: "3g protein - 45 cal", color: "#7d8f76",
+        ingredients: ["1 tbsp pumpkin seeds (pepitas)"],
+        steps: ["Sprinkle on yogurt, cottage cheese, or eat by the handful."],
+        tip: "Rich in zinc for immune function. Crunchy topper for anything.",
+        portions: ["3g protein", "45 cal", "1g fiber"]
+    },
+    { name: "1 Tbsp Pistachios", portion: "2g protein - 45 cal", color: "#7d8f76",
+        ingredients: ["1 tbsp shelled pistachios"],
+        steps: ["Eat as-is or crush over yogurt."],
+        tip: "Gamma-tocopherol (vitamin E form) and lutein. Great crunch.",
+        portions: ["2g protein", "45 cal", "1g fiber"]
+    },
+    { name: "1 Tbsp Walnuts", portion: "2g protein - 50 cal", color: "#7d8f76",
+        ingredients: ["1 tbsp walnuts, chopped"],
+        steps: ["Eat plain, add to yogurt, or top cottage cheese."],
+        tip: "The most anti-inflammatory nut. Only nut with significant omega-3 ALA.",
+        portions: ["2g protein", "50 cal", "1g fiber"]
+    },
+    { name: "1 Tbsp Dark Chocolate Chips", portion: "1g protein - 70 cal", color: "#7d8f76",
+        ingredients: ["1 tbsp dark chocolate chips"],
+        steps: ["Sprinkle on anything. Or just eat them."],
+        tip: "Flavanols from dark chocolate. A little goes a long way as a topper.",
+        portions: ["1g protein", "70 cal", "1g fiber"]
+    },
+    { name: "Trail Mix (pre-made batch)", portion: "10g protein - 200 cal", color: "#7d8f76",
+        ingredients: ["2 tbsp walnuts", "2 tbsp dried tart cherries", "1 tbsp cacao nibs", "1 tbsp pumpkin seeds"],
+        steps: ["Mix a big batch. Portion into baggies for the week."],
+        tip: "Tart cherries have among the highest anti-inflammatory scores. Cacao nibs add flavanols. Concentrated antioxidant snack.",
+        portions: ["10g protein", "200 cal", "3g fiber"]
+    },
+    { name: "Protein Chia Pudding", portion: "23g protein - 190 cal", color: "#7d8f76",
+        ingredients: ["2 tbsp chia seeds", "1/2 cup unsweetened almond milk", "1/2 scoop protein powder", "1/2 tsp vanilla"],
+        steps: ["Mix all ingredients. Refrigerate 2+ hours or overnight.", "Top with anything from this list."],
+        tip: "Omega-3 ALA from chia plus protein powder. Prep several at once for the week.",
+        portions: ["23g protein", "190 cal", "8g fiber"]
+    }
+];
 
-            // Close mobile menu when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
-                    hamburger.classList.remove('active');
-                    navLinks.classList.remove('active');
-                }
-            });
+const mealData = {
+    kasey: {
+        goals: { protein: "140-165g", calories: "1,500-1,700" },
+        days: [
+            {
+                day: 1, theme: "Italian", protein: "149g", calories: "1,480",
+                meals: [
+                    { type: "Breakfast", icon: "🌅", name: "Cacao Berry Smoothie Bowl", portion: "42g protein - 420 cal", color: "#a3b899",
+                        ingredients: ["1 cup unsweetened almond milk", "1.5 tbsp cacao powder (NOT Dutch-processed)", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "1 scoop ON Gold Standard Banana Cream whey", "1/2 cup frozen blueberries", "1/2 cup nonfat Greek yogurt", "--- TOPPINGS ---", "2 tbsp walnuts, chopped", "1 tbsp ground flaxseed", "1 tsp honey"],
+                        steps: ["Blend almond milk, cacao, collagen, L-glutamine, MCT oil, whey, blueberries, and yogurt until thick.", "Pour into bowl.", "Top with walnuts, flaxseed, honey drizzle."],
+                        tip: "Your full supplement stack blended right in. Blueberries are rich in anthocyanins linked to reduced cancer risk. Cacao (non-Dutch) retains maximum flavanols.",
+                        portions: ["42g protein", "420 cal", "8g fiber", "5 min"]
+                    },
+                    { type: "Lunch", icon: "☀️", name: "Lemony Chicken & Broccoli Grain Bowl", portion: "42g protein - 480 cal", color: "#a3b899",
+                        ingredients: ["5 oz grilled chicken breast", "1.5 cups roasted broccoli", "1/2 cup cooked farro", "1/4 cup chickpeas", "2 tbsp tahini-lemon dressing", "1/4 cup roasted red peppers", "1 tbsp olive oil", "Garlic powder, red pepper flakes"],
+                        steps: ["Season chicken with garlic, lemon zest, oregano. Grill or pan-sear.", "Roast broccoli with olive oil at 400 F for 15 min.", "Warm farro and chickpeas.", "Assemble bowl: broccoli, farro, chicken, chickpeas, roasted peppers.", "Drizzle with tahini-lemon dressing and red pepper flakes."],
+                        tip: "Broccoli is a cruciferous powerhouse with sulforaphane. Farro provides whole-grain fiber that feeds beneficial gut bacteria. Chickpeas add extra fiber and plant protein.",
+                        portions: ["42g protein", "480 cal", "11g fiber", "20 min"]
+                    },
+                    { type: "Dinner", icon: "🌙", name: "Stuffed Bell Peppers with Marinara", portion: "45g protein - 520 cal", color: "#a3b899",
+                        ingredients: ["2 bell peppers, halved", "5 oz ground turkey (93% lean)", "1/2 cup cooked quinoa", "1 cup marinara sauce", "1/4 cup diced onion", "1/4 cup diced carrots", "2 cloves garlic, minced", "1/2 cup baby spinach, chopped", "2 tbsp Parmesan", "Italian seasoning, garlic powder, red pepper flakes"],
+                        steps: ["Preheat oven to 375 F.", "Saute onion, carrots, garlic in olive oil. Add turkey, cook through.", "Mix turkey with quinoa, half the marinara, spinach, Italian seasoning.", "Fill pepper halves, top with remaining marinara.", "Bake 25-30 min. Top with Parmesan."],
+                        tip: "Marinara sauce is rich in lycopene. Cooking tomatoes into sauce increases bioavailability by up to 5x. Garlic contains allicin with anti-cancer properties.",
+                        portions: ["45g protein", "520 cal", "9g fiber", "40 min"]
+                    },
+                    { type: "Dessert", icon: "🍨", name: "Frozen Berry Yogurt Bark", portion: "14g protein - 160 cal", color: "#c4a882",
+                        ingredients: ["3/4 cup nonfat Greek yogurt", "1/2 cup mixed berries", "1 tsp honey", "1 tbsp mini dark chocolate chips"],
+                        steps: ["Mix yogurt with honey.", "Spread thin on parchment-lined sheet pan.", "Press berries and chocolate chips into yogurt.", "Freeze 2+ hours. Break into pieces."],
+                        tip: "A sweet treat that is actually cancer-preventive. Yogurt probiotics, berry anthocyanins, and chocolate flavanols. Make a batch for the week.",
+                        portions: ["14g protein", "160 cal", "2g fiber", "5 min + freeze"]
+                    }
+                ]
+            },
+            {
+                day: 2, theme: "Italian Comfort", protein: "123g", calories: "1,470",
+                meals: [
+                    { type: "Breakfast", icon: "🌅", name: "Broccoli-Pepper Frittata + Morning Shake", portion: "42g protein - 420 cal", color: "#a3b899",
+                        ingredients: ["--- MORNING BOOST SHAKE ---", "1 cup unsweetened almond milk", "1.5 tbsp cacao powder (NOT Dutch-processed)", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "--- FRITTATA ---", "2 eggs + 2 whites", "3/4 cup broccoli florets, chopped", "1/4 cup roasted red peppers, chopped", "1/4 cup diced onion", "2 tbsp feta cheese", "1 tsp olive oil", "Italian seasoning"],
+                        steps: ["Blend shake ingredients and sip alongside breakfast.", "Preheat broiler.", "Saute broccoli and onion in olive oil 4-5 min.", "Add roasted peppers, cook 1 min.", "Pour beaten eggs over veggies. Cook on medium 4-5 min.", "Top with feta, broil 2-3 min until set."],
+                        tip: "Broccoli is top-tier cruciferous. Chopping and letting sit 5 min before cooking maximizes sulforaphane formation. Feta is a classic Mediterranean cheese.",
+                        portions: ["42g protein", "420 cal", "4g fiber", "15 min"]
+                    },
+                    { type: "Lunch", icon: "☀️", name: "White Bean & Spinach Tuscan Soup", portion: "38g protein - 420 cal", color: "#a3b899",
+                        ingredients: ["5 oz shredded rotisserie chicken", "1 cup cannellini beans", "2 cups baby spinach", "1 cup marinara sauce", "2 cloves garlic", "1/2 cup diced carrots", "1 tbsp olive oil", "4 cups low-sodium chicken broth", "Italian seasoning, garlic powder, red pepper flakes"],
+                        steps: ["Saute garlic and carrots in olive oil.", "Add broth, marinara, beans. Simmer 10 min.", "Add spinach, cook until wilted (~2 min).", "Stir in chicken and Italian seasoning. Heat through.", "Serve with a drizzle of olive oil and Parmesan if you want."],
+                        tip: "White beans are loaded with resistant starch that feeds anti-cancer gut bacteria. Combined with spinach and tomato sauce, this is a cancer-prevention powerhouse.",
+                        portions: ["38g protein", "420 cal", "12g fiber", "20 min"]
+                    },
+                    { type: "Dinner", icon: "🌙", name: "Cauliflower Bolognese over Whole Wheat Pasta", portion: "42g protein - 530 cal", color: "#a3b899",
+                        ingredients: ["4 oz ground turkey", "1 cup riced cauliflower", "1 cup marinara sauce", "2 oz whole wheat penne", "1/4 cup diced onion", "2 cloves garlic", "1 tbsp olive oil", "2 tbsp Parmesan", "Fresh basil", "Red pepper flakes"],
+                        steps: ["Cook pasta al dente.", "Saute onion, garlic. Add turkey, brown.", "Add riced cauliflower, cook 3 min.", "Pour in marinara, simmer 10 min. Add red pepper flakes.", "Toss with pasta. Top with Parmesan and basil."],
+                        tip: "Cauliflower is cruciferous and ricing it into the sauce sneaks in extra cancer-fighting compounds. Whole wheat pasta provides 3x the fiber of regular.",
+                        portions: ["42g protein", "530 cal", "8g fiber", "25 min"]
+                    },
+                    { type: "Dessert", icon: "🍨", name: "Warm Cinnamon Baked Apple", portion: "1g protein - 150 cal", color: "#c4a882",
+                        ingredients: ["1 medium apple, cored", "1 tsp butter", "1/2 tsp cinnamon", "1 tsp honey", "1 tbsp chopped walnuts"],
+                        steps: ["Core apple and place in a small oven-safe dish.", "Fill center with butter, cinnamon, honey, walnuts.", "Bake at 375 F for 25 min until soft.", "Or microwave 3-4 min."],
+                        tip: "Baked apples caramelize naturally. The pectin feeds good gut bacteria. Cinnamon has anti-inflammatory properties.",
+                        portions: ["1g protein", "150 cal", "4g fiber", "25 min"]
+                    }
+                ]
+            },
+            {
+                day: 3, theme: "Spicy Comfort", protein: "133g", calories: "1,480",
+                meals: [
+                    { type: "Breakfast", icon: "🌅", name: "Spicy Egg Scramble + Morning Shake", portion: "43g protein - 400 cal", color: "#a3b899",
+                        ingredients: ["--- MORNING BOOST SHAKE ---", "1 cup unsweetened almond milk", "1.5 tbsp cacao powder (NOT Dutch-processed)", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "--- SCRAMBLE ---", "2 eggs + 1 white", "1/4 cup diced bell pepper", "1/4 cup diced onion", "Garlic powder, red pepper flakes", "1 slice whole grain bread", "2 tbsp shredded cheese", "Hot sauce"],
+                        steps: ["Blend shake ingredients and sip alongside breakfast.", "Saute bell pepper and onion in olive oil.", "Add beaten eggs seasoned with garlic powder and red pepper flakes.", "Scramble until just set. Top with cheese.", "Serve with toast and hot sauce."],
+                        tip: "Starting your day with protein and spice. Capsaicin from hot sauce has anti-inflammatory properties and may support cancer prevention through multiple pathways.",
+                        portions: ["43g protein", "400 cal", "3g fiber", "10 min"]
+                    },
+                    { type: "Lunch", icon: "☀️", name: "Spicy Chicken & Black Bean Bowl", portion: "44g protein - 490 cal", color: "#a3b899",
+                        ingredients: ["5 oz chicken breast, seasoned and grilled", "1/2 cup black beans", "1/2 cup cooked brown rice", "1/2 cup roasted corn", "1/4 cup roasted red peppers", "2 tbsp salsa (smooth, sauce-style)", "2 tbsp shredded cheese", "1 tbsp sour cream or Greek yogurt", "Hot sauce, garlic powder, sazon"],
+                        steps: ["Season chicken with garlic powder, sazon, red pepper flakes. Grill or pan-sear.", "Warm black beans with a pinch of cumin.", "Build bowl: brown rice, beans, corn, roasted peppers.", "Top with sliced chicken, salsa, cheese, sour cream.", "Hit it with hot sauce."],
+                        tip: "Black beans are among the highest-antioxidant foods by ORAC score. Corn provides ferulic acid with anti-cancer activity. Brown rice adds whole-grain fiber.",
+                        portions: ["44g protein", "490 cal", "10g fiber", "20 min"]
+                    },
+                    { type: "Dinner", icon: "🌙", name: "Red Lentil & Cauliflower Stew + Chicken", portion: "48g protein - 510 cal", color: "#a3b899",
+                        ingredients: ["4 oz grilled chicken breast", "1/2 cup red lentils", "1 cup cauliflower florets", "1/2 cup diced carrots", "1 cup marinara sauce", "1/2 cup diced onion", "2 cloves garlic", "1 tsp garlic powder, red pepper flakes", "1 tbsp olive oil", "Fresh parsley", "Squeeze of lemon"],
+                        steps: ["Saute onion and garlic in olive oil.", "Add garlic powder and red pepper flakes, cook 30 seconds.", "Add lentils, marinara, cauliflower, 1.5 cups water.", "Simmer 20 min until lentils are soft.", "Serve stew topped with sliced grilled chicken, parsley, lemon."],
+                        tip: "Red lentils provide incredible fiber plus folate for DNA repair. This stew combines cruciferous cauliflower with tomato sauce and garlic. Simple and hearty.",
+                        portions: ["48g protein", "510 cal", "14g fiber", "30 min"]
+                    },
+                    { type: "Dessert", icon: "🍨", name: "Chocolate Avocado Mousse", portion: "3g protein - 170 cal", color: "#c4a882",
+                        ingredients: ["1/2 ripe avocado", "2 tbsp cocoa powder", "1 tbsp honey", "1 tbsp almond milk", "Pinch of sea salt"],
+                        steps: ["Blend all ingredients until silky smooth.", "Chill 15 min for best texture.", "Top with a few berries if desired."],
+                        tip: "You literally cannot taste the avocado — it just makes it impossibly creamy. Cocoa is one of the highest-antioxidant foods on earth. Healthy fats help absorb fat-soluble vitamins.",
+                        portions: ["3g protein", "170 cal", "5g fiber", "5 min"]
+                    }
+                ]
+            },
+            {
+                day: 4, theme: "Spanish", protein: "130g", calories: "1,480",
+                meals: [
+                    { type: "Breakfast", icon: "🌅", name: "Cacao Overnight Oats", portion: "44g protein - 430 cal", color: "#a3b899",
+                        ingredients: ["1/2 cup rolled oats", "1 cup unsweetened almond milk", "1.5 tbsp cacao powder (NOT Dutch-processed)", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "3 tbsp hemp hearts", "1 tsp chia seeds", "1/2 tsp cinnamon", "--- MORNING TOPPINGS ---", "1/2 cup mixed berries", "1 tsp honey"],
+                        steps: ["Combine oats, almond milk, cacao, collagen, L-glutamine, MCT oil, hemp hearts, chia seeds, cinnamon in a jar.", "Stir well. Refrigerate overnight (or at least 4 hours).", "Top with mixed berries and honey before eating."],
+                        tip: "All your daily supplements folded right into overnight oats. Cacao plus oats is an antioxidant and fiber combo. Hemp hearts have an ideal omega ratio.",
+                        portions: ["44g protein", "430 cal", "10g fiber", "5 min prep"]
+                    },
+                    { type: "Lunch", icon: "☀️", name: "Romesco Chicken with Roasted Broccoli", portion: "44g protein - 470 cal", color: "#a3b899",
+                        ingredients: ["5 oz chicken breast", "1.5 cups broccoli florets", "1/2 cup sliced carrots", "3 tbsp romesco sauce (roasted red pepper, walnuts, garlic)", "1/2 cup cooked farro", "1 tbsp olive oil", "Smoked paprika, garlic powder, salt"],
+                        steps: ["Season chicken with smoked paprika and garlic powder. Grill or pan-sear.", "Toss broccoli and carrots in olive oil, roast at 425 F for 15 min.", "Warm farro.", "Plate farro, broccoli, sliced chicken. Drizzle romesco sauce."],
+                        tip: "Romesco is a cancer-prevention sauce: roasted peppers plus walnuts plus garlic. Roasted broccoli retains most sulforaphane.",
+                        portions: ["44g protein", "470 cal", "8g fiber", "25 min"]
+                    },
+                    { type: "Dinner", icon: "🌙", name: "Chickpea & Turkey Patatas Bravas Bowl", portion: "46g protein - 540 cal", color: "#a3b899",
+                        ingredients: ["4 oz ground turkey", "1/2 cup chickpeas, mashed", "1 medium potato, cubed", "1/2 cup bravas sauce (marinara + smoked paprika + splash red wine vinegar)", "1 cup baby spinach", "1 tbsp olive oil", "Garlic powder, cumin, red pepper flakes"],
+                        steps: ["Roast potato cubes with olive oil and smoked paprika at 400 F for 20 min.", "Mix turkey with mashed chickpeas and spices. Form patties, pan-sear.", "Make bravas sauce: stir smoked paprika and vinegar into marinara.", "Bowl: spinach base, potatoes, turkey-chickpea patties, bravas sauce."],
+                        tip: "Potatoes are a great source of resistant starch (especially when cooled). Chickpeas add fiber and plant protein. Smoked paprika adds antioxidants.",
+                        portions: ["46g protein", "540 cal", "11g fiber", "30 min"]
+                    },
+                    { type: "Dessert", icon: "🍨", name: "Chocolate Dipped Strawberries", portion: "2g protein - 140 cal", color: "#c4a882",
+                        ingredients: ["6 large strawberries", "2 oz dark chocolate (your fave), melted", "Flaky sea salt"],
+                        steps: ["Melt chocolate in microwave in 30-second intervals, stirring.", "Dip strawberries halfway. Place on parchment.", "Sprinkle flaky salt. Refrigerate 10 min until set."],
+                        tip: "Strawberries plus chocolate equals ellagic acid plus flavanols. A legit anti-cancer dessert that feels indulgent.",
+                        portions: ["2g protein", "140 cal", "2g fiber", "15 min"]
+                    }
+                ]
+            },
+            {
+                day: 5, theme: "Tex-Mex", protein: "141g", calories: "1,470",
+                meals: [
+                    { type: "Breakfast", icon: "🌅", name: "Chocolate Berry Protein Smoothie Bowl", portion: "48g protein - 400 cal", color: "#a3b899",
+                        ingredients: ["1 cup unsweetened almond milk", "1.5 tbsp cacao powder (NOT Dutch-processed)", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "1 scoop ON Gold Standard Banana Cream whey", "1/2 cup frozen mixed berries", "1/2 cup frozen cauliflower rice", "--- TOPPINGS ---", "1 tbsp ground flaxseed", "1 tbsp walnut butter drizzle"],
+                        steps: ["Blend all liquid and frozen ingredients until thick and creamy.", "Pour into bowl.", "Top with flaxseed and walnut butter drizzle."],
+                        tip: "Frozen cauliflower rice adds creaminess and cruciferous benefits without changing taste. Your full supplement stack blended in.",
+                        portions: ["48g protein", "400 cal", "7g fiber", "5 min"]
+                    },
+                    { type: "Lunch", icon: "☀️", name: "Loaded Turkey Taco Bowl", portion: "44g protein - 490 cal", color: "#a3b899",
+                        ingredients: ["5 oz ground turkey", "1/2 cup black beans", "1/2 cup cooked brown rice", "1/4 cup corn", "1/4 cup roasted red peppers", "2 tbsp shredded cheese", "2 tbsp salsa (smooth)", "1 tbsp sour cream or Greek yogurt", "Taco seasoning (cumin, garlic powder, onion powder, paprika, red pepper flakes)"],
+                        steps: ["Brown turkey with taco seasoning.", "Warm black beans and corn.", "Build bowl: brown rice, beans, turkey, corn, roasted peppers.", "Top with cheese, salsa, sour cream."],
+                        tip: "This bowl hits beans for fiber, brown rice for whole grains, and plenty of spice. Cumin has anti-inflammatory properties studied for cancer prevention.",
+                        portions: ["44g protein", "490 cal", "9g fiber", "15 min"]
+                    },
+                    { type: "Dinner", icon: "🌙", name: "Cheesy Chicken Enchilada Bake", portion: "48g protein - 520 cal", color: "#a3b899",
+                        ingredients: ["5 oz shredded chicken", "1/2 cup black beans", "1/2 cup enchilada sauce (red)", "1/2 cup marinara sauce", "2 corn tortillas, torn", "1/4 cup shredded cheese", "1/4 cup diced onion, bell pepper, and carrots", "Garlic powder, cumin, red pepper flakes"],
+                        steps: ["Mix shredded chicken with beans, diced veggies, and spices.", "Layer in a small baking dish: tortilla pieces, chicken-bean mix, sauces.", "Repeat layers. Top with cheese.", "Bake at 375 F for 20 min until bubbly."],
+                        tip: "Enchilada sauce plus marinara means double the lycopene. Black beans add fiber and antioxidants. Corn tortillas are whole grain.",
+                        portions: ["48g protein", "520 cal", "10g fiber", "30 min"]
+                    },
+                    { type: "Dessert", icon: "🍨", name: "Mango Coconut Chia Pots", portion: "3g protein - 160 cal", color: "#c4a882",
+                        ingredients: ["2 tbsp chia seeds", "1/2 cup light coconut milk", "1/2 cup diced mango", "1 tsp honey", "Toasted coconut flakes"],
+                        steps: ["Mix chia seeds with coconut milk and honey. Refrigerate 2+ hours.", "Top with mango and toasted coconut."],
+                        tip: "Mango provides beta-carotene and vitamin C. Chia seeds add omega-3s. Coconut milk makes it feel tropical and indulgent.",
+                        portions: ["3g protein", "160 cal", "5g fiber", "5 min + set"]
+                    }
+                ]
+            },
+            {
+                day: 6, theme: "Italian II", protein: "127g", calories: "1,480",
+                meals: [
+                    { type: "Breakfast", icon: "🌅", name: "Banana Ricotta Toast + Morning Shake", portion: "38g protein - 420 cal", color: "#a3b899",
+                        ingredients: ["--- MORNING BOOST SHAKE ---", "1 cup unsweetened almond milk", "1.5 tbsp cacao powder (NOT Dutch-processed)", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "--- TOAST ---", "1 slice whole grain bread", "1/4 cup part-skim ricotta", "1/2 banana, sliced", "1 tbsp walnuts", "1 tsp honey", "Cinnamon"],
+                        steps: ["Blend shake ingredients and sip alongside breakfast.", "Toast bread.", "Spread ricotta on toast.", "Top with banana slices, walnuts, honey drizzle, cinnamon."],
+                        tip: "Your chocolate shake pairs perfectly with this sweet toast. Bananas provide prebiotic fiber. Walnuts provide omega-3 ALA.",
+                        portions: ["38g protein", "420 cal", "5g fiber", "5 min"]
+                    },
+                    { type: "Lunch", icon: "☀️", name: "Italian Chicken & Veggie Bake", portion: "42g protein - 470 cal", color: "#a3b899",
+                        ingredients: ["5 oz chicken breast", "1 cup zucchini, sliced", "1/2 cup roasted red peppers", "1 cup marinara sauce", "1/4 cup shredded mozzarella", "2 tbsp Parmesan", "1 tbsp olive oil", "Italian seasoning, garlic powder, red pepper flakes", "Side: 1/2 cup cooked quinoa"],
+                        steps: ["Season chicken with Italian seasoning and garlic. Sear in olive oil.", "Place chicken in baking dish. Layer zucchini and peppers around it.", "Pour marinara over everything. Top with mozzarella and Parmesan.", "Bake at 375 F for 20 min until bubbly.", "Serve with quinoa."],
+                        tip: "This is basically chicken parm meets a veggie bake. Zucchini adds bulk and nutrients. Marinara provides lycopene. Cheese makes everything better.",
+                        portions: ["42g protein", "470 cal", "6g fiber", "30 min"]
+                    },
+                    { type: "Dinner", icon: "🌙", name: "Lentil & Sausage Sheet Pan with Green Beans", portion: "44g protein - 530 cal", color: "#a3b899",
+                        ingredients: ["4 oz chicken sausage (no nitrates), sliced", "1 cup green beans, trimmed", "1/2 cup sliced carrots", "1/2 cup butternut squash, cubed", "1/2 cup cooked French green lentils", "1 tbsp olive oil", "1 tbsp balsamic glaze", "Italian seasoning, garlic powder"],
+                        steps: ["Preheat oven to 400 F.", "Toss green beans, carrots, and squash with olive oil, Italian seasoning. Spread on sheet pan.", "Add sausage slices. Roast 20 min.", "Warm lentils, plate everything together.", "Drizzle balsamic glaze."],
+                        tip: "Green beans provide fiber and vitamin C. Lentils are rich in folate. Choose nitrate-free sausage to avoid processed meat carcinogens.",
+                        portions: ["44g protein", "530 cal", "12g fiber", "30 min"]
+                    },
+                    { type: "Dessert", icon: "🍨", name: "Caramelized Banana with Chocolate", portion: "3g protein - 160 cal", color: "#c4a882",
+                        ingredients: ["1 banana, sliced lengthwise", "1 tsp butter", "1 tsp honey", "Pinch cinnamon", "1 tbsp dark chocolate chips, melted for drizzle"],
+                        steps: ["Melt butter in a pan over medium heat.", "Add banana halves, cook 2 min per side until golden.", "Drizzle with honey and cinnamon.", "Plate and drizzle melted chocolate over top."],
+                        tip: "Caramelized banana is bananas foster without the liquor. Natural sugars caramelize beautifully. Add chocolate for a 5-minute restaurant dessert.",
+                        portions: ["3g protein", "160 cal", "3g fiber", "5 min"]
+                    }
+                ]
+            },
+            {
+                day: 7, theme: "Mexican Fiesta", protein: "137g", calories: "1,450",
+                meals: [
+                    { type: "Breakfast", icon: "🌅", name: "Black Bean Egg Bowl + Morning Shake", portion: "45g protein - 440 cal", color: "#a3b899",
+                        ingredients: ["--- MORNING BOOST SHAKE ---", "1 cup unsweetened almond milk", "1.5 tbsp cacao powder (NOT Dutch-processed)", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "--- BOWL ---", "2 eggs, scrambled", "1/3 cup black beans", "2 tbsp salsa (smooth, sauce-style)", "1/3 cup cooked brown rice", "2 tbsp shredded cheese", "Hot sauce"],
+                        steps: ["Blend shake ingredients and sip alongside breakfast.", "Warm black beans with a pinch of cumin.", "Scramble eggs.", "Build bowl: brown rice, beans, eggs, salsa, cheese.", "Top with hot sauce."],
+                        tip: "Black beans plus brown rice is a complete protein. Your morning shake adds the supplement stack. Cheese is totally Mediterranean-approved.",
+                        portions: ["45g protein", "440 cal", "9g fiber", "10 min"]
+                    },
+                    { type: "Lunch", icon: "☀️", name: "Spicy Chicken & Cauliflower Tacos", portion: "40g protein - 450 cal", color: "#a3b899",
+                        ingredients: ["4 oz chicken breast, shredded", "1 cup cauliflower florets, roasted", "2 corn tortillas", "2 tbsp chipotle yogurt sauce (Greek yogurt + chipotle in adobo)", "1/4 cup corn", "Lime, garlic powder, cumin", "1 tsp chipotle in adobo"],
+                        steps: ["Roast cauliflower at 425 F with olive oil and cumin (15 min).", "Shred chicken and toss with chipotle in adobo.", "Warm tortillas. Fill with chicken, cauliflower, corn.", "Top with chipotle yogurt and a squeeze of lime."],
+                        tip: "Cauliflower is cruciferous and roasting makes it nutty and delicious. Corn tortillas are whole grain. Chipotle adds smoky heat.",
+                        portions: ["40g protein", "450 cal", "7g fiber", "20 min"]
+                    },
+                    { type: "Dinner", icon: "🌙", name: "Turkey Enchilada Casserole", portion: "48g protein - 510 cal", color: "#a3b899",
+                        ingredients: ["5 oz ground turkey", "1/2 cup black beans", "1 cup diced zucchini, bell pepper, and carrots", "1/2 cup enchilada sauce", "2 corn tortillas, torn", "1/4 cup shredded cheese", "1/2 cup marinara", "Cumin, garlic powder, onion powder, sazon"],
+                        steps: ["Brown turkey with diced veggies and spices.", "Layer in a small baking dish: tortilla pieces, turkey-veggie mix, beans, sauces.", "Repeat layers. Top with cheese.", "Bake at 375 F for 20 min."],
+                        tip: "This casserole is packed with tomato-based sauces, beans for fiber, and colorful veggies. Comfort food that fights cancer.",
+                        portions: ["48g protein", "510 cal", "11g fiber", "35 min"]
+                    },
+                    { type: "Dessert", icon: "🍨", name: "Churro Bites (Baked)", portion: "4g protein - 160 cal", color: "#c4a882",
+                        ingredients: ["1 whole wheat tortilla", "1 tsp melted butter", "1 tbsp coconut sugar", "1/2 tsp cinnamon", "2 tbsp dark chocolate, melted, for dipping"],
+                        steps: ["Brush tortilla with melted butter.", "Sprinkle with cinnamon-sugar mix.", "Cut into strips. Bake at 375 F for 8-10 min until crispy.", "Dip in melted chocolate."],
+                        tip: "Whole wheat tortilla plus cinnamon plus chocolate dip. A fun treat with actual fiber and antioxidants.",
+                        portions: ["4g protein", "160 cal", "2g fiber", "12 min"]
+                    }
+                ]
+            },
+            {
+                day: 8, theme: "Greek-Italian", protein: "130g", calories: "1,490",
+                meals: [
+                    { type: "Breakfast", icon: "🌅", name: "Egg Muffins + Morning Shake (prep ahead)", portion: "41g protein - 400 cal", color: "#a3b899",
+                        ingredients: ["--- MORNING BOOST SHAKE ---", "1 cup unsweetened almond milk", "1.5 tbsp cacao powder (NOT Dutch-processed)", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "--- EGG MUFFINS (makes 6, eat 3) ---", "4 eggs + 2 whites", "1/2 cup broccoli, chopped fine", "1/4 cup roasted red peppers", "2 tbsp feta", "1/4 cup diced bell pepper", "Italian seasoning, garlic powder"],
+                        steps: ["Blend shake and sip alongside.", "Preheat oven to 350 F. Grease a muffin tin.", "Whisk eggs with spices.", "Divide broccoli, peppers into 6 muffin cups.", "Pour egg over. Top with feta.", "Bake 20 min. Eat 3, save 3 for tomorrow."],
+                        tip: "Batch cook these on prep day. Broccoli provides sulforaphane. Feta adds flavor and calcium.",
+                        portions: ["41g protein", "400 cal", "3g fiber", "25 min"]
+                    },
+                    { type: "Lunch", icon: "☀️", name: "Greek Chicken Plate", portion: "45g protein - 510 cal", color: "#a3b899",
+                        ingredients: ["5 oz chicken breast, cubed", "Marinade: lemon, oregano, garlic, olive oil", "1/2 cup cooked brown rice", "1/2 cup chopped cucumber and roasted red pepper", "2 tbsp tzatziki", "1/2 cup roasted broccoli and carrots", "2 tbsp feta crumbles", "Red pepper flakes"],
+                        steps: ["Marinate chicken in lemon-oregano-garlic-oil (30 min or overnight).", "Grill or pan-sear chicken.", "Plate with brown rice, cucumber, roasted peppers, roasted broccoli and carrots.", "Drizzle tzatziki. Top with feta."],
+                        tip: "Oregano has one of the highest antioxidant levels of any herb. Feta adds calcium and a salty tang that pulls the whole plate together.",
+                        portions: ["45g protein", "510 cal", "6g fiber", "20 min + marinate"]
+                    },
+                    { type: "Dinner", icon: "🌙", name: "Cheesy Baked Chicken & Zucchini", portion: "44g protein - 490 cal", color: "#a3b899",
+                        ingredients: ["5 oz chicken breast", "1 cup zucchini, sliced", "1 cup marinara sauce", "1/4 cup shredded mozzarella", "2 tbsp Parmesan", "Italian seasoning, garlic powder, onion powder", "1 tbsp olive oil", "Side: small baked potato or 1/2 cup quinoa"],
+                        steps: ["Season chicken with Italian seasoning and garlic powder. Sear.", "Place in baking dish with zucchini.", "Pour marinara over. Top with mozzarella and Parmesan.", "Bake at 375 F for 18-20 min.", "Serve with potato or quinoa."],
+                        tip: "This is chicken parm without the frying. Zucchini soaks up the marinara beautifully. Melted cheese plus lycopene-rich sauce.",
+                        portions: ["44g protein", "490 cal", "5g fiber", "30 min"]
+                    },
+                    { type: "Dessert", icon: "🍨", name: "Chocolate Covered Frozen Banana Bites", portion: "2g protein - 150 cal", color: "#c4a882",
+                        ingredients: ["1 banana, sliced into coins", "2 oz dark chocolate, melted", "Crushed pistachios or sea salt"],
+                        steps: ["Insert toothpicks into banana slices.", "Dip in melted chocolate. Sprinkle toppings.", "Freeze on parchment 30+ min."],
+                        tip: "Bananas provide prebiotic fiber. Dark chocolate provides flavanols. Frozen equals feels like candy. Keep a batch in the freezer.",
+                        portions: ["2g protein", "150 cal", "2g fiber", "5 min + freeze"]
+                    }
+                ]
+            },
+            {
+                day: 9, theme: "Comfort Stir-Fry", protein: "140g", calories: "1,420",
+                meals: [
+                    { type: "Breakfast", icon: "🌅", name: "Cacao-Banana Smoothie + Leftover Egg Muffins", portion: "44g protein - 420 cal", color: "#a3b899",
+                        ingredients: ["--- SMOOTHIE (with supplements) ---", "1 cup unsweetened almond milk", "1.5 tbsp cacao powder (NOT Dutch-processed)", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "1/2 frozen banana", "--- FOOD ---", "2 leftover egg muffins (from Day 8)"],
+                        steps: ["Blend smoothie ingredients until creamy.", "Reheat egg muffins (microwave 45 sec).", "Sip smoothie, eat muffins."],
+                        tip: "Meal prepping makes healthy mornings effortless. The banana makes the supplement shake taste like chocolate milk.",
+                        portions: ["44g protein", "420 cal", "4g fiber", "3 min"]
+                    },
+                    { type: "Lunch", icon: "☀️", name: "Garlic Chicken & Broccoli Stir-Fry", portion: "44g protein - 460 cal", color: "#a3b899",
+                        ingredients: ["5 oz chicken breast, sliced", "1.5 cups broccoli florets", "1/2 cup sliced carrots", "1/2 cup diced zucchini", "3 cloves garlic, minced", "1 tbsp low-sodium soy sauce", "1 tsp sesame oil", "1/2 cup cooked brown rice", "Red pepper flakes"],
+                        steps: ["Heat sesame oil. Stir-fry chicken until golden.", "Add garlic, cook 30 sec.", "Add broccoli, carrots, zucchini. Stir-fry 4-5 min.", "Toss with soy sauce and red pepper flakes.", "Serve over brown rice."],
+                        tip: "Three of your favorite veggies in one easy stir-fry. Garlic contains allicin with documented anti-cancer activity.",
+                        portions: ["44g protein", "460 cal", "7g fiber", "15 min"]
+                    },
+                    { type: "Dinner", icon: "🌙", name: "Spicy Marinara Chicken with Roasted Veggies", portion: "48g protein - 510 cal", color: "#a3b899",
+                        ingredients: ["5 oz chicken thigh", "1 cup marinara sauce", "1 cup broccoli florets", "1/2 cup butternut squash, cubed", "1 tbsp olive oil", "3 cloves garlic", "Red pepper flakes, Italian seasoning", "Fresh parsley"],
+                        steps: ["Roast broccoli and squash at 400 F with olive oil (20 min).", "Sear chicken thigh in a pan.", "Add garlic, marinara, red pepper flakes. Simmer 12 min.", "Plate roasted veggies with chicken and spicy sauce."],
+                        tip: "Tomato sauce plus garlic plus cruciferous broccoli plus beta-carotene from squash. Simple and delicious.",
+                        portions: ["48g protein", "510 cal", "9g fiber", "30 min"]
+                    },
+                    { type: "Dessert", icon: "🍨", name: "Pineapple Whip", portion: "1g protein - 130 cal", color: "#c4a882",
+                        ingredients: ["1.5 cups frozen pineapple chunks", "2 tbsp light coconut milk", "1 tsp honey", "Squeeze of lime"],
+                        steps: ["Blend frozen pineapple, coconut milk, honey, and lime until soft-serve texture.", "Serve immediately."],
+                        tip: "Pineapple contains bromelain with anti-inflammatory and potential anti-cancer properties. Tastes like Dole Whip from Disney.",
+                        portions: ["1g protein", "130 cal", "2g fiber", "5 min"]
+                    }
+                ]
+            },
+            {
+                day: 10, theme: "Spicy Italian", protein: "133g", calories: "1,520",
+                meals: [
+                    { type: "Breakfast", icon: "🌅", name: "Shakshuka + Morning Shake", portion: "40g protein - 430 cal", color: "#a3b899",
+                        ingredients: ["--- MORNING BOOST SHAKE ---", "1 cup unsweetened almond milk", "1.5 tbsp cacao powder (NOT Dutch-processed)", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "--- SHAKSHUKA ---", "2 eggs", "1 cup marinara sauce", "1/4 cup diced onion and bell pepper", "2 cloves garlic", "Red pepper flakes, cumin, smoked paprika", "1 tsp olive oil", "1 slice whole grain bread"],
+                        steps: ["Blend shake and sip alongside.", "Saute onion, pepper, garlic in olive oil.", "Add marinara and spices. Simmer 8 min.", "Make 2 wells, crack eggs in. Cover, cook 6-8 min.", "Serve with bread for dipping."],
+                        tip: "Shakshuka is a lycopene bomb. Slow-simmered spicy tomato sauce in olive oil maximizes absorption. And it is GOOD.",
+                        portions: ["40g protein", "430 cal", "5g fiber", "20 min"]
+                    },
+                    { type: "Lunch", icon: "☀️", name: "Spicy Chicken & White Bean Bowl", portion: "44g protein - 490 cal", color: "#a3b899",
+                        ingredients: ["5 oz chicken breast, grilled", "Seasoning: garlic powder, onion powder, Italian seasoning, red pepper flakes", "1/2 cup cannellini beans", "1/2 cup cooked farro", "1/2 cup roasted broccoli", "1/4 cup roasted red peppers", "2 tbsp hummus", "1 tbsp olive oil + lemon", "Parmesan to top"],
+                        steps: ["Season chicken with spice blend. Grill or pan-sear.", "Build bowl: farro, roasted broccoli, roasted peppers.", "Top with sliced chicken, beans, hummus.", "Drizzle olive oil and lemon. Sprinkle Parmesan."],
+                        tip: "White beans provide resistant starch and folate. Farro is an ancient whole grain. Broccoli adds cruciferous protection.",
+                        portions: ["44g protein", "490 cal", "9g fiber", "20 min"]
+                    },
+                    { type: "Dinner", icon: "🌙", name: "Garlic Turkey Meatballs with Roasted Veggies", portion: "46g protein - 530 cal", color: "#a3b899",
+                        ingredients: ["5 oz ground turkey", "2 tbsp whole wheat breadcrumbs", "1 egg white", "Garlic powder, onion powder, Italian seasoning, parsley", "1 cup broccoli florets", "1/2 cup carrots, sliced", "1/2 cup cooked farro", "1 tbsp olive oil", "1/4 cup marinara for dipping"],
+                        steps: ["Mix turkey, breadcrumbs, egg white, herbs and spices. Form 8 small meatballs.", "Bake meatballs at 400 F for 15 min.", "Roast broccoli and carrots alongside.", "Serve over farro with marinara for dipping."],
+                        tip: "Homemade turkey meatballs mean zero nitrates. Broccoli and tomato-based marinara make this a cancer-prevention comfort meal.",
+                        portions: ["46g protein", "530 cal", "8g fiber", "25 min"]
+                    },
+                    { type: "Dessert", icon: "🍨", name: "Frozen Yogurt Bark (Mango-Berry)", portion: "10g protein - 170 cal", color: "#c4a882",
+                        ingredients: ["3/4 cup nonfat Greek yogurt", "1 tbsp honey", "1/4 cup diced mango", "1/4 cup blueberries", "1 tbsp crushed pistachios"],
+                        steps: ["Mix yogurt with honey.", "Spread on parchment-lined pan.", "Top with mango, blueberries, pistachios.", "Freeze 2+ hours. Break into pieces."],
+                        tip: "A tropical twist on frozen yogurt bark. Mango and blueberries provide diverse phytonutrients. Keep a batch in the freezer.",
+                        portions: ["10g protein", "170 cal", "1g fiber", "5 min + freeze"]
+                    }
+                ]
+            },
+            {
+                day: 11, theme: "Cheesy Italian", protein: "133g", calories: "1,460",
+                meals: [
+                    { type: "Breakfast", icon: "🌅", name: "Cheesy Egg Toast + Morning Shake", portion: "40g protein - 420 cal", color: "#a3b899",
+                        ingredients: ["--- MORNING BOOST SHAKE ---", "1 cup unsweetened almond milk", "1.5 tbsp cacao powder (NOT Dutch-processed)", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "--- TOAST ---", "1 slice whole grain bread", "2 eggs", "2 tbsp shredded cheese", "Red pepper flakes, garlic powder", "Hot sauce"],
+                        steps: ["Blend shake and sip alongside.", "Toast bread.", "Fry or scramble eggs with garlic powder.", "Top toast with eggs, cheese, red pepper flakes.", "Hit with hot sauce."],
+                        tip: "Simple, cheesy, spicy. Your supplement shake alongside makes this a complete cancer-prevention morning.",
+                        portions: ["40g protein", "420 cal", "3g fiber", "8 min"]
+                    },
+                    { type: "Lunch", icon: "☀️", name: "Chicken & White Bean Italian Stew", portion: "44g protein - 470 cal", color: "#a3b899",
+                        ingredients: ["5 oz chicken breast, cubed", "1/2 cup cannellini beans", "1 cup marinara sauce", "1/2 cup diced zucchini", "1/2 cup diced carrots", "2 cloves garlic", "1 tbsp olive oil", "Italian seasoning, red pepper flakes", "Parmesan to top"],
+                        steps: ["Saute garlic, carrots in olive oil 3 min.", "Add chicken, cook until just white.", "Add marinara, beans, zucchini. Simmer 15 min.", "Season with Italian seasoning and red pepper flakes.", "Top with Parmesan."],
+                        tip: "An Italian-style stew loaded with your favorite veggies. Beans add fiber and resistant starch. Marinara provides lycopene.",
+                        portions: ["44g protein", "470 cal", "10g fiber", "25 min"]
+                    },
+                    { type: "Dinner", icon: "🌙", name: "Chicken Parm Zucchini Boats", portion: "44g protein - 510 cal", color: "#a3b899",
+                        ingredients: ["2 large zucchini, halved and scooped", "4 oz cooked chicken breast, shredded", "1 cup marinara sauce", "1/4 cup shredded mozzarella", "2 tbsp Parmesan", "1 egg + whole wheat breadcrumbs (for crumble topping)", "Italian seasoning, garlic powder", "Side: small baked potato"],
+                        steps: ["Halve zucchini, scoop out centers.", "Mix shredded chicken with marinara and Italian seasoning.", "Fill zucchini boats with chicken-marinara mix.", "Top with mozzarella, breadcrumb-Parmesan crumble.", "Bake at 400 F for 20 min. Serve with potato."],
+                        tip: "Zucchini boats are a fun way to eat your veggies. All the flavors of chicken parm without the heavy breading.",
+                        portions: ["44g protein", "510 cal", "6g fiber", "30 min"]
+                    },
+                    { type: "Dessert", icon: "🍨", name: "Ricotta with Honey & Walnuts", portion: "8g protein - 160 cal", color: "#c4a882",
+                        ingredients: ["1/3 cup part-skim ricotta", "1 tsp honey", "1 tbsp walnuts, chopped", "Pinch of cinnamon", "Few raspberries"],
+                        steps: ["Scoop ricotta into a small bowl.", "Drizzle honey, top with walnuts, cinnamon, raspberries."],
+                        tip: "A classic Italian dessert. Ricotta with honey is simple, satisfying, and walnuts add omega-3 ALA.",
+                        portions: ["8g protein", "160 cal", "1g fiber", "2 min"]
+                    }
+                ]
+            },
+            {
+                day: 12, theme: "Mediterranean Grill", protein: "130g", calories: "1,500",
+                meals: [
+                    { type: "Breakfast", icon: "🌅", name: "Loaded Breakfast Burrito + Morning Shake", portion: "40g protein - 440 cal", color: "#a3b899",
+                        ingredients: ["--- MORNING BOOST SHAKE ---", "1 cup unsweetened almond milk", "1.5 tbsp cacao powder (NOT Dutch-processed)", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "--- BURRITO ---", "2 eggs, scrambled", "1 small whole wheat tortilla", "2 tbsp black beans", "2 tbsp shredded cheese", "2 tbsp salsa (smooth)", "Hot sauce, garlic powder, cumin"],
+                        steps: ["Blend shake and sip alongside.", "Scramble eggs with garlic powder and cumin.", "Warm tortilla. Layer eggs, beans, cheese, salsa.", "Roll it up. Hit with hot sauce."],
+                        tip: "Black beans add fiber and antioxidants even in small amounts. Your morning shake gets the supplement stack in. Fast, easy, and satisfying.",
+                        portions: ["40g protein", "440 cal", "4g fiber", "8 min"]
+                    },
+                    { type: "Lunch", icon: "☀️", name: "Lentil Soup + Grilled Chicken", portion: "42g protein - 480 cal", color: "#a3b899",
+                        ingredients: ["4 oz grilled chicken breast", "1/2 cup red lentils", "1 cup marinara sauce", "1/2 cup diced carrot and celery", "1 tsp cumin, garlic powder, onion powder", "2 cloves garlic", "1 tbsp olive oil", "Lemon, parsley"],
+                        steps: ["Saute carrot, celery, garlic in olive oil.", "Add lentils, marinara, spices, 2 cups water.", "Simmer 18-20 min until lentils dissolve.", "Finish with lemon juice and parsley.", "Serve soup with sliced grilled chicken on top."],
+                        tip: "Lentil fiber, tomato-based sauce, garlic, and anti-inflammatory cumin. One of the most nutrient-dense lunches in the plan.",
+                        portions: ["42g protein", "480 cal", "12g fiber", "25 min"]
+                    },
+                    { type: "Dinner", icon: "🌙", name: "Chicken & Veggie Kebabs with Cauliflower Rice", portion: "45g protein - 520 cal", color: "#a3b899",
+                        ingredients: ["5 oz chicken breast, cubed", "1 cup bell pepper + zucchini + onion chunks", "Marinade: olive oil, lemon, garlic, Italian seasoning, paprika", "2 cups riced cauliflower", "1 tbsp olive oil", "2 tbsp hummus", "Red pepper flakes"],
+                        steps: ["Marinate chicken and veggies 30+ min.", "Thread on skewers. Grill or broil 12-15 min, turning once.", "Saute cauliflower rice in olive oil with garlic.", "Serve kebabs over cauliflower rice with hummus."],
+                        tip: "Cauliflower rice is a low-cal cruciferous base. Grill at moderate heat (not charring) to avoid HCA formation.",
+                        portions: ["45g protein", "520 cal", "6g fiber", "20 min + marinate"]
+                    },
+                    { type: "Dessert", icon: "🍨", name: "Pomegranate Pistachio Yogurt Bowl", portion: "15g protein - 180 cal", color: "#c4a882",
+                        ingredients: ["1/2 cup nonfat Greek yogurt", "1/4 cup pomegranate seeds", "1 tbsp crushed pistachios", "1 tsp honey", "Pinch of cinnamon"],
+                        steps: ["Top yogurt with pomegranate, pistachios, honey drizzle, cinnamon."],
+                        tip: "Pomegranate plus pistachios plus probiotics in one bowl. Pomegranate polyphenols are studied for prostate cancer prevention.",
+                        portions: ["15g protein", "180 cal", "1g fiber", "3 min"]
+                    }
+                ]
+            },
+            {
+                day: 13, theme: "Comfort Classics", protein: "143g", calories: "1,490",
+                meals: [
+                    { type: "Breakfast", icon: "🌅", name: "Chocolate PB Oat Smoothie Bowl", portion: "46g protein - 450 cal", color: "#a3b899",
+                        ingredients: ["1 cup unsweetened almond milk", "1.5 tbsp cacao powder (NOT Dutch-processed)", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "1/2 scoop ON Gold Standard Banana Cream whey", "1/2 cup rolled oats", "1 tbsp natural peanut butter", "1/2 frozen banana", "--- TOPPINGS ---", "1 tbsp ground flaxseed", "Cinnamon"],
+                        steps: ["Blend almond milk, cacao, collagen, L-glutamine, MCT oil, whey, oats, peanut butter, and banana until thick.", "Pour into bowl.", "Top with flaxseed and cinnamon."],
+                        tip: "All your supplements blended into what basically tastes like a chocolate PB milkshake. The oats add beta-glucan fiber for immune function.",
+                        portions: ["46g protein", "450 cal", "8g fiber", "5 min"]
+                    },
+                    { type: "Lunch", icon: "☀️", name: "Loaded Baked Potato + Chicken", portion: "42g protein - 460 cal", color: "#a3b899",
+                        ingredients: ["1 medium baked potato", "4 oz shredded chicken", "2 tbsp shredded cheese", "2 tbsp Greek yogurt (instead of sour cream)", "1/2 cup steamed broccoli, chopped", "Garlic powder, onion powder, red pepper flakes", "1 tsp olive oil"],
+                        steps: ["Bake potato at 400 F for 45 min (or microwave 8 min).", "Split open, fluff with fork.", "Top with chicken, broccoli, cheese, Greek yogurt.", "Season with garlic powder, onion powder, red pepper flakes."],
+                        tip: "Potatoes are loaded with potassium and vitamin C. Adding broccoli and protein makes this balanced. Greek yogurt adds probiotics.",
+                        portions: ["42g protein", "460 cal", "7g fiber", "15 min"]
+                    },
+                    { type: "Dinner", icon: "🌙", name: "Turkey & White Bean Chili", portion: "50g protein - 530 cal", color: "#a3b899",
+                        ingredients: ["5 oz ground turkey", "1/2 cup cannellini beans", "1 cup marinara + splash of green chile", "1/2 cup diced onion, bell pepper, carrots", "2 cloves garlic", "1 tsp cumin, chili powder, garlic powder, onion powder", "1 tbsp olive oil", "2 tbsp Greek yogurt (instead of sour cream)", "2 tbsp shredded cheese"],
+                        steps: ["Brown turkey with onion, pepper, carrots, garlic.", "Add spices, cook 1 min.", "Add marinara, green chile, beans, 1 cup broth. Simmer 20 min.", "Serve topped with Greek yogurt and cheese."],
+                        tip: "Turkey plus white bean chili is protein-dense, fiber-rich, and loaded with tomato sauce.",
+                        portions: ["50g protein", "530 cal", "11g fiber", "30 min"]
+                    },
+                    { type: "Dessert", icon: "🍨", name: "Chocolate Peanut Butter Cups (Freezer)", portion: "4g protein - 160 cal", color: "#c4a882",
+                        ingredients: ["2 oz dark chocolate, melted", "2 tbsp natural peanut butter", "Flaky sea salt", "Mini muffin liners"],
+                        steps: ["Spoon a thin layer of melted chocolate into 4 mini muffin liners.", "Freeze 5 min until set.", "Add 1/2 tbsp peanut butter to each.", "Cover with more chocolate. Sprinkle salt.", "Freeze 30+ min. Keep extras in freezer."],
+                        tip: "Homemade PB cups with real ingredients. No palm oil or artificial anything. Dark chocolate flavanols plus peanut resveratrol.",
+                        portions: ["4g protein", "160 cal", "2g fiber", "10 min + freeze"]
+                    }
+                ]
+            },
+            {
+                day: 14, theme: "Celebration", protein: "138g", calories: "1,470",
+                meals: [
+                    { type: "Breakfast", icon: "🌅", name: "Sweet Potato Hash + Morning Shake", portion: "40g protein - 440 cal", color: "#a3b899",
+                        ingredients: ["--- MORNING BOOST SHAKE ---", "1 cup unsweetened almond milk", "1.5 tbsp cacao powder (NOT Dutch-processed)", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "--- HASH ---", "1 medium sweet potato, diced small", "2 eggs", "1/4 cup diced onion", "1/4 cup diced bell pepper", "1 tsp olive oil", "Garlic powder, smoked paprika, cumin", "Hot sauce"],
+                        steps: ["Blend shake and sip alongside.", "Cook sweet potato in olive oil on medium heat 8-10 min until tender.", "Add onion and pepper, cook 3 min.", "Season with spices.", "Make wells, crack eggs in. Cover, cook until set.", "Serve with hot sauce."],
+                        tip: "Sweet potato provides beta-carotene safely from food. This colorful hash delivers diverse phytonutrients in every bite.",
+                        portions: ["40g protein", "440 cal", "6g fiber", "15 min"]
+                    },
+                    { type: "Lunch", icon: "☀️", name: "Build-Your-Own Mediterranean Plate", portion: "40g protein - 470 cal", color: "#a3b899",
+                        ingredients: ["4 oz grilled chicken", "1/4 cup hummus", "1/2 cup grain salad (farro or quinoa with roasted red peppers, cucumber, lemon)", "Raw veggies: cucumber, bell pepper, carrots", "2 tbsp feta crumbles", "1 whole wheat pita, quartered"],
+                        steps: ["Grill or reheat chicken.", "Arrange all components on a plate.", "Dip, scoop, and enjoy."],
+                        tip: "A mezze plate is the Mediterranean diet in miniature: olive oil, whole grains, legumes, vegetables, healthy fats. Linked to lower cancer rates.",
+                        portions: ["40g protein", "470 cal", "8g fiber", "15 min"]
+                    },
+                    { type: "Dinner", icon: "🌙", name: "One-Pot Basil Chicken & Orzo in Marinara", portion: "48g protein - 520 cal", color: "#a3b899",
+                        ingredients: ["5 oz chicken breast", "1/2 cup whole wheat orzo", "1 cup marinara sauce", "1 cup baby spinach", "1/2 cup diced zucchini", "3 cloves garlic", "1 tbsp olive oil", "Fresh basil", "2 tbsp Parmesan", "Red pepper flakes"],
+                        steps: ["Sear seasoned chicken. Remove and set aside.", "Saute garlic and zucchini.", "Add marinara, 1 cup broth, orzo. Simmer 10 min.", "Nestle chicken back in. Cook 5 more min.", "Stir in spinach until wilted. Top with basil and Parmesan."],
+                        tip: "A perfect ending to two weeks. Marinara, whole grains, garlic, spinach, olive oil. Every element is evidence-based. Make this a regular rotation.",
+                        portions: ["48g protein", "520 cal", "7g fiber", "25 min"]
+                    },
+                    { type: "Dessert", icon: "🍨", name: "Berry Crumble for Two", portion: "5g protein - 180 cal", color: "#c4a882",
+                        ingredients: ["1.5 cups mixed berries (fresh or frozen)", "2 tbsp rolled oats", "1 tbsp chopped walnuts", "1 tsp coconut oil", "1 tsp honey", "Pinch cinnamon", "Dollop Greek yogurt for topping"],
+                        steps: ["Place berries in a small oven-safe dish.", "Mix oats, walnuts, coconut oil, honey, cinnamon. Crumble over berries.", "Bake at 375 F for 20-25 min until bubbly and golden.", "Top with a spoonful of Greek yogurt."],
+                        tip: "Celebrate finishing the plan! Berries, oats, walnuts, and yogurt. Every bite is anti-cancer. Start the cycle again!",
+                        portions: ["5g protein", "180 cal", "5g fiber", "25 min"]
+                    }
+                ]
+            }
+        ]
+    },
+    charlie: {
+        goals: { protein: "180-210g", calories: "2,200-2,500" },
+        days: []
+    }
+};
+
+// Generate Charlie's meals
+mealData.charlie.days = mealData.kasey.days.map(function(day) {
+    var cDay = JSON.parse(JSON.stringify(day));
+    var kProtein = parseInt(day.protein);
+    var kCal = parseInt(day.calories.replace(",", ""));
+    cDay.protein = Math.round(kProtein * 1.3) + "g";
+    cDay.calories = (Math.round(kCal * 1.4 / 100) * 100).toLocaleString();
+    
+    cDay.meals = cDay.meals.map(function(meal) {
+        var m = JSON.parse(JSON.stringify(meal));
+        var origProtein = parseInt(m.portion);
+        var calMatch = m.portion.match(/(\d+) cal/);
+        var origCal = calMatch ? parseInt(calMatch[1]) : 0;
+        var newProtein = Math.round(origProtein * 1.3);
+        var newCal = Math.round(origCal * 1.4);
+        m.portion = newProtein + "g protein - " + newCal + " cal";
+        
+        m.portions = m.portions.map(function(p) {
+            if (p.indexOf("protein") !== -1) return newProtein + "g protein";
+            if (p.indexOf("cal") !== -1) return newCal + " cal";
+            if (p.indexOf("fiber") !== -1) {
+                var f = parseInt(p);
+                return Math.round(f * 1.2) + "g fiber";
+            }
+            return p;
+        });
+        
+        if (m.type === "Dinner" && m.tip) {
+            m.tip += "\n\nCHARLIE: Extra cooked tomato sauce with olive oil boosts lycopene absorption, especially important for prostate cancer prevention given your family history.";
         }
+        
+        return m;
+    });
+    return cDay;
+});
 
-    </script>
+// State
+var currentPerson = "kasey";
+var currentDay = 1;
+var showingSnacks = false;
+
+var dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+var dayColors = [
+    "#a3b899", "#8fa882", "#7d8f76", "#a3b899", "#8fa882", "#b8c9ad", "#7d8f76",
+    "#a3b899", "#8fa882", "#7d8f76", "#a3b899", "#8fa882", "#b8c9ad", "#7d8f76"
+];
+
+function getData() {
+    return mealData[currentPerson];
+}
+
+function renderCalendar() {
+    var data = getData();
+    ["week1", "week2"].forEach(function(id, weekIdx) {
+        var grid = document.getElementById(id);
+        grid.innerHTML = "";
+        for (var i = 0; i < 7; i++) {
+            var dayNum = weekIdx * 7 + i + 1;
+            var btn = document.createElement("button");
+            btn.className = "day-btn";
+            var isActive = dayNum === currentDay;
+            var baseColor = dayColors[dayNum - 1];
+            btn.style.background = isActive ? baseColor : "rgba(163,184,153,0.1)";
+            btn.style.color = isActive ? "#2a1f21" : "var(--light-text)";
+            btn.innerHTML = '<span class="day-letter">' + dayNames[i] + '</span><span class="day-number">' + dayNum + '</span>';
+            btn.onclick = (function(d) { return function() { currentDay = d; showingSnacks = false; render(); }; })(dayNum);
+            grid.appendChild(btn);
+        }
+    });
+}
+
+function renderDayDetail() {
+    var data = getData();
+    var day = data.days[currentDay - 1];
+    
+    var header = document.getElementById("day-header");
+    header.style.background = dayColors[currentDay - 1];
+    document.getElementById("day-num").textContent = day.day;
+    document.getElementById("day-theme").textContent = day.theme;
+    document.getElementById("day-protein").textContent = day.protein + " protein";
+    document.getElementById("day-calories").textContent = day.calories + " cal";
+    
+    var container = document.getElementById("meals-container");
+    container.innerHTML = "";
+    
+    if (showingSnacks) {
+        // Render snack menu
+        var backBtn = document.createElement("button");
+        backBtn.className = "meal-btn";
+        backBtn.style.background = "rgba(163,184,153,0.15)";
+        backBtn.style.borderColor = "#a3b899";
+        backBtn.innerHTML = '<div class="meal-icon" style="background:rgba(163,184,153,0.2)">←</div><div class="meal-info"><div class="meal-type" style="color:#a3b899">Back to Day ' + day.day + '</div><div class="meal-name">Return to meals</div></div>';
+        backBtn.onclick = function() { showingSnacks = false; render(); };
+        container.appendChild(backBtn);
+        
+        var snackHeader = document.createElement("div");
+        snackHeader.style.cssText = "text-align:center; padding: 16px 0 8px; color: rgba(242,235,224,0.5); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase;";
+        snackHeader.textContent = "Mix & match \u2022 build your own snacks";
+        container.appendChild(snackHeader);
+        
+        snackMenu.forEach(function(snack) {
+            var btn = document.createElement("button");
+            btn.className = "meal-btn";
+            btn.innerHTML = '<div class="meal-icon" style="background: rgba(163,184,153,0.15)">\u2728</div>' +
+                '<div class="meal-info">' +
+                    '<div class="meal-type">Snack</div>' +
+                    '<div class="meal-name">' + snack.name + '</div>' +
+                    '<div class="meal-portion">' + snack.portion + '</div>' +
+                '</div>' +
+                '<div class="meal-arrow">\u203A</div>';
+            btn.onclick = (function(s) { return function() { openModal(s); }; })(snack);
+            container.appendChild(btn);
+        });
+    } else {
+        // Render day meals
+        day.meals.forEach(function(meal) {
+            var btn = document.createElement("button");
+            btn.className = "meal-btn";
+            var iconMap = { "sun": "\u2600\uFE0F", "moon": "\uD83C\uDF19", "star": "\u2728", "dessert": "\uD83C\uDF68" };
+            var displayIcon = iconMap[meal.icon] || meal.icon;
+            btn.innerHTML = '<div class="meal-icon" style="background: rgba(163,184,153,0.15)">' + displayIcon + '</div>' +
+                '<div class="meal-info">' +
+                    '<div class="meal-type">' + meal.type + '</div>' +
+                    '<div class="meal-name">' + meal.name + '</div>' +
+                    '<div class="meal-portion">' + meal.portion + '</div>' +
+                '</div>' +
+                '<div class="meal-arrow">\u203A</div>';
+            btn.onclick = (function(m) { return function() { openModal(m); }; })(meal);
+            container.appendChild(btn);
+        });
+        
+        // Add snack menu button
+        var snackBtn = document.createElement("button");
+        snackBtn.className = "meal-btn";
+        snackBtn.style.borderColor = "rgba(163,184,153,0.4)";
+        snackBtn.style.background = "rgba(163,184,153,0.05)";
+        snackBtn.innerHTML = '<div class="meal-icon" style="background: rgba(163,184,153,0.2)">\u2728</div>' +
+            '<div class="meal-info">' +
+                '<div class="meal-type" style="color:#a3b899">Snack Menu</div>' +
+                '<div class="meal-name" style="color:#a3b899">' + snackMenu.length + ' items \u2022 mix & match however you want</div>' +
+                '<div class="meal-portion">proteins, fruits, dips, nuts & more</div>' +
+            '</div>' +
+            '<div class="meal-arrow" style="color:#a3b899">\u203A</div>';
+        snackBtn.onclick = function() { showingSnacks = true; render(); };
+        container.appendChild(snackBtn);
+    }
+}
+
+function openModal(meal) {
+    var modal = document.getElementById("modal");
+    var header = document.getElementById("modal-header");
+    header.style.background = meal.color || "#a3b899";
+    document.getElementById("modal-title").textContent = meal.name;
+    document.getElementById("modal-meta").textContent = meal.portions.join(" \u2022 ");
+    
+    var ingList = document.getElementById("modal-ingredients");
+    ingList.innerHTML = "";
+    meal.ingredients.forEach(function(ing) {
+        var li = document.createElement("li");
+        if (ing.indexOf("---") === 0) {
+            li.innerHTML = '<span></span><strong style="color: var(--sage-green); font-size: 0.75rem; letter-spacing: 0.05em;">' + ing.replace(/---/g, "").trim() + '</strong>';
+        } else {
+            li.innerHTML = '<span>\u2022</span>' + ing;
+        }
+        ingList.appendChild(li);
+    });
+    
+    var stepList = document.getElementById("modal-steps");
+    stepList.innerHTML = "";
+    meal.steps.forEach(function(step, i) {
+        var li = document.createElement("li");
+        li.innerHTML = '<span class="step-number">' + (i + 1) + '</span>' + step;
+        stepList.appendChild(li);
+    });
+    
+    var tipBox = document.getElementById("modal-tip");
+    if (meal.tip) {
+        tipBox.style.display = "block";
+        tipBox.querySelector("p").innerHTML = meal.tip.replace(/\n\n/g, "<br><br>");
+    } else {
+        tipBox.style.display = "none";
+    }
+    
+    var portions = document.getElementById("modal-portions");
+    portions.innerHTML = "";
+    meal.portions.forEach(function(p) {
+        portions.innerHTML += '<span class="portion-tag">' + p + '</span>';
+    });
+    
+    modal.classList.add("active");
+}
+
+function closeModal() {
+    document.getElementById("modal").classList.remove("active");
+}
+
+document.getElementById("modal").addEventListener("click", function(e) {
+    if (e.target === this) closeModal();
+});
+
+document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape") closeModal();
+});
+
+document.querySelectorAll(".toggle-btn").forEach(function(btn) {
+    btn.addEventListener("click", function() {
+        document.querySelectorAll(".toggle-btn").forEach(function(b) { b.classList.remove("active"); });
+        this.classList.add("active");
+        currentPerson = this.dataset.person;
+        document.getElementById("goal-protein").textContent = getData().goals.protein;
+        document.getElementById("goal-calories").textContent = getData().goals.calories;
+        render();
+    });
+});
+
+function render() {
+    renderCalendar();
+    renderDayDetail();
+}
+
+render();
+</script>
 </body>
 </html>
