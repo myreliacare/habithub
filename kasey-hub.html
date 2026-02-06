@@ -2,13 +2,15 @@
 <html lang="en">
 <head>
  <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#2a1f21">
  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
  <meta http-equiv="Pragma" content="no-cache">
  <meta http-equiv="Expires" content="0">
  <!-- Version 2.0 - Resources Edit/Delete Fix -->
- <meta name="mobile-web-app-capable" content="yes">
- <meta name="apple-mobile-web-app-capable" content="yes">
  <title>Kasey's Habit Hub</title>
  <link rel="preconnect" href="https://fonts.googleapis.com">
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1520,6 +1522,117 @@
  }
 
  
+
+/* ===== APP-LIKE BEHAVIOR ===== */
+html {
+    overflow-x: hidden;
+    overscroll-behavior: none;
+    -webkit-text-size-adjust: 100%;
+    height: 100%;
+    scroll-behavior: smooth;
+}
+
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+    min-height: 100%;
+    min-height: 100dvh;
+}
+
+/* Prevent pull-to-refresh on mobile */
+body.nav-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+}
+
+/* No text select on interactive elements */
+button, .btn, .nav-link, .nav-link-mobile, .nav-logo, .nav-hamburger,
+select, .tab, .view-toggle-btn, .hub-nav-btn, label {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* Smooth touch scrolling for scrollable containers */
+.scrollable, .container {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Better touch targets - minimum 44px */
+button, .btn, a.nav-link, .nav-link-mobile, select, input[type="checkbox"] {
+    min-height: 44px;
+    min-width: 44px;
+}
+
+a.nav-link {
+    display: inline-flex;
+    align-items: center;
+}
+
+/* Safe area insets for notched phones */
+.top-nav {
+    padding-top: env(safe-area-inset-top) !important;
+    padding-left: max(16px, env(safe-area-inset-left)) !important;
+    padding-right: max(16px, env(safe-area-inset-right)) !important;
+}
+
+.container {
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+    padding-bottom: max(40px, env(safe-area-inset-bottom));
+}
+
+/* Smoother nav overlay - slide up */
+.nav-overlay {
+    display: flex !important;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.nav-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+/* Active states for touch feedback */
+button:active, .btn:active, .nav-link-mobile:active {
+    opacity: 0.7;
+    transition: opacity 0.05s;
+}
+
+/* Smoother page transitions feel */
+.section, .card, [class*="card"], [class*="section"] {
+    transform: translateZ(0);
+    will-change: auto;
+}
+
+/* Input focus styles - more app-like */
+input:focus, textarea:focus, select:focus {
+    outline: none;
+}
+
+/* Disable long-press context menu on interactive elements (mobile) */
+button, .btn, a, .nav-hamburger {
+    -webkit-touch-callout: none;
+}
+
+@media (max-width: 768px) {
+    /* Account for safe area in nav height */
+    .top-nav {
+        padding-top: env(safe-area-inset-top) !important;
+    }
+}
+/* ===== END APP-LIKE BEHAVIOR ===== */
+
 /* ===== UNIFIED NAV BAR ===== */
 .top-nav {
     position: fixed;
@@ -4157,9 +4270,17 @@ What's on my mind today..."></textarea>
 function toggleNav() {
     const hamburger = document.querySelector('.nav-hamburger');
     const overlay = document.querySelector('.nav-overlay');
-    hamburger.classList.toggle('open');
-    overlay.classList.toggle('open');
-    document.body.style.overflow = overlay.classList.contains('open') ? 'hidden' : '';
+    const isOpen = overlay.classList.contains('open');
+    
+    if (isOpen) {
+        hamburger.classList.remove('open');
+        overlay.classList.remove('open');
+        document.body.classList.remove('nav-open');
+    } else {
+        hamburger.classList.add('open');
+        overlay.classList.add('open');
+        document.body.classList.add('nav-open');
+    }
 }
 </script>
 </body>
