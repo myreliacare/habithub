@@ -127,30 +127,38 @@
             }
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 600px) {
+            .nav-logo {
+                display: none;
+            }
+            .nav-container {
+                justify-content: center;
+                height: 44px;
+            }
             .nav-links {
-                gap: 8px;
+                gap: 6px;
+                justify-content: center;
+                width: 100%;
             }
             .nav-link {
-                font-size: 0.72rem;
+                font-size: 0.78rem;
+                padding: 4px 6px;
             }
-            .nav-logo {
-                font-size: 0.85rem;
+            .top-nav {
+                padding: 0 8px;
             }
             .container {
-                padding: 66px 10px 50px;
+                padding: 60px 10px 50px;
             }
         }
 
-        @media (max-width: 360px) {
-            .nav-links {
-                gap: 5px;
-            }
+        @media (max-width: 380px) {
             .nav-link {
-                font-size: 0.65rem;
+                font-size: 0.7rem;
+                padding: 4px 4px;
             }
-            .nav-logo {
-                font-size: 0.78rem;
+            .nav-links {
+                gap: 4px;
             }
         }
 
@@ -788,6 +796,8 @@
         .expand-icon { color: rgba(61, 107, 107, 0.5); font-size: 0.65rem; transition: transform 0.3s; }
         .phonebook-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
         .phonebook-content.expanded { max-height: 2000px; }
+        .grocery-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .grocery-content.expanded { max-height: 5000px; }
         .phonebook-search { margin: 16px 0 12px; }
         .phonebook-search input {
             width: 100%; background: #2a1f21;
@@ -1093,13 +1103,17 @@
 
         <!-- Grocery List -->
         <div class="section">
-            <div class="section-title">Grocery List</div>
-            <div id="groceryList"></div>
-            <div class="add-input">
-                <input type="text" id="groceryInput" placeholder="Add item..." onkeypress="if(event.key==='Enter') addGrocery()">
-                <button onclick="addGrocery()">+</button>
+            <div class="phonebook-header" onclick="toggleGroceryList()">
+                <div class="section-title" style="margin-bottom: 0;">Grocery List <span id="groceryCount" style="font-size: 0.75rem; color: rgba(242,235,224,0.4);"></span></div>
+                <span class="expand-icon" id="groceryIcon" style="transform: rotate(-90deg);">▼</span>
             </div>
-            <button onclick="loadMealPlanGroceries()" style="width:100%; margin-top:10px; padding:12px; background:rgba(163,184,153,0.1); border:1px solid rgba(163,184,153,0.3); color:#a3b899; font-family:inherit; font-size:0.85rem; cursor:pointer; transition:all 0.2s;" onmouseover="this.style.background='rgba(163,184,153,0.2)'" onmouseout="this.style.background='rgba(163,184,153,0.1)'">Load Week 1 Groceries</button>
+            <div class="grocery-content" id="groceryContent">
+                <div id="groceryList"></div>
+                <div class="add-input">
+                    <input type="text" id="groceryInput" placeholder="Add item..." onkeypress="if(event.key==='Enter') addGrocery()">
+                    <button onclick="addGrocery()">+</button>
+                </div>
+            </div>
         </div>
 
         <!-- Phone Book -->
@@ -3153,6 +3167,13 @@
             const list = document.getElementById('groceryList');
             if (!list) return;
             
+            // Update count in header
+            const countEl = document.getElementById('groceryCount');
+            if (countEl) {
+                const unchecked = groceries.filter(g => !g.completed).length;
+                countEl.textContent = groceries.length > 0 ? `(${unchecked} item${unchecked !== 1 ? 's' : ''})` : '';
+            }
+            
             if (groceries.length === 0) {
                 list.innerHTML = '<div class="empty-state" style="color: rgba(242, 235, 224, 0.35); font-size: 0.9rem; padding: 20px; text-align: center; font-style: italic;">No items yet</div>';
                 return;
@@ -3172,112 +3193,6 @@
 
         // PHONE BOOK / CONTACTS
         let contacts = [];
-
-        async function loadMealPlanGroceries() {
-            if (groceries.length > 0) {
-                if (!confirm('This will add Week 1 meal plan items to your existing list. Continue?')) return;
-            }
-
-            const mealPlanItems = [
-                "Chicken breast (~4 lbs)",
-                "Chicken thighs, bone-in (1 lb)",
-                "Ground turkey 93% lean (~3 lbs)",
-                "Rotisserie chicken (1, for Day 2 soup)",
-                "Chicken sausage, nitrate-free (1 pack, Day 6)",
-                "Eggs (2 dozen)",
-                "Broccoli (3 large crowns)",
-                "Cauliflower (2 heads or 1 head + 1 bag riced)",
-                "Zucchini (4 medium)",
-                "Bell peppers, mixed colors (6-8)",
-                "Carrots (2 lb bag)",
-                "Yellow onions (4-5)",
-                "Garlic (2 heads)",
-                "Baby spinach (2 bags, 5oz each)",
-                "Green beans (1 lb, Day 6)",
-                "Butternut squash, pre-cubed (1 small bag)",
-                "Potatoes (2 medium)",
-                "Cucumber (1)",
-                "Avocado (1, for Day 3 mousse only)",
-                "Bananas (1 bunch)",
-                "Mixed berries, frozen (2 bags)",
-                "Blueberries, frozen (1 bag)",
-                "Strawberries, fresh (1 container)",
-                "Mango, frozen diced (1 bag)",
-                "Pineapple, frozen chunks (1 bag)",
-                "Lemons (3-4)",
-                "Limes (2)",
-                "Nonfat Greek yogurt (large tub, 32oz)",
-                "Unsweetened almond milk (2 cartons)",
-                "Shredded mozzarella (1 bag)",
-                "Parmesan, grated (1 container)",
-                "Feta cheese crumbles (1 container)",
-                "Part-skim ricotta (1 small tub)",
-                "Shredded cheddar/Mexican cheese (1 bag)",
-                "Marinara sauce (2 large jars)",
-                "Enchilada sauce, red (1 can)",
-                "Black beans (3 cans)",
-                "Cannellini/white beans (2 cans)",
-                "Chickpeas (2 cans)",
-                "Roasted red peppers, jarred (2 jars)",
-                "Chipotle in adobo (1 small can)",
-                "Low-sodium chicken broth (1 carton)",
-                "Corn, canned or frozen (1)",
-                "Light coconut milk (1 can)",
-                "Red lentils (1 bag)",
-                "French green lentils (1 small bag)",
-                "Brown rice (1 bag)",
-                "Farro (1 bag)",
-                "Quinoa (1 bag)",
-                "Whole wheat penne (1 box)",
-                "Rolled oats (1 canister)",
-                "Whole grain bread (1 loaf)",
-                "Whole wheat tortillas, small (1 pack)",
-                "Corn tortillas (1 pack)",
-                "Walnuts (1 bag)",
-                "Chocolate covered almonds",
-                "Pumpkin seeds / pepitas (small bag)",
-                "Ground flaxseed (1 bag)",
-                "Chia seeds (1 bag)",
-                "Hemp hearts (1 bag)",
-                "Cacao powder, NOT Dutch-processed",
-                "Vital Proteins chocolate collagen",
-                "L-glutamine powder",
-                "Nature's Way MCT oil",
-                "ON Gold Standard Banana Cream whey",
-                "Natural peanut butter",
-                "Walnut butter",
-                "Tahini (1 jar)",
-                "Hummus (1 tub)",
-                "Extra virgin olive oil",
-                "Sesame oil (small bottle)",
-                "Balsamic glaze (small bottle)",
-                "Red wine vinegar",
-                "Honey",
-                "Low-sodium soy sauce",
-                "Hot sauce",
-                "Salsa, smooth/sauce-style",
-                "Italian seasoning",
-                "Smoked paprika",
-                "Cumin, ground",
-                "Garlic powder",
-                "Onion powder",
-                "Red pepper flakes",
-                "Cinnamon, ground",
-                "Sazon seasoning",
-                "Taco seasoning",
-                "Dark chocolate bar (for desserts)",
-                "Dark chocolate chips",
-                "Mini dark chocolate chips",
-                "Cocoa powder (for mousse)",
-                "Coconut sugar (small bag)",
-                "Toasted coconut flakes (small bag)"
-            ];
-
-            const newItems = mealPlanItems.map(text => ({ text, completed: false }));
-            groceries = [...groceries, ...newItems];
-            await saveGroceries();
-            renderGroceries();
-        }
 
         async function loadContacts() {
             const firebaseData = await loadFromFirebase('contacts');
@@ -3416,15 +3331,15 @@
         }
 
         function toggleGroceryList() {
-            const list = document.getElementById('groceryList');
-            const btn = document.getElementById('groceryExpandBtn');
+            const content = document.getElementById('groceryContent');
+            const icon = document.getElementById('groceryIcon');
             
-            if (list.classList.contains('collapsed')) {
-                list.classList.remove('collapsed');
-                btn.textContent = 'Show Less';
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                icon.style.transform = 'rotate(-90deg)';
             } else {
-                list.classList.add('collapsed');
-                btn.textContent = 'Show More';
+                content.classList.add('expanded');
+                icon.style.transform = 'rotate(0deg)';
             }
         }
 
