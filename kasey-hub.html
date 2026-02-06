@@ -1285,85 +1285,10 @@
  }
 
  
- /* Top Navigation Bar */
- .top-nav {
- position: fixed;
- top: 0;
- left: 0;
- right: 0;
- background: #2a1f21;
- border-bottom: 1px solid rgba(163, 184, 153, 0.2);
- z-index: 1000;
- padding: 0 24px;
- }
 
- .nav-container {
- max-width: 1200px;
- margin: 0 auto;
- display: flex;
- align-items: center;
- justify-content: space-between;
- height: 60px;
- }
- 
- .nav-logo {
- font-size: 1.1rem;
- font-weight: 700;
- color: #a3b899;
- text-decoration: none;
- }
- 
- .nav-links {
- display: flex;
- gap: 24px;
- align-items: center;
- }
-
- .nav-link {
- color: rgba(242, 235, 224, 0.7);
- text-decoration: none;
- font-size: 0.9rem;
- transition: color 0.2s;
- font-weight: 500;
- }
-
- .nav-link:hover {
- color: #a3b899;
- }
-
- .nav-link.active {
- color: #a3b899;
- }
-
- 
  @media (max-width: 768px) {
- .nav-container {
- height: auto;
- min-height: 60px;
- padding: 8px 0;
- flex-wrap: wrap;
- }
-
- .nav-logo {
- width: 100%;
- text-align: center;
- margin-bottom: 8px;
- }
-
- .nav-links {
- gap: 12px;
- width: 100%;
- justify-content: center;
- flex-wrap: wrap;
- }
- 
- .nav-link {
- font-size: 0.8rem;
- padding: 4px 8px;
- }
-
  body {
- padding-top: 100px;
+ padding-top: 68px;
  }
 
  .btn, button {
@@ -1378,11 +1303,6 @@
  }
 
  @media (max-width: 480px) {
- .nav-link {
- font-size: 0.75rem;
- padding: 4px 6px;
- }
-
  #currentDayDisplay {
  min-width: 160px !important;
  font-size: 0.95rem !important;
@@ -1599,7 +1519,179 @@
  height: auto;
  }
 
- </style>
+ 
+/* ===== UNIFIED NAV BAR ===== */
+.top-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #2a1f21;
+    border-bottom: 1px solid rgba(163, 184, 153, 0.2);
+    z-index: 9999;
+    padding: 0 24px;
+    font-family: 'Philosopher', Georgia, serif;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+}
+
+.nav-logo {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #a3b899;
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+}
+
+.nav-links {
+    display: flex;
+    gap: 28px;
+    align-items: center;
+}
+
+.nav-link {
+    color: rgba(242, 235, 224, 0.6);
+    text-decoration: none;
+    font-size: 0.88rem;
+    transition: color 0.2s;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+
+.nav-link:hover {
+    color: #f2ebe0;
+}
+
+.nav-link.active {
+    color: #a3b899;
+}
+
+/* Hamburger Button */
+.nav-hamburger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    z-index: 10001;
+}
+
+.nav-hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: #a3b899;
+    margin: 5px 0;
+    transition: all 0.3s ease;
+    border-radius: 1px;
+}
+
+.nav-hamburger.open span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.nav-hamburger.open span:nth-child(2) {
+    opacity: 0;
+}
+
+.nav-hamburger.open span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Mobile Overlay */
+.nav-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(42, 31, 33, 0.97);
+    z-index: 9998;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.nav-overlay.open {
+    display: flex;
+    opacity: 1;
+}
+
+.nav-overlay .nav-link-mobile {
+    color: rgba(242, 235, 224, 0.6);
+    text-decoration: none;
+    font-size: 1.3rem;
+    font-family: 'Philosopher', Georgia, serif;
+    font-weight: 500;
+    padding: 14px 40px;
+    transition: color 0.2s;
+    letter-spacing: 0.05em;
+}
+
+.nav-overlay .nav-link-mobile:hover {
+    color: #f2ebe0;
+}
+
+.nav-overlay .nav-link-mobile.active {
+    color: #a3b899;
+}
+
+@media (max-width: 768px) {
+    .nav-hamburger {
+        display: block;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .nav-container {
+        height: 52px;
+    }
+
+    .nav-logo {
+        font-size: 0.95rem;
+    }
+
+    .top-nav {
+        padding: 0 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-container {
+        height: 48px;
+    }
+
+    .nav-logo {
+        font-size: 0.88rem;
+    }
+
+    .top-nav {
+        padding: 0 12px;
+    }
+
+    .nav-overlay .nav-link-mobile {
+        font-size: 1.15rem;
+        padding: 12px 40px;
+    }
+}
+/* ===== END UNIFIED NAV BAR ===== */
+
+        </style>
 </head>
 <body data-version="2.1-resources-fix">
  <script>
@@ -1608,6 +1700,7 @@
  const CURRENT_VERSION = '2.1';
  const saved = localStorage.getItem('resources_version_kasey');
  if (saved !== CURRENT_VERSION) {
+ console.log('🔥 FORCE CLEARING OLD RESOURCES');
  localStorage.removeItem('resources_kasey');
  localStorage.removeItem('resources_version_kasey');
  localStorage.setItem('resources_version_kasey', CURRENT_VERSION);
@@ -1616,18 +1709,31 @@
  </script>
  <!-- Top Navigation Bar -->
  <nav class="top-nav">
- <div class="nav-container">
- <a href="index.html" class="nav-logo">Our Life Hub</a>
- <div class="nav-links">
- <a href="index.html" class="nav-link">Home</a>
- <a href="kasey-hub.html" class="nav-link active">Kasey</a>
- <a href="charlie-hub.html" class="nav-link">Charlie</a>
- <a href="our-dreams.html" class="nav-link">Dreams</a>
- <a href="meal-plan.html" class="nav-link">Meals</a>
- <a href="settings.html" class="nav-link">Settings</a>
- </div>
- </div>
- </nav>
+            <div class="nav-container">
+                <a href="index.html" class="nav-logo">Our Life Hub</a>
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="kasey-hub.html" class="nav-link active">Kasey</a>
+                    <a href="charlie-hub.html" class="nav-link">Charlie</a>
+                    <a href="our-dreams.html" class="nav-link">Dreams</a>
+                    <a href="meal-plan.html" class="nav-link">Meals</a>
+                    <a href="settings.html" class="nav-link">Settings</a>
+                </div>
+                <button class="nav-hamburger" onclick="toggleNav()" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+        <div class="nav-overlay" onclick="toggleNav()">
+            <a href="index.html" class="nav-link-mobile">Home</a>
+            <a href="kasey-hub.html" class="nav-link-mobile active">Kasey</a>
+            <a href="charlie-hub.html" class="nav-link-mobile">Charlie</a>
+            <a href="our-dreams.html" class="nav-link-mobile">Dreams</a>
+            <a href="meal-plan.html" class="nav-link-mobile">Meals</a>
+            <a href="settings.html" class="nav-link-mobile">Settings</a>
+        </div>
 
 
  <div class="container">
@@ -1763,7 +1869,7 @@
  <div class="resource-content" id="exercise-content">
  
  <!-- Daily Corrective Warm-Up (Do Before Every Workout) -->
- <div class="exercise-day" id="exercise-day-warmup">
+ <div class="exercise-day">
  <div class="exercise-day-header" onclick="this.parentElement.classList.toggle('active')">
  <div>
  <h3 class="exercise-day-title">Daily Corrective Warm-Up</h3>
@@ -1785,7 +1891,7 @@
  </div>
 
  <!-- MONDAY -->
- <div class="exercise-day" id="exercise-day-monday">
+ <div class="exercise-day">
  <div class="exercise-day-header" onclick="this.parentElement.classList.toggle('active')">
  <div>
  <h3 class="exercise-day-title">MONDAY: Corrective + Pilates Core</h3>
@@ -1840,7 +1946,7 @@
  </div>
 
  <!-- TUESDAY -->
- <div class="exercise-day" id="exercise-day-tuesday">
+ <div class="exercise-day">
  <div class="exercise-day-header" onclick="this.parentElement.classList.toggle('active')">
  <div>
  <h3 class="exercise-day-title">TUESDAY: Upper Body Strength + Mobility</h3>
@@ -1884,7 +1990,7 @@
  </div>
 
  <!-- WEDNESDAY -->
- <div class="exercise-day" id="exercise-day-wednesday">
+ <div class="exercise-day">
  <div class="exercise-day-header" onclick="this.parentElement.classList.toggle('active')">
  <div>
  <h3 class="exercise-day-title">WEDNESDAY: Active Recovery Yoga Flow</h3>
@@ -1937,7 +2043,7 @@
  </div>
 
  <!-- THURSDAY -->
- <div class="exercise-day" id="exercise-day-thursday">
+ <div class="exercise-day">
  <div class="exercise-day-header" onclick="this.parentElement.classList.toggle('active')">
  <div>
  <h3 class="exercise-day-title">THURSDAY: Corrective + Lower Body Strength</h3>
@@ -1990,7 +2096,7 @@
  </div>
 
  <!-- FRIDAY -->
- <div class="exercise-day" id="exercise-day-friday">
+ <div class="exercise-day">
  <div class="exercise-day-header" onclick="this.parentElement.classList.toggle('active')">
  <div>
  <h3 class="exercise-day-title">FRIDAY: Rest or Gentle Walking</h3>
@@ -2008,7 +2114,7 @@
  </div>
 
  <!-- SATURDAY -->
- <div class="exercise-day" id="exercise-day-saturday">
+ <div class="exercise-day">
  <div class="exercise-day-header" onclick="this.parentElement.classList.toggle('active')">
  <div>
  <h3 class="exercise-day-title">SATURDAY: Full Body Calisthenics + Cardio</h3>
@@ -2050,7 +2156,7 @@
  </div>
 
  <!-- SUNDAY -->
- <div class="exercise-day" id="exercise-day-sunday">
+ <div class="exercise-day">
  <div class="exercise-day-header" onclick="this.parentElement.classList.toggle('active')">
  <div>
  <h3 class="exercise-day-title">SUNDAY: Deep Mobility + Myofascial Release</h3>
@@ -2996,6 +3102,7 @@ What's on my mind today..."></textarea>
  
  // Force complete reset if version doesn't match
  if (savedVersion !== RESOURCE_VERSION) {
+ console.log('🔄 RESETTING RESOURCES - Version ' + RESOURCE_VERSION);
  // Clear everything
  localStorage.removeItem('resources_kasey');
  localStorage.removeItem('resources_version_kasey');
@@ -3004,10 +3111,12 @@ What's on my mind today..."></textarea>
  // Save version
  localStorage.setItem('resources_version_kasey', RESOURCE_VERSION);
  localStorage.setItem('resources_kasey', JSON.stringify(resources));
+ console.log('✅ Resources reset complete:', resources);
  } else {
  // Load saved resources
  const savedData = localStorage.getItem('resources_kasey');
  resources = savedData ? JSON.parse(savedData) : JSON.parse(JSON.stringify(defaultResources));
+ console.log('📂 Loaded existing resources:', resources);
  }
  
  renderAllResources();
@@ -3053,7 +3162,9 @@ What's on my mind today..."></textarea>
  }
 
  function renderAllResources() {
+ console.log('Rendering all resources:', Object.keys(resources));
  Object.keys(resources).forEach(category => {
+ console.log(`Rendering ${category}:`, resources[category]);
  renderResourceCategory(category);
  });
  }
@@ -3061,6 +3172,7 @@ What's on my mind today..."></textarea>
  function renderResourceCategory(category) {
  const container = document.getElementById(`${category}-items`);
  if (!container) {
+ console.error(`Container not found for category: ${category}`);
  return;
  }
 
@@ -3069,6 +3181,7 @@ What's on my mind today..."></textarea>
  return;
  }
 
+ console.log(`Rendering ${resources[category].length} items for ${category}`);
  container.innerHTML = '';
  resources[category].forEach((item, index) => {
  const itemDiv = document.createElement('div');
@@ -3097,6 +3210,7 @@ What's on my mind today..."></textarea>
  `;
  container.appendChild(itemDiv);
  });
+ console.log(`Finished rendering ${category}`);
  }
 
  function showAddResourceForm(category) {
@@ -3454,7 +3568,7 @@ What's on my mind today..."></textarea>
  0: { // Sunday
  morning: {
  skincare: '1. Cleanser<br>2. Essence (damp skin)<br>3. Vitamin C<br>4. Niacinamide<br>5. Under eye serum<br>6. Soothing cream<br>7. Sunscreen',
- workout: 'Deep Mobility + Myofascial Release (40 min)',
+ workout: 'Deep Mobility + Myofascial Release (40 min)<br><em>Full-body release (20 min) → Mobility flow (15 min) → Closing sequence (5 min)<br>See Resources > Exercise > SUNDAY for complete details</em>',
  tapping: `<strong style="color: #b59197;">Round 1 — Opening to Receive</strong><br>
 <strong>Top of head:</strong> "I am safe receiving good things"<br>
 <strong>Eyebrow:</strong> "Good things are already on their way to me"<br>
@@ -3491,7 +3605,7 @@ What's on my mind today..."></textarea>
  1: { // Monday
  morning: {
  skincare: '1. Cleanser<br>2. Essence (damp skin)<br>3. Vitamin C<br>4. Niacinamide<br>5. Under eye serum<br>6. Soothing cream<br>7. Sunscreen',
- workout: 'Corrective + Pilates Core (45 min)',
+ workout: 'Corrective + Pilates Core (45 min)<br><em>Myofascial release (8 min) → Corrective stretches (6 min) → Pilates core (20 min) → Scoliosis work (8 min)<br>See Resources > Exercise > MONDAY for full details</em>',
  tapping: `<strong style="color: #b59197;">Round 1 — Honor the Grief (don't skip this)</strong><br>
 <strong>Top of head:</strong> "The world feels absurd sometimes"<br>
 <strong>Eyebrow:</strong> "There is so much pain and chaos out there"<br>
@@ -3528,7 +3642,7 @@ What's on my mind today..."></textarea>
  2: { // Tuesday
  morning: {
  skincare: '1. Cleanser<br>2. Essence (damp skin)<br>3. Vitamin C<br>4. Niacinamide<br>5. Under eye serum<br>6. Soothing cream<br>7. Sunscreen',
- workout: 'Upper Body Strength + Mobility (45 min)',
+ workout: 'Upper Body Strength + Mobility (45 min)<br><em>Myofascial release (4 min) → Strength circuit (25 min, 3 rounds) → Deep neck flexor work (5 min)<br>See Resources > Exercise > TUESDAY for full details</em>',
  tapping: `<strong style="color: #b59197;">Round 1 — Opening to Receive</strong><br>
 <strong>Top of head:</strong> "I am safe receiving good things"<br>
 <strong>Eyebrow:</strong> "Good things are already on their way to me"<br>
@@ -3565,7 +3679,7 @@ What's on my mind today..."></textarea>
  3: { // Wednesday
  morning: {
  skincare: '1. Cleanser<br>2. Essence (damp skin)<br>3. Vitamin C<br>4. Niacinamide<br>5. Under eye serum<br>6. Soothing cream<br>7. Sunscreen',
- workout: 'Active Recovery Yoga Flow (40 min)',
+ workout: 'Active Recovery Yoga Flow (40 min)<br><em>Spinal mobility → Hip opening (toe-safe) → Standing balance → Restorative holds (8 min)<br>See Resources > Exercise > WEDNESDAY for full details</em>',
  tapping: `<strong style="color: #b59197;">Round 1 — Honor the Grief (don't skip this)</strong><br>
 <strong>Top of head:</strong> "The world feels absurd sometimes"<br>
 <strong>Eyebrow:</strong> "There is so much pain and chaos out there"<br>
@@ -3602,7 +3716,7 @@ What's on my mind today..."></textarea>
  4: { // Thursday
  morning: {
  skincare: '1. Cleanser<br>2. Essence (damp skin)<br>3. Vitamin C<br>4. Niacinamide<br>5. Under eye serum<br>6. Soothing cream<br>7. Sunscreen',
- workout: 'Corrective + Lower Body Strength (50 min)',
+ workout: 'Corrective + Lower Body Strength (50 min)<br><em>Myofascial release (6 min) → Hip mobility (6 min) → Strength circuit (22 min, 3 rounds) → Scoliosis hip work (5 min)<br>See Resources > Exercise > THURSDAY for full details</em>',
  tapping: `<strong style="color: #b59197;">Round 1 — Releasing Old Stories</strong><br>
 <strong>Top of head:</strong> "I release the story that I'm not enough"<br>
 <strong>Eyebrow:</strong> "I release the fear that I'll always struggle"<br>
@@ -3639,7 +3753,7 @@ What's on my mind today..."></textarea>
  5: { // Friday
  morning: {
  skincare: '1. Cleanser<br>2. Essence (damp skin)<br>3. Vitamin C<br>4. Niacinamide<br>5. Under eye serum<br>6. Soothing cream<br>7. Sunscreen',
- workout: 'Rest or Gentle Walking (20-30 min)',
+ workout: 'Rest or Gentle Walking (20-30 min)<br><em>Complete rest day OR optional treadmill walk with minimal incline. Wear supportive shoes.<br>Optional: Heat, 5 min breathing, gentle chin tucks</em>',
  tapping: `<strong style="color: #b59197;">Round 1 — Honor the Grief (don't skip this)</strong><br>
 <strong>Top of head:</strong> "The world feels absurd sometimes"<br>
 <strong>Eyebrow:</strong> "There is so much pain and chaos out there"<br>
@@ -3676,7 +3790,7 @@ What's on my mind today..."></textarea>
  6: { // Saturday
  morning: {
  skincare: '1. Cleanser<br>2. Essence (damp skin)<br>3. Vitamin C<br>4. Niacinamide<br>5. Under eye serum<br>6. Soothing cream<br>7. Sunscreen',
- workout: 'Full Body Calisthenics + Cardio (50 min)',
+ workout: 'Full Body Calisthenics + Cardio (50 min)<br><em>Low-impact cardio (12 min) → Calisthenics circuit (22 min, 4 rounds) → Core finisher (5 min)<br>See Resources > Exercise > SATURDAY for full details</em>',
  tapping: `<strong style="color: #b59197;">Round 1 — Releasing Old Stories</strong><br>
 <strong>Top of head:</strong> "I release the story that I'm not enough"<br>
 <strong>Eyebrow:</strong> "I release the fear that I'll always struggle"<br>
@@ -3711,41 +3825,6 @@ What's on my mind today..."></textarea>
  }
  }
  };
-
- function goToWorkout(dayIndex) {
- const dayMap = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
- const dayId = 'exercise-day-' + dayMap[dayIndex];
- 
- // Switch to Resources tab
- document.querySelectorAll('.hub-tab').forEach(t => t.classList.remove('active'));
- document.getElementById('resources-tab').classList.add('active');
- document.getElementById('sectionSelect').value = 'resources';
- renderAllResources();
- 
- // Open the Exercise resource category
- const exerciseCategory = document.getElementById('exercise-content').closest('.resource-category');
- if (!exerciseCategory.classList.contains('active')) {
- exerciseCategory.classList.add('active');
- }
- 
- // Open the specific exercise day and scroll to it
- setTimeout(() => {
- const target = document.getElementById(dayId);
- if (target) {
- if (!target.classList.contains('active')) {
- target.classList.add('active');
- }
- target.scrollIntoView({ behavior: 'smooth', block: 'start' });
- }
- }, 100);
- }
-
- function goToJournal() {
- document.querySelectorAll('.hub-tab').forEach(t => t.classList.remove('active'));
- document.getElementById('journal-tab').classList.add('active');
- document.getElementById('sectionSelect').value = 'journal';
- window.scrollTo({ top: 0, behavior: 'smooth' });
- }
 
  function changeDay(direction) {
  currentViewingDay += direction;
@@ -3837,7 +3916,6 @@ What's on my mind today..."></textarea>
  <div style="margin-top: 8px; padding: 10px; background: #faf8f6; border-left: 3px solid #d4a5a5; font-style: italic;">
  <strong style="color: #b59197;">Today's prompt:</strong> ${day.morning.journalPrompt}
  </div>
- <a href="javascript:void(0)" onclick="goToJournal()" style="display: inline-block; margin-top: 8px; color: #b59197; font-weight: 700; text-decoration: underline; cursor: pointer;">→ Open My Journal</a>
  </div>
  </div>
  </div>
@@ -3845,10 +3923,10 @@ What's on my mind today..."></textarea>
  <div class="schedule-item">
  <span class="schedule-time">8:45 AM</span>
  <div class="schedule-content">
- <div class="schedule-title"> WORKOUT</div>
+ <div class="schedule-title"> WORKOUT (30-45 min)</div>
  <div class="schedule-details">
  ${day.morning.workout}<br>
- <a href="javascript:void(0)" onclick="goToWorkout(${currentViewingDay})" style="display: inline-block; margin-top: 8px; color: #b59197; font-weight: 700; text-decoration: underline; cursor: pointer;">→ View Full Workout Details</a>
+ <em>Subliminals/rampages OK during workout</em>
  </div>
  </div>
  </div>
@@ -3898,7 +3976,7 @@ What's on my mind today..."></textarea>
  </div>
  <div class="day-details">
  <div class="schedule-item">
- <span class="schedule-time">10:30 AM<br>- 1:30 PM</span>
+ <span class="schedule-time">10:30 AM - 1:30 PM</span>
  <div class="schedule-content">
  <div class="schedule-title"> Pet Care Visits</div>
  <div class="schedule-details">
@@ -4062,6 +4140,7 @@ What's on my mind today..."></textarea>
  )) {
  // Clear the old saved state
  localStorage.removeItem('bingoState_kasey');
+ console.log('Cleared outdated habits');
  }
  }
  
@@ -4073,5 +4152,15 @@ What's on my mind today..."></textarea>
  });
  </script>
 
+
+<script>
+function toggleNav() {
+    const hamburger = document.querySelector('.nav-hamburger');
+    const overlay = document.querySelector('.nav-overlay');
+    hamburger.classList.toggle('open');
+    overlay.classList.toggle('open');
+    document.body.style.overflow = overlay.classList.contains('open') ? 'hidden' : '';
+}
+</script>
 </body>
 </html>
