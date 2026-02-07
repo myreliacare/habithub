@@ -2,15 +2,13 @@
 <html lang="en">
 <head>
  <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#2a1f21">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
  <meta http-equiv="Pragma" content="no-cache">
  <meta http-equiv="Expires" content="0">
  <!-- Version 2.0 - Resources Edit/Delete Fix -->
+ <meta name="mobile-web-app-capable" content="yes">
+ <meta name="apple-mobile-web-app-capable" content="yes">
  <title>Kasey's Habit Hub</title>
  <link rel="preconnect" href="https://fonts.googleapis.com">
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1287,10 +1285,72 @@
  }
 
  
+ /* Top Navigation Bar */
+ .top-nav {
+ position: fixed;
+ top: 0;
+ left: 0;
+ right: 0;
+ background: #2a1f21;
+ border-bottom: 1px solid rgba(163, 184, 153, 0.2);
+ z-index: 9999;
+ padding: 0 24px;
+ }
 
+ .nav-container {
+ max-width: 1200px;
+ margin: 0 auto;
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ height: 60px;
+ }
+ 
+ .nav-logo {
+ font-size: 1.1rem;
+ font-weight: 700;
+ color: #a3b899;
+ text-decoration: none;
+ }
+ 
+ .nav-links {
+ display: flex;
+ gap: 24px;
+ align-items: center;
+ }
+
+ .nav-link {
+ color: rgba(242, 235, 224, 0.7);
+ text-decoration: none;
+ font-size: 0.9rem;
+ transition: color 0.2s;
+ font-weight: 500;
+ }
+
+ .nav-link:hover {
+ color: #a3b899;
+ }
+
+ .nav-link.active {
+ color: #a3b899;
+ }
+
+ 
  @media (max-width: 768px) {
+ .nav-container {
+ height: 52px;
+ flex-wrap: nowrap;
+ }
+
+ .nav-logo {
+ width: auto;
+ text-align: left;
+ margin-bottom: 0;
+ font-size: 0.95rem;
+ }
+
  body {
- padding-top: 68px;
+ padding-top: 80px;
  }
 
  .btn, button {
@@ -1521,291 +1581,55 @@
  height: auto;
  }
 
- 
+ /* ===== HAMBURGER MENU ===== */
+ .nav-hamburger {
+     display: none;
+     background: none;
+     border: none;
+     cursor: pointer;
+     padding: 10px;
+     z-index: 10001;
+ }
+ .nav-hamburger span {
+     display: block;
+     width: 24px;
+     height: 2px;
+     background: #a3b899;
+     margin: 5px 0;
+     transition: all 0.3s ease;
+ }
+ .nav-hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+ .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+ .nav-hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+ .nav-overlay {
+     display: none;
+     position: fixed;
+     top: 0; left: 0; right: 0; bottom: 0;
+     background: rgba(42, 31, 33, 0.97);
+     z-index: 10000;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     gap: 8px;
+ }
+ .nav-overlay.open { display: flex; }
+ .nav-link-mobile {
+     color: rgba(242, 235, 224, 0.7);
+     text-decoration: none;
+     font-size: 1.3rem;
+     font-family: 'Philosopher', Georgia, serif;
+     font-weight: 500;
+     padding: 14px 40px;
+     transition: color 0.2s;
+ }
+ .nav-link-mobile:hover { color: #f2ebe0; }
+ .nav-link-mobile.active { color: #a3b899; }
+ @media (max-width: 768px) {
+     .nav-hamburger { display: block; }
+     .nav-links { display: none; }
+ }
 
-/* ===== APP-LIKE BEHAVIOR ===== */
-html {
-    overflow-x: hidden;
-    overscroll-behavior: none;
-    -webkit-text-size-adjust: 100%;
-    height: 100%;
-    scroll-behavior: smooth;
-    background: #3d2f31 !important;
-}
-
-* {
-    -webkit-tap-highlight-color: transparent;
-}
-
-body {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    overscroll-behavior-y: contain;
-    -webkit-overflow-scrolling: touch;
-    min-height: 100%;
-    min-height: 100dvh;
-}
-
-/* Prevent pull-to-refresh on mobile */
-body.nav-open {
-    overflow: hidden;
-    position: fixed;
-    width: 100%;
-}
-
-/* No text select on interactive elements */
-button, .btn, .nav-link, .nav-link-mobile, .nav-logo, .nav-hamburger,
-select, .tab, .view-toggle-btn, .hub-nav-btn, label {
-    -webkit-user-select: none;
-    user-select: none;
-}
-
-/* Smooth touch scrolling for scrollable containers */
-.scrollable, .container {
-    -webkit-overflow-scrolling: touch;
-}
-
-/* Better touch targets - minimum 44px */
-button, .btn, a.nav-link, .nav-link-mobile, select, input[type="checkbox"] {
-    min-height: 44px;
-    min-width: 44px;
-}
-
-a.nav-link {
-    display: inline-flex;
-    align-items: center;
-}
-
-/* Safe area insets for notched phones */
-.top-nav {
-    padding-top: env(safe-area-inset-top) !important;
-    padding-left: max(16px, env(safe-area-inset-left)) !important;
-    padding-right: max(16px, env(safe-area-inset-right)) !important;
-}
-
-.container {
-    padding-left: max(16px, env(safe-area-inset-left));
-    padding-right: max(16px, env(safe-area-inset-right));
-    padding-bottom: max(40px, env(safe-area-inset-bottom));
-}
-
-/* Smoother nav overlay - slide up */
-.nav-overlay {
-    display: flex !important;
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(-8px);
-    transition: opacity 0.25s ease, transform 0.25s ease;
-}
-
-.nav-overlay.open {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
-}
-
-/* Active states for touch feedback */
-button:active, .btn:active, .nav-link-mobile:active {
-    opacity: 0.7;
-    transition: opacity 0.05s;
-}
-
-/* Smoother page transitions feel */
-.section, .card, [class*="card"], [class*="section"] {
-    transform: translateZ(0);
-    will-change: auto;
-}
-
-/* Input focus styles - more app-like */
-input:focus, textarea:focus, select:focus {
-    outline: none;
-}
-
-/* Disable long-press context menu on interactive elements (mobile) */
-button, .btn, a, .nav-hamburger {
-    -webkit-touch-callout: none;
-}
-
-@media (max-width: 768px) {
-    /* Account for safe area in nav height */
-    .top-nav {
-        padding-top: env(safe-area-inset-top) !important;
-    }
-}
-/* ===== END APP-LIKE BEHAVIOR ===== */
-
-/* ===== UNIFIED NAV BAR ===== */
-.top-nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: #2a1f21;
-    border-bottom: 1px solid rgba(163, 184, 153, 0.2);
-    z-index: 9999;
-    padding: 0 24px;
-    font-family: 'Philosopher', Georgia, serif;
-}
-
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 56px;
-}
-
-.nav-logo {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #a3b899;
-    text-decoration: none;
-    letter-spacing: 0.03em;
-    white-space: nowrap;
-}
-
-.nav-links {
-    display: flex;
-    gap: 28px;
-    align-items: center;
-}
-
-.nav-link {
-    color: rgba(242, 235, 224, 0.6);
-    text-decoration: none;
-    font-size: 0.88rem;
-    transition: color 0.2s;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-    white-space: nowrap;
-}
-
-.nav-link:hover {
-    color: #f2ebe0;
-}
-
-.nav-link.active {
-    color: #a3b899;
-}
-
-/* Hamburger Button */
-.nav-hamburger {
-    display: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 6px;
-    z-index: 10001;
-}
-
-.nav-hamburger span {
-    display: block;
-    width: 22px;
-    height: 2px;
-    background: #a3b899;
-    margin: 5px 0;
-    transition: all 0.3s ease;
-    border-radius: 1px;
-}
-
-.nav-hamburger.open span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-}
-
-.nav-hamburger.open span:nth-child(2) {
-    opacity: 0;
-}
-
-.nav-hamburger.open span:nth-child(3) {
-    transform: rotate(-45deg) translate(5px, -5px);
-}
-
-/* Mobile Overlay */
-.nav-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(42, 31, 33, 0.97);
-    z-index: 9998;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.nav-overlay.open {
-    display: flex;
-    opacity: 1;
-}
-
-.nav-overlay .nav-link-mobile {
-    color: rgba(242, 235, 224, 0.6);
-    text-decoration: none;
-    font-size: 1.3rem;
-    font-family: 'Philosopher', Georgia, serif;
-    font-weight: 500;
-    padding: 14px 40px;
-    transition: color 0.2s;
-    letter-spacing: 0.05em;
-}
-
-.nav-overlay .nav-link-mobile:hover {
-    color: #f2ebe0;
-}
-
-.nav-overlay .nav-link-mobile.active {
-    color: #a3b899;
-}
-
-@media (max-width: 768px) {
-    .nav-hamburger {
-        display: block;
-    }
-
-    .nav-links {
-        display: none;
-    }
-
-    .nav-container {
-        height: 52px;
-    }
-
-    .nav-logo {
-        font-size: 0.95rem;
-    }
-
-    .top-nav {
-        padding: 0 16px;
-    }
-}
-
-@media (max-width: 480px) {
-    .nav-container {
-        height: 48px;
-    }
-
-    .nav-logo {
-        font-size: 0.88rem;
-    }
-
-    .top-nav {
-        padding: 0 12px;
-    }
-
-    .nav-overlay .nav-link-mobile {
-        font-size: 1.15rem;
-        padding: 12px 40px;
-    }
-}
-/* ===== END UNIFIED NAV BAR ===== */
-
-        </style>
+ </style>
 </head>
 <body data-version="2.1-resources-fix">
  <script>
@@ -1814,7 +1638,6 @@ button, .btn, a, .nav-hamburger {
  const CURRENT_VERSION = '2.1';
  const saved = localStorage.getItem('resources_version_kasey');
  if (saved !== CURRENT_VERSION) {
- console.log('🔥 FORCE CLEARING OLD RESOURCES');
  localStorage.removeItem('resources_kasey');
  localStorage.removeItem('resources_version_kasey');
  localStorage.setItem('resources_version_kasey', CURRENT_VERSION);
@@ -1823,31 +1646,31 @@ button, .btn, a, .nav-hamburger {
  </script>
  <!-- Top Navigation Bar -->
  <nav class="top-nav">
-            <div class="nav-container">
-                <a href="index.html" class="nav-logo">Our Life Hub</a>
-                <div class="nav-links">
-                    <a href="index.html" class="nav-link">Home</a>
-                    <a href="kasey-hub.html" class="nav-link active">Kasey</a>
-                    <a href="charlie-hub.html" class="nav-link">Charlie</a>
-                    <a href="our-dreams.html" class="nav-link">Dreams</a>
-                    <a href="meal-plan.html" class="nav-link">Meals</a>
-                    <a href="settings.html" class="nav-link">Settings</a>
-                </div>
-                <button class="nav-hamburger" onclick="toggleNav()" aria-label="Menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
-        </nav>
-        <div class="nav-overlay" onclick="toggleNav()">
-            <a href="index.html" class="nav-link-mobile">Home</a>
-            <a href="kasey-hub.html" class="nav-link-mobile active">Kasey</a>
-            <a href="charlie-hub.html" class="nav-link-mobile">Charlie</a>
-            <a href="our-dreams.html" class="nav-link-mobile">Dreams</a>
-            <a href="meal-plan.html" class="nav-link-mobile">Meals</a>
-            <a href="settings.html" class="nav-link-mobile">Settings</a>
-        </div>
+ <div class="nav-container">
+ <a href="index.html" class="nav-logo">Our Life Hub</a>
+ <div class="nav-links">
+ <a href="index.html" class="nav-link">Home</a>
+ <a href="kasey-hub.html" class="nav-link active">Kasey</a>
+ <a href="charlie-hub.html" class="nav-link">Charlie</a>
+ <a href="our-dreams.html" class="nav-link">Dreams</a>
+ <a href="meal-plan.html" class="nav-link">Meals</a>
+ <a href="settings.html" class="nav-link">Settings</a>
+ </div>
+ <button class="nav-hamburger" id="navHamburger" onclick="toggleNav()" aria-label="Menu">
+     <span></span>
+     <span></span>
+     <span></span>
+ </button>
+ </div>
+ </nav>
+ <div class="nav-overlay" id="navOverlay" onclick="toggleNav()">
+     <a href="index.html" class="nav-link-mobile">Home</a>
+     <a href="kasey-hub.html" class="nav-link-mobile active">Kasey</a>
+     <a href="charlie-hub.html" class="nav-link-mobile">Charlie</a>
+     <a href="our-dreams.html" class="nav-link-mobile">Dreams</a>
+     <a href="meal-plan.html" class="nav-link-mobile">Meals</a>
+     <a href="settings.html" class="nav-link-mobile">Settings</a>
+ </div>
 
 
  <div class="container">
@@ -3216,7 +3039,6 @@ What's on my mind today..."></textarea>
  
  // Force complete reset if version doesn't match
  if (savedVersion !== RESOURCE_VERSION) {
- console.log('🔄 RESETTING RESOURCES - Version ' + RESOURCE_VERSION);
  // Clear everything
  localStorage.removeItem('resources_kasey');
  localStorage.removeItem('resources_version_kasey');
@@ -3225,12 +3047,10 @@ What's on my mind today..."></textarea>
  // Save version
  localStorage.setItem('resources_version_kasey', RESOURCE_VERSION);
  localStorage.setItem('resources_kasey', JSON.stringify(resources));
- console.log('✅ Resources reset complete:', resources);
  } else {
  // Load saved resources
  const savedData = localStorage.getItem('resources_kasey');
  resources = savedData ? JSON.parse(savedData) : JSON.parse(JSON.stringify(defaultResources));
- console.log('📂 Loaded existing resources:', resources);
  }
  
  renderAllResources();
@@ -3276,9 +3096,7 @@ What's on my mind today..."></textarea>
  }
 
  function renderAllResources() {
- console.log('Rendering all resources:', Object.keys(resources));
  Object.keys(resources).forEach(category => {
- console.log(`Rendering ${category}:`, resources[category]);
  renderResourceCategory(category);
  });
  }
@@ -3286,7 +3104,6 @@ What's on my mind today..."></textarea>
  function renderResourceCategory(category) {
  const container = document.getElementById(`${category}-items`);
  if (!container) {
- console.error(`Container not found for category: ${category}`);
  return;
  }
 
@@ -3295,7 +3112,6 @@ What's on my mind today..."></textarea>
  return;
  }
 
- console.log(`Rendering ${resources[category].length} items for ${category}`);
  container.innerHTML = '';
  resources[category].forEach((item, index) => {
  const itemDiv = document.createElement('div');
@@ -3324,7 +3140,6 @@ What's on my mind today..."></textarea>
  `;
  container.appendChild(itemDiv);
  });
- console.log(`Finished rendering ${category}`);
  }
 
  function showAddResourceForm(category) {
@@ -4254,7 +4069,6 @@ What's on my mind today..."></textarea>
  )) {
  // Clear the old saved state
  localStorage.removeItem('bingoState_kasey');
- console.log('Cleared outdated habits');
  }
  }
  
@@ -4266,21 +4080,20 @@ What's on my mind today..."></textarea>
  });
  </script>
 
-
 <script>
 function toggleNav() {
-    const hamburger = document.querySelector('.nav-hamburger');
-    const overlay = document.querySelector('.nav-overlay');
-    const isOpen = overlay.classList.contains('open');
-    
+    var h = document.getElementById('navHamburger');
+    var o = document.getElementById('navOverlay');
+    if (!h || !o) return;
+    var isOpen = o.classList.contains('open');
     if (isOpen) {
-        hamburger.classList.remove('open');
-        overlay.classList.remove('open');
-        document.body.classList.remove('nav-open');
+        h.classList.remove('open');
+        o.classList.remove('open');
+        document.body.style.overflow = '';
     } else {
-        hamburger.classList.add('open');
-        overlay.classList.add('open');
-        document.body.classList.add('nav-open');
+        h.classList.add('open');
+        o.classList.add('open');
+        document.body.style.overflow = 'hidden';
     }
 }
 </script>
