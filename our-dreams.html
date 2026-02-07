@@ -88,16 +88,17 @@
         }
 
         .section-nav-dropdown {
-            margin-bottom: 32px;
+            margin-bottom: 20px;
+            text-align: center;
         }
 
         #sectionSelect {
-            width: 100%;
+            width: auto;
             background: #EBE0D6;
             border: 1px solid #7ba886;
             color: #7ba886;
-            padding: 16px;
-            font-size: 1rem;
+            padding: 10px 36px 10px 14px;
+            font-size: 0.9rem;
             cursor: pointer;
             font-family: inherit;
             font-weight: 500;
@@ -107,9 +108,8 @@
             -moz-appearance: none;
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237ba886' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
             background-repeat: no-repeat;
-            background-position: right 12px center;
-            background-size: 20px;
-            padding-right: 40px;
+            background-position: right 10px center;
+            background-size: 16px;
         }
 
         #sectionSelect:hover {
@@ -125,7 +125,7 @@
         #sectionSelect option {
             background: #EBE0D6;
             color: #4a3a3c;
-            padding: 12px;
+            padding: 8px;
         }
 
         .dreams-tab {
@@ -384,6 +384,27 @@
             transition: all 0.2s ease;
             font-family: inherit;
             min-width: 60px;
+            position: relative;
+        }
+
+        .icon-btn.saving {
+            pointer-events: none;
+            color: transparent;
+            border-color: #7ba886;
+        }
+
+        .icon-btn.saving::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 12px;
+            height: 12px;
+            margin: -6px 0 0 -6px;
+            border: 2px solid rgba(123, 168, 134, 0.3);
+            border-top-color: #7ba886;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
         }
 
         .icon-btn:hover {
@@ -407,12 +428,12 @@
             background: transparent;
             border: 1px solid #d4b5b8;
             color: #7a6668;
-            padding: 12px;
+            padding: 10px;
             cursor: pointer;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             transition: all 0.2s ease;
             font-family: inherit;
-            margin-top: 8px;
+            margin-top: 6px;
         }
 
         .add-dream-btn:hover {
@@ -423,26 +444,42 @@
 
         .dream-form {
             display: none;
-            background: #EBE0D6;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
             padding: 20px;
-            margin-top: 15px;
-            margin-bottom: 20px;
-            border: 1px solid #e8d5d8;
         }
 
         .dream-form.active {
-            display: block;
+            display: flex;
+        }
+
+        .dream-form form {
+            background: #EBE0D6;
+            padding: 28px 24px;
+            border: 1px solid #b59197;
+            width: 100%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .form-group label {
             display: block;
             color: #7a6668;
-            font-size: 0.85rem;
-            margin-bottom: 6px;
+            font-size: 0.8rem;
+            margin-bottom: 5px;
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
@@ -454,14 +491,14 @@
             background: #EBE0D6;
             border: 1px solid #d4b5b8;
             color: #4a3a3c;
-            padding: 10px;
-            font-size: 0.9rem;
+            padding: 9px 10px;
+            font-size: 0.88rem;
             font-family: inherit;
         }
 
         .form-group textarea {
             resize: vertical;
-            min-height: 80px;
+            min-height: 60px;
         }
 
         .form-group input[type="checkbox"] {
@@ -474,7 +511,7 @@
         .checkbox-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            gap: 8px;
             margin-top: 8px;
         }
 
@@ -483,10 +520,10 @@
             align-items: center;
             gap: 8px;
             cursor: pointer;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             text-transform: none;
             color: #4a3a3c;
-            padding: 8px;
+            padding: 6px 8px;
             background: #EBE0D6;
             border: 1px solid #d4b5b8;
             transition: all 0.2s ease;
@@ -517,11 +554,52 @@
             font-size: 0.85rem;
             transition: all 0.2s ease;
             font-family: inherit;
+            position: relative;
+            min-width: 70px;
         }
 
         .form-actions button[type="submit"]:hover {
             background: #b59197;
             color: #4a3a3c;
+        }
+
+        .form-actions button[type="submit"].saving {
+            pointer-events: none;
+            color: transparent;
+            border-color: #7ba886;
+            background: rgba(123, 168, 134, 0.1);
+        }
+
+        .form-actions button[type="submit"].saving::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 16px;
+            height: 16px;
+            margin: -8px 0 0 -8px;
+            border: 2px solid rgba(123, 168, 134, 0.3);
+            border-top-color: #7ba886;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .save-success {
+            text-align: center;
+            color: #7ba886;
+            font-size: 0.85rem;
+            padding: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-style: italic;
+        }
+
+        .save-success.visible {
+            opacity: 1;
         }
 
         .empty-state {
@@ -664,6 +742,24 @@
             .page-title {
                 font-size: 2rem;
             }
+
+            .dream-form {
+                padding: 12px;
+            }
+
+            .dream-form form {
+                padding: 20px 16px;
+                max-height: 85vh;
+            }
+
+            .checkbox-grid {
+                gap: 6px;
+            }
+
+            .checkbox-label {
+                padding: 5px 6px;
+                font-size: 0.78rem;
+            }
         }
 
         /* ===== NAV BAR ===== */
@@ -727,16 +823,16 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 0;
         }
         .nav-overlay.open { display: flex; }
         .nav-link-mobile {
             color: rgba(242, 235, 224, 0.7);
             text-decoration: none;
-            font-size: 1.3rem;
+            font-size: 1.05rem;
             font-family: 'Philosopher', Georgia, serif;
             font-weight: 500;
-            padding: 18px 40px;
+            padding: 12px 40px;
             transition: color 0.2s;
             display: block;
             width: 100%;
@@ -809,7 +905,7 @@
                 </div>
                 
                 <div class="dream-form" id="restaurants-form">
-                    <form onsubmit="addDream(event, 'restaurants')">
+                    <form onsubmit="addDream(event, 'restaurants'); return false;">
                         <div class="form-group">
                             <label>Restaurant Name</label>
                             <input type="text" name="title" required placeholder="Name of the place">
@@ -902,7 +998,7 @@
                 </div>
                 
                 <div class="dream-form" id="places-form">
-                    <form onsubmit="addDream(event, 'places')">
+                    <form onsubmit="addDream(event, 'places'); return false;">
                         <div class="form-group">
                             <label>Place Name</label>
                             <input type="text" name="title" required placeholder="Where do you want to go?">
@@ -995,7 +1091,7 @@
                 <button class="add-dream-btn" onclick="showForm('kasey-wishlist')">+ Add to Kasey's List</button>
                 
                 <div class="dream-form" id="kasey-wishlist-form">
-                    <form onsubmit="addDream(event, 'kasey-wishlist')">
+                    <form onsubmit="addDream(event, 'kasey-wishlist'); return false;">
                         <div class="form-group">
                             <label>Item or Experience</label>
                             <input type="text" name="title" required placeholder="What does Kasey want?">
@@ -1036,7 +1132,7 @@
                 <button class="add-dream-btn" onclick="showForm('charlie-wishlist')">+ Add to Charlie's List</button>
                 
                 <div class="dream-form" id="charlie-wishlist-form">
-                    <form onsubmit="addDream(event, 'charlie-wishlist')">
+                    <form onsubmit="addDream(event, 'charlie-wishlist'); return false;">
                         <div class="form-group">
                             <label>Item or Experience</label>
                             <input type="text" name="title" required placeholder="What does Charlie want?">
@@ -1080,7 +1176,7 @@
                 <button class="add-dream-btn" onclick="showForm('travel')">+ Add Travel Dream</button>
                 
                 <div class="dream-form" id="travel-form">
-                    <form onsubmit="addDream(event, 'travel')">
+                    <form onsubmit="addDream(event, 'travel'); return false;">
                         <div class="form-group">
                             <label>Destination</label>
                             <input type="text" name="title" required placeholder="Where do you want to go?">
@@ -1127,7 +1223,7 @@
                 </div>
                 
                 <div class="dream-form" id="shows-movies-form">
-                    <form onsubmit="addDream(event, 'shows-movies')">
+                    <form onsubmit="addDream(event, 'shows-movies'); return false;">
                         <div class="form-group">
                             <label>Title</label>
                             <input type="text" name="title" required placeholder="Name of the show or movie">
@@ -1171,7 +1267,7 @@
                 <button class="add-dream-btn" onclick="showForm('bucket')">+ Add to Bucket List</button>
                 
                 <div class="dream-form" id="bucket-form">
-                    <form onsubmit="addDream(event, 'bucket')">
+                    <form onsubmit="addDream(event, 'bucket'); return false;">
                         <div class="form-group">
                             <label>Experience or Goal</label>
                             <input type="text" name="title" required placeholder="What do you want to do together?">
@@ -1215,7 +1311,7 @@
                 <button class="add-dream-btn" onclick="showForm('home')">+ Add Home Feature</button>
                 
                 <div class="dream-form" id="home-form">
-                    <form onsubmit="addDream(event, 'home')">
+                    <form onsubmit="addDream(event, 'home'); return false;">
                         <div class="form-group">
                             <label>Feature or Room</label>
                             <input type="text" name="title" required placeholder="What do you want in your dream home?">
@@ -1259,7 +1355,7 @@
                 <button class="add-dream-btn" onclick="showForm('pets')">+ Add Pet Dream</button>
                 
                 <div class="dream-form" id="pets-form">
-                    <form onsubmit="addDream(event, 'pets')">
+                    <form onsubmit="addDream(event, 'pets'); return false;">
                         <div class="form-group">
                             <label>Pet Type or Name Idea</label>
                             <input type="text" name="title" required placeholder="What kind of pet?">
@@ -1303,7 +1399,7 @@
                 <button class="add-dream-btn" onclick="showForm('traditions')">+ Add Tradition Idea</button>
                 
                 <div class="dream-form" id="traditions-form">
-                    <form onsubmit="addDream(event, 'traditions')">
+                    <form onsubmit="addDream(event, 'traditions'); return false;">
                         <div class="form-group">
                             <label>Tradition Name</label>
                             <input type="text" name="title" required placeholder="What tradition do you want to start?">
@@ -1425,7 +1521,16 @@
         };
 
         window.showForm = function(category) {
-            document.getElementById(category + '-form').classList.add('active');
+            var formEl = document.getElementById(category + '-form');
+            formEl.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            // Close on backdrop click
+            formEl._backdropHandler = function(e) {
+                if (e.target === formEl) {
+                    window.hideForm(category);
+                }
+            };
+            formEl.addEventListener('click', formEl._backdropHandler);
         };
 
         window.hideForm = function(category) {
@@ -1435,11 +1540,25 @@
             var preview = document.getElementById(category + '-preview');
             if (preview) preview.innerHTML = '';
             delete currentImageData[category];
+            document.body.style.overflow = '';
+            if (form._backdropHandler) {
+                form.removeEventListener('click', form._backdropHandler);
+                delete form._backdropHandler;
+            }
         };
 
         window.addDream = async function(e, category) {
             e.preventDefault();
-            var formData = new FormData(e.target);
+            var form = e.target;
+            var submitBtn = form.querySelector('button[type="submit"]');
+            var cancelBtn = form.querySelector('button[type="button"]');
+            var originalText = submitBtn.textContent;
+
+            // Show saving state
+            submitBtn.classList.add('saving');
+            if (cancelBtn) cancelBtn.style.pointerEvents = 'none';
+
+            var formData = new FormData(form);
 
             var dream = {
                 id: Date.now(),
@@ -1462,23 +1581,50 @@
                 if (ptypes.length > 0) dream.placeTypes = ptypes;
             }
 
-            // Try Firebase first, fall back to localStorage
+            var savedToFirebase = false;
+
+            // Try Firebase first with timeout, fall back to localStorage
             if (database && firebaseRef && firebasePush) {
                 try {
                     var dreamsRef = firebaseRef(database, 'dreams/' + category);
-                    await firebasePush(dreamsRef, dream);
-                    window.hideForm(category);
-                    return;
+                    var pushPromise = firebasePush(dreamsRef, dream);
+                    var timeoutPromise = new Promise(function(_, reject) {
+                        setTimeout(function() { reject(new Error('timeout')); }, 5000);
+                    });
+                    await Promise.race([pushPromise, timeoutPromise]);
+                    savedToFirebase = true;
                 } catch (error) { /* fall through to local */ }
             }
 
             // localStorage fallback
-            dream.firebaseId = 'local_' + dream.id;
-            if (!dreams[category]) dreams[category] = [];
-            dreams[category].push(dream);
-            saveToLocal(category);
-            renderDreams(category);
-            window.hideForm(category);
+            if (!savedToFirebase) {
+                dream.firebaseId = 'local_' + dream.id;
+                if (!dreams[category]) dreams[category] = [];
+                dreams[category].push(dream);
+                saveToLocal(category);
+                renderDreams(category);
+            }
+
+            // Show saved confirmation briefly
+            submitBtn.classList.remove('saving');
+            submitBtn.textContent = 'Saved!';
+            submitBtn.style.borderColor = '#7ba886';
+            submitBtn.style.color = '#7ba886';
+
+            // Auto-expand the list so user sees their new item
+            var listEl = document.getElementById(category + '-list');
+            if (listEl) {
+                listEl.classList.add('expanded');
+                localStorage.setItem('dreamListExpanded_' + category, 'true');
+            }
+
+            setTimeout(function() {
+                submitBtn.textContent = originalText;
+                submitBtn.style.borderColor = '';
+                submitBtn.style.color = '';
+                if (cancelBtn) cancelBtn.style.pointerEvents = '';
+                window.hideForm(category);
+            }, 800);
         };
 
         window.toggleDreamList = function(category) {
@@ -1488,7 +1634,9 @@
             localStorage.setItem('dreamListExpanded_' + category, isExpanded);
         };
 
-        window.toggleAchieved = function(category, firebaseId, newAchievedState) {
+        window.toggleAchieved = async function(category, firebaseId, newAchievedState, btn) {
+            if (btn) btn.classList.add('saving');
+
             if (firebaseId.startsWith('local_')) {
                 var dream = dreams[category].find(function(d) { return d.firebaseId === firebaseId; });
                 if (dream) {
@@ -1498,24 +1646,47 @@
                     if (newAchievedState) showCelebration(dream.title);
                 }
             } else if (database && firebaseRef && firebaseUpdate) {
-                var dreamRef = firebaseRef(database, 'dreams/' + category + '/' + firebaseId);
-                firebaseUpdate(dreamRef, { achieved: newAchievedState });
+                try {
+                    var dreamRef = firebaseRef(database, 'dreams/' + category + '/' + firebaseId);
+                    var updatePromise = firebaseUpdate(dreamRef, { achieved: newAchievedState });
+                    var timeoutPromise = new Promise(function(_, reject) {
+                        setTimeout(function() { reject(new Error('timeout')); }, 5000);
+                    });
+                    await Promise.race([updatePromise, timeoutPromise]);
+                } catch(error) {
+                    var d = dreams[category].find(function(x) { return x.firebaseId === firebaseId; });
+                    if (d) { d.achieved = newAchievedState; saveToLocal(category); renderDreams(category); }
+                }
                 if (newAchievedState) {
                     var d = dreams[category].find(function(x) { return x.firebaseId === firebaseId; });
                     if (d) showCelebration(d.title);
                 }
             }
+
+            if (btn) btn.classList.remove('saving');
         };
 
-        window.deleteDream = function(category, firebaseId) {
+        window.deleteDream = async function(category, firebaseId, btn) {
             if (confirm('Delete this dream?')) {
+                if (btn) btn.classList.add('saving');
+
                 if (firebaseId.startsWith('local_')) {
                     dreams[category] = dreams[category].filter(function(d) { return d.firebaseId !== firebaseId; });
                     saveToLocal(category);
                     renderDreams(category);
                 } else if (database && firebaseRef && firebaseRemove) {
-                    var dreamRef = firebaseRef(database, 'dreams/' + category + '/' + firebaseId);
-                    firebaseRemove(dreamRef);
+                    try {
+                        var dreamRef = firebaseRef(database, 'dreams/' + category + '/' + firebaseId);
+                        var removePromise = firebaseRemove(dreamRef);
+                        var timeoutPromise = new Promise(function(_, reject) {
+                            setTimeout(function() { reject(new Error('timeout')); }, 5000);
+                        });
+                        await Promise.race([removePromise, timeoutPromise]);
+                    } catch(error) {
+                        dreams[category] = dreams[category].filter(function(d) { return d.firebaseId !== firebaseId; });
+                        saveToLocal(category);
+                        renderDreams(category);
+                    }
                 }
             }
         };
@@ -1659,9 +1830,9 @@
                     (dream.image ? '<img src="' + dream.image + '" class="dream-item-image" onclick="openLightbox(this.src)" alt="' + escapeHtml(dream.title) + '">' : '') +
                     allTags + '</div>' +
                     '<div class="dream-item-actions">' +
-                    '<button class="icon-btn ' + (dream.achieved ? 'achieved' : '') + '" onclick="toggleAchieved(\'' + category + '\', \'' + dream.firebaseId + '\', ' + !dream.achieved + ')">' +
+                    '<button class="icon-btn ' + (dream.achieved ? 'achieved' : '') + '" onclick="toggleAchieved(\'' + category + '\', \'' + dream.firebaseId + '\', ' + !dream.achieved + ', this)">' +
                     (dream.achieved ? '&#10004; Done' : 'Mark Done') + '</button>' +
-                    '<button class="icon-btn" onclick="deleteDream(\'' + category + '\', \'' + dream.firebaseId + '\')">' + 'Delete</button>' +
+                    '<button class="icon-btn" onclick="deleteDream(\'' + category + '\', \'' + dream.firebaseId + '\', this)">' + 'Delete</button>' +
                     '</div></div>';
             });
 
