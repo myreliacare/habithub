@@ -739,6 +739,7 @@
             transform: translateX(-20px);
         }
         .grocery-item:last-of-type { margin-bottom: 0; }
+        #groceryList.collapsed { display: none; }
         .grocery-item input[type="checkbox"] {
             width: 20px; height: 20px;
             accent-color: #a3b899;
@@ -1153,13 +1154,15 @@
 
         <!-- Grocery List -->
         <div class="section">
-            <div class="section-title">Grocery List</div>
-            <div id="groceryList"></div>
+            <div style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="toggleGroceryList()">
+                <div class="section-title" style="margin-bottom: 0;">Grocery List</div>
+                <span id="groceryExpandBtn" style="color:#a3b899; font-size:0.85rem;">▼</span>
+            </div>
+            <div id="groceryList" class="collapsed"></div>
             <div class="add-input">
                 <input type="text" id="groceryInput" placeholder="Add item..." onkeypress="if(event.key==='Enter') addGrocery()">
                 <button onclick="addGrocery()">+</button>
             </div>
-            <button onclick="loadMealPlanGroceries()" style="width:100%; margin-top:10px; padding:12px; background:rgba(163,184,153,0.1); border:1px solid rgba(163,184,153,0.3); color:#a3b899; font-family:inherit; font-size:0.85rem; cursor:pointer; transition:all 0.2s;" onmouseover="this.style.background='rgba(163,184,153,0.2)'" onmouseout="this.style.background='rgba(163,184,153,0.1)'">Load Week 1 Groceries</button>
         </div>
 
         <!-- Phone Book -->
@@ -3488,10 +3491,10 @@
             
             if (list.classList.contains('collapsed')) {
                 list.classList.remove('collapsed');
-                btn.textContent = 'Show Less';
+                btn.textContent = '▲';
             } else {
                 list.classList.add('collapsed');
-                btn.textContent = 'Show More';
+                btn.textContent = '▼';
             }
         }
 
