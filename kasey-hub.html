@@ -1607,6 +1607,8 @@
      .nav-links { display: none; }
  }
 
+ @keyframes spin { to { transform: rotate(360deg); } }
+
  </style>
 </head>
 <body data-version="2.1-resources-fix">
@@ -2387,7 +2389,7 @@
  <button class="add-event-btn" onclick="toggleVideoForm()">Add Video</button>
  
  <div class="event-form" id="videoForm">
- <form onsubmit="addVideo(event)">
+ <form onsubmit="addVideo(event); return false;">
  <div class="form-group">
  <label>Video Title</label>
  <input type="text" name="title" required>
@@ -2395,6 +2397,7 @@
  <div class="form-group">
  <label>Upload Video from Phone</label>
  <input type="file" name="video" accept="video/*" id="videoFile" onchange="handleVideoUpload()">
+ <div id="videoUploadStatus" style="margin-top: 6px; font-size: 0.82rem; color: #7ba886; display: none;"></div>
  <div style="text-align: center; color: #999; margin: 8px 0; font-size: 0.85rem;">&mdash; OR &mdash;</div>
  </div>
  <div class="form-group">
@@ -2407,7 +2410,7 @@
  </div>
  <div class="form-actions">
  <button type="button" class="btn" onclick="toggleVideoForm()">Cancel</button>
- <button type="submit" class="btn">Save Video</button>
+ <button type="submit" class="btn" id="videoSaveBtn">Save Video</button>
  </div>
  </form>
  </div>
@@ -3199,6 +3202,8 @@ What's on my mind today..."></textarea>
 
  function handleVideoUpload() {
  const fileInput = document.getElementById('videoFile');
+ const status = document.getElementById('videoUploadStatus');
+ const saveBtn = document.getElementById('videoSaveBtn');
  const file = fileInput.files[0];
  if (file) {
  const sizeMB = (file.size / 1024 / 1024).toFixed(1);
@@ -3207,8 +3212,14 @@ What's on my mind today..."></textarea>
  fileInput.value = '';
  return;
  }
+ // Show processing status
+ status.style.display = 'block';
+ status.innerHTML = '<span style="display:inline-block;width:12px;height:12px;border:2px solid rgba(123,168,134,0.3);border-top-color:#7ba886;border-radius:50%;animation:spin 0.6s linear infinite;vertical-align:middle;margin-right:6px;"></span> Processing video (' + sizeMB + 'MB)...';
+ saveBtn.disabled = true;
+ saveBtn.style.opacity = '0.5';
+
  if (file.size > 2 * 1024 * 1024) {
- alert('Warning: Video is ' + sizeMB + 'MB. May load slowly.');
+ status.innerHTML = '<span style="display:inline-block;width:12px;height:12px;border:2px solid rgba(123,168,134,0.3);border-top-color:#7ba886;border-radius:50%;animation:spin 0.6s linear infinite;vertical-align:middle;margin-right:6px;"></span> Processing large video (' + sizeMB + 'MB) — this may take a moment...';
  }
  const reader = new FileReader();
  reader.onload = function(e) {
@@ -3218,6 +3229,16 @@ What's on my mind today..."></textarea>
  name: file.name
  };
  document.getElementById('videoLink').value = '';
+ status.innerHTML = '&#10004; Video ready (' + sizeMB + 'MB)';
+ status.style.color = '#7ba886';
+ saveBtn.disabled = false;
+ saveBtn.style.opacity = '1';
+ };
+ reader.onerror = function() {
+ status.innerHTML = '&#10008; Failed to process video. Try again.';
+ status.style.color = '#c97a7a';
+ saveBtn.disabled = false;
+ saveBtn.style.opacity = '1';
  };
  reader.readAsDataURL(file);
  }
@@ -3255,13 +3276,27 @@ What's on my mind today..."></textarea>
  if (!form.classList.contains('active')) {
  form.querySelector('form').reset();
  pendingVideoFile = null;
+ const status = document.getElementById('videoUploadStatus');
+ if (status) { status.style.display = 'none'; status.innerHTML = ''; }
+ const saveBtn = document.getElementById('videoSaveBtn');
+ if (saveBtn) { saveBtn.disabled = false; saveBtn.style.opacity = '1'; saveBtn.style.cssText = ''; saveBtn.textContent = 'Save Video'; }
  }
  }
 
  function addVideo(e) {
  e.preventDefault();
+ const saveBtn = document.getElementById('videoSaveBtn');
+ const status = document.getElementById('videoUploadStatus');
+ const origText = saveBtn.textContent;
+
+ // Show saving state
+ saveBtn.textContent = '';
+ saveBtn.style.cssText = 'position:relative;pointer-events:none;min-width:90px;color:transparent;border-color:#7ba886;background:rgba(123,168,134,0.1);';
+ const spinner = document.createElement('span');
+ spinner.style.cssText = 'position:absolute;top:50%;left:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border:2px solid rgba(123,168,134,0.3);border-top-color:#7ba886;border-radius:50%;animation:spin 0.6s linear infinite;';
+ saveBtn.appendChild(spinner);
+
  const formData = new FormData(e.target);
- 
  const video = {
  title: formData.get('title'),
  link: formData.get('link') || null,
@@ -3271,11 +3306,32 @@ What's on my mind today..."></textarea>
  };
 
  videos.push(video);
+
+ try {
  saveVideos();
+ } catch(err) {
+ // localStorage might be full for large videos
+ videos.pop();
+ saveBtn.textContent = origText;
+ saveBtn.style.cssText = '';
+ alert('Could not save — video may be too large for storage. Try using a link instead.');
+ return;
+ }
+
  renderVideos();
+
+ // Show saved confirmation
+ saveBtn.textContent = 'Saved!';
+ saveBtn.style.cssText = 'border-color:#7ba886;color:#7ba886;pointer-events:none;min-width:90px;';
+ 
+ setTimeout(function() {
+ saveBtn.textContent = origText;
+ saveBtn.style.cssText = '';
  e.target.reset();
  pendingVideoFile = null;
+ if (status) { status.style.display = 'none'; status.innerHTML = ''; }
  toggleVideoForm();
+ }, 800);
  }
 
  function renderVideos() {
