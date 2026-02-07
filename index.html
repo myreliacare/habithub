@@ -2,11 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#2a1f21">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Our Life Hub</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -60,16 +56,101 @@
             50% { opacity: 0.5; }
         }
 
-        /* Container mobile overrides */
+        /* Top Navigation Bar */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #2a1f21;
+            border-bottom: 1px solid rgba(163, 184, 153, 0.2);
+            z-index: 9999;
+            padding: 0 24px;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+        }
+        
+        .nav-logo {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #a3b899;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: rgba(242, 235, 224, 0.7);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            color: #a3b899;
+        }
+
+        .nav-link.active {
+            color: #a3b899;
+        }
+
         @media (max-width: 768px) {
+            .nav-links {
+                gap: 12px;
+            }
+            .nav-link {
+                font-size: 0.8rem;
+            }
             .container {
-                padding: 72px 16px 60px;
+                padding: 80px 16px 60px;
+            }
+            .top-nav {
+                padding: 0 12px;
+            }
+            .nav-container {
+                height: 52px;
+            }
+            .nav-logo {
+                font-size: 0.95rem;
             }
         }
 
         @media (max-width: 480px) {
+            .nav-links {
+                gap: 8px;
+            }
+            .nav-link {
+                font-size: 0.72rem;
+            }
+            .nav-logo {
+                font-size: 0.85rem;
+            }
             .container {
-                padding: 64px 10px 50px;
+                padding: 66px 10px 50px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .nav-links {
+                gap: 5px;
+            }
+            .nav-link {
+                font-size: 0.65rem;
+            }
+            .nav-logo {
+                font-size: 0.78rem;
             }
         }
 
@@ -276,7 +357,7 @@
 
         /* Calendar */
         .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
-        .calendar-nav { display: flex; align-items: center; gap: 12px; }
+        .calendar-nav { display: flex; align-items: center; gap: 12px; justify-content: center; }
         .calendar-nav button {
             background: transparent; border: 1px solid rgba(61, 107, 107, 0.4);
             color: #a3b899; padding: 8px 14px; cursor: pointer;
@@ -707,9 +788,6 @@
         .expand-icon { color: rgba(61, 107, 107, 0.5); font-size: 0.65rem; transition: transform 0.3s; }
         .phonebook-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
         .phonebook-content.expanded { max-height: 2000px; }
-        .collapsible-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .collapsible-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
-        .collapsible-content.expanded { max-height: 2000px; }
         .phonebook-search { margin: 16px 0 12px; }
         .phonebook-search input {
             width: 100%; background: #2a1f21;
@@ -863,290 +941,55 @@
             .event-item { flex-direction: column; align-items: flex-start; }
             .event-actions { align-self: flex-end; }
         }
-    
 
-/* ===== APP-LIKE BEHAVIOR ===== */
-html {
-    overflow-x: hidden;
-    overscroll-behavior: none;
-    -webkit-text-size-adjust: 100%;
-    min-height: 100%;
-    scroll-behavior: smooth;
-    background: #3d2f31 !important;
-}
-
-* {
-    -webkit-tap-highlight-color: transparent;
-}
-
-body {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-overflow-scrolling: touch;
-    min-height: 100vh;
-    min-height: 100dvh;
-}
-
-/* Prevent pull-to-refresh on mobile */
-body.nav-open {
-    overflow: hidden;
-    position: fixed;
-    width: 100%;
-}
-
-/* No text select on interactive elements */
-button, .btn, .nav-link, .nav-link-mobile, .nav-logo, .nav-hamburger,
-select, .tab, .view-toggle-btn, .hub-nav-btn, label {
-    -webkit-user-select: none;
-    user-select: none;
-}
-
-/* Smooth touch scrolling for scrollable containers */
-.scrollable, .container {
-    -webkit-overflow-scrolling: touch;
-}
-
-/* Better touch targets - minimum 44px */
-button, .btn, a.nav-link, .nav-link-mobile, select, input[type="checkbox"] {
-    min-height: 44px;
-    min-width: 44px;
-}
-
-a.nav-link {
-    display: inline-flex;
-    align-items: center;
-}
-
-/* Safe area insets for notched phones */
-.top-nav {
-    padding-top: env(safe-area-inset-top) !important;
-    padding-left: max(16px, env(safe-area-inset-left)) !important;
-    padding-right: max(16px, env(safe-area-inset-right)) !important;
-}
-
-.container {
-    padding-left: max(16px, env(safe-area-inset-left));
-    padding-right: max(16px, env(safe-area-inset-right));
-    padding-bottom: max(40px, env(safe-area-inset-bottom));
-}
-
-/* Smoother nav overlay - slide up */
-.nav-overlay {
-    display: flex !important;
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(-8px);
-    transition: opacity 0.25s ease, transform 0.25s ease;
-}
-
-.nav-overlay.open {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
-}
-
-/* Active states for touch feedback */
-button:active, .btn:active, .nav-link-mobile:active {
-    opacity: 0.7;
-    transition: opacity 0.05s;
-}
-
-/* Smoother page transitions feel */
-.section, .card, [class*="card"], [class*="section"] {
-    transform: translateZ(0);
-    will-change: auto;
-}
-
-/* Input focus styles - more app-like */
-input:focus, textarea:focus, select:focus {
-    outline: none;
-}
-
-/* Disable long-press context menu on interactive elements (mobile) */
-button, .btn, a, .nav-hamburger {
-    -webkit-touch-callout: none;
-}
-
-@media (max-width: 768px) {
-    /* Account for safe area in nav height */
-    .top-nav {
-        padding-top: env(safe-area-inset-top) !important;
-    }
-}
-/* ===== END APP-LIKE BEHAVIOR ===== */
-
-/* ===== UNIFIED NAV BAR ===== */
-.top-nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: #2a1f21;
-    border-bottom: 1px solid rgba(163, 184, 153, 0.2);
-    z-index: 9999;
-    padding: 0 24px;
-    font-family: 'Philosopher', Georgia, serif;
-}
-
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 56px;
-}
-
-.nav-logo {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #a3b899;
-    text-decoration: none;
-    letter-spacing: 0.03em;
-    white-space: nowrap;
-}
-
-.nav-links {
-    display: flex;
-    gap: 28px;
-    align-items: center;
-}
-
-.nav-link {
-    color: rgba(242, 235, 224, 0.6);
-    text-decoration: none;
-    font-size: 0.88rem;
-    transition: color 0.2s;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-    white-space: nowrap;
-}
-
-.nav-link:hover {
-    color: #f2ebe0;
-}
-
-.nav-link.active {
-    color: #a3b899;
-}
-
-/* Hamburger Button */
-.nav-hamburger {
-    display: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 6px;
-    z-index: 10001;
-}
-
-.nav-hamburger span {
-    display: block;
-    width: 22px;
-    height: 2px;
-    background: #a3b899;
-    margin: 5px 0;
-    transition: all 0.3s ease;
-    border-radius: 1px;
-}
-
-.nav-hamburger.open span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-}
-
-.nav-hamburger.open span:nth-child(2) {
-    opacity: 0;
-}
-
-.nav-hamburger.open span:nth-child(3) {
-    transform: rotate(-45deg) translate(5px, -5px);
-}
-
-/* Mobile Overlay */
-.nav-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(42, 31, 33, 0.97);
-    z-index: 9998;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.nav-overlay.open {
-    display: flex;
-    opacity: 1;
-}
-
-.nav-overlay .nav-link-mobile {
-    color: rgba(242, 235, 224, 0.6);
-    text-decoration: none;
-    font-size: 1.3rem;
-    font-family: 'Philosopher', Georgia, serif;
-    font-weight: 500;
-    padding: 14px 40px;
-    transition: color 0.2s;
-    letter-spacing: 0.05em;
-}
-
-.nav-overlay .nav-link-mobile:hover {
-    color: #f2ebe0;
-}
-
-.nav-overlay .nav-link-mobile.active {
-    color: #a3b899;
-}
-
-@media (max-width: 768px) {
-    .nav-hamburger {
-        display: block;
-    }
-
-    .nav-links {
-        display: none;
-    }
-
-    .nav-container {
-        height: 52px;
-    }
-
-    .nav-logo {
-        font-size: 0.95rem;
-    }
-
-    .top-nav {
-        padding: 0 16px;
-    }
-}
-
-@media (max-width: 480px) {
-    .nav-container {
-        height: 48px;
-    }
-
-    .nav-logo {
-        font-size: 0.88rem;
-    }
-
-    .top-nav {
-        padding: 0 12px;
-    }
-
-    .nav-overlay .nav-link-mobile {
-        font-size: 1.15rem;
-        padding: 12px 40px;
-    }
-}
-/* ===== END UNIFIED NAV BAR ===== */
-
-        </style>
+        /* ===== HAMBURGER MENU ===== */
+        .nav-hamburger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            z-index: 10001;
+        }
+        .nav-hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: #a3b899;
+            margin: 5px 0;
+            transition: all 0.3s ease;
+        }
+        .nav-hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+        .nav-hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+        .nav-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(42, 31, 33, 0.97);
+            z-index: 10000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .nav-overlay.open { display: flex; }
+        .nav-link-mobile {
+            color: rgba(242, 235, 224, 0.7);
+            text-decoration: none;
+            font-size: 1.3rem;
+            font-family: 'Philosopher', Georgia, serif;
+            font-weight: 500;
+            padding: 14px 40px;
+            transition: color 0.2s;
+        }
+        .nav-link-mobile:hover { color: #f2ebe0; }
+        .nav-link-mobile.active { color: #a3b899; }
+        @media (max-width: 768px) {
+            .nav-hamburger { display: block; }
+            .nav-links { display: none; }
+        }
+    </style>
 </head>
 <body>
         <!-- Top Navigation Bar -->
@@ -1161,14 +1004,14 @@ button, .btn, a, .nav-hamburger {
                     <a href="meal-plan.html" class="nav-link">Meals</a>
                     <a href="settings.html" class="nav-link">Settings</a>
                 </div>
-                <button class="nav-hamburger" onclick="toggleNav()" aria-label="Menu">
+                <button class="nav-hamburger" id="navHamburger" onclick="toggleNav()" aria-label="Menu">
                     <span></span>
                     <span></span>
                     <span></span>
                 </button>
             </div>
         </nav>
-        <div class="nav-overlay" onclick="toggleNav()">
+        <div class="nav-overlay" id="navOverlay" onclick="toggleNav()">
             <a href="index.html" class="nav-link-mobile active">Home</a>
             <a href="kasey-hub.html" class="nav-link-mobile">Kasey</a>
             <a href="charlie-hub.html" class="nav-link-mobile">Charlie</a>
@@ -1310,17 +1153,13 @@ button, .btn, a, .nav-hamburger {
 
         <!-- Grocery List -->
         <div class="section">
-            <div class="collapsible-header" onclick="toggleGroceryList()">
-                <div class="section-title" style="margin-bottom: 0;">Grocery List</div>
-                <span class="expand-icon" id="groceryIcon" style="transform: rotate(-90deg);">▼</span>
+            <div class="section-title">Grocery List</div>
+            <div id="groceryList"></div>
+            <div class="add-input">
+                <input type="text" id="groceryInput" placeholder="Add item..." onkeypress="if(event.key==='Enter') addGrocery()">
+                <button onclick="addGrocery()">+</button>
             </div>
-            <div class="collapsible-content" id="groceryContent">
-                <div id="groceryList" style="margin-top: 16px;"></div>
-                <div class="add-input">
-                    <input type="text" id="groceryInput" placeholder="Add item..." onkeypress="if(event.key==='Enter') addGrocery()">
-                    <button onclick="addGrocery()">+</button>
-                </div>
-            </div>
+            <button onclick="loadMealPlanGroceries()" style="width:100%; margin-top:10px; padding:12px; background:rgba(163,184,153,0.1); border:1px solid rgba(163,184,153,0.3); color:#a3b899; font-family:inherit; font-size:0.85rem; cursor:pointer; transition:all 0.2s;" onmouseover="this.style.background='rgba(163,184,153,0.2)'" onmouseout="this.style.background='rgba(163,184,153,0.1)'">Load Week 1 Groceries</button>
         </div>
 
         <!-- Phone Book -->
@@ -2292,6 +2131,11 @@ button, .btn, a, .nav-hamburger {
         function calendarChangeView(view) {
             calendarView = view;
             
+            // Always reset to today when switching to two-day view
+            if (view === 'twoday') {
+                calendarDate = new Date();
+            }
+            
             // Update button states
             document.querySelectorAll('.view-toggle-btn').forEach(btn => {
                 btn.classList.remove('active');
@@ -2327,18 +2171,20 @@ button, .btn, a, .nav-hamburger {
             const container = document.getElementById('calendarContainer');
             container.innerHTML = '';
             
-            const firstDay = new Date(calendarDate);
-            const secondDay = new Date(calendarDate);
-            secondDay.setDate(firstDay.getDate() + 1);
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(today.getDate() + 1);
+            
+            calendarDate = new Date(today);
             
             document.getElementById('calendarTitle').textContent = 
-                `${firstDay.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${secondDay.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+                `${today.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${tomorrow.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
             
-            const today = new Date();
             const todayStr = today.toDateString();
             
+            const days = [today, tomorrow];
             for (let i = 0; i < 2; i++) {
-                const date = i === 0 ? new Date(firstDay) : new Date(secondDay);
+                const date = days[i];
                 
                 const dayDiv = document.createElement('div');
                 dayDiv.className = 'week-day';
@@ -3571,14 +3417,6 @@ button, .btn, a, .nav-hamburger {
             renderContacts();
         }
 
-        function toggleGroceryList() {
-            const content = document.getElementById('groceryContent');
-            const icon = document.getElementById('groceryIcon');
-            if (!content || !icon) return;
-            content.classList.toggle('expanded');
-            icon.style.transform = content.classList.contains('expanded') ? 'rotate(0deg)' : 'rotate(-90deg)';
-        }
-
         function togglePhonebook() {
             const content = document.getElementById('phonebookContent');
             const icon = document.getElementById('phonebookIcon');
@@ -3644,8 +3482,18 @@ button, .btn, a, .nav-hamburger {
             }
         }
 
-
-
+        function toggleGroceryList() {
+            const list = document.getElementById('groceryList');
+            const btn = document.getElementById('groceryExpandBtn');
+            
+            if (list.classList.contains('collapsed')) {
+                list.classList.remove('collapsed');
+                btn.textContent = 'Show Less';
+            } else {
+                list.classList.add('collapsed');
+                btn.textContent = 'Show More';
+            }
+        }
 
         // MONTHLY CHALLENGE FUNCTIONS
         async function setMonthlyChallenge() {
@@ -3980,21 +3828,20 @@ button, .btn, a, .nav-hamburger {
             }
         }
     </script>
-
 <script>
 function toggleNav() {
-    const hamburger = document.querySelector('.nav-hamburger');
-    const overlay = document.querySelector('.nav-overlay');
-    const isOpen = overlay.classList.contains('open');
-    
+    var h = document.getElementById('navHamburger');
+    var o = document.getElementById('navOverlay');
+    if (!h || !o) return;
+    var isOpen = o.classList.contains('open');
     if (isOpen) {
-        hamburger.classList.remove('open');
-        overlay.classList.remove('open');
-        document.body.classList.remove('nav-open');
+        h.classList.remove('open');
+        o.classList.remove('open');
+        document.body.style.overflow = '';
     } else {
-        hamburger.classList.add('open');
-        overlay.classList.add('open');
-        document.body.classList.add('nav-open');
+        h.classList.add('open');
+        o.classList.add('open');
+        document.body.style.overflow = 'hidden';
     }
 }
 </script>
