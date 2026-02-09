@@ -949,21 +949,6 @@ a.nav-link {
     padding-bottom: max(40px, env(safe-area-inset-bottom));
 }
 
-/* Smoother nav overlay - slide up */
-.nav-overlay {
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(-8px);
-    transition: opacity 0.25s ease, transform 0.25s ease;
-}
-
-.nav-overlay.open {
-    display: flex !important;
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
-}
-
 /* Active states for touch feedback */
 button:active, .btn:active, .nav-link-mobile:active {
     opacity: 0.7;
@@ -997,9 +982,7 @@ button, .btn, a, .nav-hamburger {
 /* ===== UNIFIED NAV BAR ===== */
 .top-nav {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
+    top: 0; left: 0; right: 0;
     background: #2a1f21;
     border-bottom: 1px solid rgba(163, 184, 153, 0.2);
     z-index: 9999;
@@ -1021,116 +1004,75 @@ button, .btn, a, .nav-hamburger {
     font-weight: 700;
     color: #a3b899;
     text-decoration: none;
-    letter-spacing: 0.03em;
     white-space: nowrap;
 }
 
-.nav-links {
-    display: flex;
-    gap: 28px;
-    align-items: center;
-}
-
+.nav-links { display: flex; gap: 28px; align-items: center; }
 .nav-link {
     color: rgba(242, 235, 224, 0.6);
     text-decoration: none;
     font-size: 0.88rem;
-    transition: color 0.2s;
     font-weight: 500;
-    letter-spacing: 0.02em;
     white-space: nowrap;
+    transition: color 0.2s;
 }
 
-.nav-link:hover {
-    color: #f2ebe0;
-}
+.nav-link:hover { color: #f2ebe0; }
+.nav-link.active { color: #a3b899; }
 
-.nav-link.active {
-    color: #a3b899;
-}
-
-/* Hamburger Button */
 .nav-hamburger {
     display: none;
     background: none;
     border: none;
     cursor: pointer;
-    padding: 6px;
+    padding: 10px;
     z-index: 10001;
 }
 
 .nav-hamburger span {
-    display: block;
-    width: 22px;
-    height: 2px;
-    background: #a3b899;
-    margin: 5px 0;
+    display: block; width: 24px; height: 2px;
+    background: #a3b899; margin: 5px 0;
     transition: all 0.3s ease;
-    border-radius: 1px;
 }
 
-.nav-hamburger.open span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-}
-
-.nav-hamburger.open span:nth-child(2) {
-    opacity: 0;
-}
-
-.nav-hamburger.open span:nth-child(3) {
-    transform: rotate(-45deg) translate(5px, -5px);
-}
+.nav-hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
 /* Mobile Overlay */
 .nav-overlay {
     display: none;
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(42, 31, 33, 0.97);
-    z-index: 9998;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: #2a1f21;
+    z-index: 10000;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
+    gap: 0;
 }
 
-.nav-overlay.open {
-    display: flex;
-    opacity: 1;
-}
+.nav-overlay.open { display: flex; }
 
 .nav-overlay .nav-link-mobile {
-    color: rgba(242, 235, 224, 0.6);
+    color: rgba(242, 235, 224, 0.7);
     text-decoration: none;
-    font-size: 1.3rem;
+    font-size: 1.05rem;
     font-family: 'Philosopher', Georgia, serif;
     font-weight: 500;
-    padding: 14px 40px;
+    padding: 12px 40px;
     transition: color 0.2s;
-    letter-spacing: 0.05em;
+    display: block;
+    width: 100%;
+    text-align: center;
 }
 
-.nav-overlay .nav-link-mobile:hover {
-    color: #f2ebe0;
-}
-
-.nav-overlay .nav-link-mobile.active {
-    color: #a3b899;
-}
+.nav-overlay .nav-link-mobile:hover { color: #f2ebe0; }
+.nav-overlay .nav-link-mobile.active { color: #a3b899; }
 
 @media (max-width: 768px) {
-    .nav-hamburger {
-        display: block;
-    }
-
-    .nav-links {
-        display: none;
-    }
+    .nav-hamburger { display: block; }
+    .nav-links { display: none; }
 
     .nav-container {
         height: 52px;
@@ -1176,7 +1118,7 @@ button, .btn, a, .nav-hamburger {
                     <a href="index.html" class="nav-link active">Home</a>
                     <a href="kasey-hub.html" class="nav-link">Kasey</a>
                     <a href="charlie-hub.html" class="nav-link">Charlie</a>
-                    <a href="our-dreams.html" class="nav-link">Dreams</a>
+                    <a href="our-dreams.html" class="nav-link">Us ♡</a>
                     <a href="meal-plan.html" class="nav-link">Meals</a>
                     <a href="settings.html" class="nav-link">Settings</a>
                 </div>
@@ -1191,7 +1133,7 @@ button, .btn, a, .nav-hamburger {
             <a href="index.html" class="nav-link-mobile active">Home</a>
             <a href="kasey-hub.html" class="nav-link-mobile">Kasey</a>
             <a href="charlie-hub.html" class="nav-link-mobile">Charlie</a>
-            <a href="our-dreams.html" class="nav-link-mobile">Dreams</a>
+            <a href="our-dreams.html" class="nav-link-mobile">Us ♡</a>
             <a href="meal-plan.html" class="nav-link-mobile">Meals</a>
             <a href="settings.html" class="nav-link-mobile">Settings</a>
         </div>
