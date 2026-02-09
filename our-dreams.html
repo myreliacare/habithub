@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>Our Life Together</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,6 +19,7 @@
 
         html {
             width: 100%;
+            touch-action: pan-y;
             background: #3d2f31;
         }
 
@@ -32,6 +35,7 @@
             overflow-y: auto;
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
         }
 
         .container {
@@ -85,16 +89,15 @@
 
         .section-nav-dropdown {
             margin-bottom: 20px;
-            text-align: center;
         }
 
         #sectionSelect {
-            width: auto;
+            width: 100%;
             background: #EBE0D6;
             border: 1px solid #7ba886;
             color: #7ba886;
-            padding: 10px 36px 10px 14px;
-            font-size: 0.9rem;
+            padding: 8px 12px;
+            font-size: 0.85rem;
             cursor: pointer;
             font-family: inherit;
             font-weight: 500;
@@ -105,7 +108,8 @@
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237ba886' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
             background-repeat: no-repeat;
             background-position: right 10px center;
-            background-size: 16px;
+            background-size: 14px;
+            padding-right: 30px;
         }
 
         #sectionSelect:hover {
@@ -874,10 +878,6 @@
         <div class="page-header">
             <h1 class="page-title">Our Life Together</h1>
             <p class="page-subtitle">Dreams, goals, ideas & all the things we want to do</p>
-            <div id="syncStatus" style="margin-top: 8px; font-size: 0.75rem; letter-spacing: 0.05em; color: #7a6668; transition: color 0.3s;">
-                <span id="syncDot" style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #7a6668; margin-right: 4px; vertical-align: middle;"></span>
-                <span id="syncText">Connecting...</span>
-            </div>
         </div>
 
         <div class="section-nav-dropdown">
@@ -1853,50 +1853,11 @@
             renderDreams(cat);
         });
 
-        function updateSyncStatus(state, detail) {
-            var dot = document.getElementById('syncDot');
-            var text = document.getElementById('syncText');
-            if (!dot || !text) return;
-            if (state === 'connected') {
-                dot.style.background = '#7ba886';
-                text.textContent = 'Synced';
-                text.style.color = '#7ba886';
-            } else if (state === 'connecting') {
-                dot.style.background = '#d4a055';
-                text.textContent = detail || 'Connecting...';
-                text.style.color = '#d4a055';
-            } else if (state === 'offline') {
-                dot.style.background = '#c97a7a';
-                text.textContent = detail || 'Offline — saving locally';
-                text.style.color = '#c97a7a';
-            }
-        }
-
-        updateSyncStatus('connecting', 'Loading Firebase...');
-
-        // Load Firebase via compat script tags (works everywhere)
-        function loadFirebaseScript(url) {
-            return new Promise(function(resolve, reject) {
-                var script = document.createElement('script');
-                script.src = url;
-                script.onload = resolve;
-                script.onerror = function() { reject(new Error('Failed to load: ' + url)); };
-                document.head.appendChild(script);
-            });
-        }
-
-        var connectTimeout = setTimeout(function() {
-            if (!isConnected) {
-                updateSyncStatus('offline', 'Timed out — saving locally');
-            }
-        }, 12000);
-
+        // === LOAD FIREBASE IN BACKGROUND ===
         (async function() {
             try {
-                await loadFirebaseScript('https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js');
-                updateSyncStatus('connecting', 'Firebase loaded...');
-                await loadFirebaseScript('https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js');
-                updateSyncStatus('connecting', 'Connecting to database...');
+                var appModule = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+                var dbModule = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js');
 
                 var firebaseConfig = {
                     apiKey: "AIzaSyCDda9sPwSY-RQ5rrM5THOvcLtHvcPRYd4",
@@ -1908,24 +1869,17 @@
                     appId: "1:78555830496:web:3e457e54729cc11b825885"
                 };
 
-                if (!firebase.apps.length) {
-                    firebase.initializeApp(firebaseConfig);
-                }
-                var db = firebase.database();
-
-                // Wire up the module-style references for addDream/deleteDream/toggleAchieved
-                database = db;
-                firebaseRef = function(db, path) { return db.ref(path); };
-                firebasePush = function(ref, data) { return ref.push(data); };
-                firebaseRemove = function(ref) { return ref.remove(); };
-                firebaseUpdate = function(ref, data) { return ref.update(data); };
-
-                updateSyncStatus('connecting', 'Listening for data...');
+                var app = appModule.initializeApp(firebaseConfig);
+                database = dbModule.getDatabase(app);
+                firebaseRef = dbModule.ref;
+                firebasePush = dbModule.push;
+                firebaseRemove = dbModule.remove;
+                firebaseUpdate = dbModule.update;
 
                 // Set up real-time listeners
-                var firstDataReceived = false;
                 categories.forEach(function(category) {
-                    db.ref('dreams/' + category).on('value', function(snapshot) {
+                    var dreamsRef = dbModule.ref(database, 'dreams/' + category);
+                    dbModule.onValue(dreamsRef, function(snapshot) {
                         var data = snapshot.val();
                         dreams[category] = [];
                         if (data) {
@@ -1937,7 +1891,7 @@
                         var localItems = loadFromLocal(category);
                         localItems.forEach(function(item) {
                             if (item.firebaseId && item.firebaseId.indexOf('local_') === 0) {
-                                db.ref('dreams/' + category).push(item).then(function() {
+                                dbModule.push(dbModule.ref(database, 'dreams/' + category), item).then(function() {
                                     var remaining = loadFromLocal(category).filter(function(l) { return l.id !== item.id; });
                                     localStorage.setItem('dreams_' + category, JSON.stringify(remaining));
                                 }).catch(function() {});
@@ -1945,22 +1899,14 @@
                         });
                         saveToLocal(category);
                         renderDreams(category);
-
-                        if (!firstDataReceived) {
-                            firstDataReceived = true;
-                            clearTimeout(connectTimeout);
-                            updateSyncStatus('connected');
-                            isConnected = true;
-                        }
+                        isConnected = true;
                     }, function(error) {
-                        clearTimeout(connectTimeout);
-                        updateSyncStatus('offline', 'Access denied — open Firebase rules');
+                        // Firebase error — keep using local data
                     });
                 });
 
             } catch(e) {
-                clearTimeout(connectTimeout);
-                updateSyncStatus('offline', 'Error: ' + (e.message || 'Unknown'));
+                // Firebase failed to load — local storage still works
             }
         })();
     </script>
