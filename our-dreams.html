@@ -170,7 +170,7 @@
         }
 
         .dream-list-toggle:hover {
-            background: #252525;
+            background: #e3d6cc;
         }
 
         .dream-list-toggle-text {
@@ -1881,7 +1881,8 @@
         function syncToFirestore(category) {
             if (window.dreamsDb && window.fsModule) {
                 try {
-                    var itemsForSync = dreams[category].map(function(d) {
+                    var deduped = dedup(dreams[category]);
+                    var itemsForSync = deduped.map(function(d) {
                         var copy = Object.assign({}, d);
                         if (copy.image && copy.image.length > 50000) {
                             copy.image = null;
@@ -1894,10 +1895,25 @@
             }
         }
 
+        // Deduplicate items by firebaseId (keep last occurrence)
+        function dedup(items) {
+            if (!items || !Array.isArray(items)) return [];
+            var seen = {};
+            var result = [];
+            for (var i = items.length - 1; i >= 0; i--) {
+                var key = items[i].firebaseId || ('no_id_' + i);
+                if (!seen[key]) {
+                    seen[key] = true;
+                    result.unshift(items[i]);
+                }
+            }
+            return result;
+        }
+
         function loadFromLocal(category) {
             try {
                 var data = localStorage.getItem('dreams_' + category);
-                return data ? JSON.parse(data) : [];
+                return data ? dedup(JSON.parse(data)) : [];
             } catch(e) { return []; }
         }
 
@@ -2527,6 +2543,8 @@
         // === LOAD LOCAL DATA IMMEDIATELY ===
         categories.forEach(function(cat) {
             dreams[cat] = loadFromLocal(cat);
+            // Save deduped version back to localStorage to clean up any corruption
+            saveToLocal(cat);
             renderDreams(cat);
         });
 
@@ -2567,33 +2585,45 @@
                 // Set up real-time listeners for each category
                 categories.forEach(function(category) {
                     var docRef = fsModule.doc(db, 'dreams', category);
+                    var ignoreNext = false;
+
                     fsModule.onSnapshot(docRef, function(snapshot) {
+                        if (ignoreNext) { ignoreNext = false; return; }
+
                         if (snapshot.exists()) {
                             var data = snapshot.data();
                             if (data && data.items) {
-                                // Merge any local-only items that haven't been synced yet
-                                var localItems = loadFromLocal(category);
-                                var localOnly = localItems.filter(function(item) {
-                                    return item.firebaseId && item.firebaseId.indexOf('local_') === 0;
+                                // Deduplicate Firestore data
+                                var firestoreItems = dedup(data.items);
+                                var hadDuplicates = firestoreItems.length < data.items.length;
+
+                                // Merge: keep local images that Firestore stripped
+                                var localItems = dreams[category] || [];
+                                var localImageMap = {};
+                                localItems.forEach(function(item) {
+                                    if (item.image && item.firebaseId) localImageMap[item.firebaseId] = item.image;
                                 });
 
-                                dreams[category] = data.items;
+                                firestoreItems.forEach(function(item) {
+                                    if (!item.image && localImageMap[item.firebaseId]) {
+                                        item.image = localImageMap[item.firebaseId];
+                                    }
+                                });
 
-                                // Push local-only items to Firebase
-                                if (localOnly.length > 0) {
-                                    localOnly.forEach(function(item) {
-                                        item.firebaseId = 'item_' + item.id;
-                                        dreams[category].push(item);
-                                    });
-                                    syncToFirestore(category);
-                                }
-
+                                dreams[category] = firestoreItems;
                                 saveToLocal(category);
                                 renderDreams(category);
+
+                                // Push cleaned data back to Firestore if it had dupes
+                                if (hadDuplicates) {
+                                    ignoreNext = true;
+                                    syncToFirestore(category);
+                                }
                             }
                         } else {
                             // No data in Firestore yet — push local data up
                             if (dreams[category] && dreams[category].length > 0) {
+                                ignoreNext = true;
                                 syncToFirestore(category);
                             }
                         }
