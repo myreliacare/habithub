@@ -199,7 +199,7 @@
         .reminder-btn.subtle:hover { border-color: rgba(224, 210, 208, 0.4); color: #e0d2d0; }
 
         .quick-add { display: flex; gap: 0; margin-bottom: 6px; }
-        .quick-add input {
+        .quick-add input[type="text"] {
             flex: 1;
             background: rgba(61, 47, 49, 0.3);
             border: 1px solid rgba(163, 184, 153, 0.3);
@@ -209,13 +209,33 @@
             font-size: 0.9rem;
             font-family: inherit;
             transition: all 0.2s ease;
+            border-radius: 0;
         }
-        .quick-add input:focus {
+        .quick-add input[type="text"]:focus {
             outline: none;
             border-color: rgba(163, 184, 153, 0.6);
             background: rgba(61, 47, 49, 0.5);
         }
-        .quick-add input::placeholder { color: rgba(242, 235, 224, 0.35); font-style: italic; }
+        .quick-add input[type="text"]::placeholder { color: rgba(242, 235, 224, 0.35); font-style: italic; }
+        .quick-add input[type="date"] {
+            background: rgba(61, 47, 49, 0.3);
+            border: 1px solid rgba(163, 184, 153, 0.3);
+            border-right: none;
+            color: #f2ebe0;
+            padding: 13px 10px;
+            font-size: 0.8rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            width: 130px;
+            min-width: 130px;
+            border-radius: 0;
+            color-scheme: dark;
+        }
+        .quick-add input[type="date"]:focus {
+            outline: none;
+            border-color: rgba(163, 184, 153, 0.6);
+            background: rgba(61, 47, 49, 0.5);
+        }
         .quick-add button {
             background: #a3b899;
             border: 1px solid #a3b899;
@@ -832,7 +852,8 @@
             .grocery-item span { font-size: 0.9rem; }
             .add-input input { padding: 12px; font-size: 0.9rem; }
             .add-input button { padding: 12px 16px; }
-            .quick-add input { padding: 12px; font-size: 0.85rem; }
+            .quick-add input[type="text"] { padding: 12px; font-size: 0.85rem; }
+            .quick-add input[type="date"] { padding: 12px 8px; font-size: 0.75rem; width: 115px; min-width: 115px; }
             .quick-add button { padding: 12px 14px; }
 
             /* Phone book */
@@ -1217,6 +1238,7 @@ button, .btn, a, .nav-hamburger {
             </div>
             <div class="quick-add">
                 <input type="text" id="quickReminderInput" placeholder="Add a quick reminder..." onkeypress="if(event.key==='Enter') addQuickReminder()">
+                <input type="date" id="quickReminderDate">
                 <button onclick="addQuickReminder()">+</button>
             </div>
             <div class="manage-link">
@@ -1757,15 +1779,27 @@ button, .btn, a, .nav-hamburger {
                 if (snoozed > today) return snoozed;
             }
             
-            const nd = reminder.notifyDate;
+            let nd = reminder.notifyDate;
+            
+            // Handle legacy string format (e.g. "2026-03-15")
+            if (typeof nd === 'string') {
+                const [y, m, d] = nd.split('-').map(Number);
+                nd = { month: m, day: d, year: y };
+            }
+            
+            if (reminder.frequency === 'once') {
+                // One-time reminder - use the exact year if stored, otherwise current year
+                const reminderYear = nd.year || currentYear;
+                let notifyDate = new Date(reminderYear, nd.month - 1, nd.day);
+                notifyDate.setHours(0, 0, 0, 0);
+                return notifyDate;
+            }
+            
+            // Yearly reminders always relative to current year
             let notifyDate = new Date(currentYear, nd.month - 1, nd.day);
             notifyDate.setHours(0, 0, 0, 0);
             
-            if (reminder.frequency === 'once') {
-                // One-time reminder - just return the notify date
-                // If it's in the past, it will show as overdue
-                return notifyDate;
-            } else if (reminder.frequency === 'yearly') {
+            if (reminder.frequency === 'yearly') {
                 // If it was completed this year, next notification is ALWAYS next year
                 if (reminder.lastDone) {
                     const lastDoneDate = new Date(reminder.lastDone);
@@ -2019,6 +2053,7 @@ button, .btn, a, .nav-hamburger {
         async function addQuickReminder() {
             // console.log('addQuickReminder called');
             const input = document.getElementById('quickReminderInput');
+            const dateInput = document.getElementById('quickReminderDate');
             const title = input.value.trim();
             // console.log('Quick reminder title:', title);
             
@@ -2027,19 +2062,28 @@ button, .btn, a, .nav-hamburger {
                 return;
             }
             
-            const today = new Date();
+            if (!dateInput.value) {
+                alert('Please pick a date for this reminder.');
+                dateInput.focus();
+                return;
+            }
+            
+            // Parse the selected date (YYYY-MM-DD)
+            const [year, month, day] = dateInput.value.split('-').map(Number);
+            
             const newReminder = {
                 id: Date.now(),
                 title: title,
-                notifyDate: { month: today.getMonth() + 1, day: today.getDate() },
+                notifyDate: { month: month, day: day, year: year },
                 frequency: 'once',
-                created: today.toISOString()
+                created: new Date().toISOString()
             };
             
             // console.log('Creating new reminder:', newReminder);
             lifeReminders.push(newReminder);
             await saveLifeReminders();
             input.value = '';
+            dateInput.value = '';
             updateReminderDisplay();
             // console.log('✓ Quick reminder added successfully!');
         }
@@ -2116,7 +2160,16 @@ button, .btn, a, .nav-hamburger {
             if (!reminder) return;
             
             document.getElementById('reminderModalTitle').value = reminder.title;
-            document.getElementById('reminderModalDate').value = reminder.notifyDate;
+            // Convert notifyDate object to YYYY-MM-DD string for the date input
+            let dateStr = '';
+            if (typeof reminder.notifyDate === 'string') {
+                dateStr = reminder.notifyDate;
+            } else if (reminder.notifyDate) {
+                const nd = reminder.notifyDate;
+                const y = nd.year || new Date().getFullYear();
+                dateStr = `${y}-${String(nd.month).padStart(2, '0')}-${String(nd.day).padStart(2, '0')}`;
+            }
+            document.getElementById('reminderModalDate').value = dateStr;
             document.getElementById('reminderModalFrequency').value = reminder.frequency || 'once';
             document.getElementById('reminderModalLink').value = reminder.link || '';
             document.getElementById('reminderModalEditId').value = id;
@@ -2152,12 +2205,16 @@ button, .btn, a, .nav-hamburger {
                 return;
             }
             
+            // Parse date string into { month, day, year } object
+            const [year, month, day] = date.split('-').map(Number);
+            const notifyDateObj = { month: month, day: day, year: year };
+            
             if (editId) {
                 // Update existing reminder
-                const index = lifeReminders.findIndex(r => r.id === editId);
+                const index = lifeReminders.findIndex(r => r.id == editId);
                 if (index !== -1) {
                     lifeReminders[index].title = title;
-                    lifeReminders[index].notifyDate = date;
+                    lifeReminders[index].notifyDate = notifyDateObj;
                     lifeReminders[index].frequency = frequency;
                     lifeReminders[index].link = link || null;
                 }
@@ -2166,7 +2223,7 @@ button, .btn, a, .nav-hamburger {
                 const newReminder = {
                     id: Date.now().toString(),
                     title: title,
-                    notifyDate: date,
+                    notifyDate: notifyDateObj,
                     frequency: frequency,
                     link: link || null,
                     lastDone: null,
