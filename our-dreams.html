@@ -89,10 +89,11 @@
 
         .section-nav-dropdown {
             margin-bottom: 20px;
+            text-align: center;
         }
 
         #sectionSelect {
-            width: 100%;
+            width: auto;
             background: #EBE0D6;
             border: 1px solid #7ba886;
             color: #7ba886;
@@ -201,53 +202,135 @@
 
         .dream-item {
             background: #EBE0D6;
-            padding: 16px;
-            margin-bottom: 12px;
+            padding: 12px 14px;
+            margin-bottom: 2px;
             border-left: 3px solid #b59197;
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 12px;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .dream-item:hover {
+            background: #e3d6cc;
         }
 
         .dream-item.achieved {
-            opacity: 0.6;
+            opacity: 0.5;
             border-left-color: #7ba886;
         }
 
         .dream-item-content {
             flex: 1;
+            min-width: 0;
         }
 
         .dream-item-title {
             color: #4a3a3c;
-            font-size: 1rem;
-            margin-bottom: 6px;
+            font-size: 0.9rem;
             font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .dream-item.achieved .dream-item-title {
             text-decoration: line-through;
         }
 
-        .dream-item-details {
-            color: #7a6668;
-            font-size: 0.85rem;
-            line-height: 1.5;
+        .dream-item-indicators {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
         }
 
-        .dream-item-image {
+        .indicator-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .indicator-dot.high { background: #ff9999; }
+        .indicator-dot.soon { background: #ffcc99; }
+        .indicator-dot.has-image { background: #b59197; }
+
+        .dream-item-chevron {
+            color: #b59197;
+            font-size: 0.7rem;
+            flex-shrink: 0;
+            opacity: 0.5;
+        }
+
+        /* Detail Popup */
+        .detail-popup {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .detail-popup.active { display: flex; }
+        .detail-popup-box {
+            background: #EBE0D6;
+            padding: 24px 20px;
+            border: 1px solid #b59197;
             width: 100%;
-            max-width: 300px;
-            margin-top: 12px;
-            margin-bottom: 8px;
-            border: 1px solid #d4b5b8;
-            cursor: pointer;
-            transition: transform 0.2s;
+            max-width: 460px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
         }
-
-        .dream-item-image:hover {
-            transform: scale(1.02);
+        .detail-popup-close {
+            float: right;
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            color: #7a6668;
+            cursor: pointer;
+            padding: 0 4px;
+            line-height: 1;
+        }
+        .detail-popup-close:hover { color: #4a3a3c; }
+        .detail-popup-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #4a3a3c;
+            margin-bottom: 10px;
+            padding-right: 24px;
+        }
+        .detail-popup-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+        .detail-popup-details {
+            color: #5a4a4c;
+            font-size: 0.88rem;
+            line-height: 1.6;
+            margin-bottom: 14px;
+        }
+        .detail-popup-image {
+            width: 100%;
+            border: 1px solid #d4b5b8;
+            margin-bottom: 14px;
+            cursor: pointer;
+        }
+        .detail-popup-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .detail-popup-actions .icon-btn {
+            flex: 1;
+            min-width: 80px;
+            text-align: center;
         }
 
         .image-upload-preview {
@@ -423,6 +506,76 @@
             color: #4a3a3c;
         }
 
+        /* Tried It Modal */
+        .tried-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .tried-modal.active { display: flex; }
+        .tried-modal-box {
+            background: #EBE0D6;
+            padding: 28px 24px;
+            border: 1px solid #b59197;
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+        }
+        .tried-modal-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #4a3a3c;
+            margin-bottom: 6px;
+        }
+        .tried-modal-name {
+            font-size: 0.95rem;
+            color: #7ba886;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        .tried-modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .tried-modal-buttons button {
+            flex: 1;
+            padding: 10px 12px;
+            font-size: 0.85rem;
+            font-family: inherit;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid;
+            background: transparent;
+            transition: all 0.2s;
+        }
+        .tried-btn-again {
+            border-color: #7ba886 !important;
+            color: #7ba886;
+        }
+        .tried-btn-again:hover { background: #7ba886; color: #fff; }
+        .tried-btn-pass {
+            border-color: #b59197 !important;
+            color: #b59197;
+        }
+        .tried-btn-pass:hover { background: #b59197; color: #fff; }
+        .tried-btn-cancel {
+            border-color: #999 !important;
+            color: #999;
+        }
+        .tried-btn-cancel:hover { background: #999; color: #fff; }
+
+        /* Section divider */
+        .section-divider {
+            border: none;
+            border-top: 1px solid rgba(123, 168, 134, 0.3);
+            margin: 28px 0 20px;
+        }
+
         .add-dream-btn {
             width: 100%;
             background: transparent;
@@ -545,7 +698,7 @@
             justify-content: flex-end;
         }
 
-        .form-actions button[type="submit"] {
+        .form-actions .save-btn {
             border: 1px solid #b59197;
             color: #b59197;
             background: transparent;
@@ -558,19 +711,19 @@
             min-width: 70px;
         }
 
-        .form-actions button[type="submit"]:hover {
+        .form-actions .save-btn:hover {
             background: #b59197;
             color: #4a3a3c;
         }
 
-        .form-actions button[type="submit"].saving {
+        .form-actions .save-btn.saving {
             pointer-events: none;
             color: transparent;
             border-color: #7ba886;
             background: rgba(123, 168, 134, 0.1);
         }
 
-        .form-actions button[type="submit"].saving::after {
+        .form-actions .save-btn.saving::after {
             content: '';
             position: absolute;
             top: 50%;
@@ -720,17 +873,12 @@
         }
 
         @media (max-width: 768px) {
-            .dream-item {
-                flex-direction: column;
-            }
-
-            .dream-item-actions {
+            .detail-popup-actions {
                 flex-direction: row;
-                width: 100%;
             }
-
-            .icon-btn {
-                flex: 1;
+            .detail-popup-actions .icon-btn {
+                font-size: 0.72rem;
+                padding: 8px 6px;
             }
         }
 
@@ -905,7 +1053,7 @@
                 </div>
                 
                 <div class="dream-form" id="restaurants-form">
-                    <form onsubmit="addDream(event, 'restaurants'); return false;">
+                    <form data-category="restaurants">
                         <div class="form-group">
                             <label>Restaurant Name</label>
                             <input type="text" name="title" required placeholder="Name of the place">
@@ -976,13 +1124,73 @@
                         </div>
                         <div class="form-actions">
                             <button type="button" class="btn" onclick="hideForm('restaurants')">Cancel</button>
-                            <button type="submit" class="btn">Save</button>
+                            <button type="button" class="btn save-btn" onclick="addDream(this)">Save</button>
                         </div>
                     </form>
                 </div>
 
                 <div class="dream-list" id="restaurants-list">
                     <div class="empty-state">No restaurants yet. Where should you go for date night?</div>
+                </div>
+
+                <hr class="section-divider">
+
+                <!-- OUR RESTAURANTS -->
+                <h2 class="section-title">Our Restaurants ♡</h2>
+                <p style="font-size: 0.8rem; color: rgba(74,58,60,0.5); margin-bottom: 12px;">Places we love and would go back to</p>
+                
+                <div style="display: flex; gap: 10px; margin-bottom: 16px;">
+                    <button class="add-dream-btn" onclick="showForm('our-restaurants')" style="flex: 1;">+ Add a Favorite</button>
+                    <button class="add-dream-btn" onclick="chooseRandomDream('our-restaurants')" style="flex: 1; border: 2px solid #7ba886; color: #7ba886; background: transparent;">Choose for Us</button>
+                </div>
+
+                <div class="dream-form" id="our-restaurants-form">
+                    <form data-category="our-restaurants">
+                        <div class="form-group">
+                            <label>Restaurant Name</label>
+                            <input type="text" name="title" required placeholder="Name of the place">
+                        </div>
+                        <div class="form-group">
+                            <label>Type (Select all that apply)</label>
+                            <div class="checkbox-grid">
+                                <label class="checkbox-label"><input type="checkbox" name="restaurantType" value="breakfast"><span>Breakfast</span></label>
+                                <label class="checkbox-label"><input type="checkbox" name="restaurantType" value="brunch"><span>Brunch</span></label>
+                                <label class="checkbox-label"><input type="checkbox" name="restaurantType" value="lunch"><span>Lunch</span></label>
+                                <label class="checkbox-label"><input type="checkbox" name="restaurantType" value="dinner"><span>Dinner</span></label>
+                                <label class="checkbox-label"><input type="checkbox" name="restaurantType" value="cafe"><span>Cafe</span></label>
+                                <label class="checkbox-label"><input type="checkbox" name="restaurantType" value="bar"><span>Bar</span></label>
+                                <label class="checkbox-label"><input type="checkbox" name="restaurantType" value="bakery"><span>Bakery</span></label>
+                                <label class="checkbox-label"><input type="checkbox" name="restaurantType" value="dessert"><span>Dessert</span></label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Location & Details</label>
+                            <textarea name="details" placeholder="Where is it? What do we love about it?"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Add Image (Optional)</label>
+                            <input type="file" class="image-upload-input" id="our-restaurants-image" accept="image/*" onchange="previewImage(event, 'our-restaurants')">
+                            <label for="our-restaurants-image" class="image-upload-label">Choose Image</label>
+                            <div id="our-restaurants-preview"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Occasion</label>
+                            <select name="occasion">
+                                <option value="">Casual</option>
+                                <option value="date-night">Date Night</option>
+                                <option value="friends">Go with Friends</option>
+                                <option value="special">Special Occasion</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn" onclick="hideForm('our-restaurants')">Cancel</button>
+                            <button type="button" class="btn save-btn" onclick="addDream(this)">Save</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="dream-list" id="our-restaurants-list">
+                    <div class="empty-state">No favorites yet!</div>
                 </div>
             </div>
         </div>
@@ -998,7 +1206,7 @@
                 </div>
                 
                 <div class="dream-form" id="places-form">
-                    <form onsubmit="addDream(event, 'places'); return false;">
+                    <form data-category="places">
                         <div class="form-group">
                             <label>Place Name</label>
                             <input type="text" name="title" required placeholder="Where do you want to go?">
@@ -1006,50 +1214,17 @@
                         <div class="form-group">
                             <label>Type (Select all that apply)</label>
                             <div class="checkbox-grid">
-                                <label class="checkbox-label">
-                                    <input type="checkbox" name="placeType" value="museum">
-                                    <span>Museum</span>
-                                </label>
-                                <label class="checkbox-label">
-                                    <input type="checkbox" name="placeType" value="park">
-                                    <span>Park</span>
-                                </label>
-                                <label class="checkbox-label">
-                                    <input type="checkbox" name="placeType" value="thrift-shop">
-                                    <span>Thrift Shop</span>
-                                </label>
-                                <label class="checkbox-label">
-                                    <input type="checkbox" name="placeType" value="metaphysical-shop">
-                                    <span>Metaphysical Shop</span>
-                                </label>
-                                <label class="checkbox-label">
-                                    <input type="checkbox" name="placeType" value="bookstore">
-                                    <span>Bookstore</span>
-                                </label>
-                                <label class="checkbox-label">
-                                    <input type="checkbox" name="placeType" value="concert">
-                                    <span>Concert</span>
-                                </label>
-                                <label class="checkbox-label">
-                                    <input type="checkbox" name="placeType" value="festival">
-                                    <span>Festival</span>
-                                </label>
-                                <label class="checkbox-label">
-                                    <input type="checkbox" name="placeType" value="market">
-                                    <span>Market</span>
-                                </label>
-                                <label class="checkbox-label">
-                                    <input type="checkbox" name="placeType" value="nature">
-                                    <span>Nature Spot</span>
-                                </label>
-                                <label class="checkbox-label">
-                                    <input type="checkbox" name="placeType" value="entertainment">
-                                    <span>Entertainment</span>
-                                </label>
-                                <label class="checkbox-label">
-                                    <input type="checkbox" name="placeType" value="historic">
-                                    <span>Historic Site</span>
-                                </label>
+                                <label class="checkbox-label"><input type="checkbox" name="placeType" value="museum"><span>Museum</span></label>
+                                <label class="checkbox-label"><input type="checkbox" name="placeType" value="park"><span>Park</span></label>
+                                <label class="checkbox-label"><input type="checkbox" name="placeType" value="thrift-shop"><span>Thrift Shop</span></label>
+                                <label class="checkbox-label"><input type="checkbox" name="placeType" value="metaphysical-shop"><span>Metaphysical Shop</span></label>
+                                <label class="checkbox-label"><input type="checkbox" name="placeType" value="bookstore"><span>Bookstore</span></label>
+                                <label class="checkbox-label"><input type="checkbox" name="placeType" value="concert"><span>Concert</span></label>
+                                <label class="checkbox-label"><input type="checkbox" name="placeType" value="festival"><span>Festival</span></label>
+                                <label class="checkbox-label"><input type="checkbox" name="placeType" value="market"><span>Market</span></label>
+                                <label class="checkbox-label"><input type="checkbox" name="placeType" value="nature"><span>Nature Spot</span></label>
+                                <label class="checkbox-label"><input type="checkbox" name="placeType" value="entertainment"><span>Entertainment</span></label>
+                                <label class="checkbox-label"><input type="checkbox" name="placeType" value="historic"><span>Historic Site</span></label>
                             </div>
                         </div>
                         <div class="form-group">
@@ -1072,13 +1247,66 @@
                         </div>
                         <div class="form-actions">
                             <button type="button" class="btn" onclick="hideForm('places')">Cancel</button>
-                            <button type="submit" class="btn">Save</button>
+                            <button type="button" class="btn save-btn" onclick="addDream(this)">Save</button>
                         </div>
                     </form>
                 </div>
 
                 <div class="dream-list" id="places-list">
                     <div class="empty-state">No places yet. Where do you want to go?</div>
+                </div>
+
+                <hr class="section-divider">
+
+                <h2 class="section-title">Our Places ♡</h2>
+                <p style="font-size: 0.8rem; color: rgba(74,58,60,0.5); margin-bottom: 12px;">Spots we love and would go back to</p>
+
+                <div style="display: flex; gap: 10px; margin-bottom: 16px;">
+                    <button class="add-dream-btn" onclick="showForm('our-places')" style="flex: 1;">+ Add a Favorite</button>
+                    <button class="add-dream-btn" onclick="chooseRandomDream('our-places')" style="flex: 1; border: 2px solid #7ba886; color: #7ba886; background: transparent;">Choose for Us</button>
+                </div>
+
+                <div class="dream-form" id="our-places-form">
+                    <form data-category="our-places">
+                        <div class="form-group">
+                            <label>Place Name</label>
+                            <input type="text" name="title" required placeholder="Name of the place">
+                        </div>
+                        <div class="form-group">
+                            <label>Type (Select all that apply)</label>
+                            <div class="checkbox-grid">
+                                <label class="checkbox-label"><input type="checkbox" name="placeType" value="museum"><span>Museum</span></label>
+                                <label class="checkbox-label"><input type="checkbox" name="placeType" value="park"><span>Park</span></label>
+                                <label class="checkbox-label"><input type="checkbox" name="placeType" value="thrift-shop"><span>Thrift Shop</span></label>
+                                <label class="checkbox-label"><input type="checkbox" name="placeType" value="metaphysical-shop"><span>Metaphysical Shop</span></label>
+                                <label class="checkbox-label"><input type="checkbox" name="placeType" value="bookstore"><span>Bookstore</span></label>
+                                <label class="checkbox-label"><input type="checkbox" name="placeType" value="concert"><span>Concert</span></label>
+                                <label class="checkbox-label"><input type="checkbox" name="placeType" value="festival"><span>Festival</span></label>
+                                <label class="checkbox-label"><input type="checkbox" name="placeType" value="market"><span>Market</span></label>
+                                <label class="checkbox-label"><input type="checkbox" name="placeType" value="nature"><span>Nature Spot</span></label>
+                                <label class="checkbox-label"><input type="checkbox" name="placeType" value="entertainment"><span>Entertainment</span></label>
+                                <label class="checkbox-label"><input type="checkbox" name="placeType" value="historic"><span>Historic Site</span></label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Details</label>
+                            <textarea name="details" placeholder="What do we love about this place?"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Add Image (Optional)</label>
+                            <input type="file" class="image-upload-input" id="our-places-image" accept="image/*" onchange="previewImage(event, 'our-places')">
+                            <label for="our-places-image" class="image-upload-label">Choose Image</label>
+                            <div id="our-places-preview"></div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn" onclick="hideForm('our-places')">Cancel</button>
+                            <button type="button" class="btn save-btn" onclick="addDream(this)">Save</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="dream-list" id="our-places-list">
+                    <div class="empty-state">No favorites yet!</div>
                 </div>
             </div>
         </div>
@@ -1091,7 +1319,7 @@
                 <button class="add-dream-btn" onclick="showForm('kasey-wishlist')">+ Add to Kasey's List</button>
                 
                 <div class="dream-form" id="kasey-wishlist-form">
-                    <form onsubmit="addDream(event, 'kasey-wishlist'); return false;">
+                    <form data-category="kasey-wishlist">
                         <div class="form-group">
                             <label>Item or Experience</label>
                             <input type="text" name="title" required placeholder="What does Kasey want?">
@@ -1116,7 +1344,7 @@
                         </div>
                         <div class="form-actions">
                             <button type="button" class="btn" onclick="hideForm('kasey-wishlist')">Cancel</button>
-                            <button type="submit" class="btn">Save</button>
+                            <button type="button" class="btn save-btn" onclick="addDream(this)">Save</button>
                         </div>
                     </form>
                 </div>
@@ -1132,7 +1360,7 @@
                 <button class="add-dream-btn" onclick="showForm('charlie-wishlist')">+ Add to Charlie's List</button>
                 
                 <div class="dream-form" id="charlie-wishlist-form">
-                    <form onsubmit="addDream(event, 'charlie-wishlist'); return false;">
+                    <form data-category="charlie-wishlist">
                         <div class="form-group">
                             <label>Item or Experience</label>
                             <input type="text" name="title" required placeholder="What does Charlie want?">
@@ -1157,7 +1385,7 @@
                         </div>
                         <div class="form-actions">
                             <button type="button" class="btn" onclick="hideForm('charlie-wishlist')">Cancel</button>
-                            <button type="submit" class="btn">Save</button>
+                            <button type="button" class="btn save-btn" onclick="addDream(this)">Save</button>
                         </div>
                     </form>
                 </div>
@@ -1173,10 +1401,13 @@
             <div class="section">
                 <h2 class="section-title">Places We Want to Travel</h2>
                 
-                <button class="add-dream-btn" onclick="showForm('travel')">+ Add Travel Dream</button>
+                <div style="display: flex; gap: 10px; margin-bottom: 16px;">
+                    <button class="add-dream-btn" onclick="showForm('travel')" style="flex: 1;">+ Add Travel Dream</button>
+                    <button class="add-dream-btn" onclick="chooseRandomDream('travel')" style="flex: 1; border: 2px solid #7ba886; color: #7ba886; background: transparent;">Choose for Us</button>
+                </div>
                 
                 <div class="dream-form" id="travel-form">
-                    <form onsubmit="addDream(event, 'travel'); return false;">
+                    <form data-category="travel">
                         <div class="form-group">
                             <label>Destination</label>
                             <input type="text" name="title" required placeholder="Where do you want to go?">
@@ -1201,7 +1432,7 @@
                         </div>
                         <div class="form-actions">
                             <button type="button" class="btn" onclick="hideForm('travel')">Cancel</button>
-                            <button type="submit" class="btn">Save Dream</button>
+                            <button type="button" class="btn save-btn" onclick="addDream(this)">Save</button>
                         </div>
                     </form>
                 </div>
@@ -1209,13 +1440,50 @@
                 <div class="dream-list" id="travel-list">
                     <div class="empty-state">No travel dreams yet. Where do you want to go?</div>
                 </div>
+
+                <hr class="section-divider">
+
+                <h2 class="section-title">Where We've Been ♡</h2>
+                <p style="font-size: 0.8rem; color: rgba(74,58,60,0.5); margin-bottom: 12px;">Places we loved and would visit again</p>
+
+                <div style="display: flex; gap: 10px; margin-bottom: 16px;">
+                    <button class="add-dream-btn" onclick="showForm('our-travel')" style="flex: 1;">+ Add a Favorite</button>
+                    <button class="add-dream-btn" onclick="chooseRandomDream('our-travel')" style="flex: 1; border: 2px solid #7ba886; color: #7ba886; background: transparent;">Choose for Us</button>
+                </div>
+
+                <div class="dream-form" id="our-travel-form">
+                    <form data-category="our-travel">
+                        <div class="form-group">
+                            <label>Destination</label>
+                            <input type="text" name="title" required placeholder="Where did you go?">
+                        </div>
+                        <div class="form-group">
+                            <label>Details & Memories</label>
+                            <textarea name="details" placeholder="What did you love about it?"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Add Image (Optional)</label>
+                            <input type="file" class="image-upload-input" id="our-travel-image" accept="image/*" onchange="previewImage(event, 'our-travel')">
+                            <label for="our-travel-image" class="image-upload-label">Choose Image</label>
+                            <div id="our-travel-preview"></div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn" onclick="hideForm('our-travel')">Cancel</button>
+                            <button type="button" class="btn save-btn" onclick="addDream(this)">Save</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="dream-list" id="our-travel-list">
+                    <div class="empty-state">No favorite trips yet!</div>
+                </div>
             </div>
         </div>
 
         <!-- TV SHOWS & MOVIES TAB -->
         <div id="shows-movies-tab" class="dreams-tab">
             <div class="section">
-                <h2 class="section-title">TV Shows & Movies to Watch Together</h2>
+                <h2 class="section-title">Shows & Movies to Watch</h2>
                 
                 <div style="display: flex; gap: 10px; margin-bottom: 16px;">
                     <button class="add-dream-btn" onclick="showForm('shows-movies')" style="flex: 1;">+ Add Show or Movie</button>
@@ -1223,7 +1491,7 @@
                 </div>
                 
                 <div class="dream-form" id="shows-movies-form">
-                    <form onsubmit="addDream(event, 'shows-movies'); return false;">
+                    <form data-category="shows-movies">
                         <div class="form-group">
                             <label>Title</label>
                             <input type="text" name="title" required placeholder="Name of the show or movie">
@@ -1248,13 +1516,50 @@
                         </div>
                         <div class="form-actions">
                             <button type="button" class="btn" onclick="hideForm('shows-movies')">Cancel</button>
-                            <button type="submit" class="btn">Save</button>
+                            <button type="button" class="btn save-btn" onclick="addDream(this)">Save</button>
                         </div>
                     </form>
                 </div>
 
                 <div class="dream-list" id="shows-movies-list">
                     <div class="empty-state">No shows or movies yet. What do you want to watch together?</div>
+                </div>
+
+                <hr class="section-divider">
+
+                <h2 class="section-title">What We've Watched ♡</h2>
+                <p style="font-size: 0.8rem; color: rgba(74,58,60,0.5); margin-bottom: 12px;">Shows & movies we loved</p>
+
+                <div style="display: flex; gap: 10px; margin-bottom: 16px;">
+                    <button class="add-dream-btn" onclick="showForm('our-shows-movies')" style="flex: 1;">+ Add a Favorite</button>
+                    <button class="add-dream-btn" onclick="chooseRandomDream('our-shows-movies')" style="flex: 1; border: 2px solid #7ba886; color: #7ba886; background: transparent;">Choose for Us</button>
+                </div>
+
+                <div class="dream-form" id="our-shows-movies-form">
+                    <form data-category="our-shows-movies">
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" name="title" required placeholder="Name of the show or movie">
+                        </div>
+                        <div class="form-group">
+                            <label>Details</label>
+                            <textarea name="details" placeholder="Where to watch? What did we love about it?"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Add Image (Optional)</label>
+                            <input type="file" class="image-upload-input" id="our-shows-movies-image" accept="image/*" onchange="previewImage(event, 'our-shows-movies')">
+                            <label for="our-shows-movies-image" class="image-upload-label">Choose Image</label>
+                            <div id="our-shows-movies-preview"></div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn" onclick="hideForm('our-shows-movies')">Cancel</button>
+                            <button type="button" class="btn save-btn" onclick="addDream(this)">Save</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="dream-list" id="our-shows-movies-list">
+                    <div class="empty-state">No favorites yet!</div>
                 </div>
             </div>
         </div>
@@ -1267,7 +1572,7 @@
                 <button class="add-dream-btn" onclick="showForm('bucket')">+ Add to Bucket List</button>
                 
                 <div class="dream-form" id="bucket-form">
-                    <form onsubmit="addDream(event, 'bucket'); return false;">
+                    <form data-category="bucket">
                         <div class="form-group">
                             <label>Experience or Goal</label>
                             <input type="text" name="title" required placeholder="What do you want to do together?">
@@ -1292,7 +1597,7 @@
                         </div>
                         <div class="form-actions">
                             <button type="button" class="btn" onclick="hideForm('bucket')">Cancel</button>
-                            <button type="submit" class="btn">Save</button>
+                            <button type="button" class="btn save-btn" onclick="addDream(this)">Save</button>
                         </div>
                     </form>
                 </div>
@@ -1311,7 +1616,7 @@
                 <button class="add-dream-btn" onclick="showForm('home')">+ Add Home Feature</button>
                 
                 <div class="dream-form" id="home-form">
-                    <form onsubmit="addDream(event, 'home'); return false;">
+                    <form data-category="home">
                         <div class="form-group">
                             <label>Feature or Room</label>
                             <input type="text" name="title" required placeholder="What do you want in your dream home?">
@@ -1336,7 +1641,7 @@
                         </div>
                         <div class="form-actions">
                             <button type="button" class="btn" onclick="hideForm('home')">Cancel</button>
-                            <button type="submit" class="btn">Save</button>
+                            <button type="button" class="btn save-btn" onclick="addDream(this)">Save</button>
                         </div>
                     </form>
                 </div>
@@ -1355,7 +1660,7 @@
                 <button class="add-dream-btn" onclick="showForm('pets')">+ Add Pet Dream</button>
                 
                 <div class="dream-form" id="pets-form">
-                    <form onsubmit="addDream(event, 'pets'); return false;">
+                    <form data-category="pets">
                         <div class="form-group">
                             <label>Pet Type or Name Idea</label>
                             <input type="text" name="title" required placeholder="What kind of pet?">
@@ -1380,7 +1685,7 @@
                         </div>
                         <div class="form-actions">
                             <button type="button" class="btn" onclick="hideForm('pets')">Cancel</button>
-                            <button type="submit" class="btn">Save</button>
+                            <button type="button" class="btn save-btn" onclick="addDream(this)">Save</button>
                         </div>
                     </form>
                 </div>
@@ -1399,7 +1704,7 @@
                 <button class="add-dream-btn" onclick="showForm('traditions')">+ Add Tradition Idea</button>
                 
                 <div class="dream-form" id="traditions-form">
-                    <form onsubmit="addDream(event, 'traditions'); return false;">
+                    <form data-category="traditions">
                         <div class="form-group">
                             <label>Tradition Name</label>
                             <input type="text" name="title" required placeholder="What tradition do you want to start?">
@@ -1424,7 +1729,7 @@
                         </div>
                         <div class="form-actions">
                             <button type="button" class="btn" onclick="hideForm('traditions')">Cancel</button>
-                            <button type="submit" class="btn">Save</button>
+                            <button type="button" class="btn save-btn" onclick="addDream(this)">Save</button>
                         </div>
                     </form>
                 </div>
@@ -1458,18 +1763,106 @@
         <img class="lightbox-image" id="lightboxImage" src="" alt="">
     </div>
 
+    <!-- Detail Popup -->
+    <div class="detail-popup" id="detailPopup" onclick="if(event.target===this)closeDetail()">
+        <div class="detail-popup-box">
+            <button class="detail-popup-close" onclick="closeDetail()">&times;</button>
+            <div class="detail-popup-title" id="detailTitle"></div>
+            <div class="detail-popup-meta" id="detailMeta"></div>
+            <div class="detail-popup-details" id="detailDetails"></div>
+            <img class="detail-popup-image" id="detailImage" src="" alt="" style="display:none;" onclick="openLightbox(this.src)">
+            <div class="detail-popup-actions" id="detailActions"></div>
+        </div>
+    </div>
+
+    <!-- Tried It / Done Modal -->
+    <div class="tried-modal" id="triedModal" onclick="if(event.target===this)closeTriedModal()">
+        <div class="tried-modal-box">
+            <div class="tried-modal-title" id="triedModalTitle">We tried it!</div>
+            <div class="tried-modal-name" id="triedModalName"></div>
+            <div class="tried-modal-buttons">
+                <button class="tried-btn-again" id="triedBtnAgain" onclick="keepItem()">♡ Again</button>
+                <button class="tried-btn-pass" onclick="passItem()">Pass</button>
+                <button class="tried-btn-cancel" onclick="closeTriedModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="dream-form" id="edit-form">
+        <form data-category="edit">
+            <h3 style="color: #4a3a3c; margin-bottom: 16px; font-size: 1rem;">Edit Entry</h3>
+            <input type="hidden" id="editFirebaseId">
+            <input type="hidden" id="editCategory">
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" id="editTitle" placeholder="Name">
+            </div>
+            <div class="form-group">
+                <label>Details</label>
+                <textarea id="editDetails" placeholder="Details"></textarea>
+            </div>
+            <div class="form-group" id="editTypeGroup" style="display:none;">
+                <label>Type</label>
+                <div class="checkbox-grid" id="editTypeCheckboxes">
+                    <label class="checkbox-label"><input type="checkbox" name="editType" value="breakfast"><span>Breakfast</span></label>
+                    <label class="checkbox-label"><input type="checkbox" name="editType" value="brunch"><span>Brunch</span></label>
+                    <label class="checkbox-label"><input type="checkbox" name="editType" value="lunch"><span>Lunch</span></label>
+                    <label class="checkbox-label"><input type="checkbox" name="editType" value="dinner"><span>Dinner</span></label>
+                    <label class="checkbox-label"><input type="checkbox" name="editType" value="cafe"><span>Cafe</span></label>
+                    <label class="checkbox-label"><input type="checkbox" name="editType" value="bar"><span>Bar</span></label>
+                    <label class="checkbox-label"><input type="checkbox" name="editType" value="bakery"><span>Bakery</span></label>
+                    <label class="checkbox-label"><input type="checkbox" name="editType" value="dessert"><span>Dessert</span></label>
+                </div>
+            </div>
+            <div class="form-group" id="editPlaceTypeGroup" style="display:none;">
+                <label>Type</label>
+                <div class="checkbox-grid" id="editPlaceTypeCheckboxes">
+                    <label class="checkbox-label"><input type="checkbox" name="editPlaceType" value="museum"><span>Museum</span></label>
+                    <label class="checkbox-label"><input type="checkbox" name="editPlaceType" value="park"><span>Park</span></label>
+                    <label class="checkbox-label"><input type="checkbox" name="editPlaceType" value="thrift-shop"><span>Thrift Shop</span></label>
+                    <label class="checkbox-label"><input type="checkbox" name="editPlaceType" value="metaphysical-shop"><span>Metaphysical Shop</span></label>
+                    <label class="checkbox-label"><input type="checkbox" name="editPlaceType" value="bookstore"><span>Bookstore</span></label>
+                    <label class="checkbox-label"><input type="checkbox" name="editPlaceType" value="concert"><span>Concert</span></label>
+                    <label class="checkbox-label"><input type="checkbox" name="editPlaceType" value="festival"><span>Festival</span></label>
+                    <label class="checkbox-label"><input type="checkbox" name="editPlaceType" value="market"><span>Market</span></label>
+                    <label class="checkbox-label"><input type="checkbox" name="editPlaceType" value="nature"><span>Nature Spot</span></label>
+                    <label class="checkbox-label"><input type="checkbox" name="editPlaceType" value="entertainment"><span>Entertainment</span></label>
+                    <label class="checkbox-label"><input type="checkbox" name="editPlaceType" value="historic"><span>Historic Site</span></label>
+                </div>
+            </div>
+            <div class="form-group" id="editOccasionGroup" style="display:none;">
+                <label>Occasion</label>
+                <select id="editOccasion">
+                    <option value="">Casual</option>
+                    <option value="date-night">Date Night</option>
+                    <option value="friends">Go with Friends</option>
+                    <option value="special">Special Occasion</option>
+                </select>
+            </div>
+            <div class="form-group" id="editPriorityGroup">
+                <label>Priority</label>
+                <select id="editPriority">
+                    <option value="">Normal</option>
+                    <option value="soon">Soon</option>
+                    <option value="high">High Priority</option>
+                </select>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn" onclick="closeEditForm()">Cancel</button>
+                <button type="button" class="btn save-btn" onclick="saveEdit()">Save Changes</button>
+            </div>
+        </form>
+    </div>
+
     <script>
         // Global variables — available immediately
-        var categories = ['restaurants', 'places', 'kasey-wishlist', 'charlie-wishlist', 'travel', 'bucket', 'home', 'pets', 'traditions', 'shows-movies'];
+        var categories = ['restaurants', 'our-restaurants', 'places', 'our-places', 'kasey-wishlist', 'charlie-wishlist', 'travel', 'our-travel', 'bucket', 'home', 'pets', 'traditions', 'shows-movies', 'our-shows-movies'];
         var dreams = {};
         var isConnected = false;
         var currentImageData = {};
-        var database = null;
-        var firebaseRef = null;
-        var firebasePush = null;
-        var firebaseRemove = null;
-        var firebaseUpdate = null;
         var currentRandomCategory = '';
+        var triedItData = { category: '', firebaseId: '' };
 
         // Initialize dreams object
         categories.forEach(function(cat) { dreams[cat] = []; });
@@ -1482,6 +1875,23 @@
 
         function saveToLocal(category) {
             try { localStorage.setItem('dreams_' + category, JSON.stringify(dreams[category])); } catch(e) {}
+        }
+
+        // Sync category to Firestore (non-blocking, strips large images)
+        function syncToFirestore(category) {
+            if (window.dreamsDb && window.fsModule) {
+                try {
+                    var itemsForSync = dreams[category].map(function(d) {
+                        var copy = Object.assign({}, d);
+                        if (copy.image && copy.image.length > 50000) {
+                            copy.image = null;
+                        }
+                        return copy;
+                    });
+                    var docRef = window.fsModule.doc(window.dreamsDb, 'dreams', category);
+                    window.fsModule.setDoc(docRef, { items: itemsForSync }).catch(function(err) {});
+                } catch(e) {}
+            }
         }
 
         function loadFromLocal(category) {
@@ -1547,84 +1957,81 @@
             }
         };
 
-        window.addDream = async function(e, category) {
-            e.preventDefault();
-            var form = e.target;
-            var submitBtn = form.querySelector('button[type="submit"]');
-            var cancelBtn = form.querySelector('button[type="button"]');
-            var originalText = submitBtn.textContent;
+        window.addDream = function(btn) {
+            try {
+                // Walk up from button to find the form
+                var form = btn.closest('form');
+                if (!form) { alert('Could not find form'); return; }
+                
+                var category = form.getAttribute('data-category');
+                if (!category) { alert('Could not find category'); return; }
 
-            // Show saving state
-            submitBtn.classList.add('saving');
-            if (cancelBtn) cancelBtn.style.pointerEvents = 'none';
+                // Get form values directly from inputs
+                var titleInput = form.querySelector('input[name="title"]');
+                var title = titleInput ? titleInput.value.trim() : '';
+                
+                if (!title) {
+                    alert('Please enter a name');
+                    return;
+                }
 
-            var formData = new FormData(form);
+                var detailsInput = form.querySelector('[name="details"]');
+                var priorityInput = form.querySelector('[name="priority"]');
+                var occasionInput = form.querySelector('[name="occasion"]');
 
-            var dream = {
-                id: Date.now(),
-                title: formData.get('title'),
-                details: formData.get('details') || '',
-                priority: formData.get('priority') || '',
-                achieved: false,
-                dateAdded: new Date().toISOString(),
-                image: currentImageData[category] || null
-            };
+                var dream = {
+                    id: Date.now(),
+                    firebaseId: 'item_' + Date.now(),
+                    title: title,
+                    details: detailsInput ? detailsInput.value.trim() : '',
+                    priority: priorityInput ? priorityInput.value : '',
+                    achieved: false,
+                    dateAdded: new Date().toISOString(),
+                    image: currentImageData[category] || null
+                };
 
-            if (category === 'restaurants') {
-                dream.occasion = formData.get('occasion') || '';
-                var types = formData.getAll('restaurantType');
-                if (types.length > 0) dream.restaurantTypes = types;
-            }
+                if (category === 'restaurants' || category === 'our-restaurants') {
+                    dream.occasion = occasionInput ? occasionInput.value : '';
+                    var checked = form.querySelectorAll('input[name="restaurantType"]:checked');
+                    var types = [];
+                    for (var i = 0; i < checked.length; i++) types.push(checked[i].value);
+                    if (types.length > 0) dream.restaurantTypes = types;
+                }
 
-            if (category === 'places') {
-                var ptypes = formData.getAll('placeType');
-                if (ptypes.length > 0) dream.placeTypes = ptypes;
-            }
+                if (category === 'places' || category === 'our-places') {
+                    var pchecked = form.querySelectorAll('input[name="placeType"]:checked');
+                    var ptypes = [];
+                    for (var i = 0; i < pchecked.length; i++) ptypes.push(pchecked[i].value);
+                    if (ptypes.length > 0) dream.placeTypes = ptypes;
+                }
 
-            var savedToFirebase = false;
-
-            // Try Firebase first with timeout, fall back to localStorage
-            if (database && firebaseRef && firebasePush) {
-                try {
-                    var dreamsRef = firebaseRef(database, 'dreams/' + category);
-                    var pushPromise = firebasePush(dreamsRef, dream);
-                    var timeoutPromise = new Promise(function(_, reject) {
-                        setTimeout(function() { reject(new Error('timeout')); }, 5000);
-                    });
-                    await Promise.race([pushPromise, timeoutPromise]);
-                    savedToFirebase = true;
-                } catch (error) { /* fall through to local */ }
-            }
-
-            // localStorage fallback
-            if (!savedToFirebase) {
-                dream.firebaseId = 'local_' + dream.id;
+                // Save to array + localStorage
                 if (!dreams[category]) dreams[category] = [];
                 dreams[category].push(dream);
                 saveToLocal(category);
                 renderDreams(category);
-            }
 
-            // Show saved confirmation briefly
-            submitBtn.classList.remove('saving');
-            submitBtn.textContent = 'Saved!';
-            submitBtn.style.borderColor = '#7ba886';
-            submitBtn.style.color = '#7ba886';
+                // Sync to Firestore in background
+                syncToFirestore(category);
 
-            // Auto-expand the list so user sees their new item
-            var listEl = document.getElementById(category + '-list');
-            if (listEl) {
-                listEl.classList.add('expanded');
-                localStorage.setItem('dreamListExpanded_' + category, 'true');
-            }
+                // Expand list so user sees their item
+                var listEl = document.getElementById(category + '-list');
+                if (listEl) {
+                    listEl.classList.add('expanded');
+                    localStorage.setItem('dreamListExpanded_' + category, 'true');
+                }
 
-            setTimeout(function() {
-                submitBtn.textContent = originalText;
-                submitBtn.style.borderColor = '';
-                submitBtn.style.color = '';
-                if (cancelBtn) cancelBtn.style.pointerEvents = '';
+                // Reset and close form
+                form.reset();
+                var preview = document.getElementById(category + '-preview');
+                if (preview) preview.innerHTML = '';
+                delete currentImageData[category];
                 window.hideForm(category);
-            }, 800);
+
+            } catch(err) {
+                alert('Error: ' + err.message);
+                try { saveToLocal(category); renderDreams(category); } catch(x) {}
+            }
         };
 
         window.toggleDreamList = function(category) {
@@ -1634,60 +2041,235 @@
             localStorage.setItem('dreamListExpanded_' + category, isExpanded);
         };
 
-        window.toggleAchieved = async function(category, firebaseId, newAchievedState, btn) {
+        window.toggleAchieved = function(category, firebaseId, newAchievedState, btn) {
             if (btn) btn.classList.add('saving');
 
-            if (firebaseId.startsWith('local_')) {
+            try {
                 var dream = dreams[category].find(function(d) { return d.firebaseId === firebaseId; });
                 if (dream) {
                     dream.achieved = newAchievedState;
                     saveToLocal(category);
                     renderDreams(category);
+                    
+                    // Sync to Firestore in background
+                    syncToFirestore(category);
+                    
                     if (newAchievedState) showCelebration(dream.title);
                 }
-            } else if (database && firebaseRef && firebaseUpdate) {
-                try {
-                    var dreamRef = firebaseRef(database, 'dreams/' + category + '/' + firebaseId);
-                    var updatePromise = firebaseUpdate(dreamRef, { achieved: newAchievedState });
-                    var timeoutPromise = new Promise(function(_, reject) {
-                        setTimeout(function() { reject(new Error('timeout')); }, 5000);
-                    });
-                    await Promise.race([updatePromise, timeoutPromise]);
-                } catch(error) {
-                    var d = dreams[category].find(function(x) { return x.firebaseId === firebaseId; });
-                    if (d) { d.achieved = newAchievedState; saveToLocal(category); renderDreams(category); }
-                }
-                if (newAchievedState) {
-                    var d = dreams[category].find(function(x) { return x.firebaseId === firebaseId; });
-                    if (d) showCelebration(d.title);
-                }
+            } catch(err) {
+                try { saveToLocal(category); renderDreams(category); } catch(e) {}
             }
 
             if (btn) btn.classList.remove('saving');
         };
 
-        window.deleteDream = async function(category, firebaseId, btn) {
-            if (confirm('Delete this dream?')) {
-                if (btn) btn.classList.add('saving');
-
-                if (firebaseId.startsWith('local_')) {
+        window.deleteDream = function(category, firebaseId, btn) {
+            // Tap once = "Sure?", tap again = delete
+            if (btn && btn.dataset.confirmDelete === 'yes') {
+                try {
                     dreams[category] = dreams[category].filter(function(d) { return d.firebaseId !== firebaseId; });
                     saveToLocal(category);
                     renderDreams(category);
-                } else if (database && firebaseRef && firebaseRemove) {
-                    try {
-                        var dreamRef = firebaseRef(database, 'dreams/' + category + '/' + firebaseId);
-                        var removePromise = firebaseRemove(dreamRef);
-                        var timeoutPromise = new Promise(function(_, reject) {
-                            setTimeout(function() { reject(new Error('timeout')); }, 5000);
-                        });
-                        await Promise.race([removePromise, timeoutPromise]);
-                    } catch(error) {
-                        dreams[category] = dreams[category].filter(function(d) { return d.firebaseId !== firebaseId; });
-                        saveToLocal(category);
-                        renderDreams(category);
-                    }
+                    syncToFirestore(category);
+                } catch(err) {
+                    try { saveToLocal(category); renderDreams(category); } catch(e) {}
                 }
+            } else if (btn) {
+                btn.dataset.confirmDelete = 'yes';
+                btn.textContent = 'Sure?';
+                btn.style.color = '#c0392b';
+                btn.style.borderColor = '#c0392b';
+                // Reset after 3 seconds if not confirmed
+                setTimeout(function() {
+                    if (btn && btn.parentNode) {
+                        btn.dataset.confirmDelete = '';
+                        btn.textContent = 'Delete';
+                        btn.style.color = '';
+                        btn.style.borderColor = '';
+                    }
+                }, 3000);
+            }
+        };
+
+        // === TRIED IT / DONE (generic for restaurants, places, travel, shows-movies) ===
+        // Maps source category → destination "our" category
+        var triedItMap = {
+            'restaurants': { dest: 'our-restaurants', title: 'We tried it!', keep: '♡ Eat Again' },
+            'places': { dest: 'our-places', title: 'We went!', keep: '♡ Go Again' },
+            'travel': { dest: 'our-travel', title: 'We traveled!', keep: '♡ Visit Again' },
+            'shows-movies': { dest: 'our-shows-movies', title: 'We watched it!', keep: '♡ Watch Again' }
+        };
+
+        window.triedIt = function(category, firebaseId) {
+            var dream = dreams[category].find(function(d) { return d.firebaseId === firebaseId; });
+            if (!dream) return;
+            var config = triedItMap[category];
+            if (!config) return;
+            triedItData.category = category;
+            triedItData.firebaseId = firebaseId;
+            document.getElementById('triedModalTitle').textContent = config.title;
+            document.getElementById('triedModalName').textContent = dream.title;
+            document.getElementById('triedBtnAgain').textContent = config.keep;
+            document.getElementById('triedModal').classList.add('active');
+        };
+
+        window.closeTriedModal = function() {
+            document.getElementById('triedModal').classList.remove('active');
+            triedItData = { category: '', firebaseId: '' };
+        };
+
+        window.keepItem = function() {
+            try {
+                var srcCat = triedItData.category;
+                var config = triedItMap[srcCat];
+                if (!config) { closeTriedModal(); return; }
+                var destCat = config.dest;
+
+                var dream = dreams[srcCat].find(function(d) { return d.firebaseId === triedItData.firebaseId; });
+                if (!dream) { closeTriedModal(); return; }
+
+                // Copy to "our" list
+                var favorite = Object.assign({}, dream);
+                favorite.id = Date.now();
+                favorite.firebaseId = 'item_' + favorite.id;
+                favorite.achieved = false;
+                delete favorite.priority;
+
+                if (!dreams[destCat]) dreams[destCat] = [];
+                dreams[destCat].push(favorite);
+                saveToLocal(destCat);
+                syncToFirestore(destCat);
+                renderDreams(destCat);
+
+                // Remove from want-to-try list
+                dreams[srcCat] = dreams[srcCat].filter(function(d) { return d.firebaseId !== triedItData.firebaseId; });
+                saveToLocal(srcCat);
+                syncToFirestore(srcCat);
+                renderDreams(srcCat);
+
+                // Auto-expand the "our" list
+                var listEl = document.getElementById(destCat + '-list');
+                if (listEl) {
+                    listEl.classList.add('expanded');
+                    localStorage.setItem('dreamListExpanded_' + destCat, 'true');
+                }
+
+                closeTriedModal();
+            } catch(err) {
+                alert('Error: ' + err.message);
+                closeTriedModal();
+            }
+        };
+
+        window.passItem = function() {
+            try {
+                var srcCat = triedItData.category;
+                dreams[srcCat] = dreams[srcCat].filter(function(d) { return d.firebaseId !== triedItData.firebaseId; });
+                saveToLocal(srcCat);
+                syncToFirestore(srcCat);
+                renderDreams(srcCat);
+                closeTriedModal();
+            } catch(err) {
+                alert('Error: ' + err.message);
+                closeTriedModal();
+            }
+        };
+
+        // === EDIT DREAM ===
+        window.editDream = function(category, firebaseId) {
+            var dream = dreams[category].find(function(d) { return d.firebaseId === firebaseId; });
+            if (!dream) return;
+
+            document.getElementById('editFirebaseId').value = firebaseId;
+            document.getElementById('editCategory').value = category;
+            document.getElementById('editTitle').value = dream.title || '';
+            document.getElementById('editDetails').value = dream.details || '';
+            document.getElementById('editPriority').value = dream.priority || '';
+
+            var isRestaurant = (category === 'restaurants' || category === 'our-restaurants');
+            var isPlace = (category === 'places' || category === 'our-places');
+            var isOurList = (category.indexOf('our-') === 0);
+
+            // Show/hide category-specific fields
+            document.getElementById('editTypeGroup').style.display = isRestaurant ? '' : 'none';
+            document.getElementById('editPlaceTypeGroup').style.display = isPlace ? '' : 'none';
+            document.getElementById('editOccasionGroup').style.display = isRestaurant ? '' : 'none';
+            document.getElementById('editPriorityGroup').style.display = isOurList ? 'none' : '';
+
+            // Set restaurant type checkboxes
+            if (isRestaurant) {
+                var types = dream.restaurantTypes || [];
+                var checkboxes = document.querySelectorAll('#editTypeCheckboxes input[name="editType"]');
+                for (var i = 0; i < checkboxes.length; i++) {
+                    checkboxes[i].checked = types.indexOf(checkboxes[i].value) !== -1;
+                }
+                document.getElementById('editOccasion').value = dream.occasion || '';
+            }
+
+            // Set place type checkboxes
+            if (isPlace) {
+                var ptypes = dream.placeTypes || [];
+                var pcheckboxes = document.querySelectorAll('#editPlaceTypeCheckboxes input[name="editPlaceType"]');
+                for (var i = 0; i < pcheckboxes.length; i++) {
+                    pcheckboxes[i].checked = ptypes.indexOf(pcheckboxes[i].value) !== -1;
+                }
+            }
+
+            var formEl = document.getElementById('edit-form');
+            formEl.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            formEl._backdropHandler = function(e) {
+                if (e.target === formEl) closeEditForm();
+            };
+            formEl.addEventListener('click', formEl._backdropHandler);
+        };
+
+        window.closeEditForm = function() {
+            var formEl = document.getElementById('edit-form');
+            formEl.classList.remove('active');
+            document.body.style.overflow = '';
+            if (formEl._backdropHandler) {
+                formEl.removeEventListener('click', formEl._backdropHandler);
+                delete formEl._backdropHandler;
+            }
+        };
+
+        window.saveEdit = function() {
+            try {
+                var firebaseId = document.getElementById('editFirebaseId').value;
+                var category = document.getElementById('editCategory').value;
+
+                var dream = dreams[category].find(function(d) { return d.firebaseId === firebaseId; });
+                if (!dream) { closeEditForm(); return; }
+
+                dream.title = document.getElementById('editTitle').value.trim();
+                dream.details = document.getElementById('editDetails').value.trim();
+                dream.priority = document.getElementById('editPriority').value;
+
+                var isRestaurant = (category === 'restaurants' || category === 'our-restaurants');
+                var isPlace = (category === 'places' || category === 'our-places');
+
+                if (isRestaurant) {
+                    var checked = document.querySelectorAll('#editTypeCheckboxes input[name="editType"]:checked');
+                    var types = [];
+                    for (var i = 0; i < checked.length; i++) types.push(checked[i].value);
+                    dream.restaurantTypes = types;
+                    dream.occasion = document.getElementById('editOccasion').value;
+                }
+
+                if (isPlace) {
+                    var pchecked = document.querySelectorAll('#editPlaceTypeCheckboxes input[name="editPlaceType"]:checked');
+                    var ptypes = [];
+                    for (var i = 0; i < pchecked.length; i++) ptypes.push(pchecked[i].value);
+                    dream.placeTypes = ptypes;
+                }
+
+                saveToLocal(category);
+                syncToFirestore(category);
+                renderDreams(category);
+                closeEditForm();
+            } catch(err) {
+                alert('Error: ' + err.message);
             }
         };
 
@@ -1759,6 +2341,128 @@
             }
         }
 
+        // === DETAIL POPUP ===
+        window.openDetail = function(category, firebaseId) {
+            var dream = dreams[category].find(function(d) { return d.firebaseId === firebaseId; });
+            if (!dream) return;
+
+            document.getElementById('detailTitle').textContent = dream.title;
+
+            // Build tags
+            var tags = '';
+            if (dream.priority === 'high') tags += '<span class="dream-tag priority-high">High Priority</span>';
+            else if (dream.priority === 'soon') tags += '<span class="dream-tag priority-soon">Soon</span>';
+
+            if (dream.occasion === 'date-night') tags += '<span class="dream-tag occasion-date-night">Date Night</span>';
+            else if (dream.occasion === 'friends') tags += '<span class="dream-tag occasion-friends">Go with Friends</span>';
+            else if (dream.occasion === 'special') tags += '<span class="dream-tag occasion-special">Special Occasion</span>';
+
+            if (dream.restaurantTypes && Array.isArray(dream.restaurantTypes)) {
+                dream.restaurantTypes.forEach(function(t) {
+                    tags += '<span class="dream-tag">' + t.charAt(0).toUpperCase() + t.slice(1) + '</span>';
+                });
+            }
+            if (dream.placeTypes && Array.isArray(dream.placeTypes)) {
+                dream.placeTypes.forEach(function(t) {
+                    tags += '<span class="dream-tag">' + t.split('-').map(function(w) { return w.charAt(0).toUpperCase() + w.slice(1); }).join(' ') + '</span>';
+                });
+            }
+            document.getElementById('detailMeta').innerHTML = tags;
+            document.getElementById('detailMeta').style.display = tags ? '' : 'none';
+
+            // Details text
+            var detailEl = document.getElementById('detailDetails');
+            detailEl.textContent = dream.details || '';
+            detailEl.style.display = dream.details ? '' : 'none';
+
+            // Image
+            var imgEl = document.getElementById('detailImage');
+            if (dream.image) {
+                imgEl.src = dream.image;
+                imgEl.style.display = '';
+            } else {
+                imgEl.style.display = 'none';
+            }
+
+            // Action buttons
+            var triedItCategories = ['restaurants', 'places', 'travel', 'shows-movies'];
+            var ourCategories = ['our-restaurants', 'our-places', 'our-travel', 'our-shows-movies'];
+            var triedLabels = {
+                'restaurants': 'We Tried It!',
+                'places': 'We Went!',
+                'travel': 'We Traveled!',
+                'shows-movies': 'We Watched It!'
+            };
+
+            var btns = '';
+            if (triedItCategories.indexOf(category) !== -1) {
+                btns =
+                    '<button class="icon-btn" onclick="closeDetail();triedIt(\'' + category + '\', \'' + firebaseId + '\')">' + triedLabels[category] + '</button>' +
+                    '<button class="icon-btn" onclick="closeDetail();editDream(\'' + category + '\', \'' + firebaseId + '\')">Edit</button>' +
+                    '<button class="icon-btn" onclick="deleteDreamAndClose(\'' + category + '\', \'' + firebaseId + '\')">Delete</button>';
+            } else if (ourCategories.indexOf(category) !== -1) {
+                btns =
+                    '<button class="icon-btn" onclick="closeDetail();editDream(\'' + category + '\', \'' + firebaseId + '\')">Edit</button>' +
+                    '<button class="icon-btn" onclick="deleteDreamAndClose(\'' + category + '\', \'' + firebaseId + '\')">Delete</button>';
+            } else {
+                btns =
+                    '<button class="icon-btn ' + (dream.achieved ? 'achieved' : '') + '" onclick="toggleAchievedAndClose(\'' + category + '\', \'' + firebaseId + '\', ' + !dream.achieved + ')">' +
+                    (dream.achieved ? '&#10004; Done' : 'Mark Done') + '</button>' +
+                    '<button class="icon-btn" onclick="closeDetail();editDream(\'' + category + '\', \'' + firebaseId + '\')">Edit</button>' +
+                    '<button class="icon-btn" onclick="deleteDreamAndClose(\'' + category + '\', \'' + firebaseId + '\')">Delete</button>';
+            }
+            document.getElementById('detailActions').innerHTML = btns;
+
+            document.getElementById('detailPopup').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.closeDetail = function() {
+            document.getElementById('detailPopup').classList.remove('active');
+            document.body.style.overflow = '';
+        };
+
+        window.deleteDreamAndClose = function(category, firebaseId) {
+            // Tap-twice inside the popup
+            var btn = event.target;
+            if (btn && btn.dataset.confirmDelete === 'yes') {
+                try {
+                    dreams[category] = dreams[category].filter(function(d) { return d.firebaseId !== firebaseId; });
+                    saveToLocal(category);
+                    renderDreams(category);
+                    syncToFirestore(category);
+                } catch(err) {}
+                closeDetail();
+            } else if (btn) {
+                btn.dataset.confirmDelete = 'yes';
+                btn.textContent = 'Sure?';
+                btn.style.color = '#c0392b';
+                btn.style.borderColor = '#c0392b';
+                setTimeout(function() {
+                    if (btn && btn.parentNode) {
+                        btn.dataset.confirmDelete = '';
+                        btn.textContent = 'Delete';
+                        btn.style.color = '';
+                        btn.style.borderColor = '';
+                    }
+                }, 3000);
+            }
+        };
+
+        window.toggleAchievedAndClose = function(category, firebaseId, newState) {
+            try {
+                var dream = dreams[category].find(function(d) { return d.firebaseId === firebaseId; });
+                if (dream) {
+                    dream.achieved = newState;
+                    saveToLocal(category);
+                    renderDreams(category);
+                    syncToFirestore(category);
+                    if (newState) showCelebration(dream.title);
+                }
+            } catch(err) {}
+            closeDetail();
+        };
+
         function renderDreams(category) {
             var listContainer = document.getElementById(category + '-list');
             if (!listContainer) return;
@@ -1766,11 +2470,15 @@
             if (!dreams[category] || dreams[category].length === 0) {
                 var emptyMessages = {
                     restaurants: 'No restaurants yet. Where should you go for date night?',
+                    'our-restaurants': 'No favorites yet! Add places you already love.',
                     places: 'No places yet. Where do you want to go?',
+                    'our-places': 'No favorite spots yet!',
                     'kasey-wishlist': "Kasey's wishlist is empty",
                     'charlie-wishlist': "Charlie's wishlist is empty",
                     travel: 'No travel dreams yet. Where do you want to go?',
+                    'our-travel': 'No favorite trips yet!',
                     'shows-movies': 'No shows or movies yet. What do you want to watch together?',
+                    'our-shows-movies': 'No favorites yet!',
                     bucket: 'Start building your bucket list together!',
                     home: 'What does your dream home look like?',
                     pets: 'Dream about your future fur (or scale, or feather) babies!',
@@ -1792,48 +2500,17 @@
                 '<span class="dream-list-arrow">&#9660;</span></div><div class="dream-list-content">';
 
             sorted.forEach(function(dream) {
-                var priorityTag = '';
-                if (dream.priority === 'high') priorityTag = '<span class="dream-tag priority-high">High Priority</span>';
-                else if (dream.priority === 'soon') priorityTag = '<span class="dream-tag priority-soon">Soon</span>';
-                else if (dream.priority === 'friends') priorityTag = '<span class="dream-tag priority-friends">Go with Friends</span>';
+                // Compact row: title + indicators + chevron
+                var indicators = '';
+                if (dream.priority === 'high') indicators += '<span class="indicator-dot high" title="High Priority"></span>';
+                else if (dream.priority === 'soon') indicators += '<span class="indicator-dot soon" title="Soon"></span>';
+                if (dream.image) indicators += '<span class="indicator-dot has-image" title="Has photo"></span>';
 
-                var occasionTag = '';
-                if (dream.occasion === 'date-night') occasionTag = '<span class="dream-tag occasion-date-night">Date Night</span>';
-                else if (dream.occasion === 'friends') occasionTag = '<span class="dream-tag occasion-friends">Go with Friends</span>';
-                else if (dream.occasion === 'special') occasionTag = '<span class="dream-tag occasion-special">Special Occasion</span>';
-
-                var restaurantTypeTags = '';
-                if (dream.restaurantTypes && Array.isArray(dream.restaurantTypes)) {
-                    restaurantTypeTags = dream.restaurantTypes.map(function(type) {
-                        return '<span class="dream-tag">' + type.charAt(0).toUpperCase() + type.slice(1) + '</span>';
-                    }).join('');
-                } else if (dream.restaurantType) {
-                    restaurantTypeTags = '<span class="dream-tag">' + dream.restaurantType.charAt(0).toUpperCase() + dream.restaurantType.slice(1) + '</span>';
-                }
-
-                var placeTypeTags = '';
-                if (dream.placeTypes && Array.isArray(dream.placeTypes)) {
-                    placeTypeTags = dream.placeTypes.map(function(type) {
-                        return '<span class="dream-tag">' + type.split('-').map(function(w) { return w.charAt(0).toUpperCase() + w.slice(1); }).join(' ') + '</span>';
-                    }).join('');
-                }
-
-                var allTags = '';
-                if (restaurantTypeTags || placeTypeTags || occasionTag || priorityTag) {
-                    allTags = '<div class="dream-item-meta">' + restaurantTypeTags + placeTypeTags + occasionTag + priorityTag + '</div>';
-                }
-
-                html += '<div class="dream-item ' + (dream.achieved ? 'achieved' : '') + '">' +
-                    '<div class="dream-item-content">' +
-                    '<div class="dream-item-title">' + escapeHtml(dream.title) + '</div>' +
-                    (dream.details ? '<div class="dream-item-details">' + escapeHtml(dream.details) + '</div>' : '') +
-                    (dream.image ? '<img src="' + dream.image + '" class="dream-item-image" onclick="openLightbox(this.src)" alt="' + escapeHtml(dream.title) + '">' : '') +
-                    allTags + '</div>' +
-                    '<div class="dream-item-actions">' +
-                    '<button class="icon-btn ' + (dream.achieved ? 'achieved' : '') + '" onclick="toggleAchieved(\'' + category + '\', \'' + dream.firebaseId + '\', ' + !dream.achieved + ', this)">' +
-                    (dream.achieved ? '&#10004; Done' : 'Mark Done') + '</button>' +
-                    '<button class="icon-btn" onclick="deleteDream(\'' + category + '\', \'' + dream.firebaseId + '\', this)">' + 'Delete</button>' +
-                    '</div></div>';
+                html += '<div class="dream-item ' + (dream.achieved ? 'achieved' : '') + '" onclick="openDetail(\'' + category + '\', \'' + dream.firebaseId + '\')">' +
+                    '<div class="dream-item-content"><div class="dream-item-title">' + escapeHtml(dream.title) + '</div></div>' +
+                    '<div class="dream-item-indicators">' + indicators + '</div>' +
+                    '<span class="dream-item-chevron">&#9654;</span>' +
+                    '</div>';
             });
 
             html += '</div>';
@@ -1853,55 +2530,75 @@
             renderDreams(cat);
         });
 
-        // === LOAD FIREBASE IN BACKGROUND ===
+        // === LOAD FIREBASE (FIRESTORE) IN BACKGROUND ===
         (async function() {
             try {
                 var appModule = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
-                var dbModule = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js');
+                var fsModule = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
 
                 var firebaseConfig = {
                     apiKey: "AIzaSyCDda9sPwSY-RQ5rrM5THOvcLtHvcPRYd4",
                     authDomain: "our-habit-hub.firebaseapp.com",
-                    databaseURL: "https://our-habit-hub-default-rtdb.firebaseio.com",
                     projectId: "our-habit-hub",
                     storageBucket: "our-habit-hub.firebasestorage.app",
                     messagingSenderId: "78555830496",
                     appId: "1:78555830496:web:3e457e54729cc11b825885"
                 };
 
-                var app = appModule.initializeApp(firebaseConfig);
-                database = dbModule.getDatabase(app);
-                firebaseRef = dbModule.ref;
-                firebasePush = dbModule.push;
-                firebaseRemove = dbModule.remove;
-                firebaseUpdate = dbModule.update;
+                var app;
+                try {
+                    app = appModule.initializeApp(firebaseConfig);
+                } catch(initErr) {
+                    // App might already be initialized
+                    app = appModule.getApp ? appModule.getApp() : null;
+                }
+                if (!app) return;
+                
+                var db = fsModule.getFirestore(app);
+                window.dreamsDb = db;
+                window.fsModule = fsModule;
+                isConnected = true;
 
-                // Set up real-time listeners
+                // Save helper
+                window.saveDreamsToFirebase = function(category) {
+                    syncToFirestore(category);
+                };
+
+                // Set up real-time listeners for each category
                 categories.forEach(function(category) {
-                    var dreamsRef = dbModule.ref(database, 'dreams/' + category);
-                    dbModule.onValue(dreamsRef, function(snapshot) {
-                        var data = snapshot.val();
-                        dreams[category] = [];
-                        if (data) {
-                            Object.keys(data).forEach(function(key) {
-                                dreams[category].push(Object.assign({ firebaseId: key }, data[key]));
-                            });
-                        }
-                        // Sync local-only items up to Firebase
-                        var localItems = loadFromLocal(category);
-                        localItems.forEach(function(item) {
-                            if (item.firebaseId && item.firebaseId.indexOf('local_') === 0) {
-                                dbModule.push(dbModule.ref(database, 'dreams/' + category), item).then(function() {
-                                    var remaining = loadFromLocal(category).filter(function(l) { return l.id !== item.id; });
-                                    localStorage.setItem('dreams_' + category, JSON.stringify(remaining));
-                                }).catch(function() {});
+                    var docRef = fsModule.doc(db, 'dreams', category);
+                    fsModule.onSnapshot(docRef, function(snapshot) {
+                        if (snapshot.exists()) {
+                            var data = snapshot.data();
+                            if (data && data.items) {
+                                // Merge any local-only items that haven't been synced yet
+                                var localItems = loadFromLocal(category);
+                                var localOnly = localItems.filter(function(item) {
+                                    return item.firebaseId && item.firebaseId.indexOf('local_') === 0;
+                                });
+
+                                dreams[category] = data.items;
+
+                                // Push local-only items to Firebase
+                                if (localOnly.length > 0) {
+                                    localOnly.forEach(function(item) {
+                                        item.firebaseId = 'item_' + item.id;
+                                        dreams[category].push(item);
+                                    });
+                                    syncToFirestore(category);
+                                }
+
+                                saveToLocal(category);
+                                renderDreams(category);
                             }
-                        });
-                        saveToLocal(category);
-                        renderDreams(category);
-                        isConnected = true;
+                        } else {
+                            // No data in Firestore yet — push local data up
+                            if (dreams[category] && dreams[category].length > 0) {
+                                syncToFirestore(category);
+                            }
+                        }
                     }, function(error) {
-                        // Firebase error — keep using local data
+                        // Firestore error — keep using local data
                     });
                 });
 
