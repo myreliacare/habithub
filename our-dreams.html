@@ -1002,7 +1002,7 @@
                 <a href="index.html" class="nav-link">Home</a>
                 <a href="kasey-hub.html" class="nav-link">Kasey</a>
                 <a href="charlie-hub.html" class="nav-link">Charlie</a>
-                <a href="our-dreams.html" class="nav-link active">Us ♡</a>
+                <a href="our-dreams.html" class="nav-link active">Us</a>
                 <a href="meal-plan.html" class="nav-link">Meals</a>
                 <a href="settings.html" class="nav-link">Settings</a>
             </div>
@@ -1017,7 +1017,7 @@
         <a href="index.html" class="nav-link-mobile">Home</a>
         <a href="kasey-hub.html" class="nav-link-mobile">Kasey</a>
         <a href="charlie-hub.html" class="nav-link-mobile">Charlie</a>
-        <a href="our-dreams.html" class="nav-link-mobile active">Us ♡</a>
+        <a href="our-dreams.html" class="nav-link-mobile active">Us</a>
         <a href="meal-plan.html" class="nav-link-mobile">Meals</a>
         <a href="settings.html" class="nav-link-mobile">Settings</a>
     </div>
@@ -1136,7 +1136,7 @@
                 <hr class="section-divider">
 
                 <!-- OUR RESTAURANTS -->
-                <h2 class="section-title">Our Restaurants ♡</h2>
+                <h2 class="section-title">Our Restaurants</h2>
                 <p style="font-size: 0.8rem; color: rgba(74,58,60,0.5); margin-bottom: 12px;">Places we love and would go back to</p>
                 
                 <div style="display: flex; gap: 10px; margin-bottom: 16px;">
@@ -1258,7 +1258,7 @@
 
                 <hr class="section-divider">
 
-                <h2 class="section-title">Our Places ♡</h2>
+                <h2 class="section-title">Our Places</h2>
                 <p style="font-size: 0.8rem; color: rgba(74,58,60,0.5); margin-bottom: 12px;">Spots we love and would go back to</p>
 
                 <div style="display: flex; gap: 10px; margin-bottom: 16px;">
@@ -1443,7 +1443,7 @@
 
                 <hr class="section-divider">
 
-                <h2 class="section-title">Where We've Been ♡</h2>
+                <h2 class="section-title">Where We've Been</h2>
                 <p style="font-size: 0.8rem; color: rgba(74,58,60,0.5); margin-bottom: 12px;">Places we loved and would visit again</p>
 
                 <div style="display: flex; gap: 10px; margin-bottom: 16px;">
@@ -1527,7 +1527,7 @@
 
                 <hr class="section-divider">
 
-                <h2 class="section-title">What We've Watched ♡</h2>
+                <h2 class="section-title">What We've Watched</h2>
                 <p style="font-size: 0.8rem; color: rgba(74,58,60,0.5); margin-bottom: 12px;">Shows & movies we loved</p>
 
                 <div style="display: flex; gap: 10px; margin-bottom: 16px;">
@@ -1781,7 +1781,7 @@
             <div class="tried-modal-title" id="triedModalTitle">We tried it!</div>
             <div class="tried-modal-name" id="triedModalName"></div>
             <div class="tried-modal-buttons">
-                <button class="tried-btn-again" id="triedBtnAgain" onclick="keepItem()">♡ Again</button>
+                <button class="tried-btn-again" id="triedBtnAgain" onclick="keepItem()">Again</button>
                 <button class="tried-btn-pass" onclick="passItem()">Pass</button>
                 <button class="tried-btn-cancel" onclick="closeTriedModal()">Cancel</button>
             </div>
@@ -1856,7 +1856,7 @@
     </div>
 
     <script>
-        // Global variables — available immediately
+        // Global variables -- available immediately
         var categories = ['restaurants', 'our-restaurants', 'places', 'our-places', 'kasey-wishlist', 'charlie-wishlist', 'travel', 'our-travel', 'bucket', 'home', 'pets', 'traditions', 'shows-movies', 'our-shows-movies'];
         var dreams = {};
         var isConnected = false;
@@ -2108,12 +2108,12 @@
         };
 
         // === TRIED IT / DONE (generic for restaurants, places, travel, shows-movies) ===
-        // Maps source category → destination "our" category
+        // Maps source category --> destination "our" category
         var triedItMap = {
-            'restaurants': { dest: 'our-restaurants', title: 'We tried it!', keep: '♡ Eat Again' },
-            'places': { dest: 'our-places', title: 'We went!', keep: '♡ Go Again' },
-            'travel': { dest: 'our-travel', title: 'We traveled!', keep: '♡ Visit Again' },
-            'shows-movies': { dest: 'our-shows-movies', title: 'We watched it!', keep: '♡ Watch Again' }
+            'restaurants': { dest: 'our-restaurants', title: 'We tried it!', keep: 'Eat Again' },
+            'places': { dest: 'our-places', title: 'We went!', keep: 'Go Again' },
+            'travel': { dest: 'our-travel', title: 'We traveled!', keep: 'Visit Again' },
+            'shows-movies': { dest: 'our-shows-movies', title: 'We watched it!', keep: 'Watch Again' }
         };
 
         window.triedIt = function(category, firebaseId) {
@@ -2621,19 +2621,19 @@
                                 }
                             }
                         } else {
-                            // No data in Firestore yet — push local data up
+                            // No data in Firestore yet -- push local data up
                             if (dreams[category] && dreams[category].length > 0) {
                                 ignoreNext = true;
                                 syncToFirestore(category);
                             }
                         }
                     }, function(error) {
-                        // Firestore error — keep using local data
+                        // Firestore error -- keep using local data
                     });
                 });
 
             } catch(e) {
-                // Firebase failed to load — local storage still works
+                // Firebase failed to load -- local storage still works
             }
         })();
     </script>
