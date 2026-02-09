@@ -2,11 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#2a1f21">
     <title>Our Life Hub</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Philosopher:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -56,42 +60,18 @@
             50% { opacity: 0.5; }
         }
 
-        /* Top Navigation Bar */
-        .top-nav {
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            background: #2a1f21;
-            border-bottom: 1px solid rgba(163, 184, 153, 0.2);
-            z-index: 9999;
-            padding: 0 24px;
-            font-family: 'Philosopher', Georgia, serif;
+        /* Container mobile overrides */
+        @media (max-width: 768px) {
+            .container {
+                padding: 72px 16px 60px;
+            }
         }
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 56px;
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 64px 10px 50px;
+            }
         }
-        .nav-logo {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #a3b899;
-            text-decoration: none;
-            white-space: nowrap;
-        }
-        .nav-links { display: flex; gap: 28px; align-items: center; }
-        .nav-link {
-            color: rgba(242, 235, 224, 0.6);
-            text-decoration: none;
-            font-size: 0.88rem;
-            font-weight: 500;
-            white-space: nowrap;
-            transition: color 0.2s;
-        }
-        .nav-link:hover { color: #f2ebe0; }
-        .nav-link.active { color: #a3b899; }
 
         /* Header */
         .home-header { text-align: center; padding: 10px 0 24px; }
@@ -116,9 +96,8 @@
         }
         .header-photo-container:hover .upload-photo-btn { opacity: 1; }
         .home-title {
-            font-family: 'Dancing Script', cursive;
-            font-size: 2.2rem; font-weight: 400;
-            letter-spacing: 0.02em; color: #a3b899;
+            font-size: 1.5rem; font-weight: 400;
+            letter-spacing: 0.3em; text-transform: uppercase; color: #f2ebe0;
         }
 
         /* Reminder Section */
@@ -297,7 +276,7 @@
 
         /* Calendar */
         .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
-        .calendar-nav { display: flex; align-items: center; gap: 12px; justify-content: center; }
+        .calendar-nav { display: flex; align-items: center; gap: 12px; }
         .calendar-nav button {
             background: transparent; border: 1px solid rgba(61, 107, 107, 0.4);
             color: #a3b899; padding: 8px 14px; cursor: pointer;
@@ -679,7 +658,6 @@
             transform: translateX(-20px);
         }
         .grocery-item:last-of-type { margin-bottom: 0; }
-        #groceryList.collapsed { display: none; }
         .grocery-item input[type="checkbox"] {
             width: 20px; height: 20px;
             accent-color: #a3b899;
@@ -729,6 +707,9 @@
         .expand-icon { color: rgba(61, 107, 107, 0.5); font-size: 0.65rem; transition: transform 0.3s; }
         .phonebook-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
         .phonebook-content.expanded { max-height: 2000px; }
+        .collapsible-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .collapsible-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .collapsible-content.expanded { max-height: 2000px; }
         .phonebook-search { margin: 16px 0 12px; }
         .phonebook-search input {
             width: 100%; background: #2a1f21;
@@ -866,7 +847,7 @@
             .elemental-divider { margin: 20px 0; }
 
             /* Home header */
-            .home-title { font-size: 1.8rem; }
+            .home-title { font-size: 1.2rem; letter-spacing: 0.2em; }
             .header-photo-container { width: 75px; height: 75px; }
         }
 
@@ -878,62 +859,295 @@
             .reminder-actions { grid-template-columns: 1fr; }
             .calendar-month-day { padding: 3px; min-height: 44px; }
             .calendar-month-day .day-number { font-size: 0.75rem; }
-            .home-title { font-size: 1.6rem; }
+            .home-title { font-size: 1.05rem; letter-spacing: 0.15em; }
             .event-item { flex-direction: column; align-items: flex-start; }
             .event-actions { align-self: flex-end; }
         }
+    
 
-        /* ===== HAMBURGER MENU ===== */
-        .nav-hamburger {
-            display: none;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 10px;
-            z-index: 10001;
-        }
-        .nav-hamburger span {
-            display: block;
-            width: 24px;
-            height: 2px;
-            background: #a3b899;
-            margin: 5px 0;
-            transition: all 0.3s ease;
-        }
-        .nav-hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-        .nav-hamburger.open span:nth-child(2) { opacity: 0; }
-        .nav-hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
-        .nav-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: #2a1f21;
-            z-index: 10000;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .nav-overlay.open { display: flex; }
-        .nav-link-mobile {
-            color: rgba(242, 235, 224, 0.7);
-            text-decoration: none;
-            font-size: 1.3rem;
-            font-family: 'Philosopher', Georgia, serif;
-            font-weight: 500;
-            padding: 18px 40px;
-            transition: color 0.2s;
-            display: block;
-            width: 100%;
-            text-align: center;
-        }
-        .nav-link-mobile:hover { color: #f2ebe0; }
-        .nav-link-mobile.active { color: #a3b899; }
-        @media (max-width: 768px) {
-            .nav-hamburger { display: block; }
-            .nav-links { display: none; }
-        }
-    </style>
+/* ===== APP-LIKE BEHAVIOR ===== */
+html {
+    overflow-x: hidden;
+    overscroll-behavior: none;
+    -webkit-text-size-adjust: 100%;
+    height: 100%;
+    scroll-behavior: smooth;
+    background: #3d2f31 !important;
+}
+
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+    min-height: 100%;
+    min-height: 100dvh;
+}
+
+/* Prevent pull-to-refresh on mobile */
+body.nav-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+}
+
+/* No text select on interactive elements */
+button, .btn, .nav-link, .nav-link-mobile, .nav-logo, .nav-hamburger,
+select, .tab, .view-toggle-btn, .hub-nav-btn, label {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* Smooth touch scrolling for scrollable containers */
+.scrollable, .container {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Better touch targets - minimum 44px */
+button, .btn, a.nav-link, .nav-link-mobile, select, input[type="checkbox"] {
+    min-height: 44px;
+    min-width: 44px;
+}
+
+a.nav-link {
+    display: inline-flex;
+    align-items: center;
+}
+
+/* Safe area insets for notched phones */
+.top-nav {
+    padding-top: env(safe-area-inset-top) !important;
+    padding-left: max(16px, env(safe-area-inset-left)) !important;
+    padding-right: max(16px, env(safe-area-inset-right)) !important;
+}
+
+.container {
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+    padding-bottom: max(40px, env(safe-area-inset-bottom));
+}
+
+/* Smoother nav overlay - slide up */
+.nav-overlay {
+    display: flex !important;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.nav-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+/* Active states for touch feedback */
+button:active, .btn:active, .nav-link-mobile:active {
+    opacity: 0.7;
+    transition: opacity 0.05s;
+}
+
+/* Smoother page transitions feel */
+.section, .card, [class*="card"], [class*="section"] {
+    transform: translateZ(0);
+    will-change: auto;
+}
+
+/* Input focus styles - more app-like */
+input:focus, textarea:focus, select:focus {
+    outline: none;
+}
+
+/* Disable long-press context menu on interactive elements (mobile) */
+button, .btn, a, .nav-hamburger {
+    -webkit-touch-callout: none;
+}
+
+@media (max-width: 768px) {
+    /* Account for safe area in nav height */
+    .top-nav {
+        padding-top: env(safe-area-inset-top) !important;
+    }
+}
+/* ===== END APP-LIKE BEHAVIOR ===== */
+
+/* ===== UNIFIED NAV BAR ===== */
+.top-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #2a1f21;
+    border-bottom: 1px solid rgba(163, 184, 153, 0.2);
+    z-index: 9999;
+    padding: 0 24px;
+    font-family: 'Philosopher', Georgia, serif;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+}
+
+.nav-logo {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #a3b899;
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+}
+
+.nav-links {
+    display: flex;
+    gap: 28px;
+    align-items: center;
+}
+
+.nav-link {
+    color: rgba(242, 235, 224, 0.6);
+    text-decoration: none;
+    font-size: 0.88rem;
+    transition: color 0.2s;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+
+.nav-link:hover {
+    color: #f2ebe0;
+}
+
+.nav-link.active {
+    color: #a3b899;
+}
+
+/* Hamburger Button */
+.nav-hamburger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    z-index: 10001;
+}
+
+.nav-hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: #a3b899;
+    margin: 5px 0;
+    transition: all 0.3s ease;
+    border-radius: 1px;
+}
+
+.nav-hamburger.open span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.nav-hamburger.open span:nth-child(2) {
+    opacity: 0;
+}
+
+.nav-hamburger.open span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Mobile Overlay */
+.nav-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(42, 31, 33, 0.97);
+    z-index: 9998;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.nav-overlay.open {
+    display: flex;
+    opacity: 1;
+}
+
+.nav-overlay .nav-link-mobile {
+    color: rgba(242, 235, 224, 0.6);
+    text-decoration: none;
+    font-size: 1.3rem;
+    font-family: 'Philosopher', Georgia, serif;
+    font-weight: 500;
+    padding: 14px 40px;
+    transition: color 0.2s;
+    letter-spacing: 0.05em;
+}
+
+.nav-overlay .nav-link-mobile:hover {
+    color: #f2ebe0;
+}
+
+.nav-overlay .nav-link-mobile.active {
+    color: #a3b899;
+}
+
+@media (max-width: 768px) {
+    .nav-hamburger {
+        display: block;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .nav-container {
+        height: 52px;
+    }
+
+    .nav-logo {
+        font-size: 0.95rem;
+    }
+
+    .top-nav {
+        padding: 0 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-container {
+        height: 48px;
+    }
+
+    .nav-logo {
+        font-size: 0.88rem;
+    }
+
+    .top-nav {
+        padding: 0 12px;
+    }
+
+    .nav-overlay .nav-link-mobile {
+        font-size: 1.15rem;
+        padding: 12px 40px;
+    }
+}
+/* ===== END UNIFIED NAV BAR ===== */
+
+        </style>
 </head>
 <body>
         <!-- Top Navigation Bar -->
@@ -944,22 +1158,22 @@
                     <a href="index.html" class="nav-link active">Home</a>
                     <a href="kasey-hub.html" class="nav-link">Kasey</a>
                     <a href="charlie-hub.html" class="nav-link">Charlie</a>
-                    <a href="our-dreams.html" class="nav-link">Us ♡</a>
+                    <a href="our-dreams.html" class="nav-link">Dreams</a>
                     <a href="meal-plan.html" class="nav-link">Meals</a>
                     <a href="settings.html" class="nav-link">Settings</a>
                 </div>
-                <button class="nav-hamburger" id="navHamburger" onclick="toggleNav()" aria-label="Menu">
+                <button class="nav-hamburger" onclick="toggleNav()" aria-label="Menu">
                     <span></span>
                     <span></span>
                     <span></span>
                 </button>
             </div>
         </nav>
-        <div class="nav-overlay" id="navOverlay" onclick="toggleNav()">
+        <div class="nav-overlay" onclick="toggleNav()">
             <a href="index.html" class="nav-link-mobile active">Home</a>
             <a href="kasey-hub.html" class="nav-link-mobile">Kasey</a>
             <a href="charlie-hub.html" class="nav-link-mobile">Charlie</a>
-            <a href="our-dreams.html" class="nav-link-mobile">Us ♡</a>
+            <a href="our-dreams.html" class="nav-link-mobile">Dreams</a>
             <a href="meal-plan.html" class="nav-link-mobile">Meals</a>
             <a href="settings.html" class="nav-link-mobile">Settings</a>
         </div>
@@ -1097,14 +1311,16 @@
 
         <!-- Grocery List -->
         <div class="section">
-            <div style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="toggleGroceryList()">
+            <div class="collapsible-header" onclick="toggleGroceryList()">
                 <div class="section-title" style="margin-bottom: 0;">Grocery List</div>
-                <span id="groceryExpandBtn" style="color:#a3b899; font-size:0.85rem;">▼</span>
+                <span class="expand-icon" id="groceryIcon" style="transform: rotate(-90deg);">▼</span>
             </div>
-            <div id="groceryList" class="collapsed"></div>
-            <div class="add-input">
-                <input type="text" id="groceryInput" placeholder="Add item..." onkeypress="if(event.key==='Enter') addGrocery()">
-                <button onclick="addGrocery()">+</button>
+            <div class="collapsible-content" id="groceryContent">
+                <div id="groceryList" style="margin-top: 16px;"></div>
+                <div class="add-input">
+                    <input type="text" id="groceryInput" placeholder="Add item..." onkeypress="if(event.key==='Enter') addGrocery()">
+                    <button onclick="addGrocery()">+</button>
+                </div>
             </div>
         </div>
 
@@ -1983,8 +2199,12 @@
         }
 
         async function calendarSaveEvents() {
+            // Save ALL events locally (including CRM) for display
             localStorage.setItem('calendarEvents', JSON.stringify(calendarEvents));
-            await syncToFirebase('calendarEvents', calendarEvents);
+            // Only sync Life Hub's OWN events to Firebase — never send CRM events back
+            // This prevents the duplication loop: CRM→LifeHub→Firebase→CRM
+            const lifeHubOnly = calendarEvents.filter(e => !e.fromCRM);
+            await syncToFirebase('calendarEvents', lifeHubOnly);
         }
 
         function calendarGetEventsForDate(date) {
@@ -2077,11 +2297,6 @@
         function calendarChangeView(view) {
             calendarView = view;
             
-            // Always reset to today when switching to two-day view
-            if (view === 'twoday') {
-                calendarDate = new Date();
-            }
-            
             // Update button states
             document.querySelectorAll('.view-toggle-btn').forEach(btn => {
                 btn.classList.remove('active');
@@ -2117,20 +2332,18 @@
             const container = document.getElementById('calendarContainer');
             container.innerHTML = '';
             
-            const today = new Date();
-            const tomorrow = new Date(today);
-            tomorrow.setDate(today.getDate() + 1);
-            
-            calendarDate = new Date(today);
+            const firstDay = new Date(calendarDate);
+            const secondDay = new Date(calendarDate);
+            secondDay.setDate(firstDay.getDate() + 1);
             
             document.getElementById('calendarTitle').textContent = 
-                `${today.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${tomorrow.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+                `${firstDay.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${secondDay.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
             
+            const today = new Date();
             const todayStr = today.toDateString();
             
-            const days = [today, tomorrow];
             for (let i = 0; i < 2; i++) {
-                const date = days[i];
+                const date = i === 0 ? new Date(firstDay) : new Date(secondDay);
                 
                 const dayDiv = document.createElement('div');
                 dayDiv.className = 'week-day';
@@ -2772,7 +2985,9 @@
             
             // Setup real-time listener for local calendar events
             setupFirebaseListener('calendarEvents', (data) => {
-                calendarEvents = data;
+                // Preserve CRM events that are currently in memory (they aren't stored in Firebase)
+                const currentCRMEvents = calendarEvents.filter(e => e.fromCRM);
+                calendarEvents = [...data, ...currentCRMEvents];
                 calendarRender();
             });
             
@@ -2838,35 +3053,40 @@
 
         // Sync CRM events into local calendar
         function syncWithCRMEvents(crmEvents) {
-            // Remove old CRM events from calendar
-            const beforeCount = calendarEvents.length;
-            calendarEvents = calendarEvents.filter(e => !e.fromCRM);
+            // Remove old CRM events from calendar (they'll be re-added fresh from CRM)
+            const lifeHubEvents = calendarEvents.filter(e => !e.fromCRM);
             
-            // Also remove any local Life Hub events that now exist in CRM
-            // (they've been picked up by CRM and are coming back as CRM events)
-            crmEvents.forEach(crmEvent => {
-                if (crmEvent.lifeHubId) {
-                    calendarEvents = calendarEvents.filter(e => 
-                        e.lifeHubId !== crmEvent.lifeHubId && e.id !== crmEvent.lifeHubId
-                    );
-                }
+            // Build a set of Life Hub event keys for dedup checking
+            const lifeHubKeys = new Set();
+            lifeHubEvents.forEach(e => {
+                if (e.lifeHubId) lifeHubKeys.add(e.lifeHubId);
+                if (e.id) lifeHubKeys.add(e.id);
+                lifeHubKeys.add(`${e.title}|${e.date}|${e.time || ''}`);
             });
             
-            // Add CRM events (avoids duplicates)
+            // Add CRM events, avoiding duplicates with Life Hub events
             let addedCount = 0;
+            const newCRMEvents = [];
             crmEvents.forEach(crmEvent => {
-                const exists = calendarEvents.some(e => 
-                    e.crmId === crmEvent.crmId || 
-                    (e.title === crmEvent.title && e.date === crmEvent.date && e.time === crmEvent.time)
-                );
+                // Skip if this CRM event matches a Life Hub event
+                const titleDateTimeKey = `${crmEvent.title}|${crmEvent.date}|${crmEvent.time || ''}`;
+                const clientDateTimeKey = `${crmEvent.clientName}|${crmEvent.date}|${crmEvent.time || ''}`;
                 
-                if (!exists) {
-                    calendarEvents.push(crmEvent);
+                const isDupe = (crmEvent.lifeHubId && lifeHubKeys.has(crmEvent.lifeHubId)) ||
+                    lifeHubKeys.has(titleDateTimeKey) ||
+                    lifeHubEvents.some(e => 
+                        e.title === crmEvent.clientName && e.date === crmEvent.date && (e.time || '') === (crmEvent.time || '')
+                    );
+                
+                if (!isDupe) {
+                    newCRMEvents.push(crmEvent);
                     addedCount++;
                 }
             });
             
-            // Re-render calendar with CRM events
+            calendarEvents = [...lifeHubEvents, ...newCRMEvents];
+            
+            // Re-render calendar with merged events
             calendarRender();
         }
 
@@ -3363,6 +3583,14 @@
             renderContacts();
         }
 
+        function toggleGroceryList() {
+            const content = document.getElementById('groceryContent');
+            const icon = document.getElementById('groceryIcon');
+            if (!content || !icon) return;
+            content.classList.toggle('expanded');
+            icon.style.transform = content.classList.contains('expanded') ? 'rotate(0deg)' : 'rotate(-90deg)';
+        }
+
         function togglePhonebook() {
             const content = document.getElementById('phonebookContent');
             const icon = document.getElementById('phonebookIcon');
@@ -3428,18 +3656,8 @@
             }
         }
 
-        function toggleGroceryList() {
-            const list = document.getElementById('groceryList');
-            const btn = document.getElementById('groceryExpandBtn');
-            
-            if (list.classList.contains('collapsed')) {
-                list.classList.remove('collapsed');
-                btn.textContent = '▲';
-            } else {
-                list.classList.add('collapsed');
-                btn.textContent = '▼';
-            }
-        }
+
+
 
         // MONTHLY CHALLENGE FUNCTIONS
         async function setMonthlyChallenge() {
@@ -3774,20 +3992,21 @@
             }
         }
     </script>
+
 <script>
 function toggleNav() {
-    var h = document.getElementById('navHamburger');
-    var o = document.getElementById('navOverlay');
-    if (!h || !o) return;
-    var isOpen = o.classList.contains('open');
+    const hamburger = document.querySelector('.nav-hamburger');
+    const overlay = document.querySelector('.nav-overlay');
+    const isOpen = overlay.classList.contains('open');
+    
     if (isOpen) {
-        h.classList.remove('open');
-        o.classList.remove('open');
-        document.body.style.overflow = '';
+        hamburger.classList.remove('open');
+        overlay.classList.remove('open');
+        document.body.classList.remove('nav-open');
     } else {
-        h.classList.add('open');
-        o.classList.add('open');
-        document.body.style.overflow = 'hidden';
+        hamburger.classList.add('open');
+        overlay.classList.add('open');
+        document.body.classList.add('nav-open');
     }
 }
 </script>
