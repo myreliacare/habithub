@@ -693,46 +693,162 @@
  color: #f2ebe0;
  }
 
- .video-item {
- background: #EBE0D6;
- padding: 16px;
- margin-bottom: 12px;
+ .video-grid {
+ display: grid;
+ grid-template-columns: repeat(3, 1fr);
+ gap: 3px;
+ margin-top: 16px;
+ }
+
+ .video-thumb {
+ position: relative;
+ aspect-ratio: 1;
+ overflow: hidden;
+ cursor: pointer;
+ background: #3d2f31;
+ }
+
+ .video-thumb video,
+ .video-thumb img {
+ width: 100%;
+ height: 100%;
+ object-fit: cover;
+ display: block;
+ }
+
+ .video-thumb-overlay {
+ position: absolute;
+ bottom: 0;
+ left: 0;
+ right: 0;
+ padding: 6px 8px;
+ background: linear-gradient(transparent, rgba(0,0,0,0.7));
+ color: #fff;
+ font-size: 0.7rem;
+ font-weight: 600;
+ white-space: nowrap;
+ overflow: hidden;
+ text-overflow: ellipsis;
+ }
+
+ .video-thumb-play {
+ position: absolute;
+ top: 50%;
+ left: 50%;
+ transform: translate(-50%, -50%);
+ width: 36px;
+ height: 36px;
+ background: rgba(181,145,151,0.85);
+ border-radius: 50%;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ pointer-events: none;
+ }
+
+ .video-thumb-play::after {
+ content: '';
+ display: block;
+ width: 0;
+ height: 0;
+ border-style: solid;
+ border-width: 7px 0 7px 12px;
+ border-color: transparent transparent transparent #fff;
+ margin-left: 2px;
+ }
+
+ .video-link-thumb {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: center;
+ width: 100%;
+ height: 100%;
+ background: linear-gradient(135deg, #3d2f31 0%, #5a4345 100%);
+ color: #b59197;
+ text-decoration: none;
+ padding: 12px;
+ text-align: center;
+ }
+
+ .video-link-icon {
+ font-size: 1.6rem;
+ margin-bottom: 4px;
+ }
+
+ .video-link-label {
+ font-size: 0.65rem;
+ color: #999;
+ overflow: hidden;
+ text-overflow: ellipsis;
+ white-space: nowrap;
+ max-width: 100%;
+ }
+
+ /* Video Detail Modal */
+ .video-detail-modal {
+ display: none;
+ position: fixed;
+ top: 0; left: 0; right: 0; bottom: 0;
+ background: rgba(0,0,0,0.92);
+ z-index: 10000;
+ padding: 0;
+ flex-direction: column;
+ }
+ .video-detail-modal.active {
+ display: flex;
+ }
+ .video-detail-header {
  display: flex;
  justify-content: space-between;
- align-items: flex-start;
- gap: 12px;
+ align-items: center;
+ padding: 14px 16px;
+ flex-shrink: 0;
  }
-
- .video-content {
+ .video-detail-title {
+ color: #b59197;
+ font-size: 1rem;
+ font-weight: 700;
  flex: 1;
+ margin-right: 12px;
+ overflow: hidden;
+ text-overflow: ellipsis;
+ white-space: nowrap;
  }
-
- .video-title {
- color: #b59197;
- font-size: 1.05rem;
- font-weight: 600;
- margin-bottom: 6px;
+ .video-detail-close {
+ background: none;
+ border: none;
+ color: #999;
+ font-size: 1.8rem;
+ cursor: pointer;
+ padding: 0 4px;
+ line-height: 1;
  }
-
- .video-link {
- color: #b59197;
- font-size: 0.85rem;
- font-weight: 500;
- word-break: break-all;
- text-decoration: none;
- display: block;
- margin-bottom: 8px;
+ .video-detail-body {
+ flex: 1;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ padding: 0 8px;
+ overflow: hidden;
  }
-
- .video-link:hover {
- text-decoration: underline;
+ .video-detail-body video {
+ max-width: 100%;
+ max-height: 100%;
+ background: #000;
  }
-
- .video-tags {
+ .video-detail-footer {
+ padding: 12px 16px;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ flex-shrink: 0;
+ }
+ .video-detail-tags {
  display: flex;
  flex-wrap: wrap;
  gap: 6px;
- margin-top: 8px;
+ flex: 1;
  }
 
  .video-tag {
@@ -741,6 +857,17 @@
  padding: 4px 10px;
  font-size: 0.75rem;
  border: 1px solid #444;
+ }
+
+ .video-detail-delete {
+ background: transparent;
+ border: 1px solid #c97a7a;
+ color: #c97a7a;
+ padding: 6px 14px;
+ cursor: pointer;
+ font-size: 0.8rem;
+ font-family: inherit;
+ margin-left: 12px;
  }
 
  .prompt-question {
@@ -1810,19 +1937,7 @@
         /* ===== END MOBILE OPTIMIZATION ===== */
  </style>
 </head>
-<body data-version="2.1-resources-fix">
- <script>
- // IMMEDIATE VERSION CHECK - Runs before anything else
- (function() {
- const CURRENT_VERSION = '2.1';
- const saved = localStorage.getItem('resources_version_kasey');
- if (saved !== CURRENT_VERSION) {
- localStorage.removeItem('resources_kasey');
- localStorage.removeItem('resources_version_kasey');
- localStorage.setItem('resources_version_kasey', CURRENT_VERSION);
- }
- })();
- </script>
+<body>
  <!-- Top Navigation Bar -->
     <nav class="top-nav">
         <div class="nav-container">
@@ -2611,8 +2726,13 @@
  <!-- VIDEOS TAB -->
  <div id="videos-tab" class="hub-tab">
  <div class="section">
- <h2 class="section-title">Video Hub</h2>
- <button class="add-event-btn" onclick="toggleVideoForm()">Add Video</button>
+ <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+ <div>
+ <h2 class="section-title" style="margin-bottom: 2px;">Video Hub</h2>
+ <div id="videoCount" style="font-size: 0.8rem; color: #7a6668;"></div>
+ </div>
+ <button class="add-event-btn" onclick="toggleVideoForm()" style="margin:0;">+ Add</button>
+ </div>
  
  <div class="event-form" id="videoForm">
  <form onsubmit="event.preventDefault(); addVideo(event);">
@@ -2641,9 +2761,22 @@
  </form>
  </div>
 
- <div id="videosList" style="margin-top: 20px;">
- <div class="empty-state">No videos yet. Add your first motivational video!</div>
+ <div id="videosList" class="video-grid">
+ <div class="empty-state" style="grid-column: 1/-1;">No videos yet. Add your first motivational video!</div>
  </div>
+ </div>
+ </div>
+
+ <!-- Video Detail Modal -->
+ <div class="video-detail-modal" id="videoDetailModal" onclick="if(event.target===this)closeVideoDetail()">
+ <div class="video-detail-header">
+ <div class="video-detail-title" id="videoDetailTitle"></div>
+ <button class="video-detail-close" onclick="closeVideoDetail()">×</button>
+ </div>
+ <div class="video-detail-body" id="videoDetailBody"></div>
+ <div class="video-detail-footer">
+ <div class="video-detail-tags" id="videoDetailTags"></div>
+ <button class="video-detail-delete" id="videoDetailDelete">Delete</button>
  </div>
  </div>
 
@@ -3038,15 +3171,12 @@ What's on my mind today..."></textarea>
  ];
 
  function loadFutureTodos() {
- const FUTURE_VERSION = '2';
- const savedVersion = localStorage.getItem('futureTodos_version_kasey');
- if (savedVersion !== FUTURE_VERSION) {
- futureTodos = JSON.parse(JSON.stringify(defaultFutureTodos));
- localStorage.setItem('futureTodos_version_kasey', FUTURE_VERSION);
- saveFutureTodos();
- } else {
  const saved = localStorage.getItem('futureTodos_kasey');
- futureTodos = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(defaultFutureTodos));
+ if (saved) {
+ futureTodos = JSON.parse(saved);
+ } else {
+ futureTodos = JSON.parse(JSON.stringify(defaultFutureTodos));
+ saveFutureTodos();
  }
  renderFutureTodos();
  }
@@ -3417,23 +3547,19 @@ What's on my mind today..."></textarea>
  }
 
  function loadResources() {
- const RESOURCE_VERSION = '2.1'; // Increment version to force reset
- const savedVersion = localStorage.getItem('resources_version_kasey');
- 
- // Force complete reset if version doesn't match
- if (savedVersion !== RESOURCE_VERSION) {
- // Clear everything
- localStorage.removeItem('resources_kasey');
- localStorage.removeItem('resources_version_kasey');
- // Load fresh defaults
- resources = JSON.parse(JSON.stringify(defaultResources));
- // Save version
- localStorage.setItem('resources_version_kasey', RESOURCE_VERSION);
- localStorage.setItem('resources_kasey', JSON.stringify(resources));
- } else {
- // Load saved resources
+ // Load saved resources, or use defaults only if nothing saved
  const savedData = localStorage.getItem('resources_kasey');
- resources = savedData ? JSON.parse(savedData) : JSON.parse(JSON.stringify(defaultResources));
+ if (savedData) {
+ resources = JSON.parse(savedData);
+ // Ensure all default categories exist (merge, don't replace)
+ for (const cat of Object.keys(defaultResources)) {
+ if (!resources[cat]) {
+ resources[cat] = JSON.parse(JSON.stringify(defaultResources[cat]));
+ }
+ }
+ } else {
+ resources = JSON.parse(JSON.stringify(defaultResources));
+ try { localStorage.setItem('resources_kasey', JSON.stringify(resources)); } catch(e) {}
  }
 
  // Migrate: strip any legacy base64 data to free localStorage
@@ -3831,66 +3957,112 @@ What's on my mind today..."></textarea>
 
  async function renderVideos() {
  const list = document.getElementById('videosList');
+ const countEl = document.getElementById('videoCount');
+ if (countEl) countEl.textContent = videos.length > 0 ? videos.length + ' video' + (videos.length !== 1 ? 's' : '') : '';
+ 
  if (videos.length === 0) {
- list.innerHTML = '<div class="empty-state">No videos yet. Add your first motivational video!</div>';
+ list.innerHTML = '<div class="empty-state" style="grid-column:1/-1;">No videos yet. Add your first motivational video!</div>';
  return;
  }
 
  list.innerHTML = '';
  for (const [index, video] of videos.entries()) {
- const videoDiv = document.createElement('div');
- videoDiv.className = 'video-item';
- 
- let videoContent = '';
- if (video.file && video.file.id) {
- // Load from IndexedDB
+ const thumb = document.createElement('div');
+ thumb.className = 'video-thumb';
+
+ if (video.file && (video.file.id || video.file.data)) {
+ // Uploaded video — generate thumbnail from first frame
+ let blobUrl = null;
+ if (video.file.id) {
  try {
  const stored = await getVideoBlob(video.file.id);
  if (stored && stored.blob) {
  const blob = (stored.blob instanceof Blob) ? stored.blob : new Blob([stored.blob], { type: stored.type });
- const blobUrl = URL.createObjectURL(blob);
- const sizeMB = video.file.size ? ' (' + (video.file.size / 1024 / 1024).toFixed(1) + 'MB)' : '';
- videoContent = `
- <video controls style="width: 100%; max-width: 400px; margin-bottom: 8px; background: #000;">
- <source src="${blobUrl}" type="${video.file.type}">
- </video>
- <div class="video-title">${video.title}${sizeMB}</div>
- `;
- } else {
- videoContent = `<div class="video-title">${video.title}</div><div style="color:#c97a7a;font-size:0.85rem;">Video file not found in storage</div>`;
+ blobUrl = URL.createObjectURL(blob);
  }
- } catch(err) {
- videoContent = `<div class="video-title">${video.title}</div><div style="color:#c97a7a;font-size:0.85rem;">Error loading video</div>`;
- }
- } else if (video.file && video.file.data) {
- // Legacy base64 format — still render it
- videoContent = `
- <video controls style="width: 100%; max-width: 400px; margin-bottom: 8px; background: #000;">
- <source src="${video.file.data}" type="${video.file.type}">
- </video>
- <div class="video-title">${video.title}</div>
- `;
- } else if (video.link) {
- videoContent = `
- <div class="video-title">${video.title}</div>
- <a href="${video.link}" target="_blank" class="video-link">${video.link}</a>
- `;
+ } catch(e) {}
+ } else if (video.file.data) {
+ blobUrl = video.file.data;
  }
 
- videoDiv.innerHTML = `
- <div class="video-content">
- ${videoContent}
- ${video.tags.length > 0 ? `
- <div class="video-tags">
- ${video.tags.map(tag => `<span class="video-tag">${tag}</span>`).join('')}
- </div>
- ` : ''}
- </div>
- <button class="btn" onclick="deleteVideo(${index})" style="padding: 4px 8px; min-width: auto;">Delete</button>
+ if (blobUrl) {
+ // Use a muted video element as the thumbnail preview
+ thumb.innerHTML = `
+ <video muted preload="metadata" src="${blobUrl}#t=0.5" style="pointer-events:none;"></video>
+ <div class="video-thumb-play"></div>
+ <div class="video-thumb-overlay">${video.title || ''}</div>
  `;
- list.appendChild(videoDiv);
+ thumb.onclick = () => openVideoDetail(index, blobUrl);
+ } else {
+ thumb.innerHTML = `
+ <div class="video-link-thumb">
+ <div class="video-link-icon">⚠</div>
+ <div class="video-link-label">${video.title || 'Not found'}</div>
+ </div>
+ `;
+ }
+ } else if (video.link) {
+ // Link-only video
+ thumb.innerHTML = `
+ <div class="video-link-thumb">
+ <div class="video-link-icon">▶</div>
+ <div style="color:#b59197;font-size:0.75rem;font-weight:600;margin-bottom:4px;">${video.title || 'Video'}</div>
+ <div class="video-link-label">${video.link.replace(/https?:\/\/(www\.)?/, '').split('/')[0]}</div>
+ </div>
+ `;
+ thumb.onclick = () => openVideoDetail(index, null);
+ }
+
+ list.appendChild(thumb);
  }
  }
+
+ function openVideoDetail(index, blobUrl) {
+ const video = videos[index];
+ const modal = document.getElementById('videoDetailModal');
+ const title = document.getElementById('videoDetailTitle');
+ const body = document.getElementById('videoDetailBody');
+ const tags = document.getElementById('videoDetailTags');
+ const delBtn = document.getElementById('videoDetailDelete');
+
+ title.textContent = video.title || 'Untitled';
+
+ if (blobUrl) {
+ body.innerHTML = `<video controls autoplay playsinline style="width:100%;max-height:70vh;"><source src="${blobUrl}" type="${video.file.type}"></video>`;
+ } else if (video.link) {
+ body.innerHTML = `
+ <div style="text-align:center;">
+ <a href="${video.link}" target="_blank" style="color:#b59197;font-size:1.1rem;text-decoration:none;display:block;padding:40px;">
+ <div style="font-size:3rem;margin-bottom:12px;">▶</div>
+ Open in ${video.link.includes('tiktok') ? 'TikTok' : video.link.includes('youtu') ? 'YouTube' : 'Browser'}
+ <div style="color:#999;font-size:0.8rem;margin-top:8px;word-break:break-all;">${video.link}</div>
+ </a>
+ </div>`;
+ }
+
+ tags.innerHTML = video.tags.length > 0
+ ? video.tags.map(t => `<span class="video-tag">${t}</span>`).join('')
+ : '';
+
+ delBtn.onclick = () => {
+ deleteVideo(index);
+ closeVideoDetail();
+ };
+
+ modal.classList.add('active');
+ document.body.style.overflow = 'hidden';
+ }
+
+ function closeVideoDetail() {
+ const modal = document.getElementById('videoDetailModal');
+ // Pause any playing video
+ const vid = modal.querySelector('video');
+ if (vid) vid.pause();
+ modal.classList.remove('active');
+ document.body.style.overflow = '';
+ }
+ window.openVideoDetail = openVideoDetail;
+ window.closeVideoDetail = closeVideoDetail;
 
  async function deleteVideo(index) {
  if (confirm('Delete this video?')) {
