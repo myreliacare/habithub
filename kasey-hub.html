@@ -1891,7 +1891,7 @@
 
  <div class="event-form-overlay" id="resourceFormOverlay" onclick="hideAddResourceForm()"></div>
  <div class="event-form" id="resourceForm">
- <form onsubmit="addResource(event)">
+ <form onsubmit="event.preventDefault(); addResource(event);">
  <input type="hidden" id="resourceCategory" name="category">
  <div class="form-group">
  <label>Title</label>
@@ -2540,7 +2540,7 @@
  <button class="add-event-btn" onclick="toggleVideoForm()">Add Video</button>
  
  <div class="event-form" id="videoForm">
- <form onsubmit="addVideo(event); return false;">
+ <form onsubmit="event.preventDefault(); addVideo(event);">
  <div class="form-group">
  <label>Video Title</label>
  <input type="text" name="title" required>
@@ -2831,6 +2831,7 @@ What's on my mind today..."></textarea>
  let resources = {};
  let todos = [];
  let pendingResourceFile = null;
+ let pendingResourceBlob = null;
  let pendingVideoFile = null;
  let pendingVideoBlob = null; // Raw blob for IndexedDB storage
 
@@ -3260,42 +3261,65 @@ What's on my mind today..."></textarea>
  const savedData = localStorage.getItem('resources_kasey');
  resources = savedData ? JSON.parse(savedData) : JSON.parse(JSON.stringify(defaultResources));
  }
- 
- renderAllResources();
- 
- setupStorageListener('resources_kasey', (data) => {
- resources = data;
- renderAllResources();
+
+ // Migrate: strip any legacy base64 data to free localStorage
+ let migrated = false;
+ for (const cat of Object.keys(resources)) {
+ resources[cat] = resources[cat].map(item => {
+ if (item.file && item.file.data) {
+ migrated = true;
+ return { ...item, file: { type: item.file.type, name: item.file.name, size: item.file.size || 0, id: item.file.id || ('legacy_res_' + Date.now()) } };
+ }
+ return item;
  });
+ }
+ if (migrated) {
+ try { localStorage.setItem('resources_kasey', JSON.stringify(resources)); } catch(e) {}
+ }
+ 
+ renderAllResources();
  }
 
  function saveResources() {
- localStorage.setItem('resources_kasey', JSON.stringify(resources));
- saveToStorage('resources_kasey', resources);
+ // Strip base64 data before saving to localStorage — only metadata
+ const metadataOnly = {};
+ for (const [cat, items] of Object.entries(resources)) {
+ metadataOnly[cat] = items.map(item => {
+ if (item.file && item.file.data) {
+ return { ...item, file: { type: item.file.type, name: item.file.name, size: item.file.size || 0, id: item.file.id } };
+ }
+ return item;
+ });
+ }
+ try {
+ localStorage.setItem('resources_kasey', JSON.stringify(metadataOnly));
+ } catch(e) {
+ try {
+ localStorage.removeItem('resources_kasey');
+ localStorage.setItem('resources_kasey', JSON.stringify(metadataOnly));
+ } catch(e2) {
+ console.warn('localStorage full for resources');
+ }
+ }
  }
 
  function handleResourceUpload() {
  const fileInput = document.getElementById('resourceFile');
  const file = fileInput.files[0];
  if (file) {
- // File size validation
  const sizeMB = (file.size / 1024 / 1024).toFixed(1);
- if (file.size > 2 * 1024 * 1024) {
- if (!confirm('File is ' + sizeMB + 'MB. This may cause issues. Continue?')) {
+ if (file.size > 200 * 1024 * 1024) {
+ alert('File too large (' + sizeMB + 'MB). Max is 200MB.');
  fileInput.value = '';
  return;
  }
- }
- const reader = new FileReader();
- reader.onload = function(e) {
+ pendingResourceBlob = file;
  pendingResourceFile = {
- data: e.target.result,
  type: file.type,
- name: file.name
+ name: file.name,
+ size: file.size
  };
  document.getElementById('resourceLink').value = '';
- };
- reader.readAsDataURL(file);
  }
  }
 
@@ -3305,11 +3329,11 @@ What's on my mind today..."></textarea>
 
  function renderAllResources() {
  Object.keys(resources).forEach(category => {
- renderResourceCategory(category);
+ renderResourceCategory(category); // async but fire-and-forget is fine here
  });
  }
 
- function renderResourceCategory(category) {
+ async function renderResourceCategory(category) {
  const container = document.getElementById(`${category}-items`);
  if (!container) {
  return;
@@ -3321,16 +3345,33 @@ What's on my mind today..."></textarea>
  }
 
  container.innerHTML = '';
- resources[category].forEach((item, index) => {
+ for (const [index, item] of resources[category].entries()) {
  const itemDiv = document.createElement('div');
  itemDiv.className = 'resource-item';
  
  let mediaContent = '';
- if (item.file) {
+ if (item.file && item.file.id) {
+ // Load from IndexedDB
+ try {
+ const stored = await getVideoBlob(item.file.id);
+ if (stored && stored.blob) {
+ const blob = (stored.blob instanceof Blob) ? stored.blob : new Blob([stored.blob], { type: stored.type });
+ const blobUrl = URL.createObjectURL(blob);
+ if (item.file.type.startsWith('image')) {
+ mediaContent = `<img src="${blobUrl}" style="max-width: 200px; margin-bottom: 8px; border-radius: 4px;">`;
+ } else if (item.file.type.startsWith('video')) {
+ mediaContent = `<video controls style="max-width: 300px; margin-bottom: 8px;"><source src="${blobUrl}" type="${item.file.type}"></video>`;
+ }
+ }
+ } catch(e) {
+ mediaContent = '<div style="color:#c97a7a;font-size:0.85rem;">File not found in storage</div>';
+ }
+ } else if (item.file && item.file.data) {
+ // Legacy base64 format
  if (item.file.type.startsWith('image')) {
  mediaContent = `<img src="${item.file.data}" style="max-width: 200px; margin-bottom: 8px; border-radius: 4px;">`;
  } else if (item.file.type.startsWith('video')) {
- mediaContent = `<video controls style="max-width: 200px; margin-bottom: 8px;"><source src="${item.file.data}" type="${item.file.type}"></video>`;
+ mediaContent = `<video controls style="max-width: 300px; margin-bottom: 8px;"><source src="${item.file.data}" type="${item.file.type}"></video>`;
  }
  }
  
@@ -3347,7 +3388,7 @@ What's on my mind today..."></textarea>
  </div>
  `;
  container.appendChild(itemDiv);
- });
+ }
  }
 
  function showAddResourceForm(category) {
@@ -3364,23 +3405,31 @@ What's on my mind today..."></textarea>
  form.querySelector('form').reset();
  document.body.style.overflow = ''; // Restore scrolling
  pendingResourceFile = null;
+ pendingResourceBlob = null;
  // Clear edit state
  delete form.dataset.editIndex;
  delete form.dataset.editCategory;
  }
 
- function addResource(e) {
+ async function addResource(e) {
  e.preventDefault();
  const formData = new FormData(e.target);
  const category = formData.get('category');
  const form = document.getElementById('resourceForm');
+ const fileId = 'res_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
  
  const resource = {
  title: formData.get('title'),
  link: formData.get('link') || null,
  note: formData.get('note') || null,
- file: pendingResourceFile
+ file: pendingResourceFile ? { type: pendingResourceFile.type, name: pendingResourceFile.name, size: pendingResourceFile.size, id: fileId } : null
  };
+
+ try {
+ // Save blob to IndexedDB if there's a file
+ if (pendingResourceBlob) {
+ await saveVideoBlob(fileId, pendingResourceBlob, pendingResourceFile.type, pendingResourceFile.name);
+ }
 
  // Check if we're editing
  if (form.dataset.editIndex !== undefined && form.dataset.editIndex !== '') {
@@ -3388,12 +3437,14 @@ What's on my mind today..."></textarea>
  // Keep existing file if no new file uploaded
  if (!resource.file && resources[category][index].file) {
  resource.file = resources[category][index].file;
+ } else if (resource.file && resources[category][index].file && resources[category][index].file.id) {
+ // Delete old blob if replacing
+ try { await deleteVideoBlob(resources[category][index].file.id); } catch(e) {}
  }
  resources[category][index] = resource;
  delete form.dataset.editIndex;
  delete form.dataset.editCategory;
  } else {
- // Adding new resource
  if (!resources[category]) resources[category] = [];
  resources[category].push(resource);
  }
@@ -3401,10 +3452,20 @@ What's on my mind today..."></textarea>
  saveResources();
  renderResourceCategory(category);
  hideAddResourceForm();
+ pendingResourceFile = null;
+ pendingResourceBlob = null;
+ } catch(err) {
+ console.error('Resource save error:', err);
+ alert('Could not save file: ' + (err.message || 'Unknown error'));
+ }
  }
 
- function deleteResource(category, index) {
+ async function deleteResource(category, index) {
  if (confirm('Delete this resource?')) {
+ const item = resources[category][index];
+ if (item.file && item.file.id) {
+ try { await deleteVideoBlob(item.file.id); } catch(e) {}
+ }
  resources[category].splice(index, 1);
  saveResources();
  renderResourceCategory(category);
