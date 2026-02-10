@@ -664,11 +664,11 @@
 
         /* Grocery */
         .grocery-item {
-            display: flex; align-items: center;
-            padding: 14px 16px;
+            display: flex; align-items: center; flex-direction: row-reverse;
+            padding: 10px 14px;
             background: rgba(61, 47, 49, 0.3);
             border: 1px solid rgba(61, 107, 107, 0.2);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             gap: 12px;
             transition: all 0.6s ease;
         }
@@ -686,7 +686,7 @@
         }
         .grocery-item:last-of-type { margin-bottom: 0; }
         .grocery-item input[type="checkbox"] {
-            width: 20px; height: 20px;
+            width: 18px; height: 18px;
             accent-color: #a3b899;
             cursor: pointer;
             flex-shrink: 0;
@@ -694,7 +694,7 @@
         .grocery-item span {
             flex: 1;
             color: #f2ebe0;
-            font-size: 1rem;
+            font-size: 0.88rem;
             line-height: 1.4;
         }
         .add-input { display: flex; gap: 8px; margin-top: 16px; }
@@ -856,8 +856,8 @@
             .reminder-form-inline { flex-direction: column; gap: 0; }
 
             /* Grocery */
-            .grocery-item { padding: 12px; }
-            .grocery-item span { font-size: 0.9rem; }
+            .grocery-item { padding: 8px 12px; }
+            .grocery-item span { font-size: 0.82rem; }
             .add-input input { padding: 12px; font-size: 0.9rem; }
             .add-input button { padding: 12px 16px; }
             .quick-add input[type="text"] { padding: 12px; font-size: 0.85rem; }
@@ -1461,9 +1461,9 @@ button, .btn, a, .nav-hamburger {
         <div class="section">
             <div class="phonebook-header" onclick="togglePhonebook()">
                 <div class="section-title" style="margin-bottom: 0;">Phone Book</div>
-                <span class="expand-icon" id="phonebookIcon">▼</span>
+                <span class="expand-icon" id="phonebookIcon" style="transform: rotate(-90deg);">▼</span>
             </div>
-            <div class="phonebook-content expanded" id="phonebookContent">
+            <div class="phonebook-content" id="phonebookContent">
                 <div class="phonebook-search">
                     <input type="text" id="phonebookSearch" placeholder="Search contacts..." oninput="filterContacts()">
                 </div>
@@ -2010,7 +2010,7 @@ button, .btn, a, .nav-hamburger {
             
             // Show action buttons
             const actions = container.querySelector('.reminder-actions');
-            if (actions) actions.style.display = 'flex';
+            if (actions) actions.style.display = 'grid';
             
             if (currentReminderIndex >= upcoming.length) {
                 currentReminderIndex = 0;
