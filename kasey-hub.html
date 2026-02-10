@@ -2944,6 +2944,32 @@ What's on my mind today..."></textarea>
  else if (selectedTab === 'resources') renderAllResources();
  }
 
+ function goToWorkout() {
+ // Switch to resources tab
+ document.querySelectorAll('.hub-tab').forEach(t => t.classList.remove('active'));
+ document.getElementById('resources-tab').classList.add('active');
+ document.getElementById('sectionSelect').value = 'resources';
+ renderAllResources();
+
+ // Open exercise category
+ const exerciseCat = document.querySelector('#exercise-content')?.closest('.resource-category');
+ if (exerciseCat) exerciseCat.classList.add('active');
+
+ // Find today's day name and expand it
+ const dayNames = ['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
+ const todayName = dayNames[new Date().getDay()];
+ const dayHeaders = document.querySelectorAll('.exercise-day-title');
+ dayHeaders.forEach(h => {
+ if (h.textContent.toUpperCase().includes(todayName)) {
+ const dayEl = h.closest('.exercise-day');
+ if (dayEl) {
+ dayEl.classList.add('active');
+ setTimeout(() => dayEl.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
+ }
+ }
+ });
+ }
+
  function initBoard() {
  const today = new Date().toDateString();
  const savedDate = localStorage.getItem('bingoDate_kasey');
@@ -3998,7 +4024,7 @@ What's on my mind today..."></textarea>
  <div class="schedule-content">
  <div class="schedule-title"> WORKOUT (30-45 min)</div>
  <div class="schedule-details">
- ${day.morning.workout}<br>
+ <button onclick="goToWorkout()" style="background: #a3b899; color: #1c1c1c; border: none; padding: 10px 24px; font-size: 0.9rem; font-weight: 600; font-family: inherit; cursor: pointer; margin: 4px 0;">Start Workout</button><br>
  <em>Subliminals/rampages OK during workout</em>
  </div>
  </div>
@@ -4049,7 +4075,7 @@ What's on my mind today..."></textarea>
  </div>
  <div class="day-details">
  <div class="schedule-item">
- <span class="schedule-time">10:30 AM - 1:30 PM</span>
+ <span class="schedule-time">10:30 AM -<br>1:30 PM</span>
  <div class="schedule-content">
  <div class="schedule-title"> Pet Care Visits</div>
  <div class="schedule-details">
