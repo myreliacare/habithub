@@ -327,7 +327,7 @@
 
  .resource-header {
  background: #3d2f31;
- padding: 16px 20px;
+ padding: 14px 14px;
  cursor: pointer;
  display: flex;
  justify-content: space-between;
@@ -359,7 +359,7 @@
  .resource-content {
  display: none;
  background: #3d2f31;
- padding: 16px 20px;
+ padding: 8px 6px;
  border: 1px solid #333;
  border-top: none;
  }
@@ -375,8 +375,8 @@
 
  .exercise-day-header {
  background: #EBE0D6;
- padding: 16px 20px;
- border-left: 4px solid #b59197;
+ padding: 12px 10px;
+ border-left: 3px solid #b59197;
  cursor: pointer;
  display: flex;
  justify-content: space-between;
@@ -390,7 +390,7 @@
 
  .exercise-day-title {
  color: #b59197;
- font-size: 1.3rem;
+ font-size: 1.1rem;
  font-weight: 600;
  margin: 0;
  }
@@ -408,13 +408,34 @@
  .exercise-day-content {
  display: none;
  background: #EBE0D6;
- padding: 20px;
- border-left: 4px solid #b59197;
+ padding: 6px 4px;
+ border-left: 3px solid #b59197;
  border-top: none;
  }
 
  .exercise-day.active .exercise-day-content {
  display: block;
+ }
+
+ /* Override inline white boxes to reduce padding */
+ .exercise-day-content > div {
+ padding: 8px 10px !important;
+ margin-bottom: 6px !important;
+ border: none !important;
+ background: rgba(255,255,255,0.85) !important;
+ }
+ .exercise-day-content ol,
+ .exercise-day-content ul {
+ padding-left: 14px !important;
+ line-height: 1.45 !important;
+ }
+ .exercise-day-content li {
+ font-size: 0.85rem;
+ margin-bottom: 4px;
+ }
+ .exercise-day-content h3 {
+ font-size: 1rem;
+ margin: 0 0 6px 0;
  }
 
  /* Collapsible Tapping Section */
@@ -1717,6 +1738,25 @@
         @media screen and (max-width: 768px) {
             input, textarea, select {
                 font-size: 16px !important;
+            }
+            /* Wider resource content on mobile */
+            .section {
+                padding: 14px 10px;
+            }
+            .resource-content {
+                padding: 4px 2px;
+            }
+            .exercise-day-content {
+                padding: 8px 6px;
+            }
+            .exercise-day-content > div {
+                padding: 8px !important;
+            }
+            .exercise-day-header {
+                padding: 10px 10px;
+            }
+            .exercise-day-title {
+                font-size: 0.95rem;
             }
         }
         /* ===== END MOBILE OPTIMIZATION ===== */
