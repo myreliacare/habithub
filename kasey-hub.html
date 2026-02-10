@@ -1611,7 +1611,22 @@
  }
 
  /* ===== HAMBURGER MENU ===== */
- .nav-hamburger {
+ .nav-refresh {
+        display: block;
+        background: none;
+        border: none;
+        color: #b59197;
+        font-size: 1.4rem;
+        cursor: pointer;
+        padding: 2px 0;
+        z-index: 10001;
+        line-height: 1;
+    }
+    .nav-refresh:active {
+        transform: rotate(180deg);
+        transition: transform 0.3s;
+    }
+    .nav-hamburger {
      display: none;
      background: none;
      border: none;
@@ -1820,11 +1835,12 @@
                 <a href="meal-plan.html" class="nav-link">Meals</a>
                 <a href="settings.html" class="nav-link">Settings</a>
             </div>
+            <div style="display:flex;align-items:center;gap:2px;"><button class="nav-refresh" onclick="location.reload(true)" aria-label="Refresh" title="Refresh page">↻</button>
             <button class="nav-hamburger" id="navHamburger" onclick="toggleNav()" aria-label="Menu">
                 <span></span>
                 <span></span>
                 <span></span>
-            </button>
+            </button></div>
         </div>
     </nav>
     <div class="nav-overlay" id="navOverlay" onclick="toggleNav()">
