@@ -73,9 +73,9 @@
         }
 
         /* Header */
-        .home-header { text-align: center; padding: 10px 0 24px; }
+        .home-header { display: flex; align-items: center; justify-content: center; gap: 20px; padding: 10px 0 24px; }
         .header-photo-container {
-            width: 90px; height: 90px; margin: 0 auto 20px;
+            width: 110px; height: 110px; flex-shrink: 0;
             border-radius: 50%; overflow: hidden; position: relative;
             border: 2px solid rgba(163, 184, 153, 0.4);
             background: linear-gradient(145deg, #3d6b6b 0%, #1c1c1c 100%);
@@ -98,6 +98,13 @@
             font-family: 'Dancing Script', cursive;
             font-size: 2rem; font-weight: 700;
             letter-spacing: 0.02em; text-transform: none; color: #f2ebe0;
+            margin: 0;
+        }
+        .home-date {
+            color: rgba(163, 184, 153, 0.5);
+            font-size: 0.75rem;
+            margin: 2px 0 0;
+            letter-spacing: 0.08em;
         }
 
         /* Reminder Section */
@@ -200,7 +207,7 @@
         .reminder-btn.subtle:hover { border-color: rgba(224, 210, 208, 0.4); color: #e0d2d0; }
 
         .quick-add { display: flex; gap: 0; margin-bottom: 6px; }
-        .quick-add input {
+        .quick-add input[type="text"] {
             flex: 1;
             background: rgba(61, 47, 49, 0.3);
             border: 1px solid rgba(163, 184, 153, 0.3);
@@ -210,13 +217,33 @@
             font-size: 0.9rem;
             font-family: inherit;
             transition: all 0.2s ease;
+            border-radius: 0;
         }
-        .quick-add input:focus {
+        .quick-add input[type="text"]:focus {
             outline: none;
             border-color: rgba(163, 184, 153, 0.6);
             background: rgba(61, 47, 49, 0.5);
         }
-        .quick-add input::placeholder { color: rgba(242, 235, 224, 0.35); font-style: italic; }
+        .quick-add input[type="text"]::placeholder { color: rgba(242, 235, 224, 0.35); font-style: italic; }
+        .quick-add input[type="date"] {
+            background: rgba(61, 47, 49, 0.3);
+            border: 1px solid rgba(163, 184, 153, 0.3);
+            border-right: none;
+            color: #f2ebe0;
+            padding: 13px 10px;
+            font-size: 0.8rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            width: 130px;
+            min-width: 130px;
+            border-radius: 0;
+            color-scheme: dark;
+        }
+        .quick-add input[type="date"]:focus {
+            outline: none;
+            border-color: rgba(163, 184, 153, 0.6);
+            background: rgba(61, 47, 49, 0.5);
+        }
         .quick-add button {
             background: #a3b899;
             border: 1px solid #a3b899;
@@ -833,7 +860,8 @@
             .grocery-item span { font-size: 0.9rem; }
             .add-input input { padding: 12px; font-size: 0.9rem; }
             .add-input button { padding: 12px 16px; }
-            .quick-add input { padding: 12px; font-size: 0.85rem; }
+            .quick-add input[type="text"] { padding: 12px; font-size: 0.85rem; }
+            .quick-add input[type="date"] { padding: 12px 8px; font-size: 0.75rem; width: 115px; min-width: 115px; }
             .quick-add button { padding: 12px 14px; }
 
             /* Phone book */
@@ -848,7 +876,7 @@
 
             /* Home header */
             .home-title { font-size: 1.6rem; letter-spacing: 0.02em; }
-            .header-photo-container { width: 75px; height: 75px; }
+            .header-photo-container { width: 85px; height: 85px; }
         }
 
         /* Extra small screens */
@@ -1181,7 +1209,10 @@ button, .btn, a, .nav-hamburger {
                 <input type="file" id="photoUpload" accept="image/*" style="display: none;">
                 <button class="upload-photo-btn" onclick="document.getElementById('photoUpload').click()"></button>
             </div>
-            <h1 class="home-title">Our Life Hub</h1>
+            <div>
+                <h1 class="home-title">Our Life Hub</h1>
+                <p class="home-date" id="homeDate"></p>
+            </div>
         </div>
 
         <!-- REMINDER SECTION -->
@@ -1206,6 +1237,7 @@ button, .btn, a, .nav-hamburger {
             </div>
             <div class="quick-add">
                 <input type="text" id="quickReminderInput" placeholder="Add a quick reminder..." onkeypress="if(event.key==='Enter') addQuickReminder()">
+                <input type="date" id="quickReminderDate">
                 <button onclick="addQuickReminder()">+</button>
             </div>
             <div class="manage-link">
@@ -1715,6 +1747,18 @@ button, .btn, a, .nav-hamburger {
             const firebaseData = await loadFromFirebase('lifeReminders');
             if (firebaseData && firebaseData.length > 0) {
                 lifeReminders = firebaseData;
+                // Merge any missing default reminders back in
+                let added = false;
+                for (const def of defaultLifeReminders) {
+                    const exists = lifeReminders.some(r => String(r.id) === String(def.id) || r.title === def.title);
+                    if (!exists) {
+                        lifeReminders.push(def);
+                        added = true;
+                    }
+                }
+                if (added) {
+                    await syncToFirebase('lifeReminders', lifeReminders);
+                }
             } else {
                 lifeReminders = defaultLifeReminders;
                 await syncToFirebase('lifeReminders', lifeReminders);
@@ -2007,31 +2051,33 @@ button, .btn, a, .nav-hamburger {
         };
 
         async function addQuickReminder() {
-            // console.log('addQuickReminder called');
             const input = document.getElementById('quickReminderInput');
+            const dateInput = document.getElementById('quickReminderDate');
             const title = input.value.trim();
-            // console.log('Quick reminder title:', title);
             
-            if (!title) {
-                // console.log('No title entered, aborting');
+            if (!title) return;
+            
+            if (!dateInput.value) {
+                alert('Please pick a date for this reminder.');
+                dateInput.focus();
                 return;
             }
             
-            const today = new Date();
+            const [year, month, day] = dateInput.value.split('-').map(Number);
+            
             const newReminder = {
                 id: Date.now(),
                 title: title,
-                notifyDate: { month: today.getMonth() + 1, day: today.getDate() },
+                notifyDate: { month: month, day: day, year: year },
                 frequency: 'once',
-                created: today.toISOString()
+                created: new Date().toISOString()
             };
             
-            // console.log('Creating new reminder:', newReminder);
             lifeReminders.push(newReminder);
             await saveLifeReminders();
             input.value = '';
+            dateInput.value = '';
             updateReminderDisplay();
-            // console.log('✓ Quick reminder added successfully!');
         }
 
         // REMINDER MODAL FUNCTIONS
@@ -3780,6 +3826,13 @@ button, .btn, a, .nav-hamburger {
         // Initialize everything
         document.addEventListener('DOMContentLoaded', async function() {
             try {
+                // Set today's date in header
+                const dateEl = document.getElementById('homeDate');
+                if (dateEl) {
+                    const now = new Date();
+                    dateEl.textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+                }
+                
                 // console.log('Starting initialization...');
                 
                 // Set a timeout for the entire initialization
