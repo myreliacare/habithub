@@ -2832,6 +2832,57 @@ What's on my mind today..."></textarea>
  let todos = [];
  let pendingResourceFile = null;
  let pendingVideoFile = null;
+ let pendingVideoBlob = null; // Raw blob for IndexedDB storage
+
+ // ===== IndexedDB Video Storage =====
+ const VIDEODB_NAME = 'kaseyVideoHub';
+ const VIDEODB_VERSION = 1;
+ const VIDEODB_STORE = 'videoFiles';
+
+ function openVideoDB() {
+   return new Promise((resolve, reject) => {
+     const request = indexedDB.open(VIDEODB_NAME, VIDEODB_VERSION);
+     request.onupgradeneeded = (e) => {
+       const db = e.target.result;
+       if (!db.objectStoreNames.contains(VIDEODB_STORE)) {
+         db.createObjectStore(VIDEODB_STORE, { keyPath: 'id' });
+       }
+     };
+     request.onsuccess = () => resolve(request.result);
+     request.onerror = () => reject(request.error);
+   });
+ }
+
+ async function saveVideoBlob(id, blob, type, name) {
+   const db = await openVideoDB();
+   return new Promise((resolve, reject) => {
+     const tx = db.transaction(VIDEODB_STORE, 'readwrite');
+     tx.objectStore(VIDEODB_STORE).put({ id, blob, type, name });
+     tx.oncomplete = () => resolve();
+     tx.onerror = () => reject(tx.error);
+   });
+ }
+
+ async function getVideoBlob(id) {
+   const db = await openVideoDB();
+   return new Promise((resolve, reject) => {
+     const tx = db.transaction(VIDEODB_STORE, 'readonly');
+     const req = tx.objectStore(VIDEODB_STORE).get(id);
+     req.onsuccess = () => resolve(req.result || null);
+     req.onerror = () => reject(req.error);
+   });
+ }
+
+ async function deleteVideoBlob(id) {
+   const db = await openVideoDB();
+   return new Promise((resolve, reject) => {
+     const tx = db.transaction(VIDEODB_STORE, 'readwrite');
+     tx.objectStore(VIDEODB_STORE).delete(id);
+     tx.oncomplete = () => resolve();
+     tx.onerror = () => reject(tx.error);
+   });
+ }
+ // ===== End IndexedDB =====
 
  // TO-DO LIST FUNCTIONS
  function loadTodos() {
@@ -3384,40 +3435,28 @@ What's on my mind today..."></textarea>
  const file = fileInput.files[0];
  if (file) {
  const sizeMB = (file.size / 1024 / 1024).toFixed(1);
- if (file.size > 10 * 1024 * 1024) {
- alert('Video too large (' + sizeMB + 'MB).\n\nVideos over 10MB cannot save properly. Please:\n1. Upload to YouTube and use the link, OR\n2. Compress video to under 10MB');
+ if (file.size > 200 * 1024 * 1024) {
+ alert('Video too large (' + sizeMB + 'MB). Max is 200MB.\n\nFor very large videos, upload to YouTube and paste the link instead.');
  fileInput.value = '';
  return;
  }
- // Show processing status
  status.style.display = 'block';
  status.innerHTML = '<span style="display:inline-block;width:12px;height:12px;border:2px solid rgba(123,168,134,0.3);border-top-color:#7ba886;border-radius:50%;animation:spin 0.6s linear infinite;vertical-align:middle;margin-right:6px;"></span> Processing video (' + sizeMB + 'MB)...';
  saveBtn.disabled = true;
  saveBtn.style.opacity = '0.5';
 
- if (file.size > 2 * 1024 * 1024) {
- status.innerHTML = '<span style="display:inline-block;width:12px;height:12px;border:2px solid rgba(123,168,134,0.3);border-top-color:#7ba886;border-radius:50%;animation:spin 0.6s linear infinite;vertical-align:middle;margin-right:6px;"></span> Processing large video (' + sizeMB + 'MB) — this may take a moment...';
- }
- const reader = new FileReader();
- reader.onload = function(e) {
+ // Store as blob reference instead of base64
+ pendingVideoBlob = file;
  pendingVideoFile = {
- data: e.target.result,
  type: file.type,
- name: file.name
+ name: file.name,
+ size: file.size
  };
  document.getElementById('videoLink').value = '';
  status.innerHTML = '&#10004; Video ready (' + sizeMB + 'MB)';
  status.style.color = '#7ba886';
  saveBtn.disabled = false;
  saveBtn.style.opacity = '1';
- };
- reader.onerror = function() {
- status.innerHTML = '&#10008; Failed to process video. Try again.';
- status.style.color = '#c97a7a';
- saveBtn.disabled = false;
- saveBtn.style.opacity = '1';
- };
- reader.readAsDataURL(file);
  }
  }
 
@@ -3453,6 +3492,7 @@ What's on my mind today..."></textarea>
  if (!form.classList.contains('active')) {
  form.querySelector('form').reset();
  pendingVideoFile = null;
+ pendingVideoBlob = null;
  const status = document.getElementById('videoUploadStatus');
  if (status) { status.style.display = 'none'; status.innerHTML = ''; }
  const saveBtn = document.getElementById('videoSaveBtn');
@@ -3460,7 +3500,7 @@ What's on my mind today..."></textarea>
  }
  }
 
- function addVideo(e) {
+ async function addVideo(e) {
  e.preventDefault();
  const saveBtn = document.getElementById('videoSaveBtn');
  const status = document.getElementById('videoUploadStatus');
@@ -3474,30 +3514,36 @@ What's on my mind today..."></textarea>
  saveBtn.appendChild(spinner);
 
  const formData = new FormData(e.target);
+ const videoId = 'vid_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+
  const video = {
+ id: videoId,
  title: formData.get('title'),
  link: formData.get('link') || null,
- file: pendingVideoFile,
+ file: pendingVideoFile ? { type: pendingVideoFile.type, name: pendingVideoFile.name, size: pendingVideoFile.size, id: videoId } : null,
  tags: formData.get('tags') ? formData.get('tags').split(',').map(t => t.trim()) : [],
  dateAdded: new Date().toISOString()
  };
 
- videos.push(video);
-
  try {
- saveVideos();
+ // Save blob to IndexedDB if there's a file
+ if (pendingVideoBlob) {
+ await saveVideoBlob(videoId, pendingVideoBlob, pendingVideoFile.type, pendingVideoFile.name);
+ }
+ videos.push(video);
+ saveVideos(); // Only metadata to localStorage
  } catch(err) {
- // localStorage might be full for large videos
  videos.pop();
  saveBtn.textContent = origText;
  saveBtn.style.cssText = '';
- alert('Could not save — video may be too large for storage. Try using a link instead.');
+ alert('Could not save video. Storage may be full.\nTry using a link instead.');
  return;
  }
 
  renderVideos();
+ pendingVideoFile = null;
+ pendingVideoBlob = null;
 
- // Show saved confirmation
  saveBtn.textContent = 'Saved!';
  saveBtn.style.cssText = 'border-color:#7ba886;color:#7ba886;pointer-events:none;min-width:90px;';
  
@@ -3505,13 +3551,12 @@ What's on my mind today..."></textarea>
  saveBtn.textContent = origText;
  saveBtn.style.cssText = '';
  e.target.reset();
- pendingVideoFile = null;
  if (status) { status.style.display = 'none'; status.innerHTML = ''; }
  toggleVideoForm();
  }, 800);
  }
 
- function renderVideos() {
+ async function renderVideos() {
  const list = document.getElementById('videosList');
  if (videos.length === 0) {
  list.innerHTML = '<div class="empty-state">No videos yet. Add your first motivational video!</div>';
@@ -3519,14 +3564,35 @@ What's on my mind today..."></textarea>
  }
 
  list.innerHTML = '';
- videos.forEach((video, index) => {
+ for (const [index, video] of videos.entries()) {
  const videoDiv = document.createElement('div');
  videoDiv.className = 'video-item';
  
  let videoContent = '';
- if (video.file) {
+ if (video.file && video.file.id) {
+ // Load from IndexedDB
+ try {
+ const stored = await getVideoBlob(video.file.id);
+ if (stored && stored.blob) {
+ const blob = (stored.blob instanceof Blob) ? stored.blob : new Blob([stored.blob], { type: stored.type });
+ const blobUrl = URL.createObjectURL(blob);
+ const sizeMB = video.file.size ? ' (' + (video.file.size / 1024 / 1024).toFixed(1) + 'MB)' : '';
  videoContent = `
- <video controls style="width: 100%; max-width: 300px; margin-bottom: 8px; background: #000;">
+ <video controls style="width: 100%; max-width: 400px; margin-bottom: 8px; background: #000;">
+ <source src="${blobUrl}" type="${video.file.type}">
+ </video>
+ <div class="video-title">${video.title}${sizeMB}</div>
+ `;
+ } else {
+ videoContent = `<div class="video-title">${video.title}</div><div style="color:#c97a7a;font-size:0.85rem;">Video file not found in storage</div>`;
+ }
+ } catch(err) {
+ videoContent = `<div class="video-title">${video.title}</div><div style="color:#c97a7a;font-size:0.85rem;">Error loading video</div>`;
+ }
+ } else if (video.file && video.file.data) {
+ // Legacy base64 format — still render it
+ videoContent = `
+ <video controls style="width: 100%; max-width: 400px; margin-bottom: 8px; background: #000;">
  <source src="${video.file.data}" type="${video.file.type}">
  </video>
  <div class="video-title">${video.title}</div>
@@ -3550,11 +3616,16 @@ What's on my mind today..."></textarea>
  <button class="btn" onclick="deleteVideo(${index})" style="padding: 4px 8px; min-width: auto;">Delete</button>
  `;
  list.appendChild(videoDiv);
- });
+ }
  }
 
- function deleteVideo(index) {
+ async function deleteVideo(index) {
  if (confirm('Delete this video?')) {
+ const video = videos[index];
+ // Clean up IndexedDB blob if exists
+ if (video.file && video.file.id) {
+ try { await deleteVideoBlob(video.file.id); } catch(e) {}
+ }
  videos.splice(index, 1);
  saveVideos();
  renderVideos();
