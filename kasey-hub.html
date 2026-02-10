@@ -534,6 +534,39 @@
  gap: 4px;
  }
 
+ .resource-video-toggle {
+ display: inline-flex;
+ align-items: center;
+ gap: 6px;
+ background: transparent;
+ border: 1px solid #b59197;
+ color: #b59197;
+ padding: 4px 10px;
+ font-size: 0.8rem;
+ cursor: pointer;
+ margin-top: 6px;
+ border-radius: 4px;
+ font-family: inherit;
+ }
+ .resource-video-toggle:hover {
+ background: rgba(181,145,151,0.1);
+ }
+ .resource-video-toggle .toggle-arrow {
+ display: inline-block;
+ transition: transform 0.2s;
+ font-size: 0.7rem;
+ }
+ .resource-video-toggle.open .toggle-arrow {
+ transform: rotate(90deg);
+ }
+ .resource-video-wrapper {
+ display: none;
+ margin-top: 8px;
+ }
+ .resource-video-wrapper.open {
+ display: block;
+ }
+
  .add-resource-btn {
  background: transparent;
  border: 1px solid #444;
@@ -2356,10 +2389,14 @@
  </div>
  <div class="resource-content" id="meals-content">
  <!-- Chocolate Banana Smoothie Recipe -->
- <div style="background: #EBE0D6; padding: 20px; border-left: 3px solid #b59197; margin-bottom: 16px;">
- <h3 style="color: #3d2f31; margin-bottom: 8px; font-size: 1.1rem;">Chocolate Banana Smoothie Recipe</h3>
- <p style="color: #7a6668; margin-bottom: 20px; font-style: italic;">Make at ~9:30 AM (after workout) — Banana Cream + Cacao = Chocolate Banana Milkshake</p>
- 
+ <div style="background: #EBE0D6; padding: 12px; border-left: 3px solid #b59197; margin-bottom: 16px;">
+ <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 4px 0;" onclick="var c=document.getElementById('smoothie-details');c.classList.toggle('open');this.querySelector('.toggle-arrow').classList.toggle('open');">
+ <h3 style="color: #3d2f31; margin: 0; font-size: 1.1rem;">Chocolate Banana Smoothie Recipe</h3>
+ <span class="toggle-arrow" style="color:#b59197;font-size:0.8rem;transition:transform 0.2s;">▶</span>
+ </div>
+ <p style="color: #7a6668; margin: 4px 0 0 0; font-style: italic; font-size: 0.85rem;">~322 cal, ~43g protein — after workout</p>
+ <div class="resource-video-wrapper" id="smoothie-details">
+ <div style="margin-top: 12px;">
  <div style="background: #fff; padding: 16px; margin-bottom: 16px; border: 1px solid #d4b5ba;">
  <h4 style="color: #b59197; margin-bottom: 12px;">Ingredients:</h4>
  <table style="width: 100%; color: #3d2f31; font-size: 0.95rem;">
@@ -2398,6 +2435,8 @@
 
  <div style="background: #f5f0ed; padding: 12px;">
  <p style="color: #3d2f31; margin: 0;"><strong>Remember:</strong> Creatine is SEPARATE — mix your flavored creatine (5g) in water at 10 AM before leaving. No banana needed — Banana Cream protein handles the flavor. This is your only caffeine for the day (~15–20mg from cacao).</p>
+ </div>
+ </div>
  </div>
  </div>
  <div id="meals-items"></div>
@@ -3350,6 +3389,7 @@ What's on my mind today..."></textarea>
  itemDiv.className = 'resource-item';
  
  let mediaContent = '';
+ let isVideo = false;
  if (item.file && item.file.id) {
  // Load from IndexedDB
  try {
@@ -3360,7 +3400,8 @@ What's on my mind today..."></textarea>
  if (item.file.type.startsWith('image')) {
  mediaContent = `<img src="${blobUrl}" style="max-width: 200px; margin-bottom: 8px; border-radius: 4px;">`;
  } else if (item.file.type.startsWith('video')) {
- mediaContent = `<video controls style="max-width: 300px; margin-bottom: 8px;"><source src="${blobUrl}" type="${item.file.type}"></video>`;
+ isVideo = true;
+ mediaContent = `<video controls style="width: 100%; max-width: 400px; margin-bottom: 8px;"><source src="${blobUrl}" type="${item.file.type}"></video>`;
  }
  }
  } catch(e) {
@@ -3371,8 +3412,21 @@ What's on my mind today..."></textarea>
  if (item.file.type.startsWith('image')) {
  mediaContent = `<img src="${item.file.data}" style="max-width: 200px; margin-bottom: 8px; border-radius: 4px;">`;
  } else if (item.file.type.startsWith('video')) {
- mediaContent = `<video controls style="max-width: 300px; margin-bottom: 8px;"><source src="${item.file.data}" type="${item.file.type}"></video>`;
+ isVideo = true;
+ mediaContent = `<video controls style="width: 100%; max-width: 400px; margin-bottom: 8px;"><source src="${item.file.data}" type="${item.file.type}"></video>`;
  }
+ }
+
+ // Wrap videos in collapsible toggle if item has a title
+ if (isVideo && item.title) {
+ const toggleId = 'resvid_' + category + '_' + index;
+ mediaContent = `
+ <button class="resource-video-toggle" onclick="var w=document.getElementById('${toggleId}');w.classList.toggle('open');this.classList.toggle('open');">
+ <span class="toggle-arrow">▶</span> Watch Video
+ </button>
+ <div class="resource-video-wrapper" id="${toggleId}">
+ ${mediaContent}
+ </div>`;
  }
  
  itemDiv.innerHTML = `
