@@ -1893,7 +1893,7 @@
  <!-- TO-DO LIST TAB -->
  <div id="todo-tab" class="hub-tab">
  <div class="todo-container">
- <h2 class="section-title">My To-Do List</h2>
+ <h2 class="section-title">Current To-Dos</h2>
  
  <div class="todo-input-group">
  <input 
@@ -1908,6 +1908,26 @@
 
  <div id="todoList" class="todo-list">
  <div class="todo-empty">No tasks yet. Add your first one above!</div>
+ </div>
+ </div>
+
+ <div class="todo-container" style="margin-top: 24px; border-left: 3px solid #7ba886;">
+ <h2 class="section-title" style="color: #7ba886;">Future To-Dos</h2>
+ <p style="font-size: 0.8rem; color: rgba(123,168,134,0.7); margin-bottom: 12px;">Things to get to when the time is right</p>
+ 
+ <div class="todo-input-group">
+ <input 
+ type="text" 
+ id="futureTodoInput" 
+ class="todo-input" 
+ placeholder="Add a future task..."
+ onkeypress="if(event.key === 'Enter') addFutureTodo()"
+ >
+ <button class="todo-add-btn" onclick="addFutureTodo()" style="background: #7ba886; border-color: #7ba886;">Add</button>
+ </div>
+
+ <div id="futureTodoList" class="todo-list">
+ <div class="todo-empty">No future tasks yet.</div>
  </div>
  </div>
  </div>
@@ -2980,17 +3000,116 @@ What's on my mind today..."></textarea>
  }
 
  function deleteTodo(id) {
- if (confirm('Delete this task?')) {
  todos = todos.filter(t => t.id !== id);
  saveTodos();
  renderTodos();
- }
  }
 
  // Make functions globally accessible
  window.addTodo = addTodo;
  window.toggleTodo = toggleTodo;
  window.deleteTodo = deleteTodo;
+
+ // ===== FUTURE TO-DOS =====
+ let futureTodos = [];
+ const defaultFutureTodos = [
+ { id: 1, text: 'Human Rights Certification Training through USIDHR', completed: false, createdAt: new Date().toISOString() },
+ { id: 2, text: 'Fear Free Pet Sitter Training', completed: false, createdAt: new Date().toISOString() },
+ { id: 3, text: 'Learn to crochet', completed: false, createdAt: new Date().toISOString() },
+ { id: 4, text: 'Clean up photo albums on phone', completed: false, createdAt: new Date().toISOString() },
+ { id: 5, text: 'Unpack boxes in house', completed: false, createdAt: new Date().toISOString() },
+ { id: 6, text: 'Sort everything', completed: false, createdAt: new Date().toISOString() }
+ ];
+
+ function loadFutureTodos() {
+ const FUTURE_VERSION = '2';
+ const savedVersion = localStorage.getItem('futureTodos_version_kasey');
+ if (savedVersion !== FUTURE_VERSION) {
+ futureTodos = JSON.parse(JSON.stringify(defaultFutureTodos));
+ localStorage.setItem('futureTodos_version_kasey', FUTURE_VERSION);
+ saveFutureTodos();
+ } else {
+ const saved = localStorage.getItem('futureTodos_kasey');
+ futureTodos = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(defaultFutureTodos));
+ }
+ renderFutureTodos();
+ }
+
+ function saveFutureTodos() {
+ localStorage.setItem('futureTodos_kasey', JSON.stringify(futureTodos));
+ }
+
+ function addFutureTodo() {
+ const input = document.getElementById('futureTodoInput');
+ const text = input.value.trim();
+ if (text === '') return;
+ futureTodos.unshift({
+ id: Date.now(),
+ text: text,
+ completed: false,
+ createdAt: new Date().toISOString()
+ });
+ saveFutureTodos();
+ renderFutureTodos();
+ input.value = '';
+ }
+
+ function toggleFutureTodo(id) {
+ const todo = futureTodos.find(t => t.id === id);
+ if (todo) {
+ todo.completed = !todo.completed;
+ saveFutureTodos();
+ renderFutureTodos();
+ }
+ }
+
+ function deleteFutureTodo(id) {
+ futureTodos = futureTodos.filter(t => t.id !== id);
+ saveFutureTodos();
+ renderFutureTodos();
+ }
+
+ function moveToCurrent(id) {
+ const todo = futureTodos.find(t => t.id === id);
+ if (todo) {
+ futureTodos = futureTodos.filter(t => t.id !== id);
+ todo.id = Date.now();
+ todo.completed = false;
+ todos.unshift(todo);
+ saveFutureTodos();
+ saveTodos();
+ renderFutureTodos();
+ renderTodos();
+ }
+ }
+
+ function renderFutureTodos() {
+ const list = document.getElementById('futureTodoList');
+ if (futureTodos.length === 0) {
+ list.innerHTML = '<div class="todo-empty">No future tasks yet.</div>';
+ return;
+ }
+ list.innerHTML = futureTodos.map(todo => `
+ <div class="todo-item${todo.completed ? ' completed' : ''}">
+ <input 
+ type="checkbox" 
+ class="todo-checkbox" 
+ ${todo.completed ? 'checked' : ''}
+ onchange="window.toggleFutureTodo(${todo.id})"
+ >
+ <div class="todo-text">${escapeHtml(todo.text)}</div>
+ <button class="todo-delete" onclick="window.moveToCurrent(${todo.id})" style="color: #7ba886; opacity: 1;" title="Move to Current">↑</button>
+ <button class="todo-delete" onclick="window.deleteFutureTodo(${todo.id})">Delete</button>
+ </div>
+ `).join('');
+ }
+
+ window.addFutureTodo = addFutureTodo;
+ window.toggleFutureTodo = toggleFutureTodo;
+ window.deleteFutureTodo = deleteFutureTodo;
+ window.moveToCurrent = moveToCurrent;
+ // ===== END FUTURE TO-DOS =====
+
  window.showAddResourceForm = showAddResourceForm;
  window.hideAddResourceForm = hideAddResourceForm;
  window.addResource = addResource;
@@ -4496,6 +4615,7 @@ What's on my mind today..."></textarea>
  loadVideos();
  loadResources();
  loadTodos();
+ loadFutureTodos();
  });
  </script>
 
