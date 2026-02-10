@@ -71,14 +71,52 @@
         .nav-link.active {
             color: #a3b899;
         }
+        .nav-hamburger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            z-index: 10001;
+        }
+        .nav-hamburger span {
+            display: block; width: 24px; height: 2px;
+            background: #a3b899; margin: 5px 0;
+            transition: all 0.3s ease;
+        }
+        .nav-hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+        .nav-hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+        .nav-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #2a1f21;
+            z-index: 10000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+        }
+        .nav-overlay.open { display: flex; }
+        .nav-link-mobile {
+            color: rgba(242, 235, 224, 0.7);
+            text-decoration: none;
+            font-size: 1.05rem;
+            font-family: 'Philosopher', Georgia, serif;
+            font-weight: 500;
+            padding: 12px 40px;
+            transition: color 0.2s;
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+        .nav-link-mobile:hover { color: #f2ebe0; }
+        .nav-link-mobile.active { color: #a3b899; }
         
         @media (max-width: 768px) {
-            .nav-links {
-                gap: 16px;
-            }
-            .nav-link {
-                font-size: 0.85rem;
-            }
+            .nav-hamburger { display: block; }
+            .nav-links { display: none; }
         }
         
         .container {
@@ -353,12 +391,25 @@
 <a href="index.html" class="nav-link">Home</a>
 <a href="kasey-hub.html" class="nav-link">Kasey</a>
 <a href="charlie-hub.html" class="nav-link">Charlie</a>
-<a href="our-dreams.html" class="nav-link">Dreams</a>
+<a href="our-dreams.html" class="nav-link">Us ♡</a>
 <a href="meal-plan.html" class="nav-link">Meals</a>
 <a href="settings.html" class="nav-link active">Settings</a>
 </div>
+<button class="nav-hamburger" id="navHamburger" onclick="toggleNav()" aria-label="Menu">
+    <span></span>
+    <span></span>
+    <span></span>
+</button>
 </div>
 </nav>
+<div class="nav-overlay" id="navOverlay" onclick="toggleNav()">
+    <a href="index.html" class="nav-link-mobile">Home</a>
+    <a href="kasey-hub.html" class="nav-link-mobile">Kasey</a>
+    <a href="charlie-hub.html" class="nav-link-mobile">Charlie</a>
+    <a href="our-dreams.html" class="nav-link-mobile">Us ♡</a>
+    <a href="meal-plan.html" class="nav-link-mobile">Meals</a>
+    <a href="settings.html" class="nav-link-mobile active">Settings</a>
+</div>
 
     <div class="container">
         <div class="page-header">
@@ -1038,6 +1089,22 @@ Try a new restaurant"></textarea>
             // Week start
             const savedWeekStart = localStorage.getItem('weekStart') || '0';
             document.getElementById('weekStart').value = savedWeekStart;
+        }
+
+        function toggleNav() {
+            var h = document.getElementById('navHamburger');
+            var o = document.getElementById('navOverlay');
+            if (!h || !o) return;
+            var isOpen = o.classList.contains('open');
+            if (isOpen) {
+                h.classList.remove('open');
+                o.classList.remove('open');
+                document.body.style.overflow = '';
+            } else {
+                h.classList.add('open');
+                o.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            }
         }
 
         loadSettings();
