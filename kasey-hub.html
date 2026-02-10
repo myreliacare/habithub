@@ -3468,22 +3468,45 @@ What's on my mind today..."></textarea>
  const saved = localStorage.getItem('videos_kasey');
  if (saved) {
  videos = JSON.parse(saved);
- saveToStorage('videos_kasey', videos);
  } else {
  videos = [];
  }
  }
- renderVideos();
- 
- setupStorageListener('videos_kasey', (data) => {
- videos = data;
- renderVideos();
+ // Migrate: strip any legacy base64 data from memory & storage
+ let migrated = false;
+ videos = videos.map(v => {
+ if (v.file && v.file.data) {
+ migrated = true;
+ return { ...v, file: { type: v.file.type, name: v.file.name, size: v.file.size || 0, id: v.id || ('legacy_' + Date.now()) } };
+ }
+ return v;
  });
+ if (migrated) {
+ try { localStorage.setItem('videos_kasey', JSON.stringify(videos)); } catch(e) {}
+ }
+ renderVideos();
  }
 
  function saveVideos() {
- localStorage.setItem('videos_kasey', JSON.stringify(videos));
- saveToStorage('videos_kasey', videos);
+ // Strip any legacy base64 data before saving metadata to localStorage
+ const metadataOnly = videos.map(v => {
+ if (v.file && v.file.data) {
+ // Legacy video with base64 — strip the data, keep metadata
+ return { ...v, file: { type: v.file.type, name: v.file.name, size: v.file.size || 0, id: v.id || v.file.id } };
+ }
+ return v;
+ });
+ try {
+ localStorage.setItem('videos_kasey', JSON.stringify(metadataOnly));
+ } catch(e) {
+ // If localStorage is full, try clearing old cached data first
+ try {
+ localStorage.removeItem('videos_kasey');
+ localStorage.setItem('videos_kasey', JSON.stringify(metadataOnly));
+ } catch(e2) {
+ console.warn('localStorage full, saving to IndexedDB only');
+ }
+ }
  }
 
  function toggleVideoForm() {
@@ -3531,12 +3554,12 @@ What's on my mind today..."></textarea>
  await saveVideoBlob(videoId, pendingVideoBlob, pendingVideoFile.type, pendingVideoFile.name);
  }
  videos.push(video);
- saveVideos(); // Only metadata to localStorage
+ saveVideos(); // Only metadata to localStorage (won't throw)
  } catch(err) {
- videos.pop();
+ console.error('Video save error:', err);
  saveBtn.textContent = origText;
  saveBtn.style.cssText = '';
- alert('Could not save video. Storage may be full.\nTry using a link instead.');
+ alert('Could not save video: ' + (err.message || 'Unknown error') + '\nTry using a link instead.');
  return;
  }
 
