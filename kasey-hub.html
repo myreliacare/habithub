@@ -2939,21 +2939,24 @@ What's on my mind today..."></textarea>
  let editingHabits = [];
 
  // Load custom habits from localStorage
- async function loadCustomHabits() {
- const firebaseData = await loadFromFirebase('kaseyCustomHabits');
- if (firebaseData && firebaseData.length >= 16) {
- kaseyHabits = firebaseData;
- localStorage.setItem('kaseyCustomHabits', JSON.stringify(kaseyHabits));
- } else {
+ function loadCustomHabits() {
+ // Load from localStorage first (instant)
  const saved = localStorage.getItem('kaseyCustomHabits');
  if (saved) {
  const parsed = JSON.parse(saved);
  if (parsed && parsed.length >= 16) {
  kaseyHabits = parsed;
+ }
+ }
+ // Sync from Firebase in background (non-blocking)
+ loadFromFirebase('kaseyCustomHabits').then(firebaseData => {
+ if (firebaseData && firebaseData.length >= 16) {
+ kaseyHabits = firebaseData;
+ localStorage.setItem('kaseyCustomHabits', JSON.stringify(kaseyHabits));
+ } else if (saved) {
  syncToFirebase('kaseyCustomHabits', kaseyHabits);
  }
- }
- }
+ });
  }
 
  // Habits Editor Functions
@@ -3243,22 +3246,25 @@ What's on my mind today..."></textarea>
  { id: 6, text: 'Sort everything', completed: false, createdAt: new Date().toISOString() }
  ];
 
- async function loadFutureTodos() {
- const firebaseData = await loadFromFirebase('futureTodos_kasey');
- if (firebaseData) {
- futureTodos = firebaseData;
- localStorage.setItem('futureTodos_kasey', JSON.stringify(futureTodos));
- } else {
+ function loadFutureTodos() {
  const saved = localStorage.getItem('futureTodos_kasey');
  if (saved) {
  futureTodos = JSON.parse(saved);
- syncToFirebase('futureTodos_kasey', futureTodos);
  } else {
  futureTodos = JSON.parse(JSON.stringify(defaultFutureTodos));
  saveFutureTodos();
  }
- }
  renderFutureTodos();
+ // Background Firebase sync
+ loadFromFirebase('futureTodos_kasey').then(firebaseData => {
+ if (firebaseData) {
+ futureTodos = firebaseData;
+ localStorage.setItem('futureTodos_kasey', JSON.stringify(futureTodos));
+ renderFutureTodos();
+ } else if (saved) {
+ syncToFirebase('futureTodos_kasey', futureTodos);
+ }
+ });
  setupFirebaseListener('futureTodos_kasey', (data) => {
  futureTodos = data;
  renderFutureTodos();
@@ -3690,31 +3696,22 @@ What's on my mind today..."></textarea>
  }
  }
 
- async function loadResources() {
- // Try Firebase first
- const firebaseData = await loadFromFirebase('resources_kasey');
- if (firebaseData) {
- resources = firebaseData;
- localStorage.setItem('resources_kasey', JSON.stringify(resources));
- } else {
+ function loadResources() {
+ // Load from localStorage first (instant)
  const savedData = localStorage.getItem('resources_kasey');
  if (savedData) {
  resources = JSON.parse(savedData);
- syncToFirebase('resources_kasey', resources);
  } else {
  resources = JSON.parse(JSON.stringify(defaultResources));
  try { localStorage.setItem('resources_kasey', JSON.stringify(resources)); } catch(e) {}
- syncToFirebase('resources_kasey', resources);
  }
- }
- // Ensure all default categories exist (merge, don't replace)
+ // Ensure all default categories exist
  for (const cat of Object.keys(defaultResources)) {
  if (!resources[cat]) {
  resources[cat] = JSON.parse(JSON.stringify(defaultResources[cat]));
  }
  }
-
- // Migrate: strip any legacy base64 data to free localStorage
+ // Migrate legacy base64
  let migrated = false;
  for (const cat of Object.keys(resources)) {
  resources[cat] = resources[cat].map(item => {
@@ -3728,8 +3725,20 @@ What's on my mind today..."></textarea>
  if (migrated) {
  try { localStorage.setItem('resources_kasey', JSON.stringify(resources)); } catch(e) {}
  }
- 
  renderAllResources();
+ // Background Firebase sync
+ loadFromFirebase('resources_kasey').then(firebaseData => {
+ if (firebaseData) {
+ resources = firebaseData;
+ for (const cat of Object.keys(defaultResources)) {
+ if (!resources[cat]) resources[cat] = JSON.parse(JSON.stringify(defaultResources[cat]));
+ }
+ localStorage.setItem('resources_kasey', JSON.stringify(resources));
+ renderAllResources();
+ } else if (savedData) {
+ syncToFirebase('resources_kasey', resources);
+ }
+ });
  setupFirebaseListener('resources_kasey', (data) => {
  resources = data;
  renderAllResources();
@@ -4011,21 +4020,15 @@ What's on my mind today..."></textarea>
  }
  }
 
- async function loadVideos() {
- const firebaseData = await loadFromFirebase('videos_kasey');
- if (firebaseData) {
- videos = firebaseData;
- localStorage.setItem('videos_kasey', JSON.stringify(videos));
- } else {
+ function loadVideos() {
+ // Load from localStorage first (instant)
  const saved = localStorage.getItem('videos_kasey');
  if (saved) {
  videos = JSON.parse(saved);
- syncToFirebase('videos_kasey', videos);
  } else {
  videos = [];
  }
- }
- // Migrate: strip any legacy base64 data from memory & storage
+ // Migrate legacy base64
  let migrated = false;
  videos = videos.map(v => {
  if (v.file && v.file.data) {
@@ -4038,6 +4041,16 @@ What's on my mind today..."></textarea>
  try { localStorage.setItem('videos_kasey', JSON.stringify(videos)); } catch(e) {}
  }
  renderVideos();
+ // Background Firebase sync
+ loadFromFirebase('videos_kasey').then(firebaseData => {
+ if (firebaseData) {
+ videos = firebaseData;
+ localStorage.setItem('videos_kasey', JSON.stringify(videos));
+ renderVideos();
+ } else if (saved) {
+ syncToFirebase('videos_kasey', videos);
+ }
+ });
  setupFirebaseListener('videos_kasey', (data) => {
  videos = data;
  renderVideos();
@@ -4401,19 +4414,22 @@ What's on my mind today..."></textarea>
  await syncToFirebase('journalEntries_kasey', journalEntries);
  }
 
- async function loadJournalEntries() {
- const firebaseData = await loadFromFirebase('journalEntries_kasey');
- if (firebaseData) {
- journalEntries = firebaseData;
- localStorage.setItem('journalEntries_kasey', JSON.stringify(journalEntries));
- } else {
+ function loadJournalEntries() {
  const saved = localStorage.getItem('journalEntries_kasey');
  if (saved) {
  journalEntries = JSON.parse(saved);
- syncToFirebase('journalEntries_kasey', journalEntries);
- }
  }
  renderJournalEntries();
+ // Background Firebase sync
+ loadFromFirebase('journalEntries_kasey').then(firebaseData => {
+ if (firebaseData) {
+ journalEntries = firebaseData;
+ localStorage.setItem('journalEntries_kasey', JSON.stringify(journalEntries));
+ renderJournalEntries();
+ } else if (saved) {
+ syncToFirebase('journalEntries_kasey', journalEntries);
+ }
+ });
  setupFirebaseListener('journalEntries_kasey', (data) => {
  journalEntries = data;
  renderJournalEntries();
@@ -5013,10 +5029,10 @@ What's on my mind today..."></textarea>
  `;
  }
 
- document.addEventListener('DOMContentLoaded', async function() {
+ document.addEventListener('DOMContentLoaded', function() {
 
  // Load custom habits first
- await loadCustomHabits();
+ loadCustomHabits();
  
  // Force clear old cached habits if they don't match current list
  const saved = localStorage.getItem('bingoState_kasey');
