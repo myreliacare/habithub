@@ -553,13 +553,37 @@
             border: 1px solid var(--border-color);
         }
         
+        /* ===== RESPONSIVE: DESKTOP ===== */
+        @media (min-width: 769px) {
+            .container {
+                max-width: 700px;
+            }
+            .rb-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .modal {
+                max-width: 560px;
+            }
+            .grocery-category {
+                margin-bottom: 10px;
+            }
+            .gen-section {
+                padding: 24px;
+            }
+        }
+
+        /* ===== RESPONSIVE: SMALL MOBILE ===== */
         @media (max-width: 480px) {
             body {
                 padding: 76px 8px 8px;
             }
             
             .header h1 {
-                font-size: 2rem;
+                font-size: 1.8rem;
+            }
+            
+            .container {
+                max-width: 100%;
             }
             
             .calendar {
@@ -569,7 +593,6 @@
             .plan-progress {
                 padding: 10px 12px;
             }
-
 
             .week-grid {
                 gap: 4px;
@@ -590,7 +613,154 @@
             }
             
             .modal {
-                max-height: 80vh;
+                max-height: 85vh;
+            }
+            .modal-container {
+                padding: 10px;
+            }
+
+            .page-tab {
+                padding: 9px 4px;
+                font-size: 0.7rem;
+            }
+
+            .toggle-btn {
+                padding: 8px 14px;
+                font-size: 0.8rem;
+            }
+
+            .goals {
+                gap: 16px;
+                padding: 12px;
+                font-size: 0.8rem;
+            }
+
+            .day-detail {
+                padding: 14px;
+            }
+            .day-header {
+                padding: 10px 12px;
+            }
+            .day-num {
+                font-size: 0.95rem;
+            }
+            .day-theme {
+                font-size: 0.78rem;
+            }
+            .day-header-right {
+                gap: 10px;
+                font-size: 0.7rem;
+            }
+
+            .meal-btn {
+                padding: 12px;
+                gap: 10px;
+            }
+            .meal-icon {
+                width: 34px;
+                height: 34px;
+                font-size: 1rem;
+            }
+            .meal-name {
+                font-size: 0.8rem;
+            }
+            .meal-portion {
+                font-size: 0.7rem;
+            }
+
+            .modal-header {
+                padding: 18px 16px 14px;
+            }
+            .modal-header h3 {
+                font-size: 1.1rem;
+            }
+            .modal-body {
+                padding: 16px;
+            }
+            .modal-section li {
+                font-size: 0.8rem;
+            }
+            .tip-box p {
+                font-size: 0.8rem;
+            }
+
+            .rb-card {
+                padding: 12px;
+            }
+            .rb-card-name {
+                font-size: 0.82rem;
+            }
+            .rb-filter {
+                padding: 6px 10px;
+                font-size: 0.7rem;
+            }
+
+            .gen-section {
+                padding: 14px;
+            }
+            .gen-section h3 {
+                font-size: 0.82rem;
+            }
+            .gen-row {
+                flex-direction: column;
+                gap: 6px;
+            }
+            .gen-label {
+                min-width: auto;
+            }
+            .gen-btn {
+                font-size: 0.9rem;
+                padding: 12px;
+            }
+
+            .diet-tag {
+                font-size: 0.65rem;
+                padding: 3px 8px;
+            }
+
+            .grocery-cat-header {
+                padding: 8px 12px;
+            }
+            .grocery-cat-header h4 {
+                font-size: 0.75rem;
+            }
+            .grocery-item {
+                font-size: 0.72rem;
+                padding: 5px 0;
+            }
+
+            .plan-selector select {
+                font-size: 0.75rem !important;
+            }
+        }
+
+        /* ===== RESPONSIVE: TINY MOBILE ===== */
+        @media (max-width: 360px) {
+            body {
+                padding: 70px 6px 6px;
+            }
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            .page-tab {
+                padding: 8px 2px;
+                font-size: 0.62rem;
+            }
+            .toggle-btn {
+                padding: 7px 10px;
+                font-size: 0.75rem;
+            }
+            .goals {
+                flex-direction: column;
+                gap: 4px;
+                text-align: center;
+            }
+            .day-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .day-header-left {
+                justify-content: center;
             }
         }
 
@@ -984,6 +1154,28 @@
             padding: 0 4px;
         }
         .grocery-item .grocery-remove:hover { color: #b4828c; }
+
+        /* Add recipe form */
+        #add-recipe-form input,
+        #add-recipe-form select,
+        #add-recipe-form textarea {
+            font-size: 0.8rem;
+        }
+        @media (max-width: 480px) {
+            #add-recipe-form input,
+            #add-recipe-form select,
+            #add-recipe-form textarea {
+                font-size: 0.75rem;
+                padding: 7px 10px;
+            }
+            #grocery-view h3 {
+                font-size: 0.9rem !important;
+            }
+            #modal-swap-list button {
+                font-size: 0.72rem !important;
+                padding: 8px 10px !important;
+            }
+        }
 
         /* ===== PLAN SELECTOR ===== */
         .plan-selector {
