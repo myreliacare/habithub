@@ -902,6 +902,59 @@
         .gen-checkbox-row input[type="checkbox"] {
             accent-color: var(--sage-green);
         }
+
+        /* ===== PLAN SELECTOR ===== */
+        .plan-selector {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            padding: 10px 14px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+        .plan-selector label {
+            font-size: 0.75rem;
+            color: rgba(224, 210, 208, 0.5);
+            white-space: nowrap;
+        }
+        .plan-selector select {
+            flex: 1;
+            padding: 6px 10px;
+            background: rgba(61, 47, 49, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--light-text);
+            font-family: 'Philosopher', serif;
+            font-size: 0.85rem;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%23a3b899'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            padding-right: 28px;
+        }
+        .plan-selector select:focus {
+            outline: none;
+            border-color: var(--sage-green);
+        }
+        .plan-delete-btn {
+            background: none;
+            border: 1px solid rgba(180, 130, 140, 0.3);
+            color: rgba(180, 130, 140, 0.6);
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Philosopher', serif;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .plan-delete-btn:hover {
+            border-color: rgba(180, 130, 140, 0.6);
+            color: #b4828c;
+        }
     </style>
 </head>
 <body>
@@ -946,6 +999,12 @@
 
     <div id="plan-view" class="tab-view active">
     
+    <div class="plan-selector" id="plan-selector" style="display:none;">
+        <label>Plan:</label>
+        <select id="plan-dropdown" onchange="switchPlan(this.value)"></select>
+        <button class="plan-delete-btn" id="plan-delete-btn" onclick="deleteCurrentPlan()">Delete</button>
+    </div>
+
     <div class="toggle-container">
         <button class="toggle-btn active" data-person="kasey">Kasey</button>
         <button class="toggle-btn" data-person="charlie">Charlie</button>
@@ -1866,6 +1925,123 @@ if (todayPlanDay < 1) todayPlanDay = 1;
 if (todayPlanDay > PLAN_DAYS) todayPlanDay = PLAN_DAYS;
 var currentDay = todayPlanDay;
 
+// ===== MULTI-PLAN SYSTEM =====
+var savedPlans = [{
+    id: 'plan_original',
+    label: 'Feb 11–24',
+    startDate: '2026-02-11',
+    days: 14,
+    kaseyDays: mealData.kasey.days,
+    charlieDays: mealData.charlie.days
+}];
+var currentPlanIndex = 0;
+
+function renderPlanSelector() {
+    var sel = document.getElementById('plan-selector');
+    var dd = document.getElementById('plan-dropdown');
+    var delBtn = document.getElementById('plan-delete-btn');
+    
+    if (savedPlans.length <= 1) {
+        sel.style.display = 'none';
+        return;
+    }
+    
+    sel.style.display = 'flex';
+    dd.innerHTML = '';
+    savedPlans.forEach(function(p, i) {
+        var opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = p.label;
+        opt.selected = i === currentPlanIndex;
+        dd.appendChild(opt);
+    });
+    
+    // Don't allow deleting the original plan
+    delBtn.style.display = currentPlanIndex === 0 ? 'none' : 'inline-block';
+}
+
+function switchPlan(index) {
+    index = parseInt(index);
+    if (index < 0 || index >= savedPlans.length) return;
+    currentPlanIndex = index;
+    
+    var plan = savedPlans[index];
+    PLAN_START = new Date(plan.startDate + 'T00:00:00');
+    PLAN_DAYS = plan.days;
+    mealData.kasey.days = plan.kaseyDays;
+    mealData.charlie.days = plan.charlieDays;
+    
+    // Update subtitle
+    var sd = new Date(plan.startDate + 'T00:00:00');
+    var ed = new Date(sd); ed.setDate(ed.getDate() + plan.days - 1);
+    document.getElementById('header-subtitle').textContent = 'Kasey & Charlie \u2022 ' + SHORT_MONTHS[sd.getMonth()] + ' ' + sd.getDate() + '\u2013' + ed.getDate();
+    
+    // Reset to appropriate day
+    var todayD = getPlanDayFromDate(new Date());
+    if (todayD < 1) todayD = 1;
+    if (todayD > PLAN_DAYS) todayD = 1;
+    currentDay = todayD;
+    
+    renderPlanSelector();
+    renderCalendar();
+    selectDay(currentDay);
+}
+
+function deleteCurrentPlan() {
+    if (currentPlanIndex === 0) return;
+    if (!confirm('Delete this plan? This cannot be undone.')) return;
+    savedPlans.splice(currentPlanIndex, 1);
+    currentPlanIndex = 0;
+    switchPlan(0);
+    saveAllPlansToFirebase();
+}
+
+function saveAllPlansToFirebase() {
+    // Update current plan's data before saving
+    savedPlans[currentPlanIndex].kaseyDays = mealData.kasey.days;
+    savedPlans[currentPlanIndex].charlieDays = mealData.charlie.days;
+    
+    if (!window.fbReady) {
+        localStorage.setItem('mealplan_allplans', JSON.stringify(savedPlans));
+        return;
+    }
+    try {
+        var imports = window.firestoreImports;
+        imports.setDoc(imports.doc(window.db, 'mealPlanData', 'allPlans'), {
+            plans: JSON.stringify(savedPlans),
+            updatedAt: new Date().toISOString()
+        });
+    } catch(e) {
+        localStorage.setItem('mealplan_allplans', JSON.stringify(savedPlans));
+    }
+}
+
+function loadAllPlansFromFirebase(callback) {
+    if (!window.fbReady) {
+        var saved = localStorage.getItem('mealplan_allplans');
+        if (saved) {
+            try {
+                var loaded = JSON.parse(saved);
+                if (loaded.length > 0) savedPlans = loaded;
+            } catch(e) {}
+        }
+        callback();
+        return;
+    }
+    try {
+        var imports = window.firestoreImports;
+        imports.getDoc(imports.doc(window.db, 'mealPlanData', 'allPlans')).then(function(snap) {
+            if (snap.exists() && snap.data().plans) {
+                try {
+                    var loaded = JSON.parse(snap.data().plans);
+                    if (loaded.length > 0) savedPlans = loaded;
+                } catch(e) {}
+            }
+            callback();
+        }).catch(function() { callback(); });
+    } catch(e) { callback(); }
+}
+
 var dayColors = [
     "#a3b899", "#8fa882", "#7d8f76", "#a3b899", "#8fa882", "#b8c9ad", "#7d8f76",
     "#a3b899", "#8fa882", "#7d8f76", "#a3b899", "#8fa882", "#b8c9ad", "#7d8f76"
@@ -2109,6 +2285,7 @@ document.querySelectorAll(".toggle-btn").forEach(function(btn) {
 });
 
 function render() {
+    renderPlanSelector();
     renderProgress();
     renderCalendar();
     renderDayDetail();
@@ -2270,7 +2447,7 @@ function toggleFavorite(id) {
 var fbReady = false;
 
 function saveRecipeBankToFirebase() {
-    if (!fbReady) { localStorage.setItem('mealplan_recipes', JSON.stringify(recipeBank)); return; }
+    if (!window.fbReady) { localStorage.setItem('mealplan_recipes', JSON.stringify(recipeBank)); return; }
     try {
         var imports = window.firestoreImports;
         imports.setDoc(imports.doc(window.db, 'mealPlanData', 'recipeBank'), {
@@ -2280,7 +2457,7 @@ function saveRecipeBankToFirebase() {
 }
 
 function loadRecipeBankFromFirebase(callback) {
-    if (!fbReady) {
+    if (!window.fbReady) {
         var saved = localStorage.getItem('mealplan_recipes');
         if (saved) recipeBank = JSON.parse(saved);
         callback();
@@ -2296,7 +2473,7 @@ function loadRecipeBankFromFirebase(callback) {
 }
 
 function savePlanToFirebase(planObj) {
-    if (!fbReady) { localStorage.setItem('mealplan_current', JSON.stringify(planObj)); return; }
+    if (!window.fbReady) { localStorage.setItem('mealplan_current', JSON.stringify(planObj)); return; }
     try {
         var imports = window.firestoreImports;
         imports.setDoc(imports.doc(window.db, 'mealPlanData', 'currentPlan'), {
@@ -2318,10 +2495,15 @@ function initRecipeBank() {
 function initGenerateView() {
     var startInput = document.getElementById('gen-start-date');
     if (!startInput.value) {
-        var planEnd = getDateForPlanDay(PLAN_DAYS);
-        var nextDay = new Date(planEnd);
-        nextDay.setDate(nextDay.getDate() + 1);
-        startInput.value = nextDay.toISOString().split('T')[0];
+        // Find the latest end date across all saved plans
+        var latestEnd = new Date(PLAN_START);
+        latestEnd.setDate(latestEnd.getDate() + PLAN_DAYS);
+        savedPlans.forEach(function(p) {
+            var pEnd = new Date(p.startDate + 'T00:00:00');
+            pEnd.setDate(pEnd.getDate() + p.days);
+            if (pEnd > latestEnd) latestEnd = pEnd;
+        });
+        startInput.value = latestEnd.toISOString().split('T')[0];
     }
 }
 
@@ -2574,11 +2756,8 @@ function acceptPlan() {
     var plan = window._pendingPlan;
     if (!plan) return;
     
-    var newStart = new Date(plan.startDate + 'T00:00:00');
-    PLAN_START = newStart;
-    PLAN_DAYS = plan.days.length;
-    
-    mealData.kasey.days = plan.days.map(function(d) {
+    // Build Kasey's days
+    var kaseyDays = plan.days.map(function(d) {
         return {
             day: d.day, theme: d.theme, protein: d.protein, calories: d.calories,
             prep: d.prep || null,
@@ -2590,14 +2769,13 @@ function acceptPlan() {
         };
     });
     
-    // Regenerate Charlie's scaled meals
-    mealData.charlie.days = mealData.kasey.days.map(function(day) {
+    // Build Charlie's scaled meals
+    var charlieDays = kaseyDays.map(function(day) {
         var cDay = JSON.parse(JSON.stringify(day));
         var kProtein = parseInt(day.protein); var kCal = parseInt(day.calories.replace(",", ""));
         cDay.protein = Math.round(kProtein * 1.3) + "g";
         cDay.calories = (Math.round(kCal * 1.4 / 100) * 100).toLocaleString();
         cDay.meals = cDay.meals.map(function(m) {
-            if (m.name.indexOf("Melting Pot") !== -1) return m;
             var origProtein = parseInt(m.portion); var calM = m.portion.match(/(\d+) cal/); var origCal = calM ? parseInt(calM[1]) : 0;
             if (isNaN(origProtein) || origCal === 0) return m;
             m.portion = Math.round(origProtein * 1.3) + "g protein - " + Math.round(origCal * 1.4) + " cal";
@@ -2612,6 +2790,23 @@ function acceptPlan() {
         });
         return cDay;
     });
+    
+    // Create date label
+    var sd = new Date(plan.startDate + 'T00:00:00');
+    var ed = new Date(sd); ed.setDate(ed.getDate() + plan.days.length - 1);
+    var mo = SHORT_MONTHS;
+    var label = mo[sd.getMonth()] + ' ' + sd.getDate() + '\u2013' + (sd.getMonth() === ed.getMonth() ? '' : mo[ed.getMonth()] + ' ') + ed.getDate();
+    
+    // Add new plan to saved plans
+    var newPlan = {
+        id: 'plan_' + Date.now(),
+        label: label,
+        startDate: plan.startDate,
+        days: plan.days.length,
+        kaseyDays: kaseyDays,
+        charlieDays: charlieDays
+    };
+    savedPlans.push(newPlan);
     
     // Add new recipes to bank
     plan.days.forEach(function(day) {
@@ -2635,21 +2830,18 @@ function acceptPlan() {
         });
     });
     saveRecipeBankToFirebase();
+    saveAllPlansToFirebase();
     
-    // Update subtitle
-    var sd = new Date(plan.startDate + 'T00:00:00'); var ed = new Date(sd); ed.setDate(ed.getDate() + plan.days.length - 1);
-    var mo = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-    document.getElementById('header-subtitle').textContent = 'Kasey & Charlie \u2022 ' + mo[sd.getMonth()] + ' ' + sd.getDate() + '\u2013' + ed.getDate();
-    
-    savePlanToFirebase({ startDate: plan.startDate, days: plan.days.length, kaseyDays: mealData.kasey.days, charlieDays: mealData.charlie.days });
-    
+    // Switch to the new plan
     document.getElementById('gen-btn').style.display = 'block';
     document.getElementById('gen-btn').disabled = false;
     document.getElementById('gen-preview').style.display = 'none';
-    document.getElementById('gen-status').innerHTML = 'Plan loaded! Switching to Plan view...';
+    document.getElementById('gen-status').innerHTML = 'Plan saved! Switching to it now...';
     
-    currentDay = 1;
-    setTimeout(function() { switchTab('plan'); renderCalendar(); selectDay(1); }, 1000);
+    setTimeout(function() {
+        switchPlan(savedPlans.length - 1);
+        switchTab('plan');
+    }, 800);
 }
 
 // Init recipe bank on load
@@ -2675,8 +2867,13 @@ try {
     window.firestoreImports = { doc, setDoc, getDoc };
     window.fbReady = true;
     
-    // Reload recipe bank now that Firebase is ready
+    // Reload data now that Firebase is ready
     if (typeof window.initRecipeBank === 'function') window.initRecipeBank();
+    if (typeof window.loadAllPlansFromFirebase === 'function') {
+        window.loadAllPlansFromFirebase(function() {
+            if (typeof window.renderPlanSelector === 'function') window.renderPlanSelector();
+        });
+    }
 } catch(e) {
     console.log('Firebase init failed, using localStorage fallback', e);
 }
