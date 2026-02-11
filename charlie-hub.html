@@ -973,6 +973,7 @@
 <script type="module">
  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
  import { getFirestore, collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+ import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
 
  try {
  const firebaseConfig = {
@@ -986,8 +987,11 @@
 
  const app = initializeApp(firebaseConfig);
  const db = getFirestore(app);
+ const storage = getStorage(app);
 
  window.db = db;
+ window.firebaseStorage = storage;
+ window.firebaseStorageImports = { ref, uploadBytes, getDownloadURL, deleteObject };
  window.firestoreImports = { collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot };
  window.firebaseReady = true;
  window.dispatchEvent(new Event('firebaseReady'));
@@ -1326,21 +1330,22 @@
         let editingHabits = [];
 
         // Load custom habits from localStorage
-        async function loadCustomHabits() {
-            const firebaseData = await loadFromFirebase('charlieCustomHabits');
-            if (firebaseData && firebaseData.length >= 16) {
-                charlieHabits = firebaseData;
-                localStorage.setItem('charlieCustomHabits', JSON.stringify(charlieHabits));
-            } else {
-                const saved = localStorage.getItem('charlieCustomHabits');
-                if (saved) {
-                    const parsed = JSON.parse(saved);
-                    if (parsed && parsed.length >= 16) {
-                        charlieHabits = parsed;
-                        syncToFirebase('charlieCustomHabits', charlieHabits);
-                    }
+        function loadCustomHabits() {
+            const saved = localStorage.getItem('charlieCustomHabits');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                if (parsed && parsed.length >= 16) {
+                    charlieHabits = parsed;
                 }
             }
+            loadFromFirebase('charlieCustomHabits').then(firebaseData => {
+                if (firebaseData && firebaseData.length >= 16) {
+                    charlieHabits = firebaseData;
+                    localStorage.setItem('charlieCustomHabits', JSON.stringify(charlieHabits));
+                } else if (saved) {
+                    syncToFirebase('charlieCustomHabits', charlieHabits);
+                }
+            });
         }
 
         // Habits Editor Functions
@@ -1545,6 +1550,25 @@
             } catch (error) {}
         }
 
+        // Firebase Storage (Cloud file uploads)
+        async function uploadToFirebaseStorage(blob, path) {
+            if (!window.firebaseReady || !window.firebaseStorage) return null;
+            try {
+                const { ref, uploadBytes, getDownloadURL } = window.firebaseStorageImports;
+                const storageRef = ref(window.firebaseStorage, path);
+                await uploadBytes(storageRef, blob);
+                return await getDownloadURL(storageRef);
+            } catch (error) { return null; }
+        }
+
+        async function deleteFromFirebaseStorage(path) {
+            if (!window.firebaseReady || !window.firebaseStorage) return;
+            try {
+                const { ref, deleteObject } = window.firebaseStorageImports;
+                await deleteObject(ref(window.firebaseStorage, path));
+            } catch (error) {}
+        }
+
         function switchTabFromDropdown() {
             const dropdown = document.getElementById('sectionDropdown');
             const tab = dropdown.value;
@@ -1727,22 +1751,23 @@
             }
         }
 
-        async function loadResources() {
-            const firebaseData = await loadFromFirebase('resources_charlie');
-            if (firebaseData) {
-                resources = firebaseData;
-                localStorage.setItem('resources_charlie', JSON.stringify(resources));
+        function loadResources() {
+            const saved = localStorage.getItem('resources_charlie');
+            if (saved) {
+                resources = JSON.parse(saved);
             } else {
-                const saved = localStorage.getItem('resources_charlie');
-                if (saved) {
-                    resources = JSON.parse(saved);
-                    syncToFirebase('resources_charlie', resources);
-                } else {
-                    resources = JSON.parse(JSON.stringify(defaultResources));
-                    syncToFirebase('resources_charlie', resources);
-                }
+                resources = JSON.parse(JSON.stringify(defaultResources));
             }
             renderAllResources();
+            loadFromFirebase('resources_charlie').then(firebaseData => {
+                if (firebaseData) {
+                    resources = firebaseData;
+                    localStorage.setItem('resources_charlie', JSON.stringify(resources));
+                    renderAllResources();
+                } else if (saved) {
+                    syncToFirebase('resources_charlie', resources);
+                }
+            });
             setupFirebaseListener('resources_charlie', (data) => {
                 resources = data;
                 renderAllResources();
@@ -1750,32 +1775,36 @@
         }
 
         function saveResources() {
-            localStorage.setItem('resources_charlie', JSON.stringify(resources));
-            syncToFirebase('resources_charlie', resources);
+            // Strip base64 data before saving
+            const metadataOnly = {};
+            for (const [cat, items] of Object.entries(resources)) {
+                metadataOnly[cat] = items.map(item => {
+                    if (item.file && item.file.data) {
+                        const { data, ...rest } = item.file;
+                        return { ...item, file: rest };
+                    }
+                    return item;
+                });
+            }
+            try { localStorage.setItem('resources_charlie', JSON.stringify(metadataOnly)); } catch(e) {}
+            syncToFirebase('resources_charlie', metadataOnly);
         }
+
+        let pendingResourceBlob = null;
 
         function handleResourceUpload() {
             const fileInput = document.getElementById('resourceFile');
             const file = fileInput.files[0];
             if (file) {
-                // File size validation
                 const sizeMB = (file.size / 1024 / 1024).toFixed(1);
-                if (file.size > 2 * 1024 * 1024) {
-                    if (!confirm('File is ' + sizeMB + 'MB. This may cause issues. Continue?')) {
-                        fileInput.value = '';
-                        return;
-                    }
+                if (file.size > 200 * 1024 * 1024) {
+                    alert('File too large (' + sizeMB + 'MB). Max is 200MB.');
+                    fileInput.value = '';
+                    return;
                 }
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    pendingResourceFile = {
-                        data: e.target.result,
-                        type: file.type,
-                        name: file.name
-                    };
-                    document.getElementById('resourceLink').value = '';
-                };
-                reader.readAsDataURL(file);
+                pendingResourceFile = { type: file.type, name: file.name, size: file.size };
+                pendingResourceBlob = file;
+                document.getElementById('resourceLink').value = '';
             }
         }
 
@@ -1803,10 +1832,15 @@
                 
                 let mediaContent = '';
                 if (item.file) {
-                    if (item.file.type.startsWith('image')) {
-                        mediaContent = `<img src="${item.file.data}" style="max-width: 200px; margin-bottom: 8px; border-radius: 4px;">`;
-                    } else if (item.file.type.startsWith('video')) {
-                        mediaContent = `<video controls style="max-width: 200px; margin-bottom: 8px;"><source src="${item.file.data}" type="${item.file.type}"></video>`;
+                    const fileUrl = item.file.cloudUrl || item.file.data || null;
+                    if (fileUrl) {
+                        if (item.file.type.startsWith('image')) {
+                            mediaContent = `<img src="${fileUrl}" style="max-width: 200px; margin-bottom: 8px; border-radius: 4px;">`;
+                        } else if (item.file.type.startsWith('video')) {
+                            mediaContent = `<video controls style="max-width: 200px; margin-bottom: 8px;"><source src="${fileUrl}" type="${item.file.type}"></video>`;
+                        }
+                    } else {
+                        mediaContent = '<div style="color:#b59197;font-size:0.85rem;">📱 File only available on upload device</div>';
                     }
                 }
                 
@@ -1832,32 +1866,54 @@
             document.getElementById('resourceForm').classList.remove('active');
             document.getElementById('resourceForm').querySelector('form').reset();
             pendingResourceFile = null;
+            pendingResourceBlob = null;
         }
 
         async function addResource(e) {
             e.preventDefault();
             const formData = new FormData(e.target);
             const category = formData.get('category');
+            const fileId = 'res_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
 
             const resource = {
                 title: formData.get('title'),
                 link: formData.get('link') || null,
                 note: formData.get('note') || null,
-                file: pendingResourceFile
+                file: pendingResourceFile ? { type: pendingResourceFile.type, name: pendingResourceFile.name, size: pendingResourceFile.size, id: fileId } : null
             };
 
-            if (!resources[category]) resources[category] = [];
-            resources[category].push(resource);
-            await saveResources();
-            renderResourceCategory(category);
-            hideAddResourceForm();
+            try {
+                if (pendingResourceBlob && resource.file) {
+                    const storagePath = 'resources/charlie/' + fileId + '_' + pendingResourceFile.name;
+                    const downloadUrl = await uploadToFirebaseStorage(pendingResourceBlob, storagePath);
+                    if (downloadUrl) {
+                        resource.file.cloudUrl = downloadUrl;
+                        resource.file.storagePath = storagePath;
+                    }
+                }
+                if (!resources[category]) resources[category] = [];
+                resources[category].push(resource);
+                await saveResources();
+                renderResourceCategory(category);
+                hideAddResourceForm();
+                pendingResourceFile = null;
+                pendingResourceBlob = null;
+            } catch(err) {
+                alert('Could not save file: ' + (err.message || 'Unknown error'));
+            }
         }
 
         async function deleteResource(category, index) {
+            const item = resources[category][index];
+            if (item.file && item.file.storagePath) {
+                try { await deleteFromFirebaseStorage(item.file.storagePath); } catch(e) {}
+            }
             resources[category].splice(index, 1);
             await saveResources();
             renderResourceCategory(category);
         }
+
+        let pendingVideoBlob = null;
 
         function handleVideoUpload() {
             const fileInput = document.getElementById('videoFile');
@@ -1866,8 +1922,8 @@
             const file = fileInput.files[0];
             if (file) {
                 const sizeMB = (file.size / 1024 / 1024).toFixed(1);
-                if (file.size > 10 * 1024 * 1024) {
-                    alert('Video too large (' + sizeMB + 'MB).\n\nVideos over 10MB cannot save properly. Please:\n1. Upload to YouTube and use the link, OR\n2. Compress video to under 10MB');
+                if (file.size > 200 * 1024 * 1024) {
+                    alert('Video too large (' + sizeMB + 'MB). Max is 200MB.');
                     fileInput.value = '';
                     return;
                 }
@@ -1876,47 +1932,33 @@
                 saveBtn.disabled = true;
                 saveBtn.style.opacity = '0.5';
 
-                if (file.size > 2 * 1024 * 1024) {
-                    status.innerHTML = '<span style="display:inline-block;width:12px;height:12px;border:2px solid rgba(123,168,134,0.3);border-top-color:#7ba886;border-radius:50%;animation:spin 0.6s linear infinite;vertical-align:middle;margin-right:6px;"></span> Processing large video (' + sizeMB + 'MB) — this may take a moment...';
-                }
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    pendingVideoFile = {
-                        data: e.target.result,
-                        type: file.type,
-                        name: file.name
-                    };
-                    document.getElementById('videoLink').value = '';
-                    status.innerHTML = '&#10004; Video ready (' + sizeMB + 'MB)';
-                    status.style.color = '#7ba886';
-                    saveBtn.disabled = false;
-                    saveBtn.style.opacity = '1';
-                };
-                reader.onerror = function() {
-                    status.innerHTML = '&#10008; Failed to process video. Try again.';
-                    status.style.color = '#c97a7a';
-                    saveBtn.disabled = false;
-                    saveBtn.style.opacity = '1';
-                };
-                reader.readAsDataURL(file);
+                pendingVideoFile = { type: file.type, name: file.name, size: file.size };
+                pendingVideoBlob = file;
+                document.getElementById('videoLink').value = '';
+                status.innerHTML = '&#10004; Video ready (' + sizeMB + 'MB)';
+                status.style.color = '#7ba886';
+                saveBtn.disabled = false;
+                saveBtn.style.opacity = '1';
             }
         }
 
-        async function loadVideos() {
-            const firebaseData = await loadFromFirebase('videos_charlie');
-            if (firebaseData) {
-                videos = firebaseData;
-                localStorage.setItem('videos_charlie', JSON.stringify(videos));
+        function loadVideos() {
+            const saved = localStorage.getItem('videos_charlie');
+            if (saved) {
+                videos = JSON.parse(saved);
             } else {
-                const saved = localStorage.getItem('videos_charlie');
-                if (saved) {
-                    videos = JSON.parse(saved);
-                    syncToFirebase('videos_charlie', videos);
-                } else {
-                    videos = [];
-                }
+                videos = [];
             }
             renderVideos();
+            loadFromFirebase('videos_charlie').then(firebaseData => {
+                if (firebaseData) {
+                    videos = firebaseData;
+                    localStorage.setItem('videos_charlie', JSON.stringify(videos));
+                    renderVideos();
+                } else if (saved) {
+                    syncToFirebase('videos_charlie', videos);
+                }
+            });
             setupFirebaseListener('videos_charlie', (data) => {
                 videos = data;
                 renderVideos();
@@ -1924,8 +1966,16 @@
         }
 
         function saveVideos() {
-            localStorage.setItem('videos_charlie', JSON.stringify(videos));
-            syncToFirebase('videos_charlie', videos);
+            // Strip base64 data before saving - only keep metadata + cloudUrl
+            const metadataOnly = videos.map(v => {
+                if (v.file && v.file.data) {
+                    const { data, ...rest } = v.file;
+                    return { ...v, file: rest };
+                }
+                return v;
+            });
+            try { localStorage.setItem('videos_charlie', JSON.stringify(metadataOnly)); } catch(e) {}
+            syncToFirebase('videos_charlie', metadataOnly);
         }
 
         function toggleVideoForm() {
@@ -1953,28 +2003,42 @@
             spinner.style.cssText = 'position:absolute;top:50%;left:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border:2px solid rgba(123,168,134,0.3);border-top-color:#7ba886;border-radius:50%;animation:spin 0.6s linear infinite;';
             saveBtn.appendChild(spinner);
 
+            if (status) { status.style.display = 'block'; status.innerHTML = 'Uploading...'; }
+
             const formData = new FormData(e.target);
+            const videoId = 'vid_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+
             const video = {
+                id: videoId,
                 title: formData.get('title'),
                 link: formData.get('link') || null,
-                file: pendingVideoFile,
+                file: pendingVideoFile ? { type: pendingVideoFile.type, name: pendingVideoFile.name, size: pendingVideoFile.size, id: videoId } : null,
                 tags: formData.get('tags') ? formData.get('tags').split(',').map(t => t.trim()) : [],
                 dateAdded: new Date().toISOString()
             };
 
-            videos.push(video);
-
             try {
-                await saveVideos();
+                if (pendingVideoBlob && video.file) {
+                    const storagePath = 'videos/charlie/' + videoId + '_' + pendingVideoFile.name;
+                    if (status) status.innerHTML = 'Uploading to cloud...';
+                    const downloadUrl = await uploadToFirebaseStorage(pendingVideoBlob, storagePath);
+                    if (downloadUrl) {
+                        video.file.cloudUrl = downloadUrl;
+                        video.file.storagePath = storagePath;
+                    }
+                }
+                videos.push(video);
+                saveVideos();
             } catch(err) {
-                videos.pop();
                 saveBtn.textContent = origText;
                 saveBtn.style.cssText = '';
-                alert('Could not save — video may be too large for storage. Try using a link instead.');
+                alert('Could not save video: ' + (err.message || 'Unknown error') + '\nTry using a link instead.');
                 return;
             }
 
             renderVideos();
+            pendingVideoFile = null;
+            pendingVideoBlob = null;
 
             saveBtn.textContent = 'Saved!';
             saveBtn.style.cssText = 'border-color:#7ba886;color:#7ba886;pointer-events:none;min-width:90px;';
@@ -1983,7 +2047,6 @@
                 saveBtn.textContent = origText;
                 saveBtn.style.cssText = '';
                 e.target.reset();
-                pendingVideoFile = null;
                 if (status) { status.style.display = 'none'; status.innerHTML = ''; }
                 toggleVideoForm();
             }, 800);
@@ -2003,12 +2066,21 @@
                 
                 let videoContent = '';
                 if (video.file) {
-                    videoContent = `
-                        <video controls style="width: 100%; max-width: 300px; margin-bottom: 8px; background: #000;">
-                            <source src="${video.file.data}" type="${video.file.type}">
-                        </video>
-                        <div class="video-title">${video.title}</div>
-                    `;
+                    // Prefer cloud URL, fallback to legacy base64
+                    const videoUrl = video.file.cloudUrl || video.file.data || null;
+                    if (videoUrl) {
+                        videoContent = `
+                            <video controls style="width: 100%; max-width: 300px; margin-bottom: 8px; background: #000;">
+                                <source src="${videoUrl}" type="${video.file.type}">
+                            </video>
+                            <div class="video-title">${video.title}</div>
+                        `;
+                    } else {
+                        videoContent = `
+                            <div class="video-title">${video.title}</div>
+                            <div style="color:#b59197;font-size:0.85rem;">📱 File only available on upload device</div>
+                        `;
+                    }
                 } else if (video.link) {
                     videoContent = `
                         <div class="video-title">${video.title}</div>
@@ -2019,7 +2091,7 @@
                 videoDiv.innerHTML = `
                     <div class="video-content">
                         ${videoContent}
-                        ${video.tags.length > 0 ? `
+                        ${video.tags && video.tags.length > 0 ? `
                             <div class="video-tags">
                                 ${video.tags.map(tag => `<span class="video-tag">${tag}</span>`).join('')}
                             </div>
@@ -2032,27 +2104,33 @@
         }
 
         async function deleteVideo(index) {
+            const video = videos[index];
+            if (video.file && video.file.storagePath) {
+                try { await deleteFromFirebaseStorage(video.file.storagePath); } catch(e) {}
+            }
             videos.splice(index, 1);
             await saveVideos();
             renderVideos();
         }
 
         // TO-DO LIST FUNCTIONS
-        async function loadTodos() {
-            const firebaseData = await loadFromFirebase('todos_charlie');
-            if (firebaseData) {
-                todos = firebaseData;
-                localStorage.setItem('todos_charlie', JSON.stringify(todos));
+        function loadTodos() {
+            const saved = localStorage.getItem('todos_charlie');
+            if (saved) {
+                todos = JSON.parse(saved);
             } else {
-                const saved = localStorage.getItem('todos_charlie');
-                if (saved) {
-                    todos = JSON.parse(saved);
-                    syncToFirebase('todos_charlie', todos);
-                } else {
-                    todos = [];
-                }
+                todos = [];
             }
             renderTodos();
+            loadFromFirebase('todos_charlie').then(firebaseData => {
+                if (firebaseData) {
+                    todos = firebaseData;
+                    localStorage.setItem('todos_charlie', JSON.stringify(todos));
+                    renderTodos();
+                } else if (saved) {
+                    syncToFirebase('todos_charlie', todos);
+                }
+            });
             setupFirebaseListener('todos_charlie', (data) => {
                 todos = data;
                 renderTodos();
@@ -2161,8 +2239,8 @@
             loadHubPrompt();
         }
 
-        document.addEventListener('DOMContentLoaded', async function() {
-            await loadCustomHabits();
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCustomHabits();
             initBoard();
             loadVideos();
             loadResources();
