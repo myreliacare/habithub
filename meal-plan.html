@@ -234,9 +234,10 @@
         }
         
         .week-label span {
-            font-size: 0.6rem;
+            font-size: 0.75rem;
+            font-weight: 700;
             color: var(--light-text);
-            opacity: 0.4;
+            opacity: 0.6;
             letter-spacing: 0.05em;
         }
         
@@ -969,11 +970,14 @@
 <a href="meal-plan.html" class="nav-link active">Meals</a>
 <a href="settings.html" class="nav-link">Settings</a>
 </div>
+<div style="display:flex;align-items:center;gap:2px;">
+<button onclick="location.reload()" aria-label="Refresh" style="background:none;border:none;color:rgba(224,210,208,0.6);font-size:1.2rem;cursor:pointer;padding:6px;">&#x21bb;</button>
 <button class="nav-hamburger" id="navHamburger" onclick="toggleNav()" aria-label="Menu">
     <span></span>
     <span></span>
     <span></span>
 </button>
+</div>
 </div>
 </nav>
 <div class="nav-overlay" id="navOverlay" onclick="toggleNav()">
@@ -988,7 +992,7 @@
 <div class="container">
     <div class="header">
         <h1>Meal Plan</h1>
-        <p id="header-subtitle">Kasey & Charlie • Feb 11–24</p>
+        <p id="header-subtitle" style="display:none;"></p>
     </div>
     
     <div class="page-tabs">
@@ -1021,7 +1025,7 @@
     </div>
 
     <div class="calendar">
-        <div class="calendar-header-row">
+        <div class="calendar-header-row" style="display:none;">
             <span id="cal-month-label">FEBRUARY 2026</span>
         </div>
         <div class="week-label">WEEK 1 <span id="week1-range"></span></div>
@@ -1340,11 +1344,11 @@ const mealData = {
                         tip: "Cauliflower is cruciferous — ricing it into the sauce sneaks in cancer-fighting sulforaphane. The protein spaghetti adds extra fiber and protein vs regular pasta. Cooked tomato sauce = maximum lycopene.",
                         portions: ["45g protein", "530 cal", "10g fiber", "25 min"]
                     },
-                    { type: "Dessert", icon: "🍨", name: "Warm Cinnamon Baked Apple", portion: "1g protein - 150 cal", color: "#c4a882",
-                        ingredients: ["1 medium apple, cored", "1 tsp butter", "1/2 tsp cinnamon", "1 tsp honey", "1 tbsp chopped walnuts"],
-                        steps: ["Core apple and place in a small oven-safe dish.", "Fill center with butter, cinnamon, honey, walnuts.", "Bake at 375°F for 25 min until soft.", "Or microwave 3-4 min."],
-                        tip: "Baked apples caramelize naturally. The pectin feeds good gut bacteria. Cinnamon has anti-inflammatory properties. Walnuts add omega-3s.",
-                        portions: ["1g protein", "150 cal", "4g fiber", "25 min"]
+                    { type: "Dessert", icon: "🍨", name: "Warm Mixed Berry Crumble", portion: "8g protein - 160 cal", color: "#c4a882",
+                        ingredients: ["1/2 cup frozen mixed berries", "1 tbsp rolled oats", "1 tsp honey", "1/2 tsp cinnamon", "1 tsp butter", "1 tbsp chopped walnuts", "2 tbsp Greek yogurt for topping"],
+                        steps: ["Put frozen berries in a small oven-safe dish or mug.", "Mix oats, honey, cinnamon, butter, and walnuts. Crumble on top.", "Microwave 2-3 min until berries are bubbling.", "Top with a dollop of Greek yogurt."],
+                        tip: "Berries are among the highest-antioxidant foods. Heating them actually increases some bioavailable compounds. Quick comfort dessert with zero prep needed.",
+                        portions: ["8g protein", "160 cal", "3g fiber", "5 min"]
                     }
                 ]
             },
@@ -1450,11 +1454,11 @@ const mealData = {
                         tip: "Red lentils provide incredible fiber plus folate for DNA repair. Cauliflower is cruciferous (sulforaphane). Cooked tomato sauce maximizes lycopene. This is one of the most cancer-protective meals in the plan.",
                         portions: ["48g protein", "510 cal", "14g fiber", "30 min"]
                     },
-                    { type: "Dessert", icon: "🍨", name: "Warm Cinnamon Baked Apple", portion: "1g protein - 150 cal", color: "#c4a882",
-                        ingredients: ["1 medium apple, cored", "1 tsp butter", "1/2 tsp cinnamon", "1 tsp honey", "1 tbsp chopped walnuts"],
-                        steps: ["Core apple and place in a small oven-safe dish.", "Fill center with butter, cinnamon, honey, walnuts.", "Bake at 375°F for 25 min until soft.", "Or microwave 3-4 min."],
-                        tip: "Pectin from baked apples feeds beneficial gut bacteria. Cinnamon is anti-inflammatory. Walnuts add omega-3s.",
-                        portions: ["1g protein", "150 cal", "4g fiber", "25 min"]
+                    { type: "Dessert", icon: "🍨", name: "Dark Chocolate Strawberry Bites", portion: "3g protein - 150 cal", color: "#c4a882",
+                        ingredients: ["4-5 fresh strawberries", "1 oz dark chocolate (70%+)", "Flaky sea salt"],
+                        steps: ["Melt dark chocolate in a small bowl (microwave 30 sec, stir, repeat).", "Dip each strawberry halfway into chocolate.", "Place on parchment paper, sprinkle with flaky sea salt.", "Let set 10-15 min in fridge (or eat warm — no judgment)."],
+                        tip: "Dark chocolate (70%+) is rich in flavanols with documented anti-cancer properties. Strawberries add vitamin C and ellagic acid. Sea salt makes the chocolate pop.",
+                        portions: ["3g protein", "150 cal", "3g fiber", "10 min"]
                     }
                 ]
             },
@@ -1742,112 +1746,110 @@ var prepSessions = {
     1: {
         name: "Prep Session 1",
         color: "#a3b899",
-        portions: ["Covers Days 1–4 (Wed–Sat)", "~60-90 min total"],
+        portions: ["Covers Days 1–4 (Wed–Sat)", "Portions for BOTH of you", "~75-90 min total"],
         ingredients: [
-            "--- EGG MUFFIN CUPS (batch of 12) ---",
-            "12 eggs + splash of milk",
-            "2 cups baby spinach, chopped",
-            "1/2 cup diced onion",
-            "1 cup shredded cheese (Mexican blend or mozzarella)",
-            "Cooking spray or olive oil for muffin tin",
-            "--- OVERNIGHT OATS (2 jars) ---",
-            "1 cup rolled oats (1/2 cup per jar)",
-            "2 cups almond milk",
-            "Collagen, L-glutamine, MCT oil (your usual doses per jar)",
-            "6 tbsp hemp hearts, 2 tsp chia seeds",
-            "Jar 1 toppings: strawberries, honey, walnuts",
-            "Jar 2 toppings: frozen berries, honey, walnuts",
-            "--- CHICKEN (for lunches Days 2-4) ---",
-            "~1.5 lbs chicken breast",
+            "--- EGG MUFFIN CUPS (batch of 24 — two muffin tins) ---",
+            "24 eggs + splash of milk",
+            "4 cups baby spinach, chopped",
+            "1 cup diced onion",
+            "2 cups shredded cheese (Mexican blend or mozzarella)",
+            "Cooking spray or olive oil for muffin tins",
+            "--- OVERNIGHT OATS (4 jars — 2 per person) ---",
+            "2 cups rolled oats (1/2 cup per jar)",
+            "4 cups almond milk (1 cup per jar)",
+            "Collagen, L-glutamine, MCT oil (your usual doses × 4 jars)",
+            "12 tbsp hemp hearts, 4 tsp chia seeds",
+            "Jar toppings: strawberries, frozen berries, honey, walnuts",
+            "--- CHICKEN (for lunches Days 2-4, both of you) ---",
+            "~2.5 lbs chicken breast",
             "Olive oil, garlic powder, cumin, chili powder, salt, pepper",
-            "--- CHIPOTLE CHICKEN (for wraps) ---",
-            "Set aside ~8 oz of the cooked chicken",
-            "2-3 chipotle peppers in adobo, minced",
+            "--- CHIPOTLE CHICKEN (portion from the cooked chicken above) ---",
+            "Set aside ~12 oz of the cooked chicken for chipotle wraps",
+            "3-4 chipotle peppers in adobo, minced",
             "--- LUNCH BASES ---",
-            "2 cups brown rice (cook a big batch)",
-            "1 can black beans, drained",
-            "1 cup corn",
+            "3 cups brown rice, dry (makes ~6 cups cooked)",
+            "2 cans black beans, drained",
+            "1.5 cups corn",
             "--- FROZEN BERRY YOGURT BARK ---",
-            "1.5 cups Greek yogurt, 1 cup berries, honey, dark choc chips"
+            "3 cups Greek yogurt, 1.5 cups berries, honey, dark choc chips"
         ],
         steps: [
-            "START THE RICE — Put 2 cups brown rice on to cook. This takes the longest so get it going first.",
-            "EGG MUFFIN CUPS — Preheat oven to 375°F. Whisk 12 eggs with a splash of milk, salt & pepper. Grease a muffin tin. Divide spinach, onion, and cheese into cups. Pour egg mixture over. Bake 20 min until set. Cool and store — fridge for 3-4 days, freeze the rest.",
-            "SEASON & COOK CHICKEN — While muffins bake, season ~1.5 lbs chicken with olive oil, garlic powder, cumin, chili powder, salt, pepper. Grill, bake at 400°F for 20 min, or pan-sear. Let rest, then slice/shred.",
-            "MAKE CHIPOTLE CHICKEN — Take ~8 oz of the cooked chicken, shred it, and toss with 2-3 minced chipotle peppers in adobo. Store separately for wraps.",
-            "PORTION LUNCH BASES — Divide rice, black beans, and corn into meal prep containers. You'll have chicken + black bean bowl bases AND chipotle wrap fillings ready to grab.",
-            "OVERNIGHT OATS — Make 2 jars: oats, almond milk, collagen, L-glutamine, MCT oil, hemp hearts, chia seeds. Stir well, refrigerate. Add toppings in the morning.",
-            "YOGURT BARK — Spread yogurt on a parchment-lined pan, press in berries and chocolate chips, freeze. Done for the week.",
-            "LABEL & STORE — Put everything in the fridge. You're set through Saturday!"
+            "START THE RICE — Put 3 cups dry brown rice on to cook. This takes the longest so get it going first.",
+            "EGG MUFFIN CUPS — Preheat oven to 375°F. Whisk 24 eggs with a splash of milk, salt & pepper. Grease two muffin tins. Divide spinach, onion, and cheese into cups. Pour egg mixture over. Bake 20 min until set. Cool and store — fridge for 3-4 days, freeze the rest.",
+            "SEASON & COOK CHICKEN — While muffins bake, season ~2.5 lbs chicken with olive oil, garlic powder, cumin, chili powder, salt, pepper. Grill, bake at 400°F for 22-25 min, or pan-sear. Let rest, then slice/shred.",
+            "MAKE CHIPOTLE CHICKEN — Take ~12 oz of the cooked chicken, shred it, and toss with 3-4 minced chipotle peppers in adobo. Store separately for wraps.",
+            "PORTION LUNCH BASES — Divide rice, black beans, and corn into containers. Make 6 containers: Kasey gets ~5 oz chicken + 1/2 cup rice per box, Charlie gets ~6.5 oz chicken + 2/3 cup rice per box.",
+            "OVERNIGHT OATS — Make 4 jars: oats, almond milk, collagen, L-glutamine, MCT oil, hemp hearts, chia seeds. Stir well, refrigerate. Add toppings in the morning.",
+            "YOGURT BARK — Spread yogurt on a parchment-lined sheet pan, press in berries and chocolate chips, freeze.",
+            "LABEL & STORE — Label containers K or C so you grab the right one. You're set through Saturday!"
         ],
         tip: "This is your biggest prep session since it's the first one. Future sessions will be faster because you'll know the rhythm. Put on a podcast or some music — this goes quick once you're rolling."
     },
     4: {
         name: "Prep Session 2",
         color: "#a3b899",
-        portions: ["Covers Days 5–7 (Sun–Tue)", "~45-60 min total"],
+        portions: ["Covers Days 5–7 (Sun–Tue)", "Portions for BOTH of you", "~45-60 min total"],
         ingredients: [
-            "--- CHICKEN (for lunches Days 5-7) ---",
-            "~1.5 lbs chicken breast",
+            "--- CHICKEN (for lunches Days 5-7, both of you) ---",
+            "~2.5 lbs chicken breast",
             "Olive oil, garlic powder, salt, pepper, oregano",
-            "--- LEMONY GRAIN BOWLS (2 servings) ---",
-            "1 cup farro or quinoa (dry — cook it)",
-            "1/2 cup chickpeas",
-            "Roasted red peppers (from jar)",
-            "Spinach, olive oil, lemon",
-            "--- BURRITO BOWL BASE (2 servings) ---",
-            "1 cup brown rice (cook fresh or use leftover)",
+            "--- LEMONY GRAIN BOWLS (4 servings — 2 each) ---",
+            "2 cups farro or quinoa (dry — cook it)",
+            "1 can chickpeas, drained",
+            "1 jar roasted red peppers",
+            "4 cups spinach, olive oil, 2 lemons",
+            "--- BURRITO BOWL BASE (2 servings — 1 each) ---",
+            "1.5 cups brown rice, dry",
             "1 can black beans, drained",
-            "1/2 cup corn",
+            "3/4 cup corn",
             "Feta, lime",
-            "--- OVERNIGHT OATS (2 jars) ---",
-            "Same base as Session 1",
-            "Jar 1: cacao powder, whey, berries (for Day 7)",
-            "Jar 2: your choice of toppings"
+            "--- OVERNIGHT OATS (4 jars — 2 per person) ---",
+            "Same base as Session 1 (1/2 cup oats, 1 cup almond milk, supplements per jar)",
+            "Jar toppings: cacao powder, whey, berries, your choice"
         ],
         steps: [
-            "COOK GRAINS — Start farro/quinoa and rice (if you need more). Let them cook while you do everything else.",
-            "COOK CHICKEN — Season ~1.5 lbs chicken with olive oil, garlic powder, oregano, salt, pepper. Cook however you prefer. Let rest, slice for grain bowls, dice for burrito bowls.",
-            "ASSEMBLE LEMONY GRAIN BOWLS — Divide grains, chicken, chickpeas, roasted red peppers into 2 containers. Keep spinach and lemon separate (add day-of so spinach doesn't wilt).",
-            "ASSEMBLE BURRITO BOWLS — Divide rice, black beans, corn, and chicken into 2 containers. Keep feta, lime, and hot sauce separate.",
-            "OVERNIGHT OATS — Make 2 jars with your supplement base. One with cacao + whey for Day 7.",
-            "You're set through Tuesday!"
+            "COOK GRAINS — Start farro/quinoa and rice. Let them cook while you do everything else.",
+            "COOK CHICKEN — Season ~2.5 lbs chicken with olive oil, garlic powder, oregano, salt, pepper. Cook all at once. Let rest, slice for grain bowls, dice for burrito bowls.",
+            "ASSEMBLE LEMONY GRAIN BOWLS — 4 containers: Kasey gets ~5 oz chicken + 1/2 cup grains per box, Charlie gets ~6.5 oz chicken + 2/3 cup grains. Add chickpeas and roasted red peppers. Keep spinach and lemon separate (add day-of).",
+            "ASSEMBLE BURRITO BOWLS — 2 containers: Kasey gets ~5 oz chicken + 1/2 cup rice, Charlie gets ~6.5 oz chicken + 2/3 cup rice. Add black beans and corn. Keep feta, lime, hot sauce separate.",
+            "OVERNIGHT OATS — Make 4 jars with your supplement base.",
+            "Label K and C. You're set through Tuesday!"
         ],
         tip: "This one's faster — you already know the routine from Session 1. The key is getting all the grains and chicken cooking at the same time so you're just assembling at the end."
     },
     8: {
         name: "Prep Session 3",
         color: "#a3b899",
-        portions: ["Covers Days 9–11 (Thu–Sat)", "~60 min total"],
+        portions: ["Covers Days 9–11 (Thu–Sat)", "Portions for BOTH of you", "~60 min total"],
         ingredients: [
-            "--- EGG MUFFIN CUPS (batch of 12) ---",
-            "12 eggs + splash of milk",
-            "2 cups baby spinach, chopped",
-            "1/2 cup diced onion",
-            "1 cup shredded cheese",
-            "--- TURKEY TACO MEAT (for wraps Days 9 & 11) ---",
-            "1 lb ground turkey (93% lean)",
-            "1/2 cup diced onion",
-            "3 cloves garlic, minced",
-            "2 tsp cumin, 1 tsp chili powder, 1 tsp garlic powder",
+            "--- EGG MUFFIN CUPS (batch of 24 — two muffin tins) ---",
+            "24 eggs + splash of milk",
+            "4 cups baby spinach, chopped",
+            "1 cup diced onion",
+            "2 cups shredded cheese",
+            "--- TURKEY TACO MEAT (for wraps Days 9 & 11, both of you) ---",
+            "1.5 lbs ground turkey (93% lean)",
+            "1 cup diced onion",
+            "4 cloves garlic, minced",
+            "1 tbsp cumin, 2 tsp chili powder, 1 tsp garlic powder",
             "Red pepper flakes, salt",
-            "--- CHICKEN (for lunches) ---",
-            "~1 lb chicken breast",
+            "--- CHICKEN (for black bean bowl Day 10, both of you) ---",
+            "~1.5 lbs chicken breast",
             "Olive oil, garlic powder, cumin, chili powder, salt",
             "--- LUNCH BASES ---",
-            "2 cups brown rice",
-            "1 can black beans",
-            "1/2 cup corn",
-            "--- OVERNIGHT OATS (2 jars) ---",
+            "3 cups brown rice, dry",
+            "2 cans black beans",
+            "1 cup corn",
+            "--- OVERNIGHT OATS (4 jars — 2 per person) ---",
             "Same supplement base as always"
         ],
         steps: [
-            "START RICE — Get 2 cups brown rice cooking.",
-            "EGG MUFFIN CUPS — Same method as Session 1: whisk 12 eggs, grease tin, divide spinach/onion/cheese, pour egg, bake 375°F for 20 min. Freeze extras.",
-            "COOK TURKEY TACO MEAT — Brown 1 lb ground turkey with onion, garlic, cumin, chili powder, garlic powder, red pepper flakes. Let cool and portion into containers.",
-            "COOK CHICKEN — Season and cook ~1 lb chicken breast. Slice for black bean bowls, dice for burrito bowls.",
-            "PORTION LUNCH BASES — Divide rice, beans, corn, and chicken into containers. You'll have black bean bowls and burrito bowls covered.",
-            "OVERNIGHT OATS — Make 2 jars with supplement base.",
+            "START RICE — Get 3 cups dry brown rice cooking.",
+            "EGG MUFFIN CUPS — Same method: whisk 24 eggs, grease two tins, divide spinach/onion/cheese, pour egg, bake 375°F for 20 min. Freeze extras.",
+            "COOK TURKEY TACO MEAT — Brown 1.5 lbs ground turkey with onion, garlic, cumin, chili powder, garlic powder, red pepper flakes. Let cool and portion: Kasey containers get ~5 oz meat, Charlie containers get ~6.5 oz.",
+            "COOK CHICKEN — Season and cook ~1.5 lbs chicken breast. Slice for black bean bowls. Portion: Kasey ~5 oz, Charlie ~6.5 oz.",
+            "PORTION LUNCH BASES — Divide rice, beans, corn, and chicken/turkey into labeled containers.",
+            "OVERNIGHT OATS — Make 4 jars with supplement base.",
             "Covered through Saturday!"
         ],
         tip: "You're a pro at this by now. Same pattern — grains and protein cook while you assemble everything else. The turkey taco meat is new but it's dead simple."
@@ -1855,41 +1857,41 @@ var prepSessions = {
     11: {
         name: "Prep Session 4",
         color: "#a3b899",
-        portions: ["Covers Days 12–14 (Sun–Tue)", "~60 min total"],
+        portions: ["Covers Days 12–14 (Sun–Tue)", "Portions for BOTH of you", "~60 min total"],
         ingredients: [
-            "--- WHITE BEAN & SPINACH SOUP (big pot) ---",
-            "~8 oz chicken breast (cook and shred)",
-            "2 cans cannellini beans",
-            "4 cups baby spinach",
-            "2 cups marinara sauce",
-            "4 cloves garlic",
-            "1 cup diced carrots",
-            "2 tbsp olive oil",
-            "8 cups low-sodium chicken broth",
+            "--- WHITE BEAN & SPINACH SOUP (big pot — 4 servings) ---",
+            "~1.5 lbs chicken breast (for soup + burrito bowls — cook all together)",
+            "3 cans cannellini beans",
+            "6 cups baby spinach",
+            "3 cups marinara sauce",
+            "6 cloves garlic",
+            "1.5 cups diced carrots",
+            "3 tbsp olive oil",
+            "12 cups low-sodium chicken broth",
             "Italian seasoning, garlic powder, red pepper flakes",
-            "--- CHICKEN (for burrito bowls Day 13) ---",
-            "~8 oz chicken breast (cook alongside soup chicken)",
+            "--- CHICKEN (extra for burrito bowls Day 13) ---",
+            "Already included above — set aside ~12 oz before adding to soup",
             "Cumin, garlic powder, chili powder",
-            "--- LUNCH BASES ---",
-            "1.5 cups brown rice",
+            "--- LUNCH BASES (for burrito bowls Day 13) ---",
+            "2 cups brown rice, dry",
             "1 can black beans",
             "Corn, feta, lime",
-            "--- OVERNIGHT OATS (2 jars) ---",
-            "Jar 1: coconut milk + mango (for Day 12)",
-            "Jar 2: your choice",
-            "--- CHIA PUDDING ---",
-            "2 servings: chia seeds, almond milk, protein powder, vanilla"
+            "--- OVERNIGHT OATS (4 jars — 2 per person) ---",
+            "Jar 1 & 2: coconut milk + mango (for Day 12)",
+            "Jar 3 & 4: your choice",
+            "--- CHIA PUDDING (4 servings — 2 each) ---",
+            "8 tbsp chia seeds, 3 cups almond milk, 4 scoops protein powder, vanilla, honey"
         ],
         steps: [
-            "START RICE — Get 1.5 cups brown rice cooking.",
-            "COOK ALL CHICKEN — Season ~1 lb total chicken (some for soup, some for burrito bowls). Cook it all at once. Shred the soup portion, dice the bowl portion.",
-            "MAKE THE SOUP — Sauté garlic and carrots in olive oil. Add broth, marinara, cannellini beans. Simmer 10 min. Add spinach until wilted. Stir in shredded chicken. Season with Italian seasoning, garlic powder, red pepper flakes. Portion into containers.",
-            "PORTION BURRITO BOWLS — Divide rice, black beans, corn, and diced chicken into containers for Day 13.",
-            "OVERNIGHT OATS — Make 2 jars. Use coconut milk + mango for the Day 12 jar.",
-            "CHIA PUDDING — Mix 2 servings: chia seeds, almond milk, protein powder, vanilla, honey. Refrigerate.",
+            "START RICE — Get 2 cups dry brown rice cooking.",
+            "COOK ALL CHICKEN — Season ~1.5 lbs total chicken. Cook it all at once. Set aside ~12 oz for burrito bowls (dice and season with cumin/chili). Shred the rest for soup.",
+            "MAKE THE SOUP — Sauté garlic and carrots in olive oil. Add broth, marinara, cannellini beans. Simmer 10 min. Add spinach until wilted. Stir in shredded chicken. Season with Italian seasoning, garlic powder, red pepper flakes. Portion into 4 containers — Kasey's portions slightly smaller than Charlie's.",
+            "PORTION BURRITO BOWLS — 2 containers for Day 13: Kasey gets ~5 oz chicken + 1/2 cup rice + beans + corn. Charlie gets ~6.5 oz chicken + 2/3 cup rice + beans + corn.",
+            "OVERNIGHT OATS — Make 4 jars. Use coconut milk + mango for the Day 12 jars.",
+            "CHIA PUDDING — Mix 4 servings: chia seeds, almond milk, protein powder, vanilla, honey. Divide into 4 jars, refrigerate.",
             "Last prep! You're almost at the finish line!"
         ],
-        tip: "Final prep session! The soup is the star here — it makes a big batch that covers 2 lunches. After this you just have 3 dinners to cook fresh and you're done with the whole plan. 💪"
+        tip: "Final prep session! The soup is the star here — it makes a big pot that covers 4 lunches between you. After this you just have 3 dinners to cook fresh and you're done with the whole plan."
     }
 };
 
@@ -2509,7 +2511,7 @@ function initGenerateView() {
 
 function buildSkeletonPrompt(startDate, duration, recipeSummary, opts) {
     return 'Generate a ' + duration + '-day meal plan skeleton. Output ONLY meal names and daily totals.\n\n' +
-        'TARGETS: 140-165g protein, 1500-1700 cal/day\n' +
+        'TARGETS: Kasey: 140-165g protein, ~1,350 cal/day. Charlie: 180-210g protein, ~2,200-2,500 cal/day.\n' +
         'RESTRICTIONS: No avocado (except choc mousse), no peanut butter, no mushrooms, no raw tomatoes, no cilantro, no turmeric, bell peppers supporting only, fish only if heavily glazed\n' +
         'STRUCTURE: Breakfast (grab-and-go), Lunch (batch prep), Dinner (fresh 20-35min), Dessert (light 100-200cal)\n' +
         (opts.noRepeat ? 'No same meal on consecutive days.\n' : '') +
@@ -2769,23 +2771,25 @@ function acceptPlan() {
         };
     });
     
-    // Build Charlie's scaled meals
+    // Build Charlie's scaled meals (Kasey ~1350cal/140-165g → Charlie ~2300cal/180-210g)
+    var CHARLIE_PROTEIN_MULT = 1.3;
+    var CHARLIE_CAL_MULT = 1.7;
     var charlieDays = kaseyDays.map(function(day) {
         var cDay = JSON.parse(JSON.stringify(day));
         var kProtein = parseInt(day.protein); var kCal = parseInt(day.calories.replace(",", ""));
-        cDay.protein = Math.round(kProtein * 1.3) + "g";
-        cDay.calories = (Math.round(kCal * 1.4 / 100) * 100).toLocaleString();
+        cDay.protein = Math.round(kProtein * CHARLIE_PROTEIN_MULT) + "g";
+        cDay.calories = (Math.round(kCal * CHARLIE_CAL_MULT / 100) * 100).toLocaleString();
         cDay.meals = cDay.meals.map(function(m) {
             var origProtein = parseInt(m.portion); var calM = m.portion.match(/(\d+) cal/); var origCal = calM ? parseInt(calM[1]) : 0;
             if (isNaN(origProtein) || origCal === 0) return m;
-            m.portion = Math.round(origProtein * 1.3) + "g protein - " + Math.round(origCal * 1.4) + " cal";
+            m.portion = Math.round(origProtein * CHARLIE_PROTEIN_MULT) + "g protein - " + Math.round(origCal * CHARLIE_CAL_MULT) + " cal";
             m.portions = m.portions.map(function(p) {
-                if (p.indexOf("protein") !== -1) return Math.round(origProtein * 1.3) + "g protein";
-                if (p.indexOf("cal") !== -1) return Math.round(origCal * 1.4) + " cal";
+                if (p.indexOf("protein") !== -1) return Math.round(origProtein * CHARLIE_PROTEIN_MULT) + "g protein";
+                if (p.indexOf("cal") !== -1) return Math.round(origCal * CHARLIE_CAL_MULT) + " cal";
                 if (p.indexOf("fiber") !== -1) return Math.round(parseInt(p) * 1.2) + "g fiber";
                 return p;
             });
-            if (m.type === "Dinner" && m.tip) m.tip += "\n\nCHARLIE: Extra cooked tomato sauce with olive oil boosts lycopene absorption.";
+            if (m.type === "Dinner" && m.tip) m.tip += "\n\nCHARLIE: Add extra protein (side of chicken/eggs) and larger grain portions to hit your targets.";
             return m;
         });
         return cDay;
