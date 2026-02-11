@@ -5386,7 +5386,8 @@ What's on my mind today..."></textarea>
  h += 'Nutricost Riboflavin 400mg (1 cap)';
  h += '</div>';
  }
- h += '<div style="margin-top:4px;"><a href="meal-plan.html" target="_blank" style="display:inline-block;background:#a3b899;color:#1c1c1c;text-decoration:none;padding:7px 16px;font-size:0.82rem;font-weight:600;font-family:inherit;cursor:pointer;">View Full Recipe</a> <span style="font-size:0.72rem;color:#aaa;margin-left:6px;">Day ' + pd + ' of 14</span></div>';
+ var mealLabel = key === 'morning.breakfast' ? 'Breakfast' : key === 'daytime.lunch' ? 'Lunch' : 'Dinner';
+ h += '<div style="margin-top:4px;"><a href="meal-plan.html?day=' + pd + '" target="_blank" style="display:inline-block;background:#a3b899;color:#1c1c1c;text-decoration:none;padding:7px 16px;font-size:0.82rem;font-weight:600;font-family:inherit;cursor:pointer;">View ' + mealLabel + ' Recipe</a> <span style="font-size:0.72rem;color:#aaa;margin-left:6px;">Day ' + pd + ' of 14</span></div>';
  return h;
  }
  if (key === 'morning.workout') {
@@ -5439,7 +5440,7 @@ What's on my mind today..."></textarea>
  details = (item.details || '').replace(/\n/g, '<br>');
  }
  if (item.title.toLowerCase().indexOf('dinner prep') !== -1) {
- details = '<a href="meal-plan.html" style="display:inline-block;background:#a3b899;color:#1c1c1c;padding:8px 18px;text-decoration:none;font-weight:600;font-size:0.85rem;margin-bottom:6px;">View Tonight\'s Meal Plan</a>' + (details ? '<br>' + details : '');
+ details = '<a href="meal-plan.html?day=' + getMealPlanDayForViewing() + '" style="display:inline-block;background:#a3b899;color:#1c1c1c;padding:8px 18px;text-decoration:none;font-weight:600;font-size:0.85rem;margin-bottom:6px;">View Tonight\'s Meal Plan</a>' + (details ? '<br>' + details : '');
  }
  h += '<div class="schedule-item"><span class="schedule-time">' + item.time + '</span><div class="schedule-content"><div class="schedule-title"> ' + item.title + '</div>';
  if (details) h += '<div class="schedule-details">' + details + '</div>';
