@@ -79,21 +79,57 @@
             border-radius: 50%; overflow: hidden; position: relative;
             border: 2px solid rgba(163, 184, 153, 0.4);
             background: linear-gradient(145deg, #3d6b6b 0%, #1c1c1c 100%);
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
         .header-photo-inner { width: 100%; height: 100%; position: relative; overflow: hidden; }
-        .header-photo-draggable { position: absolute; cursor: move; }
-        .header-photo-draggable img { display: block; }
+        .header-photo-draggable { position: absolute; cursor: default; }
+        .header-photo-draggable.editing { cursor: move; }
+        .header-photo-draggable img { display: block; pointer-events: none; }
         .photo-placeholder {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; align-items: center; justify-content: center;
             color: rgba(242, 235, 224, 0.2); font-size: 1.5rem;
+            cursor: pointer;
         }
         .upload-photo-btn {
             position: absolute; bottom: 0; right: 0; width: 28px; height: 28px;
             background: #3d6b6b; border: none; border-radius: 50%; cursor: pointer;
-            opacity: 0; transition: opacity 0.2s;
+            opacity: 0; pointer-events: none; transition: opacity 0.2s;
         }
-        .header-photo-container:hover .upload-photo-btn { opacity: 1; }
+        /* Only show upload btn when no photo exists (placeholder visible) */
+        .header-photo-container:hover .upload-photo-btn.no-photo { opacity: 1; pointer-events: auto; }
+        
+        /* Photo edit overlay */
+        .photo-edit-overlay {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            background: rgba(0,0,0,0.5); z-index: 5; gap: 6px;
+        }
+        .photo-edit-overlay.visible { display: flex; }
+        .photo-edit-btn {
+            background: rgba(61, 107, 107, 0.9); border: none; color: #f2ebe0;
+            font-size: 0.6rem; padding: 4px 8px; cursor: pointer; font-family: inherit;
+            letter-spacing: 0.05em; border-radius: 2px; white-space: nowrap;
+        }
+        .photo-edit-btn:hover { background: rgba(61, 107, 107, 1); }
+        
+        /* Edit mode ring */
+        .header-photo-container.edit-mode {
+            border-color: rgba(163, 184, 153, 0.8);
+            box-shadow: 0 0 0 2px rgba(163, 184, 153, 0.3);
+        }
+        .photo-edit-controls {
+            display: none; position: absolute; bottom: -36px; left: 50%; transform: translateX(-50%);
+            gap: 6px; z-index: 10; white-space: nowrap;
+        }
+        .photo-wrapper.edit-mode .photo-edit-controls { display: flex; }
+        .photo-ctrl-btn {
+            background: #3d6b6b; border: none; color: #f2ebe0;
+            font-size: 0.65rem; padding: 5px 10px; cursor: pointer; font-family: inherit;
+            border-radius: 2px; transition: background 0.2s;
+        }
+        .photo-ctrl-btn:hover { background: #4a7a7a; }
+        .photo-ctrl-btn.done { background: #a3b899; color: #1c1c1c; font-weight: 600; }
         .home-title {
             font-family: 'Dancing Script', cursive;
             font-size: 2rem; font-weight: 700;
@@ -1328,17 +1364,30 @@ button, .btn, a, .nav-refresh {
     <div class="container">
         
         <div class="home-header">
-            <div class="header-photo-container">
+            <div class="photo-wrapper" id="photoWrapper" style="position:relative; flex-shrink:0;">
+            <div class="header-photo-container" id="photoContainer">
                 <div class="header-photo-inner" id="photoInner">
                     <div class="header-photo-draggable" id="photoDraggable" style="display: none;">
                         <img id="headerPhoto">
                     </div>
                 </div>
-                <div id="photoPlaceholder" class="photo-placeholder">
+                <div id="photoPlaceholder" class="photo-placeholder" onclick="document.getElementById('photoUpload').click()">
                     <span style="font-size: 2rem; opacity: 0.3;">+</span>
                 </div>
+                <!-- Edit overlay - shows on double-click/tap when photo exists -->
+                <div class="photo-edit-overlay" id="photoEditOverlay">
+                    <button class="photo-edit-btn" onclick="enterPhotoEditMode(); event.stopPropagation();">Reposition</button>
+                    <button class="photo-edit-btn" onclick="document.getElementById('photoUpload').click(); hidePhotoOverlay(); event.stopPropagation();">Change Photo</button>
+                </div>
                 <input type="file" id="photoUpload" accept="image/*" style="display: none;">
-                <button class="upload-photo-btn" onclick="document.getElementById('photoUpload').click()"></button>
+                <button class="upload-photo-btn no-photo" id="uploadBtn" onclick="document.getElementById('photoUpload').click()"></button>
+            </div>
+            <!-- Edit mode controls (zoom + done) - outside overflow:hidden -->
+            <div class="photo-edit-controls" id="photoEditControls">
+                <button class="photo-ctrl-btn" onclick="zoomPhoto(-0.1)">−</button>
+                <button class="photo-ctrl-btn" onclick="zoomPhoto(0.1)">+</button>
+                <button class="photo-ctrl-btn done" onclick="exitPhotoEditMode()">Done</button>
+            </div>
             </div>
             <div>
                 <h1 class="home-title">Our Life Hub</h1>
@@ -4018,6 +4067,7 @@ button, .btn, a, .nav-refresh {
         let photoScale = 1;
         let isDragging = false;
         let startPos = { x: 0, y: 0 };
+        let photoEditMode = false;
 
         async function loadHeaderPhoto() {
             const savedPhoto = await loadFromFirebase('headerPhoto');
@@ -4030,6 +4080,7 @@ button, .btn, a, .nav-refresh {
             const img = document.getElementById('headerPhoto');
             const draggable = document.getElementById('photoDraggable');
             const placeholder = document.getElementById('photoPlaceholder');
+            const uploadBtn = document.getElementById('uploadBtn');
             
             img.src = dataUrl;
             img.onload = function() {
@@ -4038,6 +4089,8 @@ button, .btn, a, .nav-refresh {
                 updatePhotoTransform();
                 draggable.style.display = 'block';
                 placeholder.style.display = 'none';
+                // Hide the no-photo upload button once we have a photo
+                if (uploadBtn) uploadBtn.classList.remove('no-photo');
             };
         }
 
@@ -4075,10 +4128,12 @@ button, .btn, a, .nav-refresh {
             const reader = new FileReader();
             reader.onload = async function(event) {
                 photoPosition = { x: 0, y: 0 };
-                photoScale = 1.5; // Start zoomed in a bit
+                photoScale = 1.5;
                 
                 displayPhoto(event.target.result, photoPosition, photoScale);
                 await savePhotoData(event.target.result);
+                // Auto-enter edit mode so they can reposition the new photo
+                enterPhotoEditMode();
             };
             
             reader.readAsDataURL(file);
@@ -4103,21 +4158,84 @@ button, .btn, a, .nav-refresh {
             savePhotoData();
         }
 
-        // Setup drag functionality
+        // Photo edit overlay - show on double-click/double-tap
+        function showPhotoOverlay() {
+            const overlay = document.getElementById('photoEditOverlay');
+            if (overlay && !photoEditMode) {
+                overlay.classList.add('visible');
+            }
+        }
+
+        function hidePhotoOverlay() {
+            const overlay = document.getElementById('photoEditOverlay');
+            if (overlay) overlay.classList.remove('visible');
+        }
+
+        function enterPhotoEditMode() {
+            photoEditMode = true;
+            hidePhotoOverlay();
+            const wrapper = document.getElementById('photoWrapper');
+            const container = document.getElementById('photoContainer');
+            const draggable = document.getElementById('photoDraggable');
+            if (wrapper) wrapper.classList.add('edit-mode');
+            if (container) container.classList.add('edit-mode');
+            if (draggable) draggable.classList.add('editing');
+        }
+
+        function exitPhotoEditMode() {
+            photoEditMode = false;
+            const wrapper = document.getElementById('photoWrapper');
+            const container = document.getElementById('photoContainer');
+            const draggable = document.getElementById('photoDraggable');
+            if (wrapper) wrapper.classList.remove('edit-mode');
+            if (container) container.classList.remove('edit-mode');
+            if (draggable) draggable.classList.remove('editing');
+            savePhotoData();
+        }
+
+        // Setup drag functionality - only works in edit mode
         function setupPhotoDrag() {
+            const container = document.getElementById('photoContainer');
             const draggable = document.getElementById('photoDraggable');
             
+            // Double-click / double-tap to show edit overlay
+            let lastTap = 0;
+            container.addEventListener('dblclick', function(e) {
+                if (draggable.style.display !== 'none' && !photoEditMode) {
+                    e.preventDefault();
+                    showPhotoOverlay();
+                }
+            });
+            container.addEventListener('touchend', function(e) {
+                const now = Date.now();
+                if (now - lastTap < 350 && draggable.style.display !== 'none' && !photoEditMode) {
+                    e.preventDefault();
+                    showPhotoOverlay();
+                }
+                lastTap = now;
+            });
+            
+            // Close overlay if tapping outside
+            document.addEventListener('click', function(e) {
+                const overlay = document.getElementById('photoEditOverlay');
+                if (overlay && overlay.classList.contains('visible') && !container.contains(e.target)) {
+                    hidePhotoOverlay();
+                }
+            });
+            
+            // Drag - only in edit mode
             draggable.addEventListener('mousedown', startDrag);
-            draggable.addEventListener('touchstart', startDrag);
+            draggable.addEventListener('touchstart', startDrag, { passive: false });
             
             document.addEventListener('mousemove', drag);
-            document.addEventListener('touchmove', drag);
+            document.addEventListener('touchmove', drag, { passive: false });
             
             document.addEventListener('mouseup', endDrag);
             document.addEventListener('touchend', endDrag);
         }
 
         function startDrag(e) {
+            if (!photoEditMode) return; // Only drag in edit mode
             isDragging = true;
             const draggable = document.getElementById('photoDraggable');
             draggable.classList.add('dragging');
@@ -4134,7 +4252,7 @@ button, .btn, a, .nav-refresh {
         }
 
         function drag(e) {
-            if (!isDragging) return;
+            if (!isDragging || !photoEditMode) return;
             
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
             const clientY = e.touches ? e.touches[0].clientY : e.clientY;
@@ -4153,7 +4271,7 @@ button, .btn, a, .nav-refresh {
                 isDragging = false;
                 const draggable = document.getElementById('photoDraggable');
                 draggable.classList.remove('dragging');
-                savePhotoData();
+                if (photoEditMode) savePhotoData();
             }
         }
     </script>
