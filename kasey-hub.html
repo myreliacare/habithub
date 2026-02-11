@@ -1946,6 +1946,7 @@
 <script type="module">
  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
  import { getFirestore, collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+ import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
 
  try {
  const firebaseConfig = {
@@ -1959,8 +1960,11 @@
 
  const app = initializeApp(firebaseConfig);
  const db = getFirestore(app);
+ const storage = getStorage(app);
 
  window.db = db;
+ window.firebaseStorage = storage;
+ window.firebaseStorageImports = { ref, uploadBytes, getDownloadURL, deleteObject };
  window.firestoreImports = { collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot };
  window.firebaseReady = true;
  window.dispatchEvent(new Event('firebaseReady'));
@@ -3135,6 +3139,33 @@ What's on my mind today..."></textarea>
  }
  // ===== End IndexedDB =====
 
+ // ===== Firebase Storage (Cloud file uploads) =====
+ async function uploadToFirebaseStorage(blob, path) {
+ if (!window.firebaseReady || !window.firebaseStorage) return null;
+ try {
+ const { ref, uploadBytes, getDownloadURL } = window.firebaseStorageImports;
+ const storageRef = ref(window.firebaseStorage, path);
+ await uploadBytes(storageRef, blob);
+ const url = await getDownloadURL(storageRef);
+ return url;
+ } catch (error) {
+ console.warn('Firebase Storage upload failed:', error);
+ return null;
+ }
+ }
+
+ async function deleteFromFirebaseStorage(path) {
+ if (!window.firebaseReady || !window.firebaseStorage) return;
+ try {
+ const { ref, deleteObject } = window.firebaseStorageImports;
+ const storageRef = ref(window.firebaseStorage, path);
+ await deleteObject(storageRef);
+ } catch (error) {
+ // File may not exist, that's okay
+ }
+ }
+ // ===== End Firebase Storage =====
+
  // TO-DO LIST FUNCTIONS
  function loadTodos() {
  const savedData = loadFromStorage('todos_kasey');
@@ -3774,30 +3805,39 @@ What's on my mind today..."></textarea>
  
  let mediaContent = '';
  let isVideo = false;
- if (item.file && item.file.id) {
- // Load from IndexedDB
+ if (item.file) {
+ // Determine file URL: cloud > local IndexedDB > legacy base64
+ let fileUrl = null;
+ let fileType = item.file.type || '';
+
+ // 1. Cloud URL (works on any device)
+ if (item.file.cloudUrl) {
+ fileUrl = item.file.cloudUrl;
+ }
+ // 2. Local IndexedDB
+ if (!fileUrl && item.file.id) {
  try {
  const stored = await getVideoBlob(item.file.id);
  if (stored && stored.blob) {
  const blob = (stored.blob instanceof Blob) ? stored.blob : new Blob([stored.blob], { type: stored.type });
- const blobUrl = URL.createObjectURL(blob);
- if (item.file.type.startsWith('image')) {
- mediaContent = `<img src="${blobUrl}" style="max-width: 200px; margin-bottom: 8px; border-radius: 4px;">`;
- } else if (item.file.type.startsWith('video')) {
+ fileUrl = URL.createObjectURL(blob);
+ }
+ } catch(e) {}
+ }
+ // 3. Legacy base64
+ if (!fileUrl && item.file.data) {
+ fileUrl = item.file.data;
+ }
+
+ if (fileUrl) {
+ if (fileType.startsWith('image')) {
+ mediaContent = `<img src="${fileUrl}" style="max-width: 200px; margin-bottom: 8px; border-radius: 4px;">`;
+ } else if (fileType.startsWith('video')) {
  isVideo = true;
- mediaContent = `<video controls style="width: 100%; max-width: 400px; margin-bottom: 8px;"><source src="${blobUrl}" type="${item.file.type}"></video>`;
+ mediaContent = `<video controls style="width: 100%; max-width: 400px; margin-bottom: 8px;"><source src="${fileUrl}" type="${fileType}"></video>`;
  }
- }
- } catch(e) {
- mediaContent = '<div style="color:#c97a7a;font-size:0.85rem;">File not found in storage</div>';
- }
- } else if (item.file && item.file.data) {
- // Legacy base64 format
- if (item.file.type.startsWith('image')) {
- mediaContent = `<img src="${item.file.data}" style="max-width: 200px; margin-bottom: 8px; border-radius: 4px;">`;
- } else if (item.file.type.startsWith('video')) {
- isVideo = true;
- mediaContent = `<video controls style="width: 100%; max-width: 400px; margin-bottom: 8px;"><source src="${item.file.data}" type="${item.file.type}"></video>`;
+ } else {
+ mediaContent = '<div style="color:#b59197;font-size:0.85rem;">📱 File only available on upload device</div>';
  }
  }
 
@@ -3864,20 +3904,29 @@ What's on my mind today..."></textarea>
  };
 
  try {
- // Save blob to IndexedDB if there's a file
  if (pendingResourceBlob) {
+ // Upload to Firebase Storage
+ const storagePath = 'resources/kasey/' + fileId + '_' + pendingResourceFile.name;
+ const downloadUrl = await uploadToFirebaseStorage(pendingResourceBlob, storagePath);
+ if (downloadUrl && resource.file) {
+ resource.file.cloudUrl = downloadUrl;
+ resource.file.storagePath = storagePath;
+ }
+ // Also save locally
  await saveVideoBlob(fileId, pendingResourceBlob, pendingResourceFile.type, pendingResourceFile.name);
  }
 
  // Check if we're editing
  if (form.dataset.editIndex !== undefined && form.dataset.editIndex !== '') {
  const index = parseInt(form.dataset.editIndex);
- // Keep existing file if no new file uploaded
  if (!resource.file && resources[category][index].file) {
  resource.file = resources[category][index].file;
  } else if (resource.file && resources[category][index].file && resources[category][index].file.id) {
- // Delete old blob if replacing
+ // Delete old files if replacing
  try { await deleteVideoBlob(resources[category][index].file.id); } catch(e) {}
+ if (resources[category][index].file.storagePath) {
+ try { await deleteFromFirebaseStorage(resources[category][index].file.storagePath); } catch(e) {}
+ }
  }
  resources[category][index] = resource;
  delete form.dataset.editIndex;
@@ -3900,8 +3949,13 @@ What's on my mind today..."></textarea>
 
  async function deleteResource(category, index) {
  const item = resources[category][index];
- if (item.file && item.file.id) {
+ if (item.file) {
+ if (item.file.id) {
  try { await deleteVideoBlob(item.file.id); } catch(e) {}
+ }
+ if (item.file.storagePath) {
+ try { await deleteFromFirebaseStorage(item.file.storagePath); } catch(e) {}
+ }
  }
  resources[category].splice(index, 1);
  saveResources();
@@ -4035,6 +4089,8 @@ What's on my mind today..."></textarea>
  spinner.style.cssText = 'position:absolute;top:50%;left:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border:2px solid rgba(123,168,134,0.3);border-top-color:#7ba886;border-radius:50%;animation:spin 0.6s linear infinite;';
  saveBtn.appendChild(spinner);
 
+ if (status) { status.style.display = 'block'; status.innerHTML = 'Uploading...'; }
+
  const formData = new FormData(e.target);
  const videoId = 'vid_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
 
@@ -4048,12 +4104,20 @@ What's on my mind today..."></textarea>
  };
 
  try {
- // Save blob to IndexedDB if there's a file
  if (pendingVideoBlob) {
+ // Upload to Firebase Storage for cross-device access
+ const storagePath = 'videos/kasey/' + videoId + '_' + pendingVideoFile.name;
+ if (status) status.innerHTML = 'Uploading to cloud...';
+ const downloadUrl = await uploadToFirebaseStorage(pendingVideoBlob, storagePath);
+ if (downloadUrl) {
+ video.file.cloudUrl = downloadUrl;
+ video.file.storagePath = storagePath;
+ }
+ // Also save locally to IndexedDB as cache
  await saveVideoBlob(videoId, pendingVideoBlob, pendingVideoFile.type, pendingVideoFile.name);
  }
  videos.push(video);
- saveVideos(); // Only metadata to localStorage (won't throw)
+ saveVideos();
  } catch(err) {
  console.error('Video save error:', err);
  saveBtn.textContent = origText;
@@ -4093,37 +4157,47 @@ What's on my mind today..."></textarea>
  const thumb = document.createElement('div');
  thumb.className = 'video-thumb';
 
- if (video.file && (video.file.id || video.file.data)) {
- // Uploaded video — generate thumbnail from first frame
- let blobUrl = null;
- if (video.file.id) {
+ if (video.file) {
+ // Determine video URL: cloud > local IndexedDB > legacy base64
+ let videoUrl = null;
+ let isCloud = false;
+
+ // 1. Try cloud URL first (works on any device)
+ if (video.file.cloudUrl) {
+ videoUrl = video.file.cloudUrl;
+ isCloud = true;
+ }
+ // 2. Try local IndexedDB
+ if (!videoUrl && video.file.id) {
  try {
  const stored = await getVideoBlob(video.file.id);
  if (stored && stored.blob) {
  const blob = (stored.blob instanceof Blob) ? stored.blob : new Blob([stored.blob], { type: stored.type });
- blobUrl = URL.createObjectURL(blob);
+ videoUrl = URL.createObjectURL(blob);
  }
  } catch(e) {}
- } else if (video.file.data) {
- blobUrl = video.file.data;
+ }
+ // 3. Try legacy base64
+ if (!videoUrl && video.file.data) {
+ videoUrl = video.file.data;
  }
 
- if (blobUrl) {
- // Generate thumbnail via canvas for cross-browser compatibility
+ if (videoUrl) {
  const thumbId = 'vthumb_' + index;
  thumb.innerHTML = `
  <canvas id="${thumbId}" style="width:100%;height:100%;object-fit:cover;display:block;"></canvas>
  <div class="video-thumb-play"></div>
  <div class="video-thumb-overlay">${video.title || ''}</div>
  `;
- thumb.onclick = () => openVideoDetail(index, blobUrl);
+ thumb.onclick = () => openVideoDetail(index, videoUrl);
  list.appendChild(thumb);
 
  // Async thumbnail generation
- (function(url, canvasId) {
+ (function(url, canvasId, cloud) {
  const tempVid = document.createElement('video');
  tempVid.muted = true;
  tempVid.preload = 'auto';
+ if (cloud) tempVid.crossOrigin = 'anonymous';
  tempVid.addEventListener('loadeddata', function() {
  tempVid.currentTime = 0.5;
  });
@@ -4135,7 +4209,6 @@ What's on my mind today..."></textarea>
  canvas.width = size;
  canvas.height = size;
  const ctx = canvas.getContext('2d');
- // Center-crop
  const sx = (tempVid.videoWidth - size) / 2;
  const sy = (tempVid.videoHeight - size) / 2;
  ctx.drawImage(tempVid, sx, sy, size, size, 0, 0, size, size);
@@ -4143,7 +4216,7 @@ What's on my mind today..."></textarea>
  } catch(e) {}
  });
  tempVid.src = url;
- })(blobUrl, thumbId);
+ })(videoUrl, thumbId, isCloud);
  continue;
  } else {
  thumb.innerHTML = `
@@ -4155,7 +4228,6 @@ What's on my mind today..."></textarea>
  `;
  }
  } else if (video.link) {
- // Link-only video
  thumb.innerHTML = `
  <div class="video-link-thumb">
  <div class="video-link-icon">▶</div>
@@ -4219,8 +4291,15 @@ What's on my mind today..."></textarea>
 
  async function deleteVideo(index) {
  const video = videos[index];
- if (video.file && video.file.id) {
+ if (video.file) {
+ // Clean up local IndexedDB
+ if (video.file.id) {
  try { await deleteVideoBlob(video.file.id); } catch(e) {}
+ }
+ // Clean up Firebase Storage
+ if (video.file.storagePath) {
+ try { await deleteFromFirebaseStorage(video.file.storagePath); } catch(e) {}
+ }
  }
  videos.splice(index, 1);
  saveVideos();
