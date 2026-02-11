@@ -904,6 +904,30 @@
             accent-color: var(--sage-green);
         }
 
+        .diet-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            background: rgba(163, 184, 153, 0.15);
+            border: 1px solid rgba(163, 184, 153, 0.3);
+            border-radius: 20px;
+            font-size: 0.7rem;
+            color: rgba(224, 210, 208, 0.7);
+        }
+        .diet-tag button {
+            background: none;
+            border: none;
+            color: rgba(180, 130, 140, 0.6);
+            font-size: 0.85rem;
+            cursor: pointer;
+            padding: 0 2px;
+            line-height: 1;
+        }
+        .diet-tag button:hover {
+            color: #b4828c;
+        }
+
         /* ===== PLAN SELECTOR ===== */
         .plan-selector {
             display: flex;
@@ -1105,8 +1129,10 @@
 
         <div class="gen-section">
             <h3>Dietary Reminders</h3>
-            <div style="font-size: 0.75rem; color: rgba(224,210,208,0.45); line-height: 1.6;">
-                Anti-cancer Mediterranean focus • No avocado (except choc mousse) • No peanut butter • No mushrooms • No raw tomatoes • No cilantro • Bell peppers as supporting only • Heavily glazed fish only • Love spice
+            <div id="diet-tags" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;"></div>
+            <div style="display:flex;gap:6px;">
+                <input type="text" id="diet-tag-input" placeholder="Add a reminder..." style="flex:1;padding:8px 12px;background:rgba(61,47,49,0.6);border:1px solid var(--border-color);border-radius:6px;color:var(--light-text);font-family:'Philosopher',serif;font-size:0.8rem;">
+                <button onclick="addDietTag()" style="padding:8px 14px;background:var(--sage-green);color:#1a1a1a;border:none;border-radius:6px;font-family:'Philosopher',serif;font-size:0.8rem;cursor:pointer;font-weight:700;">Add</button>
             </div>
         </div>
 
@@ -2494,10 +2520,63 @@ function initRecipeBank() {
 }
 
 // ===== GENERATE PLAN =====
+// ===== DIETARY REMINDERS =====
+var dietaryReminders = [
+    "Anti-cancer Mediterranean focus",
+    "No avocado (except choc mousse)",
+    "No peanut butter",
+    "No mushrooms",
+    "No raw tomatoes",
+    "No cilantro",
+    "No turmeric",
+    "Bell peppers as supporting only",
+    "Heavily glazed fish only",
+    "Love spice"
+];
+
+function loadDietaryReminders() {
+    var saved = localStorage.getItem('mealplan_diet_reminders');
+    if (saved) {
+        try { dietaryReminders = JSON.parse(saved); } catch(e) {}
+    }
+}
+loadDietaryReminders();
+
+function saveDietaryReminders() {
+    localStorage.setItem('mealplan_diet_reminders', JSON.stringify(dietaryReminders));
+}
+
+function renderDietTags() {
+    var container = document.getElementById('diet-tags');
+    if (!container) return;
+    container.innerHTML = dietaryReminders.map(function(tag, i) {
+        return '<span class="diet-tag">' + tag + '<button onclick="removeDietTag(' + i + ')">×</button></span>';
+    }).join('');
+}
+
+function addDietTag() {
+    var input = document.getElementById('diet-tag-input');
+    var val = input.value.trim();
+    if (!val) return;
+    dietaryReminders.push(val);
+    saveDietaryReminders();
+    renderDietTags();
+    input.value = '';
+}
+
+function removeDietTag(index) {
+    dietaryReminders.splice(index, 1);
+    saveDietaryReminders();
+    renderDietTags();
+}
+
+function getDietaryRestrictionsForPrompt() {
+    return dietaryReminders.join('. ') + '.';
+}
+
 function initGenerateView() {
     var startInput = document.getElementById('gen-start-date');
     if (!startInput.value) {
-        // Find the latest end date across all saved plans
         var latestEnd = new Date(PLAN_START);
         latestEnd.setDate(latestEnd.getDate() + PLAN_DAYS);
         savedPlans.forEach(function(p) {
@@ -2507,12 +2586,19 @@ function initGenerateView() {
         });
         startInput.value = latestEnd.toISOString().split('T')[0];
     }
+    renderDietTags();
+    var tagInput = document.getElementById('diet-tag-input');
+    if (tagInput) {
+        tagInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { e.preventDefault(); addDietTag(); }
+        });
+    }
 }
 
 function buildSkeletonPrompt(startDate, duration, recipeSummary, opts) {
     return 'Generate a ' + duration + '-day meal plan skeleton. Output ONLY meal names and daily totals.\n\n' +
         'TARGETS: Kasey: 140-165g protein, ~1,350 cal/day. Charlie: 180-210g protein, ~2,200-2,500 cal/day.\n' +
-        'RESTRICTIONS: No avocado (except choc mousse), no peanut butter, no mushrooms, no raw tomatoes, no cilantro, no turmeric, bell peppers supporting only, fish only if heavily glazed\n' +
+        'RESTRICTIONS: ' + getDietaryRestrictionsForPrompt() + '\n' +
         'STRUCTURE: Breakfast (grab-and-go), Lunch (batch prep), Dinner (fresh 20-35min), Dessert (light 100-200cal)\n' +
         (opts.noRepeat ? 'No same meal on consecutive days.\n' : '') +
         (opts.favorFavs ? 'Prioritize FAV recipes.\n' : '') +
@@ -2613,7 +2699,7 @@ async function fillNewRecipeDetails(days, statusEl) {
     
     statusEl.innerHTML = '<span class="gen-spinner"></span> Generating ' + newMeals.length + ' new recipe details...';
     
-    var prompt = 'Create recipe details for these meals. Anti-cancer Mediterranean focus. Love spice. RESTRICTIONS: No avocado, no peanut butter, no mushrooms, no raw tomatoes, no cilantro, no turmeric.\n\n' +
+    var prompt = 'Create recipe details for these meals. Anti-cancer Mediterranean focus. RESTRICTIONS: ' + getDietaryRestrictionsForPrompt() + '\n\n' +
         'Meals:\n' + newMeals.map(function(m, i) { return (i+1) + '. ' + m.name + ' (' + m.type + ', ' + m.portion + ')'; }).join('\n') + '\n\n' +
         'Return ONLY a JSON array. No backticks. Each recipe:\n' +
         '[{"name":"Exact Name","ingredients":["item1","item2"],"steps":["Step 1","Step 2"],"tip":"anti-cancer tip","portions":["42g protein","420 cal","8g fiber","25 min"]}]';
