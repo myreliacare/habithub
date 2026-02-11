@@ -4549,6 +4549,13 @@ What's on my mind today..."></textarea>
  } else {
  videos = [];
  }
+ // Deduplicate any existing dupes
+ var beforeLen = videos.length;
+ videos = dedupeVideos(videos);
+ if (videos.length !== beforeLen) {
+ try { localStorage.setItem('videos_kasey', JSON.stringify(videos)); } catch(e) {}
+ syncToFirebase('videos_kasey', videos);
+ }
  // Migrate legacy base64
  let migrated = false;
  videos = videos.map(v => {
@@ -4565,7 +4572,7 @@ What's on my mind today..."></textarea>
  // Background Firebase sync
  loadFromFirebase('videos_kasey').then(firebaseData => {
  if (firebaseData) {
- videos = firebaseData;
+ videos = dedupeVideos(firebaseData);
  localStorage.setItem('videos_kasey', JSON.stringify(videos));
  renderVideos();
  } else if (saved) {
@@ -4573,12 +4580,23 @@ What's on my mind today..."></textarea>
  }
  });
  setupFirebaseListener('videos_kasey', (data) => {
- videos = data;
+ videos = dedupeVideos(data);
  renderVideos();
  });
  }
 
+ function dedupeVideos(arr) {
+ var seen = {};
+ return arr.filter(function(v) {
+ if (!v.id) return true;
+ if (seen[v.id]) return false;
+ seen[v.id] = true;
+ return true;
+ });
+ }
+
  function saveVideos() {
+ videos = dedupeVideos(videos);
  const metadataOnly = videos.map(v => {
  if (v.file && v.file.data) {
  return { ...v, file: { type: v.file.type, name: v.file.name, size: v.file.size || 0, id: v.id || v.file.id } };
@@ -4610,9 +4628,13 @@ What's on my mind today..."></textarea>
  }
  }
 
+ let videoSaving = false;
  async function addVideo(e) {
  e.preventDefault();
+ if (videoSaving) return;
+ videoSaving = true;
  const saveBtn = document.getElementById('videoSaveBtn');
+ saveBtn.disabled = true;
  const status = document.getElementById('videoUploadStatus');
  const origText = saveBtn.textContent;
 
@@ -4654,6 +4676,8 @@ What's on my mind today..."></textarea>
  saveVideos();
  } catch(err) {
  console.error('Video save error:', err);
+ videoSaving = false;
+ saveBtn.disabled = false;
  saveBtn.textContent = origText;
  saveBtn.style.cssText = '';
  alert('Could not save video: ' + (err.message || 'Unknown error') + '\nTry using a link instead.');
@@ -4668,6 +4692,8 @@ What's on my mind today..."></textarea>
  saveBtn.style.cssText = 'border-color:#7ba886;color:#7ba886;pointer-events:none;min-width:90px;';
  
  setTimeout(function() {
+ videoSaving = false;
+ saveBtn.disabled = false;
  saveBtn.textContent = origText;
  saveBtn.style.cssText = '';
  e.target.reset();
