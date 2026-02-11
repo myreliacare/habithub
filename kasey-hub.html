@@ -1245,20 +1245,15 @@
  }
  /* Journal styles */
  .journal-locked {
- position: fixed;
- top: 56px;
- left: 0;
- width: 100%;
- height: calc(100% - 56px);
- background: rgba(235, 224, 214, 0.98);
+ min-height: 60vh;
  display: flex;
  align-items: center;
  justify-content: center;
- z-index: 9000;
+ padding: 40px 20px;
  }
 
  .journal-password-box {
- background: #fff;
+ background: #f2ebe0;
  padding: 40px;
  border: 2px solid #b59197;
  box-shadow: 0 10px 40px rgba(181, 145, 151, 0.3);
@@ -1290,8 +1285,8 @@
  width: 100%;
  padding: 12px;
  border: 2px solid #b59197;
- background: #3d2f31;
- color: #f2ebe0;
+ background: #EBE0D6;
+ color: #3d2f31;
  font-size: 1rem;
  text-align: center;
  font-family: inherit;
@@ -3163,7 +3158,7 @@
  </div>
  
  <div class="event-form" id="videoForm">
- <form onsubmit="event.preventDefault(); addVideo(event);">
+ <form id="videoAddForm">
  <div class="form-group">
  <label>Video Title</label>
  <input type="text" name="title" required>
@@ -3226,6 +3221,11 @@
  <div class="journal-header">
  <div class="journal-title">My Journal</div>
  <div class="journal-subtitle">A space for your thoughts <span class="journal-heart"></span></div>
+ </div>
+
+ <div id="journalPromptSection" style="background:#3d2f31;padding:18px 20px;margin-bottom:24px;border-left:3px solid #b59197;">
+ <div style="font-size:0.72rem;color:#b59197;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;">Today's Prompt</div>
+ <div id="journalPromptText" style="font-size:1rem;color:#f2ebe0;font-style:italic;line-height:1.5;"></div>
  </div>
 
  <div class="journal-entry-form">
@@ -3866,6 +3866,9 @@ What's on my mind today..."></textarea>
  window.toggleVideoForm = toggleVideoForm;
  window.unlockJournal = unlockJournal;
  window.addVideo = addVideo;
+ // Attach video form handler (prevents mobile double-submit)
+ var vf = document.getElementById('videoAddForm');
+ if (vf) vf.addEventListener('submit', function(e) { e.preventDefault(); addVideo(e); }, { once: false });
  window.saveAnswer = saveAnswer;
 
  function renderTodos() {
@@ -4580,6 +4583,7 @@ What's on my mind today..."></textarea>
  }
  });
  setupFirebaseListener('videos_kasey', (data) => {
+ if (videoSaving) return;
  videos = dedupeVideos(data);
  renderVideos();
  });
@@ -4587,10 +4591,22 @@ What's on my mind today..."></textarea>
 
  function dedupeVideos(arr) {
  var seen = {};
+ var seenFiles = {};
  return arr.filter(function(v) {
  if (!v.id) return true;
  if (seen[v.id]) return false;
  seen[v.id] = true;
+ // Also dedup by file signature (name+size) or link
+ var fileKey = null;
+ if (v.file && v.file.name && v.file.size) {
+ fileKey = 'f_' + v.file.name + '_' + v.file.size;
+ } else if (v.link) {
+ fileKey = 'l_' + v.link;
+ }
+ if (fileKey) {
+ if (seenFiles[fileKey]) return false;
+ seenFiles[fileKey] = true;
+ }
  return true;
  });
  }
@@ -4629,10 +4645,13 @@ What's on my mind today..."></textarea>
  }
 
  let videoSaving = false;
+ let lastVideoSaveTime = 0;
  async function addVideo(e) {
  e.preventDefault();
- if (videoSaving) return;
+ var now = Date.now();
+ if (videoSaving || (now - lastVideoSaveTime < 3000)) return;
  videoSaving = true;
+ lastVideoSaveTime = now;
  const saveBtn = document.getElementById('videoSaveBtn');
  saveBtn.disabled = true;
  const status = document.getElementById('videoUploadStatus');
@@ -4918,6 +4937,7 @@ What's on my mind today..."></textarea>
  document.getElementById('journalError').classList.remove('show');
  loadJournalEntries();
  updateJournalFormDate();
+ loadJournalPrompt();
  } else {
  document.getElementById('journalError').classList.add('show');
  document.getElementById('journalPassword').value = '';
@@ -4928,6 +4948,23 @@ What's on my mind today..."></textarea>
  const now = new Date();
  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
  document.getElementById('journalFormDate').textContent = now.toLocaleDateString('en-US', options);
+ }
+
+ function loadJournalPrompt() {
+ var el = document.getElementById('journalPromptText');
+ if (!el) return;
+ var wellnessPrompts = [
+ 'What do I need more of? Less of? What\u2019s one intention for next week?',
+ 'What am I building this week? What\u2019s one thing I want to accomplish?',
+ 'What am I grateful for right now? (3 things, be specific)',
+ 'What am I holding onto that I need to release?',
+ 'What does my highest self want me to know today?',
+ 'What did I do well this week? Where did I show up for myself?',
+ 'Free write \u2014 whatever comes up. No rules.'
+ ];
+ var dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+ var dow = new Date().getDay();
+ el.innerHTML = '<strong>' + dayNames[dow] + ':</strong> ' + wellnessPrompts[dow];
  }
 
  async function saveJournalEntry() {
@@ -5401,10 +5438,11 @@ What's on my mind today..."></textarea>
  var meals = mealPlanData[pd];
  if (!meals) return '<em style="color:#aaa;">No meal plan data for this date</em>';
  var m = key === 'morning.breakfast' ? meals.b : key === 'daytime.lunch' ? meals.l : meals.d;
+ var mealLabel = key === 'morning.breakfast' ? 'Breakfast' : key === 'daytime.lunch' ? 'Lunch' : 'Dinner';
  var h = '<div style="margin-bottom:6px;"><strong style="color:#b59197;font-size:0.95rem;">' + m.name + '</strong><br>';
  h += '<span style="color:#8a7a6d;font-size:0.82rem;">' + m.p + '</span></div>';
  if (key === 'morning.breakfast') {
- h += '<div style="padding:8px 10px;background:#faf8f6;border-left:3px solid #a3b899;font-size:0.82rem;color:#6b5a5e;margin-bottom:8px;">';
+ h += '<div style="padding:8px 10px;background:#faf8f6;border-left:3px solid #a3b899;font-size:0.82rem;color:#6b5a5e;">';
  h += '<strong>Take WITH breakfast:</strong><br>';
  h += 'Thorne Basic Nutrients 2/Day (1 cap)<br>';
  h += 'Sports Research Omega-3 (1-2 softgels)<br>';
@@ -5412,7 +5450,6 @@ What's on my mind today..."></textarea>
  h += 'Nutricost Riboflavin 400mg (1 cap)';
  h += '</div>';
  }
- var mealLabel = key === 'morning.breakfast' ? 'Breakfast' : key === 'daytime.lunch' ? 'Lunch' : 'Dinner';
  h += '<div style="margin-top:4px;"><a href="meal-plan.html?day=' + pd + '" target="_blank" style="display:inline-block;background:#a3b899;color:#1c1c1c;text-decoration:none;padding:7px 16px;font-size:0.82rem;font-weight:600;font-family:inherit;cursor:pointer;">View ' + mealLabel + ' Recipe</a> <span style="font-size:0.72rem;color:#aaa;margin-left:6px;">Day ' + pd + ' of 14</span></div>';
  return h;
  }
