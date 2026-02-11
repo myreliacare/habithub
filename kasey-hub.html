@@ -1910,6 +1910,13 @@
             overflow-x: hidden !important;
             max-width: 100vw !important;
         }
+        /* Spellbook header mobile */
+        @media screen and (max-width: 480px) {
+            .spellbook-title { font-size: 1.6rem !important; }
+            .spellbook-moon-badge { padding: 6px 10px 6px 6px !important; gap: 6px !important; }
+            .spellbook-moon-badge .moon-phase-name { font-size: 0.95rem !important; }
+            .spellbook-moon-badge .moon-phase-illumination { font-size: 0.65rem !important; }
+        }
         /* Prevent iOS auto-zoom on input focus */
         @media screen and (max-width: 768px) {
             input, textarea, select {
@@ -1945,8 +1952,9 @@
  display: flex;
  align-items: center;
  justify-content: center;
- gap: 16px;
+ gap: 10px;
  margin-bottom: 6px;
+ flex-wrap: nowrap;
  }
  .spellbook-moon {
  width: 68px;
@@ -1967,7 +1975,9 @@
  background: rgba(122,138,110,0.1);
  border: 1px solid rgba(168,201,155,0.2);
  border-radius: 20px;
- padding: 8px 16px 8px 10px;
+ padding: 8px 14px 8px 8px;
+ flex-shrink: 1;
+ min-width: 0;
  }
  .spellbook-moon-badge .moon-phase-name {
  font-family: 'Dancing Script', cursive;
@@ -1983,6 +1993,11 @@
  text-transform: uppercase;
  margin: 0;
  }
+ .moon-badge-svg {
+ flex-shrink: 0;
+ width: 42px;
+ height: 42px;
+ }
  .spellbook-moon-detail {
  font-size: 0.78rem;
  color: #c8b8bb;
@@ -1991,6 +2006,17 @@
  max-width: 340px;
  margin: 6px auto 0;
  text-align: center;
+ }
+ @media (min-width: 769px) {
+ .spellbook-header { padding: 32px 0 12px; }
+ .spellbook-header-top { gap: 18px; margin-bottom: 10px; }
+ .spellbook-title { font-size: 3rem; }
+ .spellbook-moon-badge { padding: 12px 20px 12px 14px; gap: 12px; border-radius: 28px; }
+ .spellbook-moon-badge .moon-phase-name { font-size: 1.5rem; }
+ .spellbook-moon-badge .moon-phase-illumination { font-size: 0.88rem; }
+ .spellbook-moon-detail { font-size: 1rem; max-width: 500px; margin-top: 10px; }
+ .moon-badge-svg { width: 56px; height: 56px; }
+ .spellbook-divider-svg { width: 340px; height: 28px; }
  }
  .spellbook-subtitle {
  font-size: 0.82rem;
@@ -3252,7 +3278,7 @@ What's on my mind today..."></textarea>
  <div id="moonDetail" class="spellbook-moon-detail"></div>
  </div>
  <div style="text-align:center;margin:4px 0 18px;">
- <svg viewBox="0 0 200 16" width="200" height="16" fill="none" style="display:block;margin:0 auto;">
+ <svg class="spellbook-divider-svg" viewBox="0 0 200 16" width="260" height="22" fill="none" style="display:block;margin:0 auto;">
  <line x1="8" y1="8" x2="52" y2="8" stroke="#b5d4a4" stroke-width="0.5" opacity="0.4"/>
  <circle cx="62" cy="8" r="4" fill="none" stroke="#b5d4a4" stroke-width="0.6" opacity="0.4"/>
  <circle cx="76" cy="8" r="4" fill="none" stroke="#b5d4a4" stroke-width="0.6" opacity="0.4"/>
@@ -3290,9 +3316,9 @@ What's on my mind today..."></textarea>
  <button class="spell-sub-btn" onclick="filterCorrSub('day')">Days</button>
  <button class="spell-sub-btn" onclick="filterCorrSub('moon')">Moon Phases</button>
  </div>
- <input type="text" class="spell-search" id="spellSearch" placeholder="Search your spells..." oninput="renderSpells()">
- <div style="text-align:center;margin-bottom:24px;">
- <button onclick="openSpellForm()" style="background:#7a9b6a;color:#f2ebe0;border:none;padding:8px 20px;font-family:inherit;font-size:0.85rem;cursor:pointer;">Add New Entry</button>
+ <div style="display:flex;gap:10px;align-items:center;margin-bottom:24px;">
+ <input type="text" class="spell-search" id="spellSearch" placeholder="Search your spells..." oninput="renderSpells()" style="flex:1;margin-bottom:0;">
+ <button onclick="openSpellForm()" style="background:#7a9b6a;color:#f2ebe0;border:none;padding:10px 16px;font-family:inherit;font-size:0.82rem;cursor:pointer;white-space:nowrap;flex-shrink:0;">+ Add New</button>
  </div>
  <div id="spellList"></div>
  </div>
@@ -5828,9 +5854,27 @@ What's on my mind today..."></textarea>
  h += '<div class="spell-card-header"><div class="spell-card-title">' + sched.evening.title + '</div><span class="spell-card-tag" style="background:rgba(168,201,155,0.15);color:#4a6a3e;">' + sched.evening.time + '</span></div>';
  h += '<div class="spell-card-body">' + sched.evening.desc + '</div></div>';
 
+ // Moon ritual prompt on full/new moon days
+ var moonInfo = getMoonPhase();
+ if (moonInfo.phase === 'Full Moon' || moonInfo.phase === 'New Moon') {
+ var isFull = moonInfo.phase === 'Full Moon';
+ h += '<div class="spell-card" style="border-left-color:#c9b84a;background:rgba(201,184,74,0.08);">';
+ h += '<div class="spell-card-header"><div class="spell-card-title" style="color:#b5a33d;">' + moonInfo.phase + ' Tonight</div>';
+ h += '<span class="spell-card-tag" style="background:rgba(201,184,74,0.15);color:#8a7a2e;">' + moonInfo.illumination + '% illuminated</span></div>';
+ if (isFull) {
+ h += '<div class="spell-card-body">Tonight is the full moon — time for release, gratitude, and recharging. Set your crystals and moon water out. Burn what no longer serves you. Charge your tools in moonlight.</div>';
+ h += '<div style="margin-top:8px;"><strong style="color:#8a7a2e;font-size:0.82rem;">Your ritual:</strong> Celebrate what manifested, release what\'s heavy, charge your tools, pull a tarot card. Leave water + crystals out overnight.</div>';
+ } else {
+ h += '<div class="spell-card-body">Tonight is the new moon — the darkest night holds the most potential. Go inward. Set 1-3 clear intentions for this cycle. Plant seeds, not plans.</div>';
+ h += '<div style="margin-top:8px;"><strong style="color:#8a7a2e;font-size:0.82rem;">Your ritual:</strong> Dim the lights, cleanse your space, journal what ended and what\'s beginning. Write intentions present-tense. Read them to the flame. Pull a card for the cycle ahead.</div>';
+ }
+ h += '<div style="margin-top:10px;"><button onclick="document.getElementById(\'spellSearch\').value=\'' + (isFull ? 'Full Moon Ritual' : 'New Moon Ritual') + '\';currentSpellCategory=\'moon\';renderSpells();" style="background:#b5a33d;color:#1c1c1c;border:none;padding:8px 16px;font-size:0.82rem;font-weight:600;font-family:inherit;cursor:pointer;">View Full Ritual Script</button></div>';
+ h += '</div>';
+ }
+
  // Weekly ritual (show on Sunday)
  if (sched.weekly) {
- h += '<div style="text-align:center;margin:20px 0 12px;"><svg viewBox="0 0 200 16" width="160" height="14" fill="none" style="display:block;margin:0 auto;"><line x1="8" y1="8" x2="52" y2="8" stroke="#8fa87a" stroke-width="0.5" opacity="0.35"/><circle cx="62" cy="8" r="4" fill="none" stroke="#8fa87a" stroke-width="0.6" opacity="0.35"/><circle cx="76" cy="8" r="4" fill="none" stroke="#8fa87a" stroke-width="0.6" opacity="0.35"/><path d="M76,4 A4,4 0 0,1 76,12 A2.5,4 0 0,0 76,4" fill="#8fa87a" opacity="0.4"/><circle cx="90" cy="8" r="4" fill="none" stroke="#8fa87a" stroke-width="0.6" opacity="0.35"/><path d="M90,4 A4,4 0 0,1 90,12 L90,4 Z" fill="#8fa87a" opacity="0.4"/><circle cx="104" cy="8" r="4.5" fill="#8fa87a" opacity="0.5"/><circle cx="118" cy="8" r="4" fill="none" stroke="#8fa87a" stroke-width="0.6" opacity="0.35"/><path d="M118,4 A4,4 0 0,0 118,12 L118,4 Z" fill="#8fa87a" opacity="0.4"/><circle cx="132" cy="8" r="4" fill="none" stroke="#8fa87a" stroke-width="0.6" opacity="0.35"/><path d="M132,4 A4,4 0 0,0 132,12 A2.5,4 0 0,1 132,4" fill="#8fa87a" opacity="0.4"/><circle cx="146" cy="8" r="4" fill="none" stroke="#8fa87a" stroke-width="0.6" opacity="0.35"/><line x1="156" y1="8" x2="198" y2="8" stroke="#8fa87a" stroke-width="0.5" opacity="0.35"/></svg></div>';
+ h += '<div style="text-align:center;margin:20px 0 12px;"><svg viewBox="0 0 200 16" width="220" height="18" fill="none" style="display:block;margin:0 auto;"><line x1="8" y1="8" x2="52" y2="8" stroke="#8fa87a" stroke-width="0.5" opacity="0.35"/><circle cx="62" cy="8" r="4" fill="none" stroke="#8fa87a" stroke-width="0.6" opacity="0.35"/><circle cx="76" cy="8" r="4" fill="none" stroke="#8fa87a" stroke-width="0.6" opacity="0.35"/><path d="M76,4 A4,4 0 0,1 76,12 A2.5,4 0 0,0 76,4" fill="#8fa87a" opacity="0.4"/><circle cx="90" cy="8" r="4" fill="none" stroke="#8fa87a" stroke-width="0.6" opacity="0.35"/><path d="M90,4 A4,4 0 0,1 90,12 L90,4 Z" fill="#8fa87a" opacity="0.4"/><circle cx="104" cy="8" r="4.5" fill="#8fa87a" opacity="0.5"/><circle cx="118" cy="8" r="4" fill="none" stroke="#8fa87a" stroke-width="0.6" opacity="0.35"/><path d="M118,4 A4,4 0 0,0 118,12 L118,4 Z" fill="#8fa87a" opacity="0.4"/><circle cx="132" cy="8" r="4" fill="none" stroke="#8fa87a" stroke-width="0.6" opacity="0.35"/><path d="M132,4 A4,4 0 0,0 132,12 A2.5,4 0 0,1 132,4" fill="#8fa87a" opacity="0.4"/><circle cx="146" cy="8" r="4" fill="none" stroke="#8fa87a" stroke-width="0.6" opacity="0.35"/><line x1="156" y1="8" x2="198" y2="8" stroke="#8fa87a" stroke-width="0.5" opacity="0.35"/></svg></div>';
  h += '<div style="text-align:center;margin-bottom:12px;"><span style="font-family:Dancing Script,cursive;font-size:1.1rem;color:#a8c99b;">Weekly Ritual</span></div>';
  h += '<div class="spell-card" style="border-left-color:#4a5c3f;background:#edecd5;">';
  h += '<div class="spell-card-header"><div class="spell-card-title">' + sched.weekly.title + '</div><span class="spell-card-tag" style="background:rgba(168,201,155,0.15);color:#4a6a3e;">' + sched.weekly.time + '</span></div>';
@@ -5838,7 +5882,7 @@ What's on my mind today..."></textarea>
  }
 
  // Quick view of other days
- h += '<div style="text-align:center;margin:24px 0 12px;"><svg viewBox="0 0 200 16" width="160" height="14" fill="none" style="display:block;margin:0 auto;"><line x1="8" y1="8" x2="52" y2="8" stroke="#8fa87a" stroke-width="0.5" opacity="0.35"/><circle cx="62" cy="8" r="4" fill="none" stroke="#8fa87a" stroke-width="0.6" opacity="0.35"/><circle cx="76" cy="8" r="4" fill="none" stroke="#8fa87a" stroke-width="0.6" opacity="0.35"/><path d="M76,4 A4,4 0 0,1 76,12 A2.5,4 0 0,0 76,4" fill="#8fa87a" opacity="0.4"/><circle cx="90" cy="8" r="4" fill="none" stroke="#8fa87a" stroke-width="0.6" opacity="0.35"/><path d="M90,4 A4,4 0 0,1 90,12 L90,4 Z" fill="#8fa87a" opacity="0.4"/><circle cx="104" cy="8" r="4.5" fill="#8fa87a" opacity="0.5"/><circle cx="118" cy="8" r="4" fill="none" stroke="#8fa87a" stroke-width="0.6" opacity="0.35"/><path d="M118,4 A4,4 0 0,0 118,12 L118,4 Z" fill="#8fa87a" opacity="0.4"/><circle cx="132" cy="8" r="4" fill="none" stroke="#8fa87a" stroke-width="0.6" opacity="0.35"/><path d="M132,4 A4,4 0 0,0 132,12 A2.5,4 0 0,1 132,4" fill="#8fa87a" opacity="0.4"/><circle cx="146" cy="8" r="4" fill="none" stroke="#8fa87a" stroke-width="0.6" opacity="0.35"/><line x1="156" y1="8" x2="198" y2="8" stroke="#8fa87a" stroke-width="0.5" opacity="0.35"/></svg></div>';
+ h += '<div style="text-align:center;margin:24px 0 12px;"><svg viewBox="0 0 200 16" width="220" height="18" fill="none" style="display:block;margin:0 auto;"><line x1="8" y1="8" x2="52" y2="8" stroke="#8fa87a" stroke-width="0.5" opacity="0.35"/><circle cx="62" cy="8" r="4" fill="none" stroke="#8fa87a" stroke-width="0.6" opacity="0.35"/><circle cx="76" cy="8" r="4" fill="none" stroke="#8fa87a" stroke-width="0.6" opacity="0.35"/><path d="M76,4 A4,4 0 0,1 76,12 A2.5,4 0 0,0 76,4" fill="#8fa87a" opacity="0.4"/><circle cx="90" cy="8" r="4" fill="none" stroke="#8fa87a" stroke-width="0.6" opacity="0.35"/><path d="M90,4 A4,4 0 0,1 90,12 L90,4 Z" fill="#8fa87a" opacity="0.4"/><circle cx="104" cy="8" r="4.5" fill="#8fa87a" opacity="0.5"/><circle cx="118" cy="8" r="4" fill="none" stroke="#8fa87a" stroke-width="0.6" opacity="0.35"/><path d="M118,4 A4,4 0 0,0 118,12 L118,4 Z" fill="#8fa87a" opacity="0.4"/><circle cx="132" cy="8" r="4" fill="none" stroke="#8fa87a" stroke-width="0.6" opacity="0.35"/><path d="M132,4 A4,4 0 0,0 132,12 A2.5,4 0 0,1 132,4" fill="#8fa87a" opacity="0.4"/><circle cx="146" cy="8" r="4" fill="none" stroke="#8fa87a" stroke-width="0.6" opacity="0.35"/><line x1="156" y1="8" x2="198" y2="8" stroke="#8fa87a" stroke-width="0.5" opacity="0.35"/></svg></div>';
  h += '<div style="text-align:center;margin-bottom:14px;"><span style="font-family:Dancing Script,cursive;font-size:1.1rem;color:#a8c99b;">Full Week at a Glance</span></div>';
 
  for (var d = 0; d < 7; d++) {
@@ -5902,7 +5946,7 @@ What's on my mind today..."></textarea>
  h += '<div class="spell-card-header"><div class="spell-card-title">' + c.title + '</div>';
  h += '<span class="spell-card-tag corr-tag">' + (subcatLabelsShort[c.subcat] || c.subcat) + '</span></div>';
  if (c.intent) h += '<div class="spell-card-intent">' + c.intent + '</div>';
- h += '<div class="spell-card-expand-icon">tap to expand</div>';
+ 
  h += '<div class="spell-card-details">';
  if (c.materials) h += '<div class="corr-element">' + c.materials + '</div>';
  if (c.steps) { h += '<div class="spell-card-section-label">How to Use</div>'; h += '<div class="spell-card-body">' + c.steps + '</div>'; }
@@ -5937,7 +5981,7 @@ What's on my mind today..."></textarea>
  h += '<div class="spell-card-header"><div class="spell-card-title">' + (s.title || 'Untitled') + '</div>';
  h += '<span class="spell-card-tag">' + (catLabels[s.category] || s.category) + '</span></div>';
  if (s.intent) h += '<div class="spell-card-intent">' + s.intent.replace(/\\n/g, '<br>') + '</div>';
- h += '<div class="spell-card-expand-icon">tap to expand</div>';
+ 
  h += '<div class="spell-card-details">';
  if (s.materials) { h += '<div class="spell-card-section-label">Materials</div>'; h += '<div class="spell-card-body">' + s.materials.replace(/\\n/g, '<br>') + '</div>'; }
  if (s.steps) { h += '<div class="spell-card-section-label">Steps</div>'; h += '<div class="spell-card-body">' + s.steps.replace(/\\n/g, '<br>') + '</div>'; }
@@ -5954,7 +5998,7 @@ What's on my mind today..."></textarea>
  h += '<div class="spell-card-header"><div class="spell-card-title">' + c.title + '</div>';
  h += '<span class="spell-card-tag corr-tag">' + (subcatLabelsShort[c.subcat] || c.subcat) + '</span></div>';
  if (c.intent) h += '<div class="spell-card-intent">' + c.intent + '</div>';
- h += '<div class="spell-card-expand-icon">tap to expand</div>';
+ 
  h += '<div class="spell-card-details">';
  if (c.materials) h += '<div class="corr-element">' + c.materials + '</div>';
  if (c.steps) { h += '<div class="spell-card-section-label">How to Use</div>'; h += '<div class="spell-card-body">' + c.steps + '</div>'; }
@@ -6127,7 +6171,7 @@ What's on my mind today..."></textarea>
  var moonSvg = drawMoonSVG(m.phase, m.illumination);
 
  badge.innerHTML =
- '<div style="flex-shrink:0;width:42px;height:42px;">' + moonSvg.replace('class="spellbook-moon"','style="width:42px;height:42px;"') + '</div>' +
+ '<div class="moon-badge-svg">' + moonSvg.replace('class="spellbook-moon"','style="width:100%;height:100%;display:block;"') + '</div>' +
  '<div>' +
  '<div class="moon-phase-name">' + m.phase + '</div>' +
  '<div class="moon-phase-illumination">' + m.illumination + '% illuminated</div>' +
