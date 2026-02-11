@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -961,6 +962,345 @@
             }
         }
         /* ===== END MOBILE OPTIMIZATION ===== */
+    /* ===== WELLNESS SCHEDULE CSS ===== */
+    .schedule-section { padding: 0 4px; }
+    .schedule-item {
+        display: flex;
+        gap: 12px;
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(181, 145, 151, 0.15);
+    }
+    .schedule-time {
+        min-width: 75px;
+        font-size: 0.78rem;
+        color: #b59197;
+        font-weight: 600;
+        padding-top: 2px;
+    }
+    .schedule-content { flex: 1; }
+    .schedule-title {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: #4a3b3e;
+        margin-bottom: 4px;
+    }
+    .schedule-details {
+        font-size: 0.82rem;
+        color: #6b5a5e;
+        line-height: 1.55;
+    }
+    .schedule-details strong { color: #4a3b3e; }
+    .schedule-details em { color: #9a7a80; }
+
+    .day-card {
+        background: #f5ede6;
+        border: 1px solid rgba(181,145,151,0.2);
+        margin-bottom: 8px;
+        overflow: hidden;
+        width: 100%;
+    }
+    .day-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 16px;
+        cursor: pointer;
+        user-select: none;
+    }
+    .day-header:hover { background: rgba(181,145,151,0.05); }
+    .day-name { font-weight: 700; font-size: 0.92rem; color: #4a3b3e; }
+    .day-preview { font-size: 0.78rem; color: #9a7a80; margin-top: 2px; }
+    .arrow { font-size: 0.7rem; color: #b59197; transition: transform 0.2s; }
+    .day-card.expanded .arrow { transform: rotate(180deg); }
+    .day-details {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        padding: 0 16px;
+    }
+    .day-card.expanded .day-details {
+        max-height: 3000px;
+        padding: 0 16px 16px;
+    }
+
+    .day-nav-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin: 12px 0;
+    }
+    .day-nav-btn {
+        background: none;
+        border: 1px solid rgba(181,145,151,0.3);
+        color: #b59197;
+        font-size: 1.1rem;
+        cursor: pointer;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    #currentDayDisplay {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #4a3b3e;
+        min-width: 200px;
+        text-align: center;
+    }
+
+    /* ===== VIDEO GRID CSS ===== */
+    .video-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 3px;
+    }
+    .video-thumb {
+        aspect-ratio: 1;
+        background: #3d2f31;
+        position: relative;
+        cursor: pointer;
+        overflow: hidden;
+    }
+    .video-thumb video,
+    .video-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    .video-thumb-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 20px 6px 6px;
+        background: linear-gradient(transparent, rgba(0,0,0,0.6));
+        color: #f5ede6;
+        font-size: 0.7rem;
+        font-weight: 500;
+    }
+    .video-thumb-play {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 36px;
+        height: 36px;
+        background: rgba(0,0,0,0.4);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .video-thumb-play::after {
+        content: '';
+        display: block;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 7px 0 7px 12px;
+        border-color: transparent transparent transparent rgba(255,255,255,0.85);
+        margin-left: 2px;
+    }
+    .video-link-thumb {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: #3d2f31;
+    }
+    .video-link-icon {
+        font-size: 1.8rem;
+        color: rgba(181,145,151,0.6);
+        margin-bottom: 4px;
+    }
+    .video-link-label {
+        color: rgba(181,145,151,0.8);
+        font-size: 0.65rem;
+    }
+    .video-detail-modal {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.95);
+        z-index: 10000;
+        flex-direction: column;
+    }
+    .video-detail-modal.active { display: flex; }
+    .video-detail-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        background: rgba(60,47,49,0.9);
+    }
+    .video-detail-title {
+        color: #f5ede6;
+        font-size: 0.95rem;
+        font-weight: 600;
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .video-detail-close {
+        color: #b59197;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 4px 8px;
+        background: none;
+        border: none;
+    }
+    .video-detail-body {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px;
+        overflow: hidden;
+    }
+    .video-detail-body video {
+        max-width: 100%;
+        max-height: 100%;
+    }
+    .video-detail-footer {
+        padding: 12px 16px;
+        background: rgba(60,47,49,0.9);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .video-detail-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    .video-detail-tags .video-tag {
+        background: rgba(181,145,151,0.2);
+        color: #d4a5a5;
+        padding: 3px 10px;
+        font-size: 0.75rem;
+    }
+    .video-detail-delete {
+        background: none;
+        border: 1px solid rgba(201,122,122,0.4);
+        color: #c97a7a;
+        padding: 6px 14px;
+        font-size: 0.8rem;
+        cursor: pointer;
+    }
+
+    /* ===== JOURNAL CSS ===== */
+    .journal-locked {
+        position: fixed;
+        top: 56px;
+        left: 0;
+        right: 0;
+        height: calc(100% - 56px);
+        background: #3c2f31;
+        z-index: 9000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .journal-password-box {
+        background: #f5ede6;
+        padding: 40px 30px;
+        max-width: 320px;
+        width: 90%;
+        text-align: center;
+    }
+    .journal-password-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #4a3b3e;
+        margin-bottom: 6px;
+    }
+    .journal-password-subtitle {
+        font-size: 0.85rem;
+        color: #9a7a80;
+        margin-bottom: 20px;
+    }
+    .journal-password-input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid rgba(181,145,151,0.3);
+        background: #fff;
+        font-size: 1rem;
+        text-align: center;
+        margin-bottom: 12px;
+        box-sizing: border-box;
+    }
+    .journal-password-input:focus {
+        outline: none;
+        border-color: #b59197;
+    }
+    .journal-unlock-btn {
+        width: 100%;
+        padding: 12px;
+        background: #b59197;
+        color: #fff;
+        border: none;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: inherit;
+    }
+    .journal-unlock-btn:hover { background: #a3818a; }
+    .journal-error { color: #c97a7a; font-size: 0.85rem; margin-top: 8px; display: none; }
+    .journal-error.show { display: block; }
+
+    .journal-content { padding: 4px 0; }
+    .journal-entry {
+        background: #f5ede6;
+        border: 1px solid rgba(181,145,151,0.15);
+        padding: 16px;
+        margin-bottom: 8px;
+    }
+    .journal-entry-date {
+        font-size: 0.78rem;
+        color: #b59197;
+        font-weight: 600;
+        margin-bottom: 6px;
+    }
+    .journal-entry-text {
+        font-size: 0.88rem;
+        color: #4a3b3e;
+        line-height: 1.6;
+        white-space: pre-wrap;
+    }
+    .journal-entry-actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 8px;
+    }
+
+    /* ===== FUTURE TODOS ===== */
+    .future-todos-section {
+        margin-top: 20px;
+        border-top: 2px solid rgba(123,168,134,0.2);
+        padding-top: 16px;
+    }
+    .future-todos-header {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #7ba886;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 4px;
+    }
+    .future-todos-subtitle {
+        font-size: 0.78rem;
+        color: #9a7a80;
+        font-style: italic;
+        margin-bottom: 12px;
+    }
+
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 </head>
@@ -1032,17 +1372,32 @@
         
         <div class="section-nav">
             <select id="sectionDropdown" onchange="switchTabFromDropdown()" class="section-dropdown">
-                <option value="bingo">Bingo Card</option>
+                <option value="bingo">Habits & Wellness</option>
                 <option value="resources">Resources</option>
                 <option value="videos">Video Hub</option>
                 <option value="todos">To-Do List</option>
+                <option value="journal">Journal</option>
                 <option value="prompt">Daily Prompt</option>
             </select>
         </div>
 
-        <!-- BINGO TAB -->
+        <!-- BINGO & WELLNESS TAB -->
         <div id="bingo-tab" class="hub-tab active">
+            <!-- Wellness Schedule -->
             <div class="bingo-section">
+                <h1>Charlie's</h1>
+                <div class="main-title">WELLNESS<br>ROUTINE</div>
+                <p class="subtitle">Your daily schedule for health & optimization</p>
+                <div class="day-nav-row">
+                    <button class="day-nav-btn" onclick="changeDay(-1)">&#9664;</button>
+                    <div id="currentDayDisplay"></div>
+                    <button class="day-nav-btn" onclick="changeDay(1)">&#9654;</button>
+                </div>
+                <div id="dailyScheduleContainer"></div>
+            </div>
+
+            <!-- Bingo Card -->
+            <div class="bingo-section" style="margin-top: 24px;">
                 <h1>The Ultimate</h1>
                 <div class="main-title">DAILY HABITS<br>BINGO</div>
                 <p class="subtitle">Click squares to mark complete &bull; Get 4 in a row to win</p>
@@ -1194,8 +1549,11 @@
         <!-- VIDEOS TAB -->
         <div id="videos-tab" class="hub-tab">
             <div class="section">
-                <h2 class="section-title">Video Hub</h2>
-                <button class="add-event-btn" onclick="toggleVideoForm()">Add Video</button>
+                <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:8px;">
+                    <h2 class="section-title" style="margin:0;">VIDEO HUB</h2>
+                    <span id="videoCount" style="font-size:0.8rem;color:#9a7a80;"></span>
+                </div>
+                <button class="add-event-btn" onclick="toggleVideoForm()" style="margin-bottom:12px;">+ Add</button>
                 
                 <div class="event-form" id="videoForm">
                     <form onsubmit="addVideo(event); return false;">
@@ -1224,8 +1582,8 @@
                     </form>
                 </div>
 
-                <div id="videosList" style="margin-top: 20px;">
-                    <div class="empty-state">No videos yet. Add your first motivational video!</div>
+                <div id="videosList" class="video-grid">
+                    <div class="empty-state" style="grid-column:1/-1;">No videos yet. Add your first motivational video!</div>
                 </div>
             </div>
         </div>
@@ -1252,10 +1610,41 @@
                 <div id="todosList" style="margin-top: 20px;">
                     <div class="empty-state">No to-dos yet. Add your first task!</div>
                 </div>
+
+                <!-- Future To-Dos -->
+                <div class="future-todos-section">
+                    <div class="future-todos-header">Future To-Dos</div>
+                    <div class="future-todos-subtitle">Things to get to when the time is right</div>
+                    <div style="display:flex;gap:8px;margin-bottom:12px;">
+                        <input type="text" id="futureTodoInput" placeholder="Add a future to-do..." style="flex:1;padding:8px 12px;border:1px solid rgba(123,168,134,0.3);background:#fff;font-family:inherit;" onkeydown="if(event.key==='Enter')addFutureTodo()">
+                        <button class="btn" onclick="addFutureTodo()" style="border-color:#7ba886;color:#7ba886;">Add</button>
+                    </div>
+                    <div id="futureTodosList"></div>
+                </div>
             </div>
         </div>
 
         <!-- PROMPT TAB -->
+        <!-- JOURNAL TAB -->
+        <div id="journal-tab" class="hub-tab">
+            <div id="journalLocked" class="journal-locked" style="display:none;">
+                <div class="journal-password-box">
+                    <div class="journal-password-title">Charlie's Journal</div>
+                    <div class="journal-password-subtitle">Enter your password to unlock</div>
+                    <input type="password" id="journalPassword" class="journal-password-input" placeholder="Password" onkeydown="if(event.key==='Enter') unlockJournal()">
+                    <button class="journal-unlock-btn" onclick="unlockJournal()">Unlock</button>
+                    <div id="journalError" class="journal-error">Incorrect password</div>
+                </div>
+            </div>
+            <div id="journalContent" class="journal-content" style="display:none;">
+                <div style="margin-bottom: 12px;">
+                    <textarea id="journalInput" placeholder="Write what's on your mind..." style="width:100%;min-height:100px;padding:12px;border:1px solid rgba(181,145,151,0.3);background:#fff;font-family:inherit;font-size:0.9rem;box-sizing:border-box;resize:vertical;"></textarea>
+                    <button class="btn" onclick="saveJournalEntry()" style="margin-top:6px;width:100%;padding:10px;">Save Entry</button>
+                </div>
+                <div id="journalEntries"></div>
+            </div>
+        </div>
+
         <div id="prompt-tab" class="hub-tab">
             <div class="section">
                 <h2 class="section-title">Today's Prompt</h2>
@@ -1579,7 +1968,10 @@
 
             if (tab === 'prompt') loadHubPrompt();
             else if (tab === 'resources') renderAllResources();
-            else if (tab === 'todos') renderTodos();
+            else if (tab === 'todos') { renderTodos(); renderFutureTodos(); }
+            else if (tab === 'bingo') renderDailySchedule();
+            else if (tab === 'journal') showJournalTab();
+            else if (tab === 'videos') renderVideos();
         }
 
         async function initBoard() {
@@ -2054,52 +2446,50 @@
 
         function renderVideos() {
             const list = document.getElementById('videosList');
+            const countEl = document.getElementById('videoCount');
+            if (countEl) countEl.textContent = videos.length > 0 ? videos.length + ' video' + (videos.length !== 1 ? 's' : '') : '';
             if (videos.length === 0) {
-                list.innerHTML = '<div class="empty-state">No videos yet. Add your first motivational video!</div>';
+                list.innerHTML = '<div class="empty-state" style="grid-column:1/-1;">No videos yet. Add your first motivational video!</div>';
                 return;
             }
-
             list.innerHTML = '';
             videos.forEach((video, index) => {
-                const videoDiv = document.createElement('div');
-                videoDiv.className = 'video-item';
-                
-                let videoContent = '';
+                const thumb = document.createElement('div');
+                thumb.className = 'video-thumb';
                 if (video.file) {
-                    // Prefer cloud URL, fallback to legacy base64
                     const videoUrl = video.file.cloudUrl || video.file.data || null;
                     if (videoUrl) {
-                        videoContent = `
-                            <video controls style="width: 100%; max-width: 300px; margin-bottom: 8px; background: #000;">
-                                <source src="${videoUrl}" type="${video.file.type}">
-                            </video>
-                            <div class="video-title">${video.title}</div>
-                        `;
+                        const thumbId = 'vthumb_' + index;
+                        thumb.innerHTML = '<canvas id="' + thumbId + '" style="width:100%;height:100%;object-fit:cover;display:block;"></canvas><div class="video-thumb-play"></div><div class="video-thumb-overlay">' + (video.title || '') + '</div>';
+                        thumb.onclick = () => openVideoDetail(index, videoUrl);
+                        list.appendChild(thumb);
+                        (function(url, canvasId) {
+                            const tempVid = document.createElement('video');
+                            tempVid.muted = true; tempVid.preload = 'auto';
+                            if (url.startsWith('http')) tempVid.crossOrigin = 'anonymous';
+                            tempVid.addEventListener('loadeddata', function() { tempVid.currentTime = 0.5; });
+                            tempVid.addEventListener('seeked', function() {
+                                try {
+                                    const canvas = document.getElementById(canvasId);
+                                    if (canvas) {
+                                        const size = Math.min(tempVid.videoWidth, tempVid.videoHeight) || 200;
+                                        canvas.width = size; canvas.height = size;
+                                        const ctx = canvas.getContext('2d');
+                                        ctx.drawImage(tempVid, (tempVid.videoWidth-size)/2, (tempVid.videoHeight-size)/2, size, size, 0, 0, size, size);
+                                    }
+                                } catch(e) {}
+                            });
+                            tempVid.src = url;
+                        })(videoUrl, thumbId);
+                        return;
                     } else {
-                        videoContent = `
-                            <div class="video-title">${video.title}</div>
-                            <div style="color:#b59197;font-size:0.85rem;">📱 File only available on upload device</div>
-                        `;
+                        thumb.innerHTML = '<div class="video-link-thumb"><div class="video-link-icon">📱</div><div style="color:#b59197;font-size:0.7rem;font-weight:600;">' + (video.title || 'Video') + '</div><div class="video-link-label" style="font-size:0.6rem;">Only plays on upload device</div></div>';
                     }
                 } else if (video.link) {
-                    videoContent = `
-                        <div class="video-title">${video.title}</div>
-                        <a href="${video.link}" target="_blank" class="video-link">${video.link}</a>
-                    `;
+                    thumb.innerHTML = '<div class="video-link-thumb"><div class="video-link-icon">▶</div><div style="color:#b59197;font-size:0.75rem;font-weight:600;margin-bottom:4px;">' + (video.title || 'Video') + '</div><div class="video-link-label">' + video.link.replace(/https?:\/\/(www\.)?/, '').split('/')[0] + '</div></div>';
+                    thumb.onclick = () => openVideoDetail(index, null);
                 }
-
-                videoDiv.innerHTML = `
-                    <div class="video-content">
-                        ${videoContent}
-                        ${video.tags && video.tags.length > 0 ? `
-                            <div class="video-tags">
-                                ${video.tags.map(tag => `<span class="video-tag">${tag}</span>`).join('')}
-                            </div>
-                        ` : ''}
-                    </div>
-                    <button class="btn" onclick="deleteVideo(${index})" style="padding: 4px 8px; min-width: auto;">Delete</button>
-                `;
-                list.appendChild(videoDiv);
+                list.appendChild(thumb);
             });
         }
 
@@ -2239,16 +2629,357 @@
             loadHubPrompt();
         }
 
+        // ===== WELLNESS SCHEDULE =====
+        let currentViewingDay = new Date().getDay();
+        const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+        const charlieWeeklySchedule = {
+            0: { // Sunday
+                morning: { skincare: '1. Wash face<br>2. Moisturize<br>3. Sunscreen' },
+                evening: { skincare: '1. Deep pore cleansing mask (with Kasey)<br>2. Wash face<br>3. Moisturize<br>4. Pink stuff' }
+            },
+            1: { morning: { skincare: '1. Wash face<br>2. Moisturize<br>3. Sunscreen' }, evening: { skincare: '1. Wash face<br>2. Moisturize<br>3. Pink stuff' } },
+            2: { morning: { skincare: '1. Wash face<br>2. Moisturize<br>3. Sunscreen' }, evening: { skincare: '1. Wash face<br>2. Moisturize<br>3. Pink stuff' } },
+            3: { morning: { skincare: '1. Wash face<br>2. Moisturize<br>3. Sunscreen' }, evening: { skincare: '1. Wash face<br>2. Moisturize<br>3. Pink stuff' } },
+            4: { morning: { skincare: '1. Wash face<br>2. Moisturize<br>3. Sunscreen' }, evening: { skincare: '1. Wash face<br>2. Moisturize<br>3. Pink stuff' } },
+            5: { morning: { skincare: '1. Wash face<br>2. Moisturize<br>3. Sunscreen' }, evening: { skincare: '1. Wash face<br>2. Moisturize<br>3. Pink stuff' } },
+            6: { morning: { skincare: '1. Wash face<br>2. Moisturize<br>3. Sunscreen' }, evening: { skincare: '1. Wash face<br>2. Moisturize<br>3. Pink stuff' } }
+        };
+
+        function changeDay(direction) {
+            currentViewingDay += direction;
+            if (currentViewingDay > 6) currentViewingDay = 0;
+            if (currentViewingDay < 0) currentViewingDay = 6;
+            renderDailySchedule();
+        }
+
+        function renderDailySchedule() {
+            const day = charlieWeeklySchedule[currentViewingDay];
+            const dayName = dayNames[currentViewingDay];
+            const today = new Date();
+            const currentDay = today.getDay();
+            const dayOffset = currentViewingDay - currentDay;
+            const viewingDate = new Date(today);
+            viewingDate.setDate(today.getDate() + dayOffset);
+            const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+            const formattedDate = `${dayName}, ${monthNames[viewingDate.getMonth()]} ${viewingDate.getDate()}`;
+            
+            document.getElementById('currentDayDisplay').textContent = formattedDate;
+            const container = document.getElementById('dailyScheduleContainer');
+            container.innerHTML = `
+            <!-- Morning Routine -->
+            <div class="day-card">
+                <div class="day-header" onclick="this.parentElement.classList.toggle('expanded')">
+                    <div>
+                        <div class="day-name">Morning Routine (8:00 AM - 10:30 AM)</div>
+                    </div>
+                    <span class="arrow">&#9660;</span>
+                </div>
+                <div class="day-details">
+                    <div class="schedule-item">
+                        <span class="schedule-time">8:00 AM</span>
+                        <div class="schedule-content">
+                            <div class="schedule-title">Morning Supplements</div>
+                            <div class="schedule-details">
+                                • Life Extension Neuro-Mag (3 caps = 144mg Mg L-threonate)<br>
+                                • Allergy pill (1 tab)<br>
+                                • Lexapro<br>
+                                <strong>Take with full glass of water on empty stomach</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">8:05 AM</span>
+                        <div class="schedule-content">
+                            <div class="schedule-title">Morning Skin Care</div>
+                            <div class="schedule-details">${day.morning.skincare}</div>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">8:15 AM</span>
+                        <div class="schedule-content">
+                            <div class="schedule-title">Feed Wizzy & Moo, refresh water</div>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">8:45 AM</span>
+                        <div class="schedule-content">
+                            <div class="schedule-title">WORKOUT (30-45 min)</div>
+                            <div class="schedule-details">
+                                <em>Workout details coming soon</em>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">~9:30 AM</span>
+                        <div class="schedule-content">
+                            <div class="schedule-title">Smoothie + Morning Supplements</div>
+                            <div class="schedule-details">
+                                <strong>Smoothie Recipe (~322 cal, ~43g protein):</strong><br>
+                                • 1 cup unsweetened almond milk<br>
+                                • 1.5 tbsp cacao powder (NOT Dutch-processed)<br>
+                                • 1 scoop ON Gold Standard Banana Cream whey<br>
+                                • ~1/2 scoop Vital Proteins chocolate collagen (~12g)<br>
+                                • 5g L-glutamine<br>
+                                • 1 tsp Nature's Way MCT oil<br>
+                                • Optional: 1 cup frozen spinach, 1/2 cup frozen blueberries<br><br>
+                                <strong>Take WITH smoothie:</strong><br>
+                                • Daily multivitamin<br>
+                                • Big dark pill (name TBD)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">10:00 AM</span>
+                        <div class="schedule-content">
+                            <div class="schedule-title">Creatine + Prep to Leave</div>
+                            <div class="schedule-details">
+                                Mix creatine (5g minimum) in water. Head out 10–10:30 AM
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Daytime Routine -->
+            <div class="day-card">
+                <div class="day-header" onclick="this.parentElement.classList.toggle('expanded')">
+                    <div>
+                        <div class="day-name">Daytime Routine (10:30 AM - 7 PM)</div>
+                    </div>
+                    <span class="arrow">&#9660;</span>
+                </div>
+                <div class="day-details">
+                    <div class="schedule-item">
+                        <span class="schedule-time">10:30 AM -<br>1:30 PM</span>
+                        <div class="schedule-content">
+                            <div class="schedule-title">Pet Care Visits</div>
+                            <div class="schedule-details">Client visits<br>Walking between homes counts as steps</div>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">2:00-3:00 PM</span>
+                        <div class="schedule-content">
+                            <div class="schedule-title">Lunch</div>
+                            <div class="schedule-details">Target: ~400-500 cal, protein-focused</div>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">3:00-7:00 PM</span>
+                        <div class="schedule-content">
+                            <div class="schedule-title">Work Block</div>
+                            <div class="schedule-details">Admin, client management, business tasks</div>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">~5:00 PM</span>
+                        <div class="schedule-content">
+                            <div class="schedule-title">Fiber</div>
+                            <div class="schedule-details">Fiber drink (midday, before dinner)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Evening Routine -->
+            <div class="day-card">
+                <div class="day-header" onclick="this.parentElement.classList.toggle('expanded')">
+                    <div>
+                        <div class="day-name">Evening Routine (7 PM - 11 PM)</div>
+                    </div>
+                    <span class="arrow">&#9660;</span>
+                </div>
+                <div class="day-details">
+                    <div class="schedule-item">
+                        <span class="schedule-time">7:15 PM</span>
+                        <div class="schedule-content">
+                            <div class="schedule-title">Start Dinner Prep</div>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">7:30 PM</span>
+                        <div class="schedule-content">
+                            <div class="schedule-title">Dinner + Evening Supplements</div>
+                            <div class="schedule-details">
+                                <strong>Take WITH dinner:</strong><br>
+                                • Mag Glycinate<br>
+                                • Probiotic
+                            </div>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">9:25 PM</span>
+                        <div class="schedule-content">
+                            <div class="schedule-title">Evening Skin Care</div>
+                            <div class="schedule-details">${day.evening.skincare}</div>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">9:30 PM</span>
+                        <div class="schedule-content">
+                            <div class="schedule-title">Dim Lights</div>
+                            <div class="schedule-details">Lamps only. Night mode on screens. Wind down begins</div>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">10:30 PM</span>
+                        <div class="schedule-content">
+                            <div class="schedule-title">Nighttime Meds + Bedtime</div>
+                            <div class="schedule-details">
+                                • Muscle relaxer<br>
+                                • Amitriptyline<br>
+                                Teeth, wind down
+                            </div>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">11:00 PM</span>
+                        <div class="schedule-content">
+                            <div class="schedule-title">Lights Out</div>
+                            <div class="schedule-details">
+                                Phone face down or in another room<br>
+                                <strong>Target: 9 hours sleep (11 PM - 8 AM)</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+        }
+
+        // ===== JOURNAL =====
+        let journalEntries = [];
+        const JOURNAL_PASSWORD_CHARLIE = 'charlie2025';
+
+        function updateJournalDate() {
+            const el = document.getElementById('journalDate');
+            if (!el) return;
+            const d = new Date();
+            const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+            const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+            el.textContent = days[d.getDay()] + ', ' + months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+        }
+
+        function unlockJournal() {
+            const input = document.getElementById('journalPasswordInput');
+            const errorEl = document.getElementById('journalError');
+            if (input.value === JOURNAL_PASSWORD_CHARLIE) {
+                document.getElementById('journalLocked').style.display = 'none';
+                document.getElementById('journalContent').style.display = 'block';
+                updateJournalDate();
+                loadJournalEntries();
+            } else {
+                errorEl.classList.add('show');
+                setTimeout(() => errorEl.classList.remove('show'), 2000);
+            }
+        }
+
+        function saveJournalEntry() {
+            const textarea = document.getElementById('journalTextarea');
+            const text = textarea.value.trim();
+            if (!text) return;
+            const now = new Date();
+            journalEntries.unshift({
+                text: text,
+                date: now.toISOString(),
+                id: 'j_' + Date.now()
+            });
+            textarea.value = '';
+            localStorage.setItem('journalEntries_charlie', JSON.stringify(journalEntries));
+            syncToFirebase('journalEntries_charlie', journalEntries);
+            renderJournalEntries();
+        }
+
+        function deleteJournalEntry(id) {
+            journalEntries = journalEntries.filter(e => e.id !== id);
+            localStorage.setItem('journalEntries_charlie', JSON.stringify(journalEntries));
+            syncToFirebase('journalEntries_charlie', journalEntries);
+            renderJournalEntries();
+        }
+
+        function loadJournalEntries() {
+            const saved = localStorage.getItem('journalEntries_charlie');
+            if (saved) journalEntries = JSON.parse(saved);
+            renderJournalEntries();
+            loadFromFirebase('journalEntries_charlie').then(data => {
+                if (data) {
+                    journalEntries = data;
+                    localStorage.setItem('journalEntries_charlie', JSON.stringify(journalEntries));
+                    renderJournalEntries();
+                } else if (saved) {
+                    syncToFirebase('journalEntries_charlie', journalEntries);
+                }
+            });
+            setupFirebaseListener('journalEntries_charlie', (data) => {
+                journalEntries = data;
+                renderJournalEntries();
+            });
+        }
+
+        function renderJournalEntries() {
+            const container = document.getElementById('journalEntries');
+            if (!container) return;
+            if (journalEntries.length === 0) {
+                container.innerHTML = '<div class="journal-empty">No entries yet. Start writing!</div>';
+                return;
+            }
+            container.innerHTML = '';
+            journalEntries.forEach(entry => {
+                const d = new Date(entry.date);
+                const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+                const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+                const dateStr = days[d.getDay()] + ', ' + months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+                const h = d.getHours(); const m = d.getMinutes();
+                const timeStr = (h > 12 ? h - 12 : h || 12) + ':' + (m < 10 ? '0' : '') + m + ' ' + (h >= 12 ? 'PM' : 'AM');
+                const div = document.createElement('div');
+                div.className = 'journal-entry';
+                div.innerHTML = `
+                    <div class="journal-entry-date">${dateStr} <span class="journal-entry-time">${timeStr}</span></div>
+                    <div class="journal-entry-text">${entry.text}</div>
+                    <button class="journal-entry-delete" onclick="deleteJournalEntry('${entry.id}')">Delete</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // ===== VIDEO DETAIL MODAL =====
+        function openVideoDetail(index, videoUrl) {
+            const video = videos[index];
+            if (!video) return;
+            const modal = document.getElementById('videoDetailModal');
+            document.getElementById('videoDetailTitle').textContent = video.title || 'Untitled';
+            const body = document.getElementById('videoDetailBody');
+            if (videoUrl && video.file) {
+                body.innerHTML = '<video controls autoplay style="max-width:100%;max-height:100%;"><source src="' + videoUrl + '" type="' + (video.file.type || 'video/mp4') + '"></video>';
+            } else if (video.link) {
+                body.innerHTML = '<div style="text-align:center;padding:40px;"><a href="' + video.link + '" target="_blank" style="color:#b59197;font-size:1.1rem;">Open: ' + video.link + '</a></div>';
+            }
+            const tagsEl = document.getElementById('videoDetailTags');
+            tagsEl.innerHTML = (video.tags || []).map(t => '<span class="video-tag">' + t + '</span>').join('');
+            document.getElementById('videoDetailDelete').onclick = function() {
+                deleteVideo(index);
+                closeVideoDetail();
+            };
+            modal.classList.add('active');
+        }
+
+        function closeVideoDetail() {
+            const modal = document.getElementById('videoDetailModal');
+            modal.classList.remove('active');
+            document.getElementById('videoDetailBody').innerHTML = '';
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             loadCustomHabits();
             initBoard();
+            renderDailySchedule();
             loadVideos();
             loadResources();
             loadTodos();
 
             // Restore last active tab
             const savedTab = localStorage.getItem('charlieHub_activeTab');
-            if (savedTab) {
+            if (savedTab && savedTab !== 'wellness') {
                 const tabEl = document.getElementById(savedTab + '-tab');
                 if (tabEl) {
                     document.querySelectorAll('.hub-tab').forEach(t => t.classList.remove('active'));
@@ -2257,6 +2988,7 @@
                     if (dd) dd.value = savedTab;
                     if (savedTab === 'prompt') loadHubPrompt();
                     else if (savedTab === 'resources') renderAllResources();
+                    else if (savedTab === 'journal') { updateJournalDate(); loadJournalEntries(); }
                 }
             }
         });
