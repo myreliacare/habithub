@@ -5054,18 +5054,7 @@ What's on my mind today..."></textarea>
  loadTodos();
  loadFutureTodos();
 
- // Restore last active tab
- const savedTab = localStorage.getItem('kaseyHub_activeTab');
- if (savedTab) {
- const tabEl = document.getElementById(savedTab + '-tab');
- if (tabEl) {
- document.querySelectorAll('.hub-tab').forEach(t => t.classList.remove('active'));
- tabEl.classList.add('active');
- document.getElementById('sectionSelect').value = savedTab;
- if (savedTab === 'prompt') loadHubPrompt();
- else if (savedTab === 'resources') renderAllResources();
- }
- }
+ // Always start on Habits & Wellness tab
  });
  </script>
 
