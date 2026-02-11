@@ -553,37 +553,13 @@
             border: 1px solid var(--border-color);
         }
         
-        /* ===== RESPONSIVE: DESKTOP ===== */
-        @media (min-width: 769px) {
-            .container {
-                max-width: 700px;
-            }
-            .rb-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .modal {
-                max-width: 560px;
-            }
-            .grocery-category {
-                margin-bottom: 10px;
-            }
-            .gen-section {
-                padding: 24px;
-            }
-        }
-
-        /* ===== RESPONSIVE: SMALL MOBILE ===== */
         @media (max-width: 480px) {
             body {
                 padding: 76px 8px 8px;
             }
             
             .header h1 {
-                font-size: 1.8rem;
-            }
-            
-            .container {
-                max-width: 100%;
+                font-size: 2rem;
             }
             
             .calendar {
@@ -593,6 +569,7 @@
             .plan-progress {
                 padding: 10px 12px;
             }
+
 
             .week-grid {
                 gap: 4px;
@@ -613,154 +590,7 @@
             }
             
             .modal {
-                max-height: 85vh;
-            }
-            .modal-container {
-                padding: 10px;
-            }
-
-            .page-tab {
-                padding: 9px 4px;
-                font-size: 0.7rem;
-            }
-
-            .toggle-btn {
-                padding: 8px 14px;
-                font-size: 0.8rem;
-            }
-
-            .goals {
-                gap: 16px;
-                padding: 12px;
-                font-size: 0.8rem;
-            }
-
-            .day-detail {
-                padding: 14px;
-            }
-            .day-header {
-                padding: 10px 12px;
-            }
-            .day-num {
-                font-size: 0.95rem;
-            }
-            .day-theme {
-                font-size: 0.78rem;
-            }
-            .day-header-right {
-                gap: 10px;
-                font-size: 0.7rem;
-            }
-
-            .meal-btn {
-                padding: 12px;
-                gap: 10px;
-            }
-            .meal-icon {
-                width: 34px;
-                height: 34px;
-                font-size: 1rem;
-            }
-            .meal-name {
-                font-size: 0.8rem;
-            }
-            .meal-portion {
-                font-size: 0.7rem;
-            }
-
-            .modal-header {
-                padding: 18px 16px 14px;
-            }
-            .modal-header h3 {
-                font-size: 1.1rem;
-            }
-            .modal-body {
-                padding: 16px;
-            }
-            .modal-section li {
-                font-size: 0.8rem;
-            }
-            .tip-box p {
-                font-size: 0.8rem;
-            }
-
-            .rb-card {
-                padding: 12px;
-            }
-            .rb-card-name {
-                font-size: 0.82rem;
-            }
-            .rb-filter {
-                padding: 6px 10px;
-                font-size: 0.7rem;
-            }
-
-            .gen-section {
-                padding: 14px;
-            }
-            .gen-section h3 {
-                font-size: 0.82rem;
-            }
-            .gen-row {
-                flex-direction: column;
-                gap: 6px;
-            }
-            .gen-label {
-                min-width: auto;
-            }
-            .gen-btn {
-                font-size: 0.9rem;
-                padding: 12px;
-            }
-
-            .diet-tag {
-                font-size: 0.65rem;
-                padding: 3px 8px;
-            }
-
-            .grocery-cat-header {
-                padding: 8px 12px;
-            }
-            .grocery-cat-header h4 {
-                font-size: 0.75rem;
-            }
-            .grocery-item {
-                font-size: 0.72rem;
-                padding: 5px 0;
-            }
-
-            .plan-selector select {
-                font-size: 0.75rem !important;
-            }
-        }
-
-        /* ===== RESPONSIVE: TINY MOBILE ===== */
-        @media (max-width: 360px) {
-            body {
-                padding: 70px 6px 6px;
-            }
-            .header h1 {
-                font-size: 1.5rem;
-            }
-            .page-tab {
-                padding: 8px 2px;
-                font-size: 0.62rem;
-            }
-            .toggle-btn {
-                padding: 7px 10px;
-                font-size: 0.75rem;
-            }
-            .goals {
-                flex-direction: column;
-                gap: 4px;
-                text-align: center;
-            }
-            .day-header {
-                flex-direction: column;
-                text-align: center;
-            }
-            .day-header-left {
-                justify-content: center;
+                max-height: 80vh;
             }
         }
 
@@ -1098,85 +928,6 @@
             color: #b4828c;
         }
 
-        .grocery-category {
-            margin-bottom: 14px;
-            background: var(--card-bg);
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            overflow: hidden;
-        }
-        .grocery-cat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 14px;
-            background: rgba(163,184,153,0.1);
-            cursor: pointer;
-        }
-        .grocery-cat-header h4 {
-            margin: 0;
-            font-size: 0.8rem;
-            color: var(--sage-green);
-            letter-spacing: 0.05em;
-        }
-        .grocery-cat-header span {
-            font-size: 0.65rem;
-            color: rgba(224,210,208,0.4);
-        }
-        .grocery-cat-items {
-            padding: 6px 14px 10px;
-        }
-        .grocery-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 6px 0;
-            border-bottom: 1px solid rgba(224,210,208,0.06);
-            font-size: 0.78rem;
-            color: var(--light-text);
-        }
-        .grocery-item:last-child { border-bottom: none; }
-        .grocery-item input[type="checkbox"] {
-            accent-color: var(--sage-green);
-            flex-shrink: 0;
-        }
-        .grocery-item.checked span {
-            text-decoration: line-through;
-            opacity: 0.4;
-        }
-        .grocery-item .grocery-remove {
-            margin-left: auto;
-            background: none;
-            border: none;
-            color: rgba(180,130,140,0.4);
-            cursor: pointer;
-            font-size: 0.9rem;
-            padding: 0 4px;
-        }
-        .grocery-item .grocery-remove:hover { color: #b4828c; }
-
-        /* Add recipe form */
-        #add-recipe-form input,
-        #add-recipe-form select,
-        #add-recipe-form textarea {
-            font-size: 0.8rem;
-        }
-        @media (max-width: 480px) {
-            #add-recipe-form input,
-            #add-recipe-form select,
-            #add-recipe-form textarea {
-                font-size: 0.75rem;
-                padding: 7px 10px;
-            }
-            #grocery-view h3 {
-                font-size: 0.9rem !important;
-            }
-            #modal-swap-list button {
-                font-size: 0.72rem !important;
-                padding: 8px 10px !important;
-            }
-        }
-
         /* ===== PLAN SELECTOR ===== */
         .plan-selector {
             display: flex;
@@ -1271,7 +1022,6 @@
     <div class="page-tabs">
         <button class="page-tab active" onclick="switchTab('plan')">Plan</button>
         <button class="page-tab" onclick="switchTab('recipes')">Recipes</button>
-        <button class="page-tab" onclick="switchTab('grocery')">Grocery</button>
         <button class="page-tab" onclick="switchTab('generate')">Generate</button>
     </div>
 
@@ -1337,47 +1087,7 @@
             <button class="rb-filter" data-filter="favorites" onclick="setRecipeFilter('favorites', this)">♥ Favs</button>
         </div>
         <div class="rb-count" id="rb-count"></div>
-        <div id="add-recipe-form" style="display:none;margin-bottom:16px;background:var(--card-bg);border-radius:8px;border:1px solid var(--border-color);padding:14px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-                <h4 style="margin:0;color:var(--sage-green);font-size:0.85rem;">Add Custom Recipe</h4>
-                <button onclick="document.getElementById('add-recipe-form').style.display='none'" style="background:none;border:none;color:rgba(224,210,208,0.4);font-size:1.1rem;cursor:pointer;">×</button>
-            </div>
-            <input id="ar-name" placeholder="Recipe name" style="width:100%;padding:8px 10px;margin-bottom:8px;background:rgba(61,47,49,0.6);border:1px solid var(--border-color);border-radius:6px;color:var(--light-text);font-family:'Philosopher',serif;font-size:0.8rem;box-sizing:border-box;">
-            <div style="display:flex;gap:6px;margin-bottom:8px;">
-                <select id="ar-type" style="flex:1;padding:8px;background:rgba(61,47,49,0.6);border:1px solid var(--border-color);border-radius:6px;color:var(--light-text);font-family:'Philosopher',serif;font-size:0.8rem;">
-                    <option value="Breakfast">Breakfast</option>
-                    <option value="Lunch">Lunch</option>
-                    <option value="Dinner" selected>Dinner</option>
-                    <option value="Dessert">Dessert</option>
-                </select>
-                <input id="ar-protein" placeholder="Protein (g)" style="width:70px;padding:8px;background:rgba(61,47,49,0.6);border:1px solid var(--border-color);border-radius:6px;color:var(--light-text);font-family:'Philosopher',serif;font-size:0.8rem;">
-                <input id="ar-cal" placeholder="Calories" style="width:70px;padding:8px;background:rgba(61,47,49,0.6);border:1px solid var(--border-color);border-radius:6px;color:var(--light-text);font-family:'Philosopher',serif;font-size:0.8rem;">
-            </div>
-            <textarea id="ar-ingredients" placeholder="Ingredients (one per line)" style="width:100%;min-height:70px;padding:8px 10px;margin-bottom:8px;background:rgba(61,47,49,0.6);border:1px solid var(--border-color);border-radius:6px;color:var(--light-text);font-family:'Philosopher',serif;font-size:0.78rem;resize:vertical;box-sizing:border-box;"></textarea>
-            <textarea id="ar-steps" placeholder="Steps (one per line)" style="width:100%;min-height:70px;padding:8px 10px;margin-bottom:8px;background:rgba(61,47,49,0.6);border:1px solid var(--border-color);border-radius:6px;color:var(--light-text);font-family:'Philosopher',serif;font-size:0.78rem;resize:vertical;box-sizing:border-box;"></textarea>
-            <input id="ar-tip" placeholder="Tip or note (optional)" style="width:100%;padding:8px 10px;margin-bottom:10px;background:rgba(61,47,49,0.6);border:1px solid var(--border-color);border-radius:6px;color:var(--light-text);font-family:'Philosopher',serif;font-size:0.8rem;box-sizing:border-box;">
-            <button onclick="saveCustomRecipe()" style="width:100%;padding:10px;background:var(--sage-green);color:#1a1a1a;border:none;border-radius:6px;font-family:'Philosopher',serif;font-size:0.8rem;cursor:pointer;font-weight:700;">Save Recipe</button>
-        </div>
-        <button onclick="document.getElementById('add-recipe-form').style.display='block'" id="add-recipe-btn" style="width:100%;padding:10px;margin-bottom:16px;background:rgba(163,184,153,0.1);border:1px dashed rgba(163,184,153,0.3);border-radius:6px;color:#a3b899;font-family:'Philosopher',serif;font-size:0.78rem;cursor:pointer;letter-spacing:0.03em;">+ Add Custom Recipe</button>
         <div class="rb-grid" id="rb-grid"></div>
-    </div>
-
-    <!-- GROCERY LIST VIEW -->
-    <div id="grocery-view" class="tab-view">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-            <h3 style="margin:0;color:var(--light-text);font-size:1rem;">Grocery List</h3>
-            <div style="display:flex;gap:8px;">
-                <button onclick="generateGroceryList()" class="gen-btn" style="font-size:0.75rem;padding:8px 14px;margin:0;">Generate from Plan</button>
-            </div>
-        </div>
-        <div id="grocery-list-content">
-            <div style="color:rgba(224,210,208,0.4);font-size:0.8rem;text-align:center;padding:40px 20px;">
-                Tap "Generate from Plan" to build your grocery list from the current meal plan.
-            </div>
-        </div>
-        <div id="grocery-send-bar" style="display:none;position:sticky;bottom:0;padding:12px 0;background:var(--bg-color);">
-            <button onclick="sendGroceryToHomeHub()" class="gen-btn" style="width:100%;margin:0;background:#a3b899;">Send to Home Hub Grocery List</button>
-        </div>
     </div>
 
     <!-- GENERATE PLAN VIEW -->
@@ -1453,10 +1163,6 @@
                 <p></p>
             </div>
             <div class="portions-row" id="modal-portions"></div>
-            <div id="modal-swap-section" style="display:none;margin-top:12px;">
-                <button id="modal-swap-btn" onclick="showSwapOptions()" style="width:100%;padding:10px;background:rgba(163,184,153,0.15);border:1px solid rgba(163,184,153,0.3);border-radius:6px;color:#a3b899;font-family:'Philosopher',serif;font-size:0.78rem;cursor:pointer;letter-spacing:0.03em;">Swap this meal</button>
-                <div id="modal-swap-list" style="display:none;margin-top:10px;max-height:250px;overflow-y:auto;"></div>
-            </div>
         </div>
     </div>
 </div>
@@ -1673,7 +1379,7 @@ const mealData = {
                 ]
             },
             {
-                day: 3, theme: "Date Night", protein: "116g", calories: "1,270",
+                day: 3, theme: "Date Night 🍽️", protein: "116g", calories: "1,270",
                 meals: [
                     { type: "Breakfast", icon: "🌅", name: "Egg Muffin Cups + Morning Shake", portion: "38g protein - 380 cal", color: "#a3b899",
                         ingredients: ["--- MORNING BOOST SHAKE ---", "1 cup unsweetened almond milk", "1.5 tbsp cacao powder (NOT Dutch-processed)", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "--- EGG MUFFIN CUPS (x2) ---", "2 eggs (from batch of 12)", "1/4 cup chopped spinach (baked in)", "2 tbsp diced onion (baked in)", "2 tbsp shredded cheese (baked in)"],
@@ -1696,7 +1402,7 @@ const mealData = {
                 ]
             },
             {
-                day: 4, theme: "Valentine's Day ❤️", protein: "149g", calories: "1,530", prep: "PREP DAY — Prep Session 2 tonight after dinner",
+                day: 4, theme: "Valentine's Day ♥", protein: "149g", calories: "1,530", prep: "PREP DAY — Prep Session 2 tonight after dinner",
                 meals: [
                     { type: "Breakfast", icon: "🌅", name: "Protein Yogurt Parfait", portion: "30g protein - 350 cal", color: "#a3b899",
                         ingredients: ["1 cup Oikos Triple Zero vanilla Greek yogurt", "1/2 cup fresh strawberries, sliced", "2 tbsp walnuts, chopped", "1 tsp honey drizzle"],
@@ -1713,7 +1419,7 @@ const mealData = {
                     { type: "Dinner", icon: "🌙", name: "Spicy Turkey Enchiladas", portion: "46g protein - 540 cal", color: "#a3b899",
                         ingredients: ["5 oz ground turkey (93% lean)", "1/4 cup diced onion", "2 cloves garlic, minced", "1 tsp cumin", "1 tsp chili powder", "Red pepper flakes", "3 Mission Carb Balance tortillas", "1 cup enchilada sauce", "1/2 cup Mexican blend shredded cheese", "2 tbsp sour cream", "Hot sauce"],
                         steps: ["Preheat oven to 375°F.", "Brown ground turkey with onion, garlic, cumin, chili powder, and red pepper flakes.", "Divide turkey mix between tortillas. Roll up and place seam-down in a baking dish.", "Pour enchilada sauce over. Top with cheese.", "Bake 20 min until bubbly and golden.", "Top with sour cream and hot sauce."],
-                        tip: "Happy Valentine's Day! ❤️ Cumin and chili powder both have anti-inflammatory properties. The carb balance tortillas keep the fiber high. Make a couple extra for Charlie's portions.",
+                        tip: "Happy Valentine's Day! ♥ Cumin and chili powder both have anti-inflammatory properties. The carb balance tortillas keep the fiber high. Make a couple extra for Charlie's portions.",
                         portions: ["46g protein", "540 cal", "8g fiber", "35 min"]
                     },
                     { type: "Dessert", icon: "🍨", name: "Chocolate Avocado Mousse", portion: "3g protein - 170 cal", color: "#c4a882",
@@ -2009,7 +1715,7 @@ const mealData = {
                     { type: "Dessert", icon: "🍨", name: "Berry Crumble for Two", portion: "5g protein - 180 cal", color: "#c4a882",
                         ingredients: ["1.5 cups mixed berries (frozen)", "2 tbsp rolled oats", "1 tbsp chopped walnuts", "1 tsp coconut oil", "1 tsp honey", "Pinch cinnamon", "Dollop Greek yogurt for topping"],
                         steps: ["Place berries in a small oven-safe dish.", "Mix oats, walnuts, coconut oil, honey, cinnamon. Crumble over berries.", "Bake at 375°F for 20-25 min until bubbly and golden.", "Top with Greek yogurt. Celebrate!"],
-                        tip: "You did it! 14 days of eating well. Berries, oats, walnuts, yogurt — every bite is anti-cancer. Now do it again.",
+                        tip: "You did it! 14 days of eating well. Berries, oats, walnuts, yogurt — every bite is anti-cancer. Now do it again. 💪",
                         portions: ["5g protein", "180 cal", "5g fiber", "25 min"]
                     }
                 ]
@@ -2463,7 +2169,7 @@ function renderDayDetail() {
         var prepBanner = document.createElement("div");
         prepBanner.id = "prep-banner";
         prepBanner.style.cssText = "background: rgba(163,184,153,0.15); border: 1px solid rgba(163,184,153,0.3); border-radius: 6px; padding: 10px 14px; margin-bottom: 12px; font-size: 0.8rem; color: #a3b899; text-align: center; letter-spacing: 0.03em; cursor: pointer; transition: background 0.2s;";
-        prepBanner.innerHTML = "" + day.prep + ' <span style="opacity:0.6; margin-left:6px;">tap for details ›</span>';
+        prepBanner.innerHTML = day.prep + ' <span style="opacity:0.6; margin-left:6px;">tap for details ›</span>';
         prepBanner.onmouseenter = function() { this.style.background = "rgba(163,184,153,0.25)"; };
         prepBanner.onmouseleave = function() { this.style.background = "rgba(163,184,153,0.15)"; };
         prepBanner.onclick = function() {
@@ -2506,7 +2212,7 @@ function renderDayDetail() {
         });
     } else {
         // Render day meals
-        day.meals.forEach(function(meal, mi) {
+        day.meals.forEach(function(meal) {
             var btn = document.createElement("button");
             btn.className = "meal-btn";
             var iconMap = { "sun": "\u2600\uFE0F", "moon": "\uD83C\uDF19", "star": "\u2728", "dessert": "\uD83C\uDF68" };
@@ -2518,7 +2224,7 @@ function renderDayDetail() {
                     '<div class="meal-portion">' + meal.portion + '</div>' +
                 '</div>' +
                 '<div class="meal-arrow">\u203A</div>';
-            btn.onclick = (function(m, idx) { return function() { openModal(m, idx); }; })(meal, mi);
+            btn.onclick = (function(m) { return function() { openModal(m); }; })(meal);
             container.appendChild(btn);
         });
         
@@ -2536,36 +2242,10 @@ function renderDayDetail() {
             '<div class="meal-arrow" style="color:#a3b899">\u203A</div>';
         snackBtn.onclick = function() { showingSnacks = true; render(); };
         container.appendChild(snackBtn);
-        
-        // Day notes
-        var notesDiv = document.createElement("div");
-        notesDiv.style.cssText = "margin-top: 16px; padding-top: 12px; border-top: 1px solid rgba(224,210,208,0.08);";
-        var noteKey = 'dayNote_' + currentPlanIndex + '_' + currentDay + '_' + currentPerson;
-        var savedNote = localStorage.getItem(noteKey) || '';
-        notesDiv.innerHTML = '<div style="font-size:0.65rem;color:rgba(224,210,208,0.35);letter-spacing:0.1em;margin-bottom:6px;text-transform:uppercase;">Day Notes</div>' +
-            '<textarea id="day-note-input" placeholder="How did today go? Any swaps, skips, or wins..." style="width:100%;min-height:60px;padding:10px;background:rgba(61,47,49,0.4);border:1px solid var(--border-color);border-radius:6px;color:var(--light-text);font-family:\'Philosopher\',serif;font-size:0.78rem;resize:vertical;box-sizing:border-box;">' + savedNote + '</textarea>';
-        container.appendChild(notesDiv);
-        
-        // Auto-save on input
-        setTimeout(function() {
-            var ta = document.getElementById('day-note-input');
-            if (ta) {
-                ta.addEventListener('input', function() {
-                    localStorage.setItem(noteKey, this.value);
-                    saveDayNotesToFirebase();
-                });
-            }
-        }, 50);
     }
 }
 
-var currentModalMeal = null;
-var currentModalMealIndex = -1;
-
-function openModal(meal, mealIndex) {
-    currentModalMeal = meal;
-    currentModalMealIndex = (typeof mealIndex === 'number') ? mealIndex : -1;
-    
+function openModal(meal) {
     var modal = document.getElementById("modal");
     var header = document.getElementById("modal-header");
     header.style.background = meal.color || "#a3b899";
@@ -2606,88 +2286,11 @@ function openModal(meal, mealIndex) {
         portions.innerHTML += '<span class="portion-tag">' + p + '</span>';
     });
     
-    // Show swap button only for plan meals (not snacks or prep sessions)
-    var swapSection = document.getElementById('modal-swap-section');
-    var swapList = document.getElementById('modal-swap-list');
-    if (swapSection) {
-        swapSection.style.display = (currentModalMealIndex >= 0 && meal.type) ? 'block' : 'none';
-        swapList.style.display = 'none';
-    }
-    
     modal.classList.add("active");
 }
 
 function closeModal() {
     document.getElementById("modal").classList.remove("active");
-}
-
-function showSwapOptions() {
-    if (!currentModalMeal || currentModalMealIndex < 0) return;
-    var swapList = document.getElementById('modal-swap-list');
-    var mealType = currentModalMeal.type; // Breakfast, Lunch, Dinner, Dessert
-    
-    // Find alternatives from recipe bank
-    var alternatives = [];
-    var currentName = currentModalMeal.name;
-    
-    // First check recipe bank
-    recipeBank.forEach(function(recipe) {
-        if (recipe.name === currentName) return;
-        if (recipe.type === mealType) {
-            alternatives.push(recipe);
-        }
-    });
-    
-    // Also check all meals in the current plan for same type
-    var data = getData();
-    var seen = {};
-    seen[currentName] = true;
-    data.days.forEach(function(day) {
-        day.meals.forEach(function(m) {
-            if (m.type === mealType && !seen[m.name] && m.ingredients) {
-                seen[m.name] = true;
-                alternatives.push(m);
-            }
-        });
-    });
-    
-    if (alternatives.length === 0) {
-        swapList.innerHTML = '<div style="padding:12px;text-align:center;color:rgba(224,210,208,0.4);font-size:0.75rem;">No alternatives found. Add more recipes to your bank!</div>';
-        swapList.style.display = 'block';
-        return;
-    }
-    
-    var html = '<div style="font-size:0.65rem;color:rgba(224,210,208,0.35);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">Pick a replacement:</div>';
-    alternatives.forEach(function(alt, i) {
-        html += '<button onclick="swapMeal(' + i + ')" style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:10px 12px;margin-bottom:4px;background:rgba(61,47,49,0.5);border:1px solid var(--border-color);border-radius:6px;color:var(--light-text);font-family:\'Philosopher\',serif;font-size:0.78rem;cursor:pointer;text-align:left;">' +
-            '<span>' + alt.name + '</span>' +
-            '<span style="opacity:0.5;font-size:0.7rem;">' + (alt.portion || '') + '</span>' +
-            '</button>';
-    });
-    
-    swapList.innerHTML = html;
-    swapList.style.display = 'block';
-    
-    // Store alternatives for selection
-    window._swapAlternatives = alternatives;
-}
-
-function swapMeal(altIndex) {
-    var alt = window._swapAlternatives[altIndex];
-    if (!alt || currentModalMealIndex < 0) return;
-    
-    var data = getData();
-    var day = data.days[currentDay - 1];
-    
-    // Replace the meal
-    day.meals[currentModalMealIndex] = JSON.parse(JSON.stringify(alt));
-    
-    // Save to Firebase
-    saveAllPlansToFirebase();
-    
-    // Close modal and re-render
-    closeModal();
-    render();
 }
 
 document.getElementById("modal").addEventListener("click", function(e) {
@@ -2802,54 +2405,6 @@ function guessCuisine(name, ingredients) {
     if (n.match(/smoothie|oats|parfait|muffin/)) tags.push('American');
     if (tags.length === 0) tags.push('American');
     return tags;
-}
-
-function saveCustomRecipe() {
-    var name = document.getElementById('ar-name').value.trim();
-    var type = document.getElementById('ar-type').value;
-    var protein = parseInt(document.getElementById('ar-protein').value) || 0;
-    var cal = parseInt(document.getElementById('ar-cal').value) || 0;
-    var ingredientsRaw = document.getElementById('ar-ingredients').value.trim();
-    var stepsRaw = document.getElementById('ar-steps').value.trim();
-    var tip = document.getElementById('ar-tip').value.trim();
-    
-    if (!name) { alert('Please enter a recipe name.'); return; }
-    if (!ingredientsRaw) { alert('Please enter at least one ingredient.'); return; }
-    
-    var ingredients = ingredientsRaw.split('\n').map(function(s) { return s.trim(); }).filter(Boolean);
-    var steps = stepsRaw ? stepsRaw.split('\n').map(function(s) { return s.trim(); }).filter(Boolean) : ['Prepare as desired.'];
-    
-    var recipe = {
-        id: 'r_custom_' + Date.now() + '_' + Math.random().toString(36).substr(2,6),
-        name: name,
-        type: type,
-        protein: protein,
-        calories: cal,
-        prepTime: 0,
-        ingredients: ingredients,
-        steps: steps,
-        tip: tip || '',
-        portion: protein + 'g protein - ' + cal + ' cal',
-        portions: [protein + 'g protein', cal + ' cal'],
-        color: type === 'Dessert' ? '#c4a882' : '#a3b899',
-        cuisineTags: guessCuisine(name, ingredients),
-        favorite: false,
-        timesUsed: 0,
-        source: 'custom'
-    };
-    
-    recipeBank.push(recipe);
-    saveRecipeBankToFirebase();
-    renderRecipeBank();
-    
-    // Clear form
-    document.getElementById('ar-name').value = '';
-    document.getElementById('ar-protein').value = '';
-    document.getElementById('ar-cal').value = '';
-    document.getElementById('ar-ingredients').value = '';
-    document.getElementById('ar-steps').value = '';
-    document.getElementById('ar-tip').value = '';
-    document.getElementById('add-recipe-form').style.display = 'none';
 }
 
 function setRecipeFilter(filter, btn) {
@@ -3017,223 +2572,6 @@ function removeDietTag(index) {
 
 function getDietaryRestrictionsForPrompt() {
     return dietaryReminders.join('. ') + '.';
-}
-
-// ===== DAY NOTES =====
-var dayNotesSaveTimer = null;
-function saveDayNotesToFirebase() {
-    clearTimeout(dayNotesSaveTimer);
-    dayNotesSaveTimer = setTimeout(function() {
-        if (!window.db) return;
-        // Collect all day notes from localStorage
-        var allNotes = {};
-        for (var i = 0; i < localStorage.length; i++) {
-            var key = localStorage.key(i);
-            if (key.indexOf('dayNote_') === 0) {
-                allNotes[key] = localStorage.getItem(key);
-            }
-        }
-        try {
-            var imports = window.firestoreImports;
-            imports.setDoc(imports.doc(window.db, 'mealPlanData', 'dayNotes'), { notes: allNotes });
-        } catch(e) { console.error('Day notes save error:', e); }
-    }, 1500); // Debounce 1.5s
-}
-
-function loadDayNotesFromFirebase() {
-    if (!window.db) return;
-    try {
-        var imports = window.firestoreImports;
-        imports.getDoc(imports.doc(window.db, 'mealPlanData', 'dayNotes')).then(function(snap) {
-            if (snap.exists() && snap.data().notes) {
-                var notes = snap.data().notes;
-                Object.keys(notes).forEach(function(key) {
-                    if (!localStorage.getItem(key)) {
-                        localStorage.setItem(key, notes[key]);
-                    }
-                });
-            }
-        });
-    } catch(e) { console.error('Day notes load error:', e); }
-}
-
-// ===== GROCERY LIST =====
-var groceryData = [];
-
-var GROCERY_CATEGORIES = {
-    'Produce': ['spinach','baby spinach','onion','garlic','lemon','lime','carrots','carrot','strawberries','strawberry','blueberries','blueberry','berries','banana','apple','mango','pineapple','avocado','cilantro','parsley','basil','ginger','jalapeño','tomato','tomatoes','lettuce','arugula','kale','zucchini','cucumber','celery','bell pepper','broccoli','cauliflower','sweet potato','potato','green onion','scallion','fresh'],
-    'Protein': ['chicken','turkey','beef','salmon','shrimp','fish','egg','eggs','ground turkey','ground beef','chicken breast','pork','steak','tuna','sausage','bacon'],
-    'Dairy': ['cheese','yogurt','greek yogurt','milk','almond milk','sour cream','cream','butter','feta','parmesan','mozzarella','string cheese','coconut milk','cream cheese'],
-    'Grains & Bread': ['rice','brown rice','oats','rolled oats','farro','quinoa','tortilla','tortillas','bread','spaghetti','pasta','noodle','pita','wrap','bun'],
-    'Canned & Jarred': ['black beans','cannellini','chickpeas','beans','marinara','salsa','chipotle','adobo','roasted red pepper','tomato sauce','broth','coconut milk','olives','corn'],
-    'Frozen': ['frozen berries','frozen blueberries','frozen mixed berries','riced cauliflower','frozen'],
-    'Spices & Oils': ['olive oil','cumin','chili powder','garlic powder','oregano','cinnamon','paprika','red pepper flakes','italian seasoning','salt','pepper','cayenne','turmeric','nutmeg','vanilla','honey','maple syrup','soy sauce','hot sauce','vinegar','sesame oil','mct oil'],
-    'Baking & Snacks': ['chocolate','dark chocolate','walnuts','almonds','chia seeds','flaxseed','hemp hearts','cocoa','cacao','protein powder','whey','collagen','peanut butter','almond butter','trail mix'],
-    'Supplements': ['collagen','l-glutamine','mct oil','vital proteins','whey']
-};
-
-function categorizeIngredient(text) {
-    var lower = text.toLowerCase();
-    // Skip section headers
-    if (lower.indexOf('---') !== -1) return null;
-    // Skip prep references
-    if (lower.indexOf('from prep') !== -1 || lower.indexOf('from batch') !== -1 || lower.indexOf('from session') !== -1) {
-        // Still include but mark it
-    }
-    // Check each category
-    var scores = {};
-    Object.keys(GROCERY_CATEGORIES).forEach(function(cat) {
-        scores[cat] = 0;
-        GROCERY_CATEGORIES[cat].forEach(function(keyword) {
-            if (lower.indexOf(keyword) !== -1) {
-                scores[cat] += keyword.length; // longer match = more specific
-            }
-        });
-    });
-    var best = 'Other';
-    var bestScore = 0;
-    Object.keys(scores).forEach(function(cat) {
-        if (scores[cat] > bestScore) {
-            bestScore = scores[cat];
-            best = cat;
-        }
-    });
-    return best;
-}
-
-function generateGroceryList() {
-    var ingredients = {};
-    var data = getData();
-    
-    // Extract from all meals (Kasey's plan - portions are Kasey-sized)
-    // We'll note that prep sessions have combined amounts already
-    data.days.forEach(function(day) {
-        day.meals.forEach(function(meal) {
-            if (!meal.ingredients) return;
-            meal.ingredients.forEach(function(ing) {
-                if (ing.indexOf('---') !== -1) return;
-                var clean = ing.trim();
-                if (!clean) return;
-                // Create a normalized key for dedup
-                var key = clean.toLowerCase().replace(/[^a-z ]/g, '').replace(/\s+/g, ' ').trim();
-                if (!ingredients[key]) {
-                    ingredients[key] = { text: clean, count: 1, category: categorizeIngredient(clean) };
-                } else {
-                    ingredients[key].count++;
-                }
-            });
-        });
-    });
-    
-    // Also extract from prep sessions for combined amounts
-    Object.keys(prepSessions).forEach(function(dayKey) {
-        var session = prepSessions[dayKey];
-        session.ingredients.forEach(function(ing) {
-            if (ing.indexOf('---') !== -1) return;
-            var clean = ing.trim();
-            if (!clean) return;
-            var key = 'prep_' + clean.toLowerCase().replace(/[^a-z ]/g, '').replace(/\s+/g, ' ').trim();
-            if (!ingredients[key]) {
-                ingredients[key] = { text: '(prep) ' + clean, count: 1, category: categorizeIngredient(clean), isPrep: true };
-            }
-        });
-    });
-    
-    // Group by category
-    var grouped = {};
-    Object.keys(ingredients).forEach(function(key) {
-        var item = ingredients[key];
-        var cat = item.category || 'Other';
-        if (!grouped[cat]) grouped[cat] = [];
-        grouped[cat].push(item);
-    });
-    
-    // Sort categories
-    var categoryOrder = ['Produce', 'Protein', 'Dairy', 'Grains & Bread', 'Canned & Jarred', 'Frozen', 'Spices & Oils', 'Baking & Snacks', 'Supplements', 'Other'];
-    
-    groceryData = [];
-    var html = '';
-    categoryOrder.forEach(function(cat) {
-        if (!grouped[cat] || grouped[cat].length === 0) return;
-        var items = grouped[cat];
-        items.sort(function(a, b) { return a.text.localeCompare(b.text); });
-        
-        html += '<div class="grocery-category">';
-        html += '<div class="grocery-cat-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display===\'none\'?\'block\':\'none\'">';
-        html += '<h4>' + cat + '</h4>';
-        html += '<span>' + items.length + ' items</span>';
-        html += '</div>';
-        html += '<div class="grocery-cat-items">';
-        items.forEach(function(item) {
-            var idx = groceryData.length;
-            groceryData.push({ text: item.text, checked: false, category: cat });
-            html += '<div class="grocery-item" id="gi-' + idx + '">';
-            html += '<input type="checkbox" onchange="toggleGroceryItem(' + idx + ')">';
-            html += '<span>' + item.text + (item.count > 2 ? ' <em style=\"opacity:0.4;font-size:0.65rem;\">×' + item.count + ' meals</em>' : '') + '</span>';
-            html += '<button class="grocery-remove" onclick="removeGroceryItem(' + idx + ')">×</button>';
-            html += '</div>';
-        });
-        html += '</div></div>';
-    });
-    
-    document.getElementById('grocery-list-content').innerHTML = html;
-    document.getElementById('grocery-send-bar').style.display = 'block';
-}
-
-function toggleGroceryItem(idx) {
-    groceryData[idx].checked = !groceryData[idx].checked;
-    var el = document.getElementById('gi-' + idx);
-    if (el) el.classList.toggle('checked');
-}
-
-function removeGroceryItem(idx) {
-    var el = document.getElementById('gi-' + idx);
-    if (el) el.remove();
-    groceryData[idx] = null;
-}
-
-function sendGroceryToHomeHub() {
-    // Build items in the format the index page expects: { text, completed: false }
-    var items = [];
-    var categoryOrder = ['Produce', 'Protein', 'Dairy', 'Grains & Bread', 'Canned & Jarred', 'Frozen', 'Spices & Oils', 'Baking & Snacks', 'Supplements', 'Other'];
-    
-    categoryOrder.forEach(function(cat) {
-        var catItems = groceryData.filter(function(item) {
-            return item && !item.checked && item.category === cat;
-        });
-        if (catItems.length > 0) {
-            // Add category header
-            items.push({ text: '── ' + cat.toUpperCase() + ' ──', completed: false });
-            catItems.forEach(function(item) {
-                items.push({ text: item.text.replace('(prep) ', ''), completed: false });
-            });
-        }
-    });
-    
-    // Save to localStorage (same key the index page uses)
-    localStorage.setItem('groceries', JSON.stringify(items));
-    
-    // Also save to Firebase if available
-    if (window.db) {
-        try {
-            var setDoc = window.firestoreImports.setDoc;
-            var doc = window.firestoreImports.doc;
-            setDoc(doc(window.db, 'groceries', 'data'), { items: items })
-                .then(function() { console.log('Groceries synced to Firebase'); })
-                .catch(function(e) { console.error('Firebase grocery sync error:', e); });
-        } catch(e) {
-            console.error('Firebase grocery error:', e);
-        }
-    }
-    
-    // Visual feedback
-    var btn = document.querySelector('#grocery-send-bar button');
-    btn.textContent = '✓ Sent to Home Hub!';
-    btn.style.background = '#7d8f76';
-    setTimeout(function() {
-        btn.textContent = 'Send to Home Hub Grocery List';
-        btn.style.background = '#a3b899';
-    }, 2500);
 }
 
 function initGenerateView() {
@@ -3626,7 +2964,6 @@ try {
             if (typeof window.renderPlanSelector === 'function') window.renderPlanSelector();
         });
     }
-    if (typeof window.loadDayNotesFromFirebase === 'function') window.loadDayNotesFromFirebase();
 } catch(e) {
     console.log('Firebase init failed, using localStorage fallback', e);
 }
