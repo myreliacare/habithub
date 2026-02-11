@@ -3326,6 +3326,8 @@ What's on my mind today..."></textarea>
  function switchTab(e, tab) {
  document.querySelectorAll('.hub-tab').forEach(t => t.classList.remove('active'));
  document.getElementById(`${tab}-tab`).classList.add('active');
+ document.getElementById('sectionSelect').value = tab;
+ localStorage.setItem('kaseyHub_activeTab', tab);
 
  if (tab === 'prompt') loadHubPrompt();
  else if (tab === 'resources') renderAllResources();
@@ -3337,6 +3339,7 @@ What's on my mind today..."></textarea>
  
  document.querySelectorAll('.hub-tab').forEach(t => t.classList.remove('active'));
  document.getElementById(`${selectedTab}-tab`).classList.add('active');
+ localStorage.setItem('kaseyHub_activeTab', selectedTab);
 
  if (selectedTab === 'prompt') loadHubPrompt();
  else if (selectedTab === 'resources') renderAllResources();
@@ -3986,13 +3989,42 @@ What's on my mind today..."></textarea>
  }
 
  if (blobUrl) {
- // Use a muted video element as the thumbnail preview
+ // Generate thumbnail via canvas for cross-browser compatibility
+ const thumbId = 'vthumb_' + index;
  thumb.innerHTML = `
- <video muted preload="metadata" src="${blobUrl}#t=0.5" style="pointer-events:none;"></video>
+ <canvas id="${thumbId}" style="width:100%;height:100%;object-fit:cover;display:block;"></canvas>
  <div class="video-thumb-play"></div>
  <div class="video-thumb-overlay">${video.title || ''}</div>
  `;
  thumb.onclick = () => openVideoDetail(index, blobUrl);
+ list.appendChild(thumb);
+
+ // Async thumbnail generation
+ (function(url, canvasId) {
+ const tempVid = document.createElement('video');
+ tempVid.muted = true;
+ tempVid.preload = 'auto';
+ tempVid.addEventListener('loadeddata', function() {
+ tempVid.currentTime = 0.5;
+ });
+ tempVid.addEventListener('seeked', function() {
+ try {
+ const canvas = document.getElementById(canvasId);
+ if (canvas) {
+ const size = Math.min(tempVid.videoWidth, tempVid.videoHeight) || 200;
+ canvas.width = size;
+ canvas.height = size;
+ const ctx = canvas.getContext('2d');
+ // Center-crop
+ const sx = (tempVid.videoWidth - size) / 2;
+ const sy = (tempVid.videoHeight - size) / 2;
+ ctx.drawImage(tempVid, sx, sy, size, size, 0, 0, size, size);
+ }
+ } catch(e) {}
+ });
+ tempVid.src = url;
+ })(blobUrl, thumbId);
+ continue;
  } else {
  thumb.innerHTML = `
  <div class="video-link-thumb">
@@ -4799,6 +4831,19 @@ What's on my mind today..."></textarea>
  loadResources();
  loadTodos();
  loadFutureTodos();
+
+ // Restore last active tab
+ const savedTab = localStorage.getItem('kaseyHub_activeTab');
+ if (savedTab) {
+ const tabEl = document.getElementById(savedTab + '-tab');
+ if (tabEl) {
+ document.querySelectorAll('.hub-tab').forEach(t => t.classList.remove('active'));
+ tabEl.classList.add('active');
+ document.getElementById('sectionSelect').value = savedTab;
+ if (savedTab === 'prompt') loadHubPrompt();
+ else if (savedTab === 'resources') renderAllResources();
+ }
+ }
  });
  </script>
 
