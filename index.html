@@ -444,6 +444,25 @@
         }
         .event-title { color: #f2ebe0; font-size: 0.9rem; margin-bottom: 2px; font-weight: 600; }
         .event-note { color: rgba(242, 235, 224, 0.5); font-size: 0.8rem; font-style: italic; }
+
+        /* Event check-off */
+        .event-check {
+            width: 18px; height: 18px; min-width: 18px; border-radius: 50%;
+            border: 1.5px solid rgba(163, 184, 153, 0.5); background: transparent;
+            cursor: pointer; margin-right: 10px; margin-top: 2px;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s ease; flex-shrink: 0; padding: 0;
+        }
+        .event-check:hover { border-color: #a3b899; background: rgba(163, 184, 153, 0.15); }
+        .event-check.checked {
+            background: rgba(163, 184, 153, 0.3); border-color: #a3b899;
+        }
+        .event-check.checked::after {
+            content: '✓'; font-size: 0.6rem; color: #a3b899; line-height: 1;
+        }
+        .event-item.done { opacity: 0.45; }
+        .event-item.done .event-title { text-decoration: line-through; }
+        .event-item.done .event-note { text-decoration: line-through; }
         
         /* Event Action Buttons */
         .event-actions {
@@ -2541,13 +2560,16 @@ button, .btn, a, .nav-refresh {
         }
 
         // Helper function to render an event (handles both regular and CRM events)
-        function renderEventHTML(event, eventIndex) {
+        function renderEventHTML(event, eventIndex, dateStr) {
             const displayTime = event.time ? formatTime12Hour(event.time) : '';
             const heartEmoji = event.fromCRM ? ' 💗' : '';
-            const itemClass = event.fromCRM ? 'event-item crm-event' : 'event-item';
+            const isDone = isEventDone(eventIndex, dateStr);
+            const itemClass = (event.fromCRM ? 'event-item crm-event' : 'event-item') + (isDone ? ' done' : '');
+            const checkClass = 'event-check' + (isDone ? ' checked' : '');
             
             return `
                 <div class="${itemClass}">
+                    <button class="${checkClass}" onclick="toggleEventDone(${eventIndex}, '${dateStr}')" aria-label="Mark done"></button>
                     <div style="flex: 1;">
                         <div class="event-title">${displayTime ? displayTime + ' - ' : ''}${event.title}${heartEmoji}</div>
                         ${event.note ? `<div class="event-note">${event.note}</div>` : ''}
@@ -2558,6 +2580,39 @@ button, .btn, a, .nav-refresh {
                     </div>
                 </div>
             `;
+        }
+
+        // Event completion tracking (per date)
+        function getEventCompletions() {
+            try {
+                return JSON.parse(localStorage.getItem('eventCompletions') || '{}');
+            } catch { return {}; }
+        }
+
+        function isEventDone(eventIndex, dateStr) {
+            const completions = getEventCompletions();
+            const key = eventIndex + ':' + dateStr;
+            return !!completions[key];
+        }
+
+        async function toggleEventDone(eventIndex, dateStr) {
+            const completions = getEventCompletions();
+            const key = eventIndex + ':' + dateStr;
+            if (completions[key]) {
+                delete completions[key];
+            } else {
+                completions[key] = true;
+            }
+            localStorage.setItem('eventCompletions', JSON.stringify(completions));
+            await syncToFirebase('eventCompletions', completions);
+            calendarRender();
+        }
+
+        async function loadEventCompletions() {
+            const firebaseData = await loadFromFirebase('eventCompletions');
+            if (firebaseData) {
+                localStorage.setItem('eventCompletions', JSON.stringify(firebaseData));
+            }
         }
 
         function calendarRenderTwoDay() {
@@ -2585,12 +2640,13 @@ button, .btn, a, .nav-refresh {
                 }
                 
                 const dayEvents = calendarGetEventsForDate(date);
+                const dateStr = date.toISOString().split('T')[0];
                 
                 let eventsHTML = '';
                 if (dayEvents.length > 0) {
                     dayEvents.forEach((event) => {
                         const eventIndex = calendarEvents.indexOf(event);
-                        eventsHTML += renderEventHTML(event, eventIndex);
+                        eventsHTML += renderEventHTML(event, eventIndex, dateStr);
                     });
                 } else {
                     eventsHTML = '<div class="empty-state">No events</div>';
@@ -2634,12 +2690,13 @@ button, .btn, a, .nav-refresh {
                 }
                 
                 const dayEvents = calendarGetEventsForDate(date);
+                const dateStr = date.toISOString().split('T')[0];
                 
                 let eventsHTML = '';
                 if (dayEvents.length > 0) {
                     dayEvents.forEach((event) => {
                         const eventIndex = calendarEvents.indexOf(event);
-                        eventsHTML += renderEventHTML(event, eventIndex);
+                        eventsHTML += renderEventHTML(event, eventIndex, dateStr);
                     });
                 } else {
                     eventsHTML = '<div class="empty-state">No events</div>';
@@ -4019,6 +4076,11 @@ button, .btn, a, .nav-refresh {
                 lifeReminders = data;
                 updateReminderDisplay();
             });
+            
+            setupFirebaseListener('eventCompletions', (data) => {
+                localStorage.setItem('eventCompletions', JSON.stringify(data));
+                calendarRender();
+            });
         }
 
         // Initialize everything
@@ -4054,6 +4116,8 @@ button, .btn, a, .nav-refresh {
                 
                 await loadContacts();
                 // console.log('Contacts loaded');
+                
+                await loadEventCompletions();
                 
                 await loadHeaderPhoto();
                 // console.log('Header photo loaded');
