@@ -2696,6 +2696,7 @@
             daytime: [
                 { id:'cd1', time:'10:30-1:30', title:'Pet Care Visits', details:'Client visits\nWalking between homes counts as steps' },
                 { id:'cd2', time:'2:00-3:00 PM', title:'Lunch', details:'Target: ~400-500 cal, protein-focused' },
+                { id:'cd5', time:'~3:00 PM', title:'Journal (5-10 min)', details:'Check today\'s prompt and write what comes up' },
                 { id:'cd3', time:'3:00-7:00 PM', title:'Work Block', details:'Admin, client management, business tasks' },
                 { id:'cd4', time:'~5:00 PM', title:'Fiber', details:'Fiber drink (midday, before dinner)' }
             ],
@@ -2763,6 +2764,9 @@
                     var details = (item.details || '').replace(/\n/g, '<br>');
                     if (item.title.toLowerCase().indexOf('dinner prep') !== -1) {
                         details = '<a href="meal-plan.html" style="display:inline-block;background:#a3b899;color:#1c1c1c;padding:8px 18px;text-decoration:none;font-weight:600;font-size:0.85rem;margin-bottom:6px;">View Tonight\'s Meal Plan</a>' + (details ? '<br>' + details : '');
+                    }
+                    if (item.title.toLowerCase().indexOf('journal') !== -1) {
+                        details = '<a onclick="document.getElementById(\'sectionDropdown\').value=\'journal\';switchTabFromDropdown();" style="display:inline-block;background:#a3b899;color:#1c1c1c;padding:8px 18px;text-decoration:none;font-weight:600;font-size:0.85rem;margin-bottom:6px;cursor:pointer;">Open Journal</a>' + (details ? '<br>' + details : '');
                     }
                     h += '<div class="schedule-item"><span class="schedule-time">' + item.time + '</span><div class="schedule-content"><div class="schedule-title">' + item.title + '</div>';
                     if (details) h += '<div class="schedule-details">' + details + '</div>';
@@ -3010,23 +3014,7 @@
             loadResources();
             loadTodos();
 
-            // Restore last active tab
-            const savedTab = localStorage.getItem('charlieHub_activeTab');
-            if (savedTab && savedTab !== 'wellness') {
-                const tabEl = document.getElementById(savedTab + '-tab');
-                if (tabEl) {
-                    document.querySelectorAll('.hub-tab').forEach(t => t.classList.remove('active'));
-                    tabEl.classList.add('active');
-                    const dd = document.getElementById('sectionDropdown');
-                    if (dd) dd.value = savedTab;
-                    if (savedTab === 'prompt') loadHubPrompt();
-                    else if (savedTab === 'resources') renderAllResources();
-                    else if (savedTab === 'journal') {
-                        document.getElementById('journalLocked').style.display = 'flex';
-                        document.getElementById('journalContent').style.display = 'none';
-                    }
-                }
-            }
+            // Always start on Habits & Wellness tab
         });
     </script>
 <script>
