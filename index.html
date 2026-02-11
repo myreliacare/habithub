@@ -4151,9 +4151,31 @@ button, .btn, a, .nav-refresh {
         let photoEditMode = false;
 
         async function loadHeaderPhoto() {
-            const savedPhoto = await loadFromFirebase('headerPhoto');
-            if (savedPhoto && savedPhoto.data) {
-                displayPhoto(savedPhoto.data, savedPhoto.position, savedPhoto.scale);
+            // Don't load if we're actively saving a new photo
+            if (_photoSaving) return;
+            
+            const localRaw = localStorage.getItem('headerPhoto');
+            const localPhoto = localRaw ? JSON.parse(localRaw) : null;
+            const firebasePhoto = await loadFromFirebase('headerPhoto');
+            
+            // Use whichever is newer, or whichever exists
+            let photo = null;
+            if (firebasePhoto && firebasePhoto.data && localPhoto && localPhoto.data) {
+                const fbTime = new Date(firebasePhoto.uploaded || 0).getTime();
+                const localTime = new Date(localPhoto.uploaded || 0).getTime();
+                photo = localTime >= fbTime ? localPhoto : firebasePhoto;
+                // Sync the winner back
+                if (localTime > fbTime) {
+                    syncToFirebase('headerPhoto', localPhoto);
+                } else if (fbTime > localTime) {
+                    localStorage.setItem('headerPhoto', JSON.stringify(firebasePhoto));
+                }
+            } else {
+                photo = (firebasePhoto && firebasePhoto.data) ? firebasePhoto : localPhoto;
+            }
+            
+            if (photo && photo.data) {
+                displayPhoto(photo.data, photo.position, photo.scale);
             }
         }
 
@@ -4209,21 +4231,43 @@ button, .btn, a, .nav-refresh {
                 return;
             }
             
-            const reader = new FileReader();
-            reader.onload = async function(event) {
-                photoPosition = { x: 0, y: 0 };
-                photoScale = 1.5;
-                
-                displayPhoto(event.target.result, photoPosition, photoScale);
-                await savePhotoData(event.target.result);
-                // Auto-enter edit mode so they can reposition the new photo
-                enterPhotoEditMode();
-            };
+            // Compress image to stay under Firestore 1MB limit
+            const compressed = await compressImage(file, 600, 0.7);
             
-            reader.readAsDataURL(file);
+            photoPosition = { x: 0, y: 0 };
+            photoScale = 1.5;
+            
+            displayPhoto(compressed, photoPosition, photoScale);
+            await savePhotoData(compressed);
+            // Auto-enter edit mode so they can reposition the new photo
+            enterPhotoEditMode();
         }
 
+        function compressImage(file, maxSize, quality) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        let w = img.width, h = img.height;
+                        if (w > h && w > maxSize) { h = h * maxSize / w; w = maxSize; }
+                        else if (h > maxSize) { w = w * maxSize / h; h = maxSize; }
+                        canvas.width = w;
+                        canvas.height = h;
+                        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                        resolve(canvas.toDataURL('image/jpeg', quality));
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        let _photoSaving = false;
+
         async function savePhotoData(dataUrl = null) {
+            _photoSaving = true;
             const img = document.getElementById('headerPhoto');
             const photoData = {
                 data: dataUrl || img.src,
@@ -4234,6 +4278,7 @@ button, .btn, a, .nav-refresh {
             
             localStorage.setItem('headerPhoto', JSON.stringify(photoData));
             await syncToFirebase('headerPhoto', photoData);
+            _photoSaving = false;
         }
 
         function zoomPhoto(delta) {
