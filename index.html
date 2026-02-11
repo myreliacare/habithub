@@ -73,7 +73,7 @@
         }
 
         /* Header */
-        .home-header { display: flex; align-items: center; justify-content: center; gap: 20px; padding: 10px 0 24px; }
+        .home-header { display: flex; align-items: center; justify-content: center; gap: 20px; padding: 10px 0 24px; margin-left: -28px; }
         .header-photo-container {
             width: 110px; height: 110px; flex-shrink: 0;
             border-radius: 50%; overflow: hidden; position: relative;
@@ -98,6 +98,20 @@
         }
         /* Only show upload btn when no photo exists (placeholder visible) */
         .header-photo-container:hover .upload-photo-btn.no-photo { opacity: 1; pointer-events: auto; }
+        
+        /* Subtle edit hint icon - always visible on photo */
+        .photo-edit-hint {
+            position: absolute; bottom: 4px; right: 4px; z-index: 4;
+            width: 22px; height: 22px; border-radius: 50%;
+            background: rgba(42, 31, 33, 0.7); 
+            display: none; align-items: center; justify-content: center;
+            cursor: pointer; transition: background 0.2s;
+            border: 1px solid rgba(163, 184, 153, 0.3);
+        }
+        .photo-edit-hint.visible { display: flex; }
+        .photo-edit-hint:hover { background: rgba(42, 31, 33, 0.9); border-color: rgba(163, 184, 153, 0.6); }
+        .photo-edit-hint svg { width: 10px; height: 10px; fill: none; stroke: rgba(163, 184, 153, 0.6); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .header-photo-container.edit-mode .photo-edit-hint { display: none; }
         
         /* Photo edit overlay */
         .photo-edit-overlay {
@@ -1381,6 +1395,10 @@ button, .btn, a, .nav-refresh {
                 </div>
                 <input type="file" id="photoUpload" accept="image/*" style="display: none;">
                 <button class="upload-photo-btn no-photo" id="uploadBtn" onclick="document.getElementById('photoUpload').click()"></button>
+                <!-- Subtle pencil hint -->
+                <div class="photo-edit-hint" id="photoEditHint" onclick="showPhotoOverlay(); event.stopPropagation();">
+                    <svg viewBox="0 0 12 12"><path d="M7.5 1.5l3 3M2 8l5-5 3 3-5 5H2V8z"/></svg>
+                </div>
             </div>
             <!-- Edit mode controls (zoom + done) - outside overflow:hidden -->
             <div class="photo-edit-controls" id="photoEditControls">
@@ -4091,6 +4109,9 @@ button, .btn, a, .nav-refresh {
                 placeholder.style.display = 'none';
                 // Hide the no-photo upload button once we have a photo
                 if (uploadBtn) uploadBtn.classList.remove('no-photo');
+                // Show the edit hint pencil
+                const hint = document.getElementById('photoEditHint');
+                if (hint) hint.classList.add('visible');
             };
         }
 
@@ -4197,23 +4218,6 @@ button, .btn, a, .nav-refresh {
         function setupPhotoDrag() {
             const container = document.getElementById('photoContainer');
             const draggable = document.getElementById('photoDraggable');
-            
-            // Double-click / double-tap to show edit overlay
-            let lastTap = 0;
-            container.addEventListener('dblclick', function(e) {
-                if (draggable.style.display !== 'none' && !photoEditMode) {
-                    e.preventDefault();
-                    showPhotoOverlay();
-                }
-            });
-            container.addEventListener('touchend', function(e) {
-                const now = Date.now();
-                if (now - lastTap < 350 && draggable.style.display !== 'none' && !photoEditMode) {
-                    e.preventDefault();
-                    showPhotoOverlay();
-                }
-                lastTap = now;
-            });
             
             // Close overlay if tapping outside
             document.addEventListener('click', function(e) {
