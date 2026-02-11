@@ -3601,6 +3601,16 @@ function acceptPlan() {
 
 // Init recipe bank on load
 initRecipeBank();
+
+// URL param support: ?day=X jumps to that day
+(function() {
+ var params = new URLSearchParams(window.location.search);
+ var dayParam = parseInt(params.get('day'));
+ if (dayParam && dayParam >= 1 && dayParam <= PLAN_DAYS) {
+ currentDay = dayParam;
+ selectDay(currentDay);
+ }
+})();
 </script>
 
 <script type="module">
