@@ -4148,8 +4148,9 @@ What's on my mind today..."></textarea>
  } else {
  thumb.innerHTML = `
  <div class="video-link-thumb">
- <div class="video-link-icon">⚠</div>
- <div class="video-link-label">${video.title || 'Not found'}</div>
+ <div class="video-link-icon">📱</div>
+ <div style="color:#b59197;font-size:0.7rem;font-weight:600;margin-bottom:2px;">${video.title || 'Video'}</div>
+ <div class="video-link-label" style="font-size:0.6rem;">Only plays on upload device</div>
  </div>
  `;
  }
