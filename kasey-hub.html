@@ -1941,6 +1941,286 @@
             }
         }
         /* ===== END MOBILE OPTIMIZATION ===== */
+ /* ===== SPELL BOOK ===== */
+ .spellbook-header {
+ text-align: center;
+ padding: 24px 0 16px;
+ }
+ .spellbook-moon {
+ width: 68px;
+ height: 68px;
+ margin: 0 auto 10px;
+ }
+ .spellbook-title {
+ font-family: 'Dancing Script', cursive;
+ font-size: 2rem;
+ color: #4a5c3f;
+ margin-bottom: 6px;
+ }
+ .spellbook-subtitle {
+ font-size: 0.82rem;
+ color: #8fa87a;
+ letter-spacing: 0.15em;
+ text-transform: uppercase;
+ margin-bottom: 4px;
+ }
+ .spellbook-divider {
+ text-align: center;
+ color: #8fa87a;
+ font-size: 0.9rem;
+ letter-spacing: 8px;
+ margin: 12px 0 16px;
+ opacity: 0.6;
+ }
+ .spellbook-categories {
+ display: flex;
+ flex-wrap: wrap;
+ gap: 8px;
+ justify-content: center;
+ margin-bottom: 20px;
+ }
+ .spell-cat-btn {
+ background: transparent;
+ border: 1px solid rgba(122,138,110,0.35);
+ color: #6d8a5e;
+ padding: 6px 16px;
+ font-family: inherit;
+ font-size: 0.78rem;
+ cursor: pointer;
+ letter-spacing: 0.05em;
+ transition: all 0.2s;
+ }
+ .spell-cat-btn:hover, .spell-cat-btn.active {
+ background: #6d8a5e;
+ color: #f2ebe0;
+ border-color: #6d8a5e;
+ }
+ .spell-card {
+ background: #f0efe8;
+ border: 1px solid rgba(122,138,110,0.2);
+ padding: 18px;
+ margin-bottom: 14px;
+ position: relative;
+ border-left: 3px solid #8fa87a;
+ }
+ .spell-card-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: flex-start;
+ margin-bottom: 6px;
+ }
+ .spell-card-title {
+ font-family: 'Dancing Script', cursive;
+ font-size: 1.2rem;
+ color: #4a5c3f;
+ line-height: 1.3;
+ }
+ .spell-card-tag {
+ font-size: 0.68rem;
+ color: #6d8a5e;
+ border: 1px solid rgba(122,138,110,0.35);
+ padding: 2px 8px;
+ letter-spacing: 0.05em;
+ text-transform: uppercase;
+ white-space: nowrap;
+ }
+ .spell-card-intent {
+ font-size: 0.85rem;
+ color: #6b5a5e;
+ font-style: italic;
+ margin-bottom: 8px;
+ padding-left: 12px;
+ border-left: 2px solid rgba(122,138,110,0.3);
+ }
+ .spell-card-section-label {
+ font-size: 0.72rem;
+ color: #8fa87a;
+ text-transform: uppercase;
+ letter-spacing: 0.1em;
+ margin: 10px 0 4px;
+ font-weight: 600;
+ }
+ .spell-card-body {
+ font-size: 0.85rem;
+ color: #4a3b3e;
+ line-height: 1.6;
+ white-space: pre-wrap;
+ }
+ .spell-card-notes {
+ font-size: 0.82rem;
+ color: #8fa87a;
+ font-style: italic;
+ margin-top: 8px;
+ padding: 8px 12px;
+ background: rgba(122,138,110,0.08);
+ }
+ .spell-card-actions {
+ display: flex;
+ gap: 6px;
+ margin-top: 10px;
+ justify-content: flex-end;
+ }
+ .spell-card-actions button {
+ background: none;
+ border: 1px solid rgba(122,138,110,0.25);
+ color: #8fa87a;
+ padding: 3px 10px;
+ font-size: 0.72rem;
+ cursor: pointer;
+ font-family: inherit;
+ }
+ .spell-card-actions button:hover {
+ border-color: #6d8a5e;
+ color: #6d8a5e;
+ }
+ .spell-form-overlay {
+ display: none;
+ position: fixed;
+ top: 0; left: 0; right: 0; bottom: 0;
+ background: rgba(0,0,0,0.7);
+ z-index: 10001;
+ overflow-y: auto;
+ }
+ .spell-form-overlay.active { display: block; }
+ .spell-form {
+ background: #f2ebe0;
+ max-width: 550px;
+ margin: 30px auto;
+ border: 2px solid #8fa87a;
+ }
+ .spell-form-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ padding: 14px 18px;
+ border-bottom: 1px solid rgba(122,138,110,0.25);
+ background: rgba(122,138,110,0.06);
+ }
+ .spell-form-header h3 {
+ margin: 0;
+ font-family: 'Dancing Script', cursive;
+ font-size: 1.3rem;
+ color: #4a5c3f;
+ }
+ .spell-form-close {
+ background: none;
+ border: none;
+ font-size: 1.5rem;
+ color: #8fa87a;
+ cursor: pointer;
+ }
+ .spell-form-body {
+ padding: 16px 18px;
+ }
+ .spell-form-body label {
+ display: block;
+ font-size: 0.78rem;
+ color: #6d8a5e;
+ text-transform: uppercase;
+ letter-spacing: 0.08em;
+ margin-bottom: 4px;
+ margin-top: 12px;
+ font-weight: 600;
+ }
+ .spell-form-body label:first-child { margin-top: 0; }
+ .spell-form-body input,
+ .spell-form-body select,
+ .spell-form-body textarea {
+ width: 100%;
+ padding: 8px 10px;
+ border: 1px solid rgba(122,138,110,0.25);
+ background: #fff;
+ font-family: inherit;
+ font-size: 0.85rem;
+ color: #3d2f31;
+ box-sizing: border-box;
+ }
+ .spell-form-body input:focus,
+ .spell-form-body select:focus,
+ .spell-form-body textarea:focus {
+ outline: none;
+ border-color: #8fa87a;
+ }
+ .spell-form-body textarea { min-height: 70px; resize: vertical; }
+ .spell-form-footer {
+ display: flex;
+ justify-content: flex-end;
+ gap: 8px;
+ padding: 12px 18px;
+ border-top: 1px solid rgba(122,138,110,0.2);
+ }
+ .spell-form-footer button {
+ padding: 8px 20px;
+ font-family: inherit;
+ font-size: 0.85rem;
+ cursor: pointer;
+ border: none;
+ }
+ .spell-form-footer .spell-cancel { background: #ddd; color: #666; }
+ .spell-form-footer .spell-save { background: #6d8a5e; color: #f2ebe0; font-weight: 600; }
+ .spell-empty {
+ text-align: center;
+ color: #8fa87a;
+ font-style: italic;
+ padding: 50px 20px;
+ font-size: 0.9rem;
+ line-height: 1.8;
+ }
+ .spell-search {
+ width: 100%;
+ padding: 10px 14px;
+ border: 1px solid rgba(122,138,110,0.25);
+ background: #fff;
+ font-family: inherit;
+ font-size: 0.85rem;
+ color: #3d2f31;
+ box-sizing: border-box;
+ margin-bottom: 16px;
+ }
+ .spell-search:focus { outline: none; border-color: #8fa87a; }
+ .spell-search::placeholder { color: #b5c9a8; }
+ .moon-phase-card {
+ padding: 14px 0 16px;
+ text-align: center;
+ margin-bottom: 8px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ gap: 16px;
+ }
+ .moon-phase-visual {
+ flex-shrink: 0;
+ }
+ .moon-phase-info {
+ text-align: left;
+ }
+ .moon-phase-name {
+ font-family: 'Dancing Script', cursive;
+ font-size: 1.1rem;
+ color: #4a5c3f;
+ margin-bottom: 2px;
+ }
+ .moon-phase-illumination {
+ font-size: 0.72rem;
+ color: #8fa87a;
+ letter-spacing: 0.1em;
+ text-transform: uppercase;
+ margin-bottom: 8px;
+ }
+ .moon-phase-desc {
+ font-size: 0.82rem;
+ color: #6b5a5e;
+ line-height: 1.5;
+ font-style: italic;
+ max-width: 220px;
+ }
+ .moon-phase-location {
+ font-size: 0.68rem;
+ color: #9a7a80;
+ margin-top: 8px;
+ letter-spacing: 0.05em;
+ }
+
  /* ===== ROUTINE EDITOR ===== */
  .routine-editor-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:10001; overflow-y:auto; }
  .routine-editor-overlay.active { display:block; }
@@ -2046,6 +2326,7 @@
  <option value="videos">Video Hub</option>
  <option value="journal">Journal</option>
  <option value="prompt">Daily Prompt</option>
+ <option value="spellbook">Spell Book</option>
  </select>
  </div>
 
@@ -2885,6 +3166,72 @@ What's on my mind today..."></textarea>
  </div>
  </div>
 
+ <!-- SPELL BOOK TAB -->
+ <div id="spellbook-tab" class="hub-tab">
+ <div class="spellbook-header">
+ <div class="spellbook-title">Book of Shadows</div>
+ <div id="moonPhaseCard" class="moon-phase-card"></div>
+ </div>
+ <div style="text-align:center;margin:4px 0 18px;">
+ <svg viewBox="0 0 160 12" width="140" height="12" fill="none" style="display:block;margin:0 auto;">
+ <line x1="10" y1="6" x2="68" y2="6" stroke="#8fa87a" stroke-width="0.7" opacity="0.35"/>
+ <line x1="92" y1="6" x2="150" y2="6" stroke="#8fa87a" stroke-width="0.7" opacity="0.35"/>
+ <path d="M80,1 L84,6 L80,11 L76,6 Z" fill="#8fa87a" opacity="0.3"/>
+ <circle cx="70" cy="6" r="1.2" fill="#8fa87a" opacity="0.2"/>
+ <circle cx="90" cy="6" r="1.2" fill="#8fa87a" opacity="0.2"/>
+ </svg>
+ </div>
+ <div class="spellbook-categories" id="spellCategoryFilter">
+ <button class="spell-cat-btn active" onclick="filterSpells('all')">All</button>
+ <button class="spell-cat-btn" onclick="filterSpells('spell')">Spells</button>
+ <button class="spell-cat-btn" onclick="filterSpells('ritual')">Rituals</button>
+ <button class="spell-cat-btn" onclick="filterSpells('intention')">Intentions</button>
+ <button class="spell-cat-btn" onclick="filterSpells('moon')">Moon Work</button>
+ <button class="spell-cat-btn" onclick="filterSpells('tarot')">Tarot</button>
+ <button class="spell-cat-btn" onclick="filterSpells('correspondence')">Correspondences</button>
+ </div>
+ <input type="text" class="spell-search" id="spellSearch" placeholder="Search your spells..." oninput="renderSpells()">
+ <div style="text-align:center;margin-bottom:24px;">
+ <button onclick="openSpellForm()" style="background:#6d8a5e;color:#f2ebe0;border:none;padding:8px 20px;font-family:inherit;font-size:0.85rem;cursor:pointer;">Add New Entry</button>
+ </div>
+ <div id="spellList"></div>
+ </div>
+
+ <!-- Spell Form Modal -->
+ <div class="spell-form-overlay" id="spellFormOverlay" onclick="if(event.target===this)closeSpellForm()">
+ <div class="spell-form">
+ <div class="spell-form-header">
+ <h3>New Entry</h3>
+ <button class="spell-form-close" onclick="closeSpellForm()">&times;</button>
+ </div>
+ <div class="spell-form-body">
+ <label>Title</label>
+ <input type="text" id="spellTitle" placeholder="Name of spell, ritual, or intention">
+ <label>Category</label>
+ <select id="spellCategory">
+ <option value="spell">Spell</option>
+ <option value="ritual">Ritual</option>
+ <option value="intention">Intention</option>
+ <option value="moon">Moon Work</option>
+ <option value="tarot">Tarot</option>
+ <option value="correspondence">Correspondence</option>
+ </select>
+ <label>Intention / Purpose</label>
+ <textarea id="spellIntent" placeholder="What is this for? What energy are you calling in?"></textarea>
+ <label>Materials / Ingredients</label>
+ <textarea id="spellMaterials" placeholder="Candles, herbs, crystals, tools..."></textarea>
+ <label>Steps / Description</label>
+ <textarea id="spellSteps" placeholder="How to perform it, what to say, what to visualize..." style="min-height:100px;"></textarea>
+ <label>Notes</label>
+ <textarea id="spellNotes" placeholder="Moon phase, timing, results, reflections..."></textarea>
+ </div>
+ <div class="spell-form-footer">
+ <button class="spell-cancel" onclick="closeSpellForm()">Cancel</button>
+ <button class="spell-save" onclick="saveSpell()">Save</button>
+ </div>
+ </div>
+ </div>
+
  <!-- PROMPT TAB -->
  <div id="prompt-tab" class="hub-tab">
  <div class="section">
@@ -3527,6 +3874,7 @@ What's on my mind today..."></textarea>
 
  if (tab === 'prompt') loadHubPrompt();
  else if (tab === 'resources') renderAllResources();
+ else if (tab === 'spellbook') { renderSpells(); renderMoonPhase(); }
  }
 
  function switchTabFromDropdown() {
@@ -3539,6 +3887,7 @@ What's on my mind today..."></textarea>
 
  if (selectedTab === 'prompt') loadHubPrompt();
  else if (selectedTab === 'resources') renderAllResources();
+ else if (selectedTab === 'spellbook') { renderSpells(); renderMoonPhase(); }
  }
 
  function goToWorkout() {
@@ -4929,6 +5278,266 @@ What's on my mind today..."></textarea>
  renderBlock('Evening Routine', '7 PM - 11 PM', scheduleData.evening);
  }
 
+ // ===== SPELL BOOK =====
+ let spells = [];
+ let currentSpellFilter = 'all';
+ let editingSpellId = null;
+
+ function loadSpells() {
+ var saved = localStorage.getItem('spellbook_kasey');
+ if (saved) {
+ try { spells = JSON.parse(saved); } catch(e) { spells = []; }
+ }
+ renderSpells();
+ loadFromFirebase('spellbook_kasey').then(function(data) {
+ if (data && Array.isArray(data)) {
+ spells = data;
+ localStorage.setItem('spellbook_kasey', JSON.stringify(spells));
+ renderSpells();
+ } else if (saved) {
+ syncToFirebase('spellbook_kasey', spells);
+ }
+ });
+ setupFirebaseListener('spellbook_kasey', function(data) {
+ if (data && Array.isArray(data)) {
+ spells = data;
+ localStorage.setItem('spellbook_kasey', JSON.stringify(spells));
+ renderSpells();
+ }
+ });
+ }
+
+ function saveSpellData() {
+ localStorage.setItem('spellbook_kasey', JSON.stringify(spells));
+ syncToFirebase('spellbook_kasey', spells);
+ }
+
+ function filterSpells(cat) {
+ currentSpellFilter = cat;
+ document.querySelectorAll('.spell-cat-btn').forEach(function(b) { b.classList.remove('active'); });
+ event.target.classList.add('active');
+ renderSpells();
+ }
+
+ function renderSpells() {
+ var container = document.getElementById('spellList');
+ if (!container) return;
+ var search = (document.getElementById('spellSearch') || {}).value || '';
+ search = search.toLowerCase();
+
+ var filtered = spells.filter(function(s) {
+ if (currentSpellFilter !== 'all' && s.category !== currentSpellFilter) return false;
+ if (search && s.title.toLowerCase().indexOf(search) === -1 &&
+ (s.intent || '').toLowerCase().indexOf(search) === -1 &&
+ (s.steps || '').toLowerCase().indexOf(search) === -1 &&
+ (s.materials || '').toLowerCase().indexOf(search) === -1 &&
+ (s.notes || '').toLowerCase().indexOf(search) === -1) return false;
+ return true;
+ });
+
+ if (filtered.length === 0 && spells.length === 0) {
+ container.innerHTML = '<div class="spell-empty">The pages are blank and the moon is listening.<br>Add your first spell, ritual, or intention.</div>';
+ return;
+ }
+ if (filtered.length === 0) {
+ container.innerHTML = '<div class="spell-empty">Nothing found for this search or category.</div>';
+ return;
+ }
+
+ var catLabels = { spell:'Spell', ritual:'Ritual', intention:'Intention', moon:'Moon Work', tarot:'Tarot', correspondence:'Correspondence' };
+
+ container.innerHTML = filtered.map(function(s) {
+ var h = '<div class="spell-card">';
+ h += '<div class="spell-card-header"><div class="spell-card-title">' + (s.title || 'Untitled') + '</div>';
+ h += '<span class="spell-card-tag">' + (catLabels[s.category] || s.category) + '</span></div>';
+ if (s.intent) h += '<div class="spell-card-intent">' + s.intent.replace(/\n/g, '<br>') + '</div>';
+ if (s.materials) {
+ h += '<div class="spell-card-section-label">Materials</div>';
+ h += '<div class="spell-card-body">' + s.materials.replace(/\n/g, '<br>') + '</div>';
+ }
+ if (s.steps) {
+ h += '<div class="spell-card-section-label">Steps</div>';
+ h += '<div class="spell-card-body">' + s.steps.replace(/\n/g, '<br>') + '</div>';
+ }
+ if (s.notes) h += '<div class="spell-card-notes">' + s.notes.replace(/\n/g, '<br>') + '</div>';
+ h += '<div class="spell-card-actions">';
+ h += '<button onclick="editSpell(\'' + s.id + '\')">Edit</button>';
+ h += '<button onclick="deleteSpell(\'' + s.id + '\')">Delete</button>';
+ h += '</div></div>';
+ return h;
+ }).join('');
+ }
+
+ function openSpellForm(spell) {
+ editingSpellId = spell ? spell.id : null;
+ document.getElementById('spellTitle').value = spell ? spell.title : '';
+ document.getElementById('spellCategory').value = spell ? spell.category : 'spell';
+ document.getElementById('spellIntent').value = spell ? (spell.intent || '') : '';
+ document.getElementById('spellMaterials').value = spell ? (spell.materials || '') : '';
+ document.getElementById('spellSteps').value = spell ? (spell.steps || '') : '';
+ document.getElementById('spellNotes').value = spell ? (spell.notes || '') : '';
+ document.querySelector('.spell-form-header h3').textContent = spell ? 'Edit Entry' : 'New Entry';
+ document.getElementById('spellFormOverlay').classList.add('active');
+ }
+
+ function closeSpellForm() {
+ document.getElementById('spellFormOverlay').classList.remove('active');
+ editingSpellId = null;
+ }
+
+ function saveSpell() {
+ var title = document.getElementById('spellTitle').value.trim();
+ if (!title) { alert('Give your entry a name.'); return; }
+ var entry = {
+ id: editingSpellId || ('sp_' + Date.now()),
+ title: title,
+ category: document.getElementById('spellCategory').value,
+ intent: document.getElementById('spellIntent').value.trim(),
+ materials: document.getElementById('spellMaterials').value.trim(),
+ steps: document.getElementById('spellSteps').value.trim(),
+ notes: document.getElementById('spellNotes').value.trim(),
+ created: editingSpellId ? (spells.find(function(s){ return s.id === editingSpellId; }) || {}).created || new Date().toISOString() : new Date().toISOString(),
+ updated: new Date().toISOString()
+ };
+ if (editingSpellId) {
+ var idx = spells.findIndex(function(s) { return s.id === editingSpellId; });
+ if (idx !== -1) spells[idx] = entry;
+ } else {
+ spells.unshift(entry);
+ }
+ saveSpellData();
+ renderSpells();
+ closeSpellForm();
+ }
+
+ function editSpell(id) {
+ var spell = spells.find(function(s) { return s.id === id; });
+ if (spell) openSpellForm(spell);
+ }
+
+ function deleteSpell(id) {
+ if (!confirm('Remove this entry from your book?')) return;
+ spells = spells.filter(function(s) { return s.id !== id; });
+ saveSpellData();
+ renderSpells();
+ }
+
+ // ===== MOON PHASE =====
+ function getMoonPhase() {
+ var now = new Date();
+ // Known new moon: Jan 29, 2025 12:36 UTC
+ var knownNew = new Date(Date.UTC(2025, 0, 29, 12, 36, 0));
+ var synodic = 29.53058770576;
+ var diff = (now.getTime() - knownNew.getTime()) / (1000 * 60 * 60 * 24);
+ var cycle = ((diff % synodic) + synodic) % synodic;
+ var age = cycle;
+ var illumination = Math.round((1 - Math.cos(2 * Math.PI * age / synodic)) / 2 * 100);
+
+ var phase, desc, energy;
+ if (age < 1.85) {
+ phase = 'New Moon';
+ desc = 'Set intentions. Plant seeds for what you want to grow. This is your blank canvas — dream big and write it down.';
+ energy = 'Stillness, new beginnings, planting seeds';
+ } else if (age < 7.38) {
+ phase = 'Waxing Crescent';
+ desc = 'Your intentions are taking root. Stay committed, stay soft. Trust what you planted during the new moon.';
+ energy = 'Hope, intention, momentum building';
+ } else if (age < 9.23) {
+ phase = 'First Quarter';
+ desc = 'Challenges may surface — this is the universe asking how badly you want it. Push through with purpose.';
+ energy = 'Action, determination, overcoming obstacles';
+ } else if (age < 14.77) {
+ phase = 'Waxing Gibbous';
+ desc = 'Refine and adjust. You can see your work taking shape. Trust the process and keep showing up.';
+ energy = 'Patience, refinement, trust';
+ } else if (age < 16.61) {
+ phase = 'Full Moon';
+ desc = 'Harvest what you have been growing. Release what no longer serves you. Emotions run high — honor them.';
+ energy = 'Illumination, release, gratitude';
+ } else if (age < 22.15) {
+ phase = 'Waning Gibbous';
+ desc = 'Share what you have learned. Practice gratitude. Let the fullness of the last cycle settle into your bones.';
+ energy = 'Gratitude, sharing, introspection';
+ } else if (age < 24.0) {
+ phase = 'Last Quarter';
+ desc = 'Let go. Forgive. Clear out the physical and emotional clutter that is weighing you down.';
+ energy = 'Release, forgiveness, clearing space';
+ } else {
+ phase = 'Waning Crescent';
+ desc = 'Rest and surrender. This is not a time to push — it is a time to be still and prepare for what is next.';
+ energy = 'Rest, surrender, restoration';
+ }
+
+ return { phase: phase, desc: desc, energy: energy, illumination: illumination, age: age, synodic: synodic };
+ }
+
+ function drawMoonSVG(phase, illumination) {
+ var svg = '<svg class="spellbook-moon" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">';
+ // Dark sky circle
+ svg += '<circle cx="30" cy="30" r="24" fill="#6d8a5e" opacity="0.15"/>';
+
+ var pct = illumination / 100;
+ var isWaxing = phase.indexOf('Waxing') !== -1 || phase === 'First Quarter';
+
+ if (phase === 'New Moon') {
+ // Just a faint outline
+ svg += '<circle cx="30" cy="30" r="18" fill="none" stroke="#6d8a5e" stroke-width="0.5" opacity="0.25"/>';
+ } else if (phase === 'Full Moon') {
+ // Full green circle
+ svg += '<circle cx="30" cy="30" r="18" fill="#6d8a5e" opacity="0.7"/>';
+ } else {
+ // Crescent/gibbous using same style as the original cute moon
+ // The crescent is drawn as the intersection of two circles
+ var r = 18;
+ var cx = 30, cy = 30;
+ var k = Math.abs(2 * pct - 1);
+ var bulge = r * k;
+
+ if (pct < 0.5) {
+ // Crescent - thin sliver
+ if (isWaxing) {
+ // Right side lit - like original design
+ svg += '<path d="M' + cx + ',' + (cy - r) + ' A' + r + ',' + r + ' 0 0 1 ' + cx + ',' + (cy + r) + ' A' + bulge + ',' + r + ' 0 0 1 ' + cx + ',' + (cy - r) + '" fill="#6d8a5e" opacity="0.7"/>';
+ } else {
+ // Left side lit
+ svg += '<path d="M' + cx + ',' + (cy - r) + ' A' + r + ',' + r + ' 0 0 0 ' + cx + ',' + (cy + r) + ' A' + bulge + ',' + r + ' 0 0 0 ' + cx + ',' + (cy - r) + '" fill="#6d8a5e" opacity="0.7"/>';
+ }
+ } else {
+ // Gibbous - mostly full
+ if (isWaxing) {
+ svg += '<path d="M' + cx + ',' + (cy - r) + ' A' + r + ',' + r + ' 0 0 1 ' + cx + ',' + (cy + r) + ' A' + bulge + ',' + r + ' 0 0 0 ' + cx + ',' + (cy - r) + '" fill="#6d8a5e" opacity="0.7"/>';
+ } else {
+ svg += '<path d="M' + cx + ',' + (cy - r) + ' A' + r + ',' + r + ' 0 0 0 ' + cx + ',' + (cy + r) + ' A' + bulge + ',' + r + ' 0 0 1 ' + cx + ',' + (cy - r) + '" fill="#6d8a5e" opacity="0.7"/>';
+ }
+ }
+ }
+
+ // Little stars (same as original)
+ svg += '<circle cx="20" cy="16" r="1" fill="#8fa87a" opacity="0.4"/>';
+ svg += '<circle cx="44" cy="22" r="0.8" fill="#8fa87a" opacity="0.3"/>';
+ svg += '<circle cx="14" cy="38" r="0.8" fill="#8fa87a" opacity="0.35"/>';
+ svg += '<circle cx="42" cy="42" r="1" fill="#8fa87a" opacity="0.3"/>';
+ svg += '<circle cx="48" cy="32" r="0.6" fill="#8fa87a" opacity="0.25"/>';
+ svg += '</svg>';
+ return svg;
+ }
+
+ function renderMoonPhase() {
+ var container = document.getElementById('moonPhaseCard');
+ if (!container) return;
+ var m = getMoonPhase();
+ var moonSvg = drawMoonSVG(m.phase, m.illumination);
+
+ container.innerHTML =
+ '<div class="moon-phase-visual">' + moonSvg + '</div>' +
+ '<div class="moon-phase-info">' +
+ '<div class="moon-phase-name">' + m.phase + '</div>' +
+ '<div class="moon-phase-illumination">' + m.illumination + '% illuminated</div>' +
+ '<div class="moon-phase-desc">' + m.desc + '</div>' +
+ '<div class="moon-phase-location">Walton, Kentucky</div>' +
+ '</div>';
+ }
+
  // ===== ROUTINE EDITOR =====
  function openRoutineEditor() {
  var body = document.getElementById('routineEditorBody');
@@ -5053,6 +5662,8 @@ What's on my mind today..."></textarea>
  loadResources();
  loadTodos();
  loadFutureTodos();
+ loadSpells();
+ renderMoonPhase();
 
  // Always start on Habits & Wellness tab
  });
