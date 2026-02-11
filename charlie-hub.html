@@ -964,6 +964,38 @@
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 </head>
+
+<script>
+ window.firebaseReady = false;
+ window.firebaseError = null;
+</script>
+
+<script type="module">
+ import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+ import { getFirestore, collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+ try {
+ const firebaseConfig = {
+ apiKey: "AIzaSyCDda9sPwSY-RQ5rrM5THOvcLtHvcPRYd4",
+ authDomain: "our-habit-hub.firebaseapp.com",
+ projectId: "our-habit-hub",
+ storageBucket: "our-habit-hub.firebasestorage.app",
+ messagingSenderId: "78555830496",
+ appId: "1:78555830496:web:3e457e54729cc11b825885"
+ };
+
+ const app = initializeApp(firebaseConfig);
+ const db = getFirestore(app);
+
+ window.db = db;
+ window.firestoreImports = { collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot };
+ window.firebaseReady = true;
+ window.dispatchEvent(new Event('firebaseReady'));
+ } catch (error) {
+ window.firebaseReady = false;
+ window.firebaseError = error.message;
+ }
+</script>
 <body>
     <nav class="top-nav">
         <div class="nav-container">
@@ -1294,12 +1326,19 @@
         let editingHabits = [];
 
         // Load custom habits from localStorage
-        function loadCustomHabits() {
-            const saved = localStorage.getItem('charlieCustomHabits');
-            if (saved) {
-                const parsed = JSON.parse(saved);
-                if (parsed && parsed.length >= 16) {
-                    charlieHabits = parsed;
+        async function loadCustomHabits() {
+            const firebaseData = await loadFromFirebase('charlieCustomHabits');
+            if (firebaseData && firebaseData.length >= 16) {
+                charlieHabits = firebaseData;
+                localStorage.setItem('charlieCustomHabits', JSON.stringify(charlieHabits));
+            } else {
+                const saved = localStorage.getItem('charlieCustomHabits');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    if (parsed && parsed.length >= 16) {
+                        charlieHabits = parsed;
+                        syncToFirebase('charlieCustomHabits', charlieHabits);
+                    }
                 }
             }
         }
@@ -1361,6 +1400,7 @@
             
             charlieHabits = [...editingHabits];
             localStorage.setItem('charlieCustomHabits', JSON.stringify(charlieHabits));
+            syncToFirebase('charlieCustomHabits', charlieHabits);
             shuffleBoard();
             closeHabitsEditor();
         }
@@ -1439,14 +1479,70 @@
         let pendingResourceFile = null;
         let pendingVideoFile = null;
 
-        // Storage functions (localStorage only)
+        // Storage functions (localStorage + Firebase sync)
         function saveData(key, data) {
             localStorage.setItem(key, JSON.stringify(data));
+            syncToFirebase(key, data);
         }
 
         function loadData(key) {
             const saved = localStorage.getItem(key);
             return saved ? JSON.parse(saved) : null;
+        }
+
+        async function syncToFirebase(collectionName, data) {
+            if (!window.firebaseReady) {
+                await Promise.race([
+                    new Promise(resolve => {
+                        if (window.firebaseReady) resolve();
+                        else window.addEventListener('firebaseReady', resolve, { once: true });
+                    }),
+                    new Promise(resolve => setTimeout(resolve, 5000))
+                ]);
+            }
+            if (!window.firebaseReady || !window.db) return;
+            try {
+                const { setDoc, doc } = window.firestoreImports;
+                await setDoc(doc(window.db, collectionName, 'data'), { items: data });
+            } catch (error) {}
+        }
+
+        async function loadFromFirebase(collectionName) {
+            if (!window.firebaseReady) {
+                await Promise.race([
+                    new Promise(resolve => {
+                        if (window.firebaseReady) resolve();
+                        else window.addEventListener('firebaseReady', resolve, { once: true });
+                    }),
+                    new Promise(resolve => setTimeout(resolve, 5000))
+                ]);
+            }
+            if (!window.firebaseReady || !window.db) return null;
+            try {
+                const { getDoc, doc } = window.firestoreImports;
+                const docSnap = await getDoc(doc(window.db, collectionName, 'data'));
+                if (docSnap.exists()) return docSnap.data().items;
+                return null;
+            } catch (error) { return null; }
+        }
+
+        async function setupFirebaseListener(collectionName, callback) {
+            if (!window.firebaseReady) {
+                await Promise.race([
+                    new Promise(resolve => {
+                        if (window.firebaseReady) resolve();
+                        else window.addEventListener('firebaseReady', resolve, { once: true });
+                    }),
+                    new Promise(resolve => setTimeout(resolve, 5000))
+                ]);
+            }
+            if (!window.firebaseReady || !window.db) return;
+            try {
+                const { onSnapshot, doc } = window.firestoreImports;
+                onSnapshot(doc(window.db, collectionName, 'data'), (d) => {
+                    if (d.exists()) callback(d.data().items);
+                });
+            } catch (error) {}
         }
 
         function switchTabFromDropdown() {
@@ -1455,6 +1551,7 @@
             
             document.querySelectorAll('.hub-tab').forEach(t => t.classList.remove('active'));
             document.getElementById(`${tab}-tab`).classList.add('active');
+            localStorage.setItem('charlieHub_activeTab', tab);
 
             if (tab === 'prompt') loadHubPrompt();
             else if (tab === 'resources') renderAllResources();
@@ -1569,7 +1666,7 @@
                 state: boardState
             };
             localStorage.setItem('bingoState_charlie', JSON.stringify(data));
-            saveData(data);
+            syncToFirebase('bingoState_charlie', data);
         }
 
         function updateStats() {
@@ -1630,18 +1727,31 @@
             }
         }
 
-        function loadResources() {
-            const saved = localStorage.getItem('resources_charlie');
-            if (saved) {
-                resources = JSON.parse(saved);
+        async function loadResources() {
+            const firebaseData = await loadFromFirebase('resources_charlie');
+            if (firebaseData) {
+                resources = firebaseData;
+                localStorage.setItem('resources_charlie', JSON.stringify(resources));
             } else {
-                resources = JSON.parse(JSON.stringify(defaultResources));
+                const saved = localStorage.getItem('resources_charlie');
+                if (saved) {
+                    resources = JSON.parse(saved);
+                    syncToFirebase('resources_charlie', resources);
+                } else {
+                    resources = JSON.parse(JSON.stringify(defaultResources));
+                    syncToFirebase('resources_charlie', resources);
+                }
             }
             renderAllResources();
+            setupFirebaseListener('resources_charlie', (data) => {
+                resources = data;
+                renderAllResources();
+            });
         }
 
         function saveResources() {
             localStorage.setItem('resources_charlie', JSON.stringify(resources));
+            syncToFirebase('resources_charlie', resources);
         }
 
         function handleResourceUpload() {
@@ -1744,11 +1854,9 @@
         }
 
         async function deleteResource(category, index) {
-            if (confirm('Delete this resource?')) {
-                resources[category].splice(index, 1);
-                await saveResources();
-                renderResourceCategory(category);
-            }
+            resources[category].splice(index, 1);
+            await saveResources();
+            renderResourceCategory(category);
         }
 
         function handleVideoUpload() {
@@ -1794,18 +1902,30 @@
             }
         }
 
-        function loadVideos() {
-            const saved = localStorage.getItem('videos_charlie');
-            if (saved) {
-                videos = JSON.parse(saved);
+        async function loadVideos() {
+            const firebaseData = await loadFromFirebase('videos_charlie');
+            if (firebaseData) {
+                videos = firebaseData;
+                localStorage.setItem('videos_charlie', JSON.stringify(videos));
             } else {
-                videos = [];
+                const saved = localStorage.getItem('videos_charlie');
+                if (saved) {
+                    videos = JSON.parse(saved);
+                    syncToFirebase('videos_charlie', videos);
+                } else {
+                    videos = [];
+                }
             }
             renderVideos();
+            setupFirebaseListener('videos_charlie', (data) => {
+                videos = data;
+                renderVideos();
+            });
         }
 
         function saveVideos() {
             localStorage.setItem('videos_charlie', JSON.stringify(videos));
+            syncToFirebase('videos_charlie', videos);
         }
 
         function toggleVideoForm() {
@@ -1912,26 +2032,36 @@
         }
 
         async function deleteVideo(index) {
-            if (confirm('Delete this video?')) {
-                videos.splice(index, 1);
-                await saveVideos();
-                renderVideos();
-            }
+            videos.splice(index, 1);
+            await saveVideos();
+            renderVideos();
         }
 
         // TO-DO LIST FUNCTIONS
-        function loadTodos() {
-            const saved = localStorage.getItem('todos_charlie');
-            if (saved) {
-                todos = JSON.parse(saved);
+        async function loadTodos() {
+            const firebaseData = await loadFromFirebase('todos_charlie');
+            if (firebaseData) {
+                todos = firebaseData;
+                localStorage.setItem('todos_charlie', JSON.stringify(todos));
             } else {
-                todos = [];
+                const saved = localStorage.getItem('todos_charlie');
+                if (saved) {
+                    todos = JSON.parse(saved);
+                    syncToFirebase('todos_charlie', todos);
+                } else {
+                    todos = [];
+                }
             }
             renderTodos();
+            setupFirebaseListener('todos_charlie', (data) => {
+                todos = data;
+                renderTodos();
+            });
         }
 
         function saveTodos() {
             localStorage.setItem('todos_charlie', JSON.stringify(todos));
+            syncToFirebase('todos_charlie', todos);
         }
 
         function toggleTodoForm() {
@@ -1966,11 +2096,9 @@
         }
 
         async function deleteTodo(index) {
-            if (confirm('Delete this to-do?')) {
-                todos.splice(index, 1);
-                await saveTodos();
-                renderTodos();
-            }
+            todos.splice(index, 1);
+            await saveTodos();
+            renderTodos();
         }
 
         function renderTodos() {
@@ -2005,10 +2133,12 @@
             const promptIndex = dayOfYear % dailyPrompts.length;
             document.getElementById('promptQuestionHub').textContent = dailyPrompts[promptIndex];
 
-            const saved = localStorage.getItem('dailyPromptAnswers');
-            const savedAnswers = saved ? JSON.parse(saved) : {};
+            const firebaseData = await loadFromFirebase('dailyPromptAnswers');
+            const savedAnswers = firebaseData || (function() {
+                const s = localStorage.getItem('dailyPromptAnswers');
+                return s ? JSON.parse(s) : {};
+            })();
             
-            // If there's a saved answer for today, populate the textarea
             if (savedAnswers.date === today.toDateString() && savedAnswers.charlie) {
                 document.getElementById('answerInput').value = savedAnswers.charlie;
             } else {
@@ -2026,17 +2156,31 @@
             savedAnswers.date = today;
             savedAnswers.charlie = answer;
             localStorage.setItem('dailyPromptAnswers', JSON.stringify(savedAnswers));
+            syncToFirebase('dailyPromptAnswers', savedAnswers);
             
             loadHubPrompt();
-            alert('Your answer has been saved! It will appear on the homepage.');
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            loadCustomHabits();
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadCustomHabits();
             initBoard();
             loadVideos();
             loadResources();
             loadTodos();
+
+            // Restore last active tab
+            const savedTab = localStorage.getItem('charlieHub_activeTab');
+            if (savedTab) {
+                const tabEl = document.getElementById(savedTab + '-tab');
+                if (tabEl) {
+                    document.querySelectorAll('.hub-tab').forEach(t => t.classList.remove('active'));
+                    tabEl.classList.add('active');
+                    const dd = document.getElementById('sectionDropdown');
+                    if (dd) dd.value = savedTab;
+                    if (savedTab === 'prompt') loadHubPrompt();
+                    else if (savedTab === 'resources') renderAllResources();
+                }
+            }
         });
     </script>
 <script>
