@@ -640,6 +640,268 @@
             .nav-hamburger { display: block; }
             .nav-links { display: none; }
         }
+
+        /* ===== PAGE TABS ===== */
+        .page-tabs {
+            display: flex;
+            gap: 4px;
+            background: rgba(42, 31, 33, 0.6);
+            border-radius: 8px;
+            padding: 4px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border-color);
+        }
+        .page-tab {
+            flex: 1;
+            padding: 10px 8px;
+            background: none;
+            border: none;
+            color: rgba(224, 210, 208, 0.5);
+            font-family: 'Philosopher', serif;
+            font-size: 0.8rem;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s;
+            letter-spacing: 0.03em;
+        }
+        .page-tab:hover { color: var(--light-text); }
+        .page-tab.active {
+            background: rgba(163, 184, 153, 0.15);
+            color: var(--sage-green);
+        }
+        .tab-view { display: none; }
+        .tab-view.active { display: block; }
+
+        /* ===== RECIPE BANK ===== */
+        .rb-toolbar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .rb-search {
+            flex: 1;
+            min-width: 140px;
+            padding: 10px 14px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--light-text);
+            font-family: 'Philosopher', serif;
+            font-size: 0.85rem;
+        }
+        .rb-search::placeholder { color: rgba(224, 210, 208, 0.3); }
+        .rb-search:focus { outline: none; border-color: var(--sage-green); }
+        .rb-filters {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+        .rb-filter {
+            padding: 8px 12px;
+            background: none;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: rgba(224, 210, 208, 0.5);
+            font-family: 'Philosopher', serif;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .rb-filter:hover { color: var(--light-text); }
+        .rb-filter.active {
+            background: rgba(163, 184, 153, 0.15);
+            color: var(--sage-green);
+            border-color: rgba(163, 184, 153, 0.3);
+        }
+        .rb-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+        .rb-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .rb-card:hover { border-color: rgba(163, 184, 153, 0.4); }
+        .rb-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 6px;
+        }
+        .rb-card-name {
+            font-size: 0.9rem;
+            color: var(--cream);
+            font-weight: 400;
+            flex: 1;
+            padding-right: 8px;
+        }
+        .rb-card-fav {
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 2px;
+            opacity: 0.3;
+            transition: all 0.2s;
+        }
+        .rb-card-fav.favorited { opacity: 1; }
+        .rb-card-meta {
+            font-size: 0.7rem;
+            color: rgba(224, 210, 208, 0.4);
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 6px;
+        }
+        .rb-card-tags {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+        .rb-tag {
+            padding: 2px 8px;
+            border-radius: 99px;
+            font-size: 0.65rem;
+            letter-spacing: 0.04em;
+        }
+        .rb-tag-breakfast { background: rgba(163, 184, 153, 0.15); color: var(--sage-green); }
+        .rb-tag-lunch { background: rgba(196, 168, 130, 0.15); color: #c4a882; }
+        .rb-tag-dinner { background: rgba(180, 130, 140, 0.15); color: #b4828c; }
+        .rb-tag-dessert { background: rgba(160, 140, 180, 0.15); color: #a08cb4; }
+        .rb-tag-snack { background: rgba(125, 143, 118, 0.15); color: var(--muted-sage); }
+        .rb-tag-cuisine { background: rgba(224, 210, 208, 0.08); color: rgba(224, 210, 208, 0.5); }
+        .rb-count {
+            font-size: 0.75rem;
+            color: rgba(224, 210, 208, 0.3);
+            text-align: center;
+            padding: 12px 0;
+        }
+        .rb-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: rgba(224, 210, 208, 0.3);
+            font-size: 0.85rem;
+        }
+
+        /* ===== GENERATE VIEW ===== */
+        .gen-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 12px;
+        }
+        .gen-section h3 {
+            font-size: 0.9rem;
+            color: var(--sage-green);
+            margin-bottom: 12px;
+            font-weight: 400;
+            letter-spacing: 0.03em;
+        }
+        .gen-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            align-items: center;
+        }
+        .gen-label {
+            font-size: 0.8rem;
+            color: rgba(224, 210, 208, 0.6);
+            min-width: 90px;
+        }
+        .gen-input {
+            flex: 1;
+            padding: 8px 12px;
+            background: rgba(61, 47, 49, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--light-text);
+            font-family: 'Philosopher', serif;
+            font-size: 0.85rem;
+        }
+        .gen-input:focus { outline: none; border-color: var(--sage-green); }
+        .gen-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--sage-green);
+            color: var(--dark-bg);
+            border: none;
+            border-radius: 8px;
+            font-family: 'Philosopher', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: 0.03em;
+        }
+        .gen-btn:hover { opacity: 0.9; }
+        .gen-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .gen-btn-secondary {
+            background: none;
+            border: 1px solid var(--sage-green);
+            color: var(--sage-green);
+        }
+        .gen-status {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.85rem;
+            color: rgba(224, 210, 208, 0.5);
+        }
+        .gen-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(163, 184, 153, 0.2);
+            border-top-color: var(--sage-green);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .gen-preview-day {
+            background: rgba(61, 47, 49, 0.4);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 8px;
+        }
+        .gen-preview-day h4 {
+            font-size: 0.8rem;
+            color: var(--sage-green);
+            margin-bottom: 8px;
+            font-weight: 400;
+        }
+        .gen-preview-meal {
+            font-size: 0.75rem;
+            color: rgba(224, 210, 208, 0.6);
+            padding: 4px 0;
+        }
+        .gen-preview-meal strong {
+            color: var(--light-text);
+            font-weight: 400;
+        }
+        .gen-checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 0.8rem;
+            color: rgba(224, 210, 208, 0.6);
+        }
+        .gen-checkbox-row input[type="checkbox"] {
+            accent-color: var(--sage-green);
+        }
     </style>
 </head>
 <body>
@@ -673,8 +935,16 @@
 <div class="container">
     <div class="header">
         <h1>Meal Plan</h1>
-        <p>Kasey & Charlie • Feb 11–24</p>
+        <p id="header-subtitle">Kasey & Charlie • Feb 11–24</p>
     </div>
+    
+    <div class="page-tabs">
+        <button class="page-tab active" onclick="switchTab('plan')">Plan</button>
+        <button class="page-tab" onclick="switchTab('recipes')">Recipes</button>
+        <button class="page-tab" onclick="switchTab('generate')">Generate</button>
+    </div>
+
+    <div id="plan-view" class="tab-view active">
     
     <div class="toggle-container">
         <button class="toggle-btn active" data-person="kasey">Kasey</button>
@@ -714,7 +984,75 @@
         </div>
         <div class="meals-container" id="meals-container"></div>
     </div>
-</div>
+    </div><!-- end plan-view -->
+
+    <!-- RECIPE BANK VIEW -->
+    <div id="recipes-view" class="tab-view">
+        <div class="rb-toolbar">
+            <input type="text" class="rb-search" id="rb-search" placeholder="Search recipes..." oninput="filterRecipes()">
+        </div>
+        <div class="rb-filters" id="rb-filters">
+            <button class="rb-filter active" data-filter="all" onclick="setRecipeFilter('all', this)">All</button>
+            <button class="rb-filter" data-filter="Breakfast" onclick="setRecipeFilter('Breakfast', this)">Breakfast</button>
+            <button class="rb-filter" data-filter="Lunch" onclick="setRecipeFilter('Lunch', this)">Lunch</button>
+            <button class="rb-filter" data-filter="Dinner" onclick="setRecipeFilter('Dinner', this)">Dinner</button>
+            <button class="rb-filter" data-filter="Dessert" onclick="setRecipeFilter('Dessert', this)">Dessert</button>
+            <button class="rb-filter" data-filter="favorites" onclick="setRecipeFilter('favorites', this)">♥ Favs</button>
+        </div>
+        <div class="rb-count" id="rb-count"></div>
+        <div class="rb-grid" id="rb-grid"></div>
+    </div>
+
+    <!-- GENERATE PLAN VIEW -->
+    <div id="generate-view" class="tab-view">
+        <div class="gen-section">
+            <h3>Generate New 2-Week Plan</h3>
+            <div class="gen-row">
+                <span class="gen-label">Start Date</span>
+                <input type="date" class="gen-input" id="gen-start-date">
+            </div>
+            <div class="gen-row">
+                <span class="gen-label">Duration</span>
+                <select class="gen-input" id="gen-duration">
+                    <option value="7">1 Week (7 days)</option>
+                    <option value="14" selected>2 Weeks (14 days)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="gen-section">
+            <h3>Preferences</h3>
+            <div class="gen-checkbox-row">
+                <input type="checkbox" id="gen-favor-favs" checked>
+                <label for="gen-favor-favs">Prioritize favorite recipes</label>
+            </div>
+            <div class="gen-checkbox-row">
+                <input type="checkbox" id="gen-new-recipes" checked>
+                <label for="gen-new-recipes">Suggest ~20% new recipe ideas</label>
+            </div>
+            <div class="gen-checkbox-row">
+                <input type="checkbox" id="gen-no-repeat" checked>
+                <label for="gen-no-repeat">No same meal two days in a row</label>
+            </div>
+            <div class="gen-checkbox-row">
+                <input type="checkbox" id="gen-prep-days" checked>
+                <label for="gen-prep-days">Include prep day schedules</label>
+            </div>
+        </div>
+
+        <div class="gen-section">
+            <h3>Dietary Reminders</h3>
+            <div style="font-size: 0.75rem; color: rgba(224,210,208,0.45); line-height: 1.6;">
+                Anti-cancer Mediterranean focus • No avocado (except choc mousse) • No peanut butter • No mushrooms • No raw tomatoes • No cilantro • Bell peppers as supporting only • Heavily glazed fish only • Love spice
+            </div>
+        </div>
+
+        <button class="gen-btn" id="gen-btn" onclick="generatePlan()">Generate Meal Plan</button>
+        
+        <div id="gen-status" class="gen-status" style="display:none;"></div>
+        <div id="gen-preview" style="display:none; margin-top: 16px;"></div>
+    </div>
+</div><!-- end container -->
 
 <div class="modal-container" id="modal">
     <div class="modal">
@@ -1793,6 +2131,554 @@ function toggleNav() {
         o.classList.add('open');
         document.body.style.overflow = 'hidden';
     }
+}
+
+// ===== TAB SWITCHING =====
+function switchTab(tab) {
+    document.querySelectorAll('.page-tab').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelectorAll('.tab-view').forEach(function(v) { v.classList.remove('active'); });
+    document.querySelector('.page-tab[onclick*="' + tab + '"]').classList.add('active');
+    document.getElementById(tab + '-view').classList.add('active');
+    if (tab === 'recipes') renderRecipeBank();
+    if (tab === 'generate') initGenerateView();
+}
+
+// ===== RECIPE BANK =====
+var recipeBank = [];
+var rbFilter = 'all';
+var rbSearch = '';
+
+function extractRecipesFromPlan() {
+    var recipes = [];
+    var seen = {};
+    mealData.kasey.days.forEach(function(day) {
+        day.meals.forEach(function(meal) {
+            if (meal.name.indexOf('Melting Pot') !== -1) return;
+            var key = meal.name;
+            if (seen[key]) { seen[key].timesUsed++; return; }
+            var proteinMatch = meal.portion.match(/(\d+)g protein/);
+            var calMatch = meal.portion.match(/(\d+)\s*cal/);
+            var timeMatch = (meal.portions || []).join(' ').match(/(\d+)\s*min/);
+            var recipe = {
+                id: 'r_' + recipes.length + '_' + Math.random().toString(36).substr(2,6),
+                name: meal.name, type: meal.type,
+                protein: proteinMatch ? parseInt(proteinMatch[1]) : 0,
+                calories: calMatch ? parseInt(calMatch[1]) : 0,
+                prepTime: timeMatch ? parseInt(timeMatch[1]) : 0,
+                ingredients: meal.ingredients || [], steps: meal.steps || [],
+                tip: meal.tip || '', portion: meal.portion || '',
+                portions: meal.portions || [], color: meal.color || '#a3b899',
+                cuisineTags: guessCuisine(meal.name, meal.ingredients),
+                favorite: false, timesUsed: 1, source: 'original'
+            };
+            seen[key] = recipe;
+            recipes.push(recipe);
+        });
+    });
+    snackMenu.forEach(function(s, i) {
+        recipes.push({
+            id: 'r_s' + i + '_' + Math.random().toString(36).substr(2,6),
+            name: s.name, type: 'Snack',
+            protein: parseInt((s.portion || '').match(/(\d+)g/)?.[1] || 0),
+            calories: parseInt((s.portion || '').match(/(\d+)\s*cal/)?.[1] || 0),
+            prepTime: 0, ingredients: s.ingredients || [], steps: s.steps || [],
+            tip: s.tip || '', portion: s.portion || '',
+            portions: s.portions || [], color: s.color || '#7d8f76',
+            cuisineTags: [], favorite: false, timesUsed: 0, source: 'original'
+        });
+    });
+    return recipes;
+}
+
+function guessCuisine(name, ingredients) {
+    var n = (name + ' ' + ingredients.join(' ')).toLowerCase();
+    var tags = [];
+    if (n.match(/chipotle|enchilada|burrito|taco|mexican|salsa|cumin/)) tags.push('Mexican');
+    if (n.match(/asian|soy sauce|ginger|sesame/)) tags.push('Asian');
+    if (n.match(/alfredo|orzo|marinara|italian|basil|parmesan|ricotta|mozzarella|bolognese/)) tags.push('Italian');
+    if (n.match(/lemon|farro|olive oil|chickpea|mediterranean|feta/)) tags.push('Mediterranean');
+    if (n.match(/smoothie|oats|parfait|muffin/)) tags.push('American');
+    if (tags.length === 0) tags.push('American');
+    return tags;
+}
+
+function setRecipeFilter(filter, btn) {
+    rbFilter = filter;
+    document.querySelectorAll('.rb-filter').forEach(function(f) { f.classList.remove('active'); });
+    btn.classList.add('active');
+    renderRecipeBank();
+}
+
+function filterRecipes() {
+    rbSearch = document.getElementById('rb-search').value.toLowerCase();
+    renderRecipeBank();
+}
+
+function renderRecipeBank() {
+    var grid = document.getElementById('rb-grid');
+    var count = document.getElementById('rb-count');
+    grid.innerHTML = '';
+    
+    var filtered = recipeBank.filter(function(r) {
+        if (rbFilter === 'favorites' && !r.favorite) return false;
+        if (rbFilter !== 'all' && rbFilter !== 'favorites' && r.type !== rbFilter) return false;
+        if (rbSearch && r.name.toLowerCase().indexOf(rbSearch) === -1 && 
+            r.cuisineTags.join(' ').toLowerCase().indexOf(rbSearch) === -1 &&
+            r.ingredients.join(' ').toLowerCase().indexOf(rbSearch) === -1) return false;
+        return true;
+    });
+    
+    filtered.sort(function(a, b) {
+        if (a.favorite && !b.favorite) return -1;
+        if (!a.favorite && b.favorite) return 1;
+        return a.name.localeCompare(b.name);
+    });
+    
+    count.textContent = filtered.length + ' recipe' + (filtered.length !== 1 ? 's' : '');
+    
+    if (filtered.length === 0) {
+        grid.innerHTML = '<div class="rb-empty">No recipes found</div>';
+        return;
+    }
+    
+    filtered.forEach(function(r) {
+        var card = document.createElement('div');
+        card.className = 'rb-card';
+        card.onclick = function(e) {
+            if (e.target.closest('.rb-card-fav')) return;
+            openModal({ name: r.name, color: r.color, portions: r.portions, ingredients: r.ingredients, steps: r.steps, tip: r.tip });
+        };
+        var tagClass = 'rb-tag-' + r.type.toLowerCase();
+        var cuisineHtml = r.cuisineTags.map(function(t) { return '<span class="rb-tag rb-tag-cuisine">' + t + '</span>'; }).join('');
+        card.innerHTML = '<div class="rb-card-top">' +
+            '<span class="rb-card-name">' + r.name + '</span>' +
+            '<button class="rb-card-fav ' + (r.favorite ? 'favorited' : '') + '" onclick="toggleFavorite(\'' + r.id + '\')">' + (r.favorite ? '♥' : '♡') + '</button>' +
+            '</div>' +
+            '<div class="rb-card-meta"><span>' + r.protein + 'g protein</span><span>' + r.calories + ' cal</span>' + (r.prepTime ? '<span>' + r.prepTime + ' min</span>' : '') + '</div>' +
+            '<div class="rb-card-tags"><span class="rb-tag ' + tagClass + '">' + r.type + '</span>' + cuisineHtml + '</div>';
+        grid.appendChild(card);
+    });
+}
+
+function toggleFavorite(id) {
+    recipeBank.forEach(function(r) { if (r.id === id) r.favorite = !r.favorite; });
+    saveRecipeBankToFirebase();
+    renderRecipeBank();
+}
+
+// ===== FIREBASE FOR RECIPE BANK =====
+var fbReady = false;
+
+function saveRecipeBankToFirebase() {
+    if (!fbReady) { localStorage.setItem('mealplan_recipes', JSON.stringify(recipeBank)); return; }
+    try {
+        var imports = window.firestoreImports;
+        imports.setDoc(imports.doc(window.db, 'mealPlanData', 'recipeBank'), {
+            recipes: JSON.stringify(recipeBank), updatedAt: new Date().toISOString()
+        });
+    } catch(e) { localStorage.setItem('mealplan_recipes', JSON.stringify(recipeBank)); }
+}
+
+function loadRecipeBankFromFirebase(callback) {
+    if (!fbReady) {
+        var saved = localStorage.getItem('mealplan_recipes');
+        if (saved) recipeBank = JSON.parse(saved);
+        callback();
+        return;
+    }
+    try {
+        var imports = window.firestoreImports;
+        imports.getDoc(imports.doc(window.db, 'mealPlanData', 'recipeBank')).then(function(snap) {
+            if (snap.exists() && snap.data().recipes) recipeBank = JSON.parse(snap.data().recipes);
+            callback();
+        }).catch(function() { callback(); });
+    } catch(e) { callback(); }
+}
+
+function savePlanToFirebase(planObj) {
+    if (!fbReady) { localStorage.setItem('mealplan_current', JSON.stringify(planObj)); return; }
+    try {
+        var imports = window.firestoreImports;
+        imports.setDoc(imports.doc(window.db, 'mealPlanData', 'currentPlan'), {
+            plan: JSON.stringify(planObj), updatedAt: new Date().toISOString()
+        });
+    } catch(e) { localStorage.setItem('mealplan_current', JSON.stringify(planObj)); }
+}
+
+function initRecipeBank() {
+    loadRecipeBankFromFirebase(function() {
+        if (recipeBank.length === 0) {
+            recipeBank = extractRecipesFromPlan();
+            saveRecipeBankToFirebase();
+        }
+    });
+}
+
+// ===== GENERATE PLAN =====
+function initGenerateView() {
+    var startInput = document.getElementById('gen-start-date');
+    if (!startInput.value) {
+        var planEnd = getDateForPlanDay(PLAN_DAYS);
+        var nextDay = new Date(planEnd);
+        nextDay.setDate(nextDay.getDate() + 1);
+        startInput.value = nextDay.toISOString().split('T')[0];
+    }
+}
+
+function buildSkeletonPrompt(startDate, duration, recipeSummary, opts) {
+    return 'Generate a ' + duration + '-day meal plan skeleton. Output ONLY meal names and daily totals.\n\n' +
+        'TARGETS: 140-165g protein, 1500-1700 cal/day\n' +
+        'RESTRICTIONS: No avocado (except choc mousse), no peanut butter, no mushrooms, no raw tomatoes, no cilantro, no turmeric, bell peppers supporting only, fish only if heavily glazed\n' +
+        'STRUCTURE: Breakfast (grab-and-go), Lunch (batch prep), Dinner (fresh 20-35min), Dessert (light 100-200cal)\n' +
+        (opts.noRepeat ? 'No same meal on consecutive days.\n' : '') +
+        (opts.favorFavs ? 'Prioritize FAV recipes.\n' : '') +
+        'Mix cuisines. Love spicy food.\n' +
+        (opts.prepDays ? 'Mark 2 prep days per week.\n' : '') +
+        (opts.newRecipes ? '~80% from bank, ~20% new ideas (mark with isNew:true). For new recipes include protein and calories in portion.\n' : 'Use ONLY recipes from bank.\n') +
+        '\nRECIPE BANK:\n' + recipeSummary + '\n\n' +
+        'START: ' + startDate + ', ' + duration + ' days.\n\n' +
+        'Return ONLY a JSON array. No markdown. No backticks. COMPACT format:\n' +
+        '[{"day":1,"theme":"Italian","protein":"148g","calories":"1,560","prep":null,' +
+        '"meals":[{"type":"Breakfast","name":"Exact Recipe Name From Bank","portion":"42g protein - 420 cal","isNew":false},' +
+        '{"type":"Lunch","name":"Name","portion":"38g protein - 450 cal","isNew":false},' +
+        '{"type":"Dinner","name":"Name","portion":"48g protein - 520 cal","isNew":false},' +
+        '{"type":"Dessert","name":"Name","portion":"8g protein - 150 cal","isNew":false}]}]\n\n' +
+        'IMPORTANT: Use EXACT recipe names from the bank. Only include type, name, portion, and isNew per meal. Nothing else.';
+}
+
+async function callAI(prompt) {
+    var response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            model: 'claude-sonnet-4-20250514',
+            max_tokens: 4000,
+            messages: [{ role: 'user', content: prompt }]
+        })
+    });
+    var data = await response.json();
+    if (!data.content || !data.content[0]) throw new Error(data.error?.message || 'No response from AI');
+    var text = data.content.map(function(c) { return c.text || ''; }).join('');
+    text = text.replace(/```json|```/g, '').trim();
+    return JSON.parse(text);
+}
+
+function hydrateSkeletonWithRecipes(skeleton) {
+    // Build lookup from recipe bank
+    var lookup = {};
+    recipeBank.forEach(function(r) {
+        lookup[r.name.toLowerCase()] = r;
+    });
+    
+    // Color map for meal types
+    var typeColors = {
+        'Breakfast': '#a3b899',
+        'Lunch': '#c4a882',
+        'Dinner': '#b4828c',
+        'Dessert': '#a08cb4'
+    };
+    var typeIcons = {
+        'Breakfast': '\u2600\uFE0F',
+        'Lunch': '\uD83C\uDF5C',
+        'Dinner': '\uD83C\uDF73',
+        'Dessert': '\uD83C\uDF53'
+    };
+    
+    return skeleton.map(function(day) {
+        day.meals = day.meals.map(function(m) {
+            var bankRecipe = lookup[m.name.toLowerCase()];
+            
+            if (bankRecipe) {
+                // Fill from recipe bank
+                m.icon = typeIcons[m.type] || '';
+                m.color = bankRecipe.color || typeColors[m.type] || '#a3b899';
+                m.ingredients = bankRecipe.ingredients || [];
+                m.steps = bankRecipe.steps || [];
+                m.tip = bankRecipe.tip || '';
+                m.portions = bankRecipe.portions || [m.portion];
+                if (!m.portion) m.portion = bankRecipe.portion;
+            } else {
+                // New recipe or unmatched — mark for AI detail pass
+                m.icon = typeIcons[m.type] || '';
+                m.color = typeColors[m.type] || '#a3b899';
+                m.ingredients = m.ingredients || [];
+                m.steps = m.steps || [];
+                m.tip = m.tip || '';
+                m.portions = m.portions || [m.portion];
+                m.isNew = true;
+                m.needsDetails = true;
+            }
+            return m;
+        });
+        return day;
+    });
+}
+
+async function fillNewRecipeDetails(days, statusEl) {
+    // Collect all meals that need details
+    var newMeals = [];
+    days.forEach(function(day) {
+        day.meals.forEach(function(m) {
+            if (m.needsDetails && !newMeals.some(function(x) { return x.name === m.name; })) {
+                newMeals.push({ name: m.name, type: m.type, portion: m.portion });
+            }
+        });
+    });
+    
+    if (newMeals.length === 0) return days;
+    
+    statusEl.innerHTML = '<span class="gen-spinner"></span> Generating ' + newMeals.length + ' new recipe details...';
+    
+    var prompt = 'Create recipe details for these meals. Anti-cancer Mediterranean focus. Love spice. RESTRICTIONS: No avocado, no peanut butter, no mushrooms, no raw tomatoes, no cilantro, no turmeric.\n\n' +
+        'Meals:\n' + newMeals.map(function(m, i) { return (i+1) + '. ' + m.name + ' (' + m.type + ', ' + m.portion + ')'; }).join('\n') + '\n\n' +
+        'Return ONLY a JSON array. No backticks. Each recipe:\n' +
+        '[{"name":"Exact Name","ingredients":["item1","item2"],"steps":["Step 1","Step 2"],"tip":"anti-cancer tip","portions":["42g protein","420 cal","8g fiber","25 min"]}]';
+    
+    try {
+        var details = await callAI(prompt);
+        if (!Array.isArray(details)) details = [details];
+        
+        var detailLookup = {};
+        details.forEach(function(d) { detailLookup[d.name.toLowerCase()] = d; });
+        
+        // Apply details back to days
+        days.forEach(function(day) {
+            day.meals.forEach(function(m) {
+                if (m.needsDetails) {
+                    var detail = detailLookup[m.name.toLowerCase()];
+                    if (detail) {
+                        m.ingredients = detail.ingredients || [];
+                        m.steps = detail.steps || [];
+                        m.tip = detail.tip || '';
+                        m.portions = detail.portions || [m.portion];
+                    }
+                    delete m.needsDetails;
+                }
+            });
+        });
+    } catch(e) {
+        console.warn('Could not fetch new recipe details:', e);
+        // Leave them without details — still usable
+        days.forEach(function(day) {
+            day.meals.forEach(function(m) { delete m.needsDetails; });
+        });
+    }
+    
+    return days;
+}
+
+async function generatePlan() {
+    var btn = document.getElementById('gen-btn');
+    var status = document.getElementById('gen-status');
+    var preview = document.getElementById('gen-preview');
+    
+    btn.disabled = true;
+    btn.style.display = 'block';
+    status.style.display = 'block';
+    preview.style.display = 'none';
+    
+    var startDate = document.getElementById('gen-start-date').value;
+    var duration = parseInt(document.getElementById('gen-duration').value);
+    var opts = {
+        favorFavs: document.getElementById('gen-favor-favs').checked,
+        newRecipes: document.getElementById('gen-new-recipes').checked,
+        noRepeat: document.getElementById('gen-no-repeat').checked,
+        prepDays: document.getElementById('gen-prep-days').checked
+    };
+    
+    var recipeSummary = recipeBank.filter(function(r) { return r.type !== 'Snack'; }).map(function(r) {
+        return r.type + ': ' + r.name + ' (' + r.protein + 'g/' + r.calories + 'cal' + 
+            (r.favorite ? ' FAV' : '') + ')';
+    }).join('\n');
+    
+    try {
+        // Phase 1: Get lightweight skeleton from AI
+        status.innerHTML = '<span class="gen-spinner"></span> Planning meals...';
+        var prompt = buildSkeletonPrompt(startDate, duration, recipeSummary, opts);
+        var skeleton = await callAI(prompt);
+        
+        if (!Array.isArray(skeleton)) {
+            if (skeleton.days && Array.isArray(skeleton.days)) skeleton = skeleton.days;
+            else throw new Error('Unexpected response format');
+        }
+        
+        // Phase 2: Fill in recipe details from bank
+        status.innerHTML = '<span class="gen-spinner"></span> Filling in recipes...';
+        var hydrated = hydrateSkeletonWithRecipes(skeleton);
+        
+        // Phase 3: Get details for any new recipes
+        hydrated = await fillNewRecipeDetails(hydrated, status);
+        
+        var plan = {
+            planName: duration + '-Day Anti-Cancer Mediterranean Plan',
+            startDate: startDate,
+            days: hydrated
+        };
+        
+        status.innerHTML = 'Plan generated! Review below.';
+        showPlanPreview(plan);
+        
+    } catch(e) {
+        console.error('Generation error:', e);
+        status.innerHTML = 'Error: ' + e.message + '<br><button class="gen-btn gen-btn-secondary" onclick="generatePlan()" style="margin-top:12px;width:auto;padding:10px 20px;">Try Again</button>';
+        btn.disabled = false;
+    }
+}
+
+function showPlanPreview(plan) {
+    var preview = document.getElementById('gen-preview');
+    var btn = document.getElementById('gen-btn');
+    preview.style.display = 'block';
+    
+    var html = '<div class="gen-section"><h3>' + (plan.planName || 'New Meal Plan') + '</h3>';
+    
+    var sd = new Date(plan.startDate + 'T00:00:00');
+    var dayNames = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+    var monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    
+    plan.days.forEach(function(day) {
+        var dayDate = new Date(sd);
+        dayDate.setDate(dayDate.getDate() + day.day - 1);
+        var dateStr = dayNames[dayDate.getDay()] + ' ' + monthNames[dayDate.getMonth()] + ' ' + dayDate.getDate();
+        
+        html += '<div class="gen-preview-day">';
+        html += '<h4>' + dateStr + ' — ' + day.theme + (day.prep ? '' : '') + '</h4>';
+        html += '<div style="font-size:0.65rem;color:rgba(224,210,208,0.35);margin-bottom:6px;">' + day.protein + ' protein • ' + day.calories + ' cal</div>';
+        day.meals.forEach(function(m) {
+            var newBadge = m.isNew ? ' <span style="color:#a3b899;">NEW</span>' : '';
+            html += '<div class="gen-preview-meal">' + m.icon + ' <strong>' + m.name + '</strong>' + newBadge + ' <span style="opacity:0.4;">— ' + m.portion + '</span></div>';
+        });
+        html += '</div>';
+    });
+    
+    html += '</div>';
+    html += '<div style="display:flex;gap:8px;flex-direction:column;">';
+    html += '<button class="gen-btn" onclick="acceptPlan()">Use This Plan</button>';
+    html += '<button class="gen-btn gen-btn-secondary" onclick="regenPlan()">Regenerate</button>';
+    html += '</div>';
+    
+    preview.innerHTML = html;
+    btn.disabled = false;
+    btn.style.display = 'none';
+    
+    window._pendingPlan = plan;
+}
+
+function regenPlan() {
+    document.getElementById('gen-btn').style.display = 'block';
+    document.getElementById('gen-preview').style.display = 'none';
+    generatePlan();
+}
+
+function acceptPlan() {
+    var plan = window._pendingPlan;
+    if (!plan) return;
+    
+    var newStart = new Date(plan.startDate + 'T00:00:00');
+    PLAN_START = newStart;
+    PLAN_DAYS = plan.days.length;
+    
+    mealData.kasey.days = plan.days.map(function(d) {
+        return {
+            day: d.day, theme: d.theme, protein: d.protein, calories: d.calories,
+            prep: d.prep || null,
+            meals: d.meals.map(function(m) {
+                return { type: m.type, icon: m.icon, name: m.name, portion: m.portion,
+                    color: m.color || '#a3b899', ingredients: m.ingredients, steps: m.steps,
+                    tip: m.tip, portions: m.portions };
+            })
+        };
+    });
+    
+    // Regenerate Charlie's scaled meals
+    mealData.charlie.days = mealData.kasey.days.map(function(day) {
+        var cDay = JSON.parse(JSON.stringify(day));
+        var kProtein = parseInt(day.protein); var kCal = parseInt(day.calories.replace(",", ""));
+        cDay.protein = Math.round(kProtein * 1.3) + "g";
+        cDay.calories = (Math.round(kCal * 1.4 / 100) * 100).toLocaleString();
+        cDay.meals = cDay.meals.map(function(m) {
+            if (m.name.indexOf("Melting Pot") !== -1) return m;
+            var origProtein = parseInt(m.portion); var calM = m.portion.match(/(\d+) cal/); var origCal = calM ? parseInt(calM[1]) : 0;
+            if (isNaN(origProtein) || origCal === 0) return m;
+            m.portion = Math.round(origProtein * 1.3) + "g protein - " + Math.round(origCal * 1.4) + " cal";
+            m.portions = m.portions.map(function(p) {
+                if (p.indexOf("protein") !== -1) return Math.round(origProtein * 1.3) + "g protein";
+                if (p.indexOf("cal") !== -1) return Math.round(origCal * 1.4) + " cal";
+                if (p.indexOf("fiber") !== -1) return Math.round(parseInt(p) * 1.2) + "g fiber";
+                return p;
+            });
+            if (m.type === "Dinner" && m.tip) m.tip += "\n\nCHARLIE: Extra cooked tomato sauce with olive oil boosts lycopene absorption.";
+            return m;
+        });
+        return cDay;
+    });
+    
+    // Add new recipes to bank
+    plan.days.forEach(function(day) {
+        day.meals.forEach(function(m) {
+            if (m.isNew) {
+                var exists = recipeBank.some(function(r) { return r.name === m.name; });
+                if (!exists) {
+                    var pm = m.portion.match(/(\d+)g protein/); var cm = m.portion.match(/(\d+)\s*cal/);
+                    recipeBank.push({
+                        id: 'r_ai_' + Math.random().toString(36).substr(2,8),
+                        name: m.name, type: m.type,
+                        protein: pm ? parseInt(pm[1]) : 0, calories: cm ? parseInt(cm[1]) : 0,
+                        prepTime: 0, ingredients: m.ingredients, steps: m.steps,
+                        tip: m.tip, portion: m.portion, portions: m.portions,
+                        color: m.color || '#a3b899',
+                        cuisineTags: guessCuisine(m.name, m.ingredients),
+                        favorite: false, timesUsed: 1, source: 'ai-generated'
+                    });
+                }
+            }
+        });
+    });
+    saveRecipeBankToFirebase();
+    
+    // Update subtitle
+    var sd = new Date(plan.startDate + 'T00:00:00'); var ed = new Date(sd); ed.setDate(ed.getDate() + plan.days.length - 1);
+    var mo = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    document.getElementById('header-subtitle').textContent = 'Kasey & Charlie \u2022 ' + mo[sd.getMonth()] + ' ' + sd.getDate() + '\u2013' + ed.getDate();
+    
+    savePlanToFirebase({ startDate: plan.startDate, days: plan.days.length, kaseyDays: mealData.kasey.days, charlieDays: mealData.charlie.days });
+    
+    document.getElementById('gen-btn').style.display = 'block';
+    document.getElementById('gen-btn').disabled = false;
+    document.getElementById('gen-preview').style.display = 'none';
+    document.getElementById('gen-status').innerHTML = 'Plan loaded! Switching to Plan view...';
+    
+    currentDay = 1;
+    setTimeout(function() { switchTab('plan'); renderCalendar(); selectDay(1); }, 1000);
+}
+
+// Init recipe bank on load
+initRecipeBank();
+</script>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { getFirestore, doc, setDoc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+try {
+    const firebaseConfig = {
+        apiKey: "AIzaSyCDda9sPwSY-RQ5rrM5THOvcLtHvcPRYd4",
+        authDomain: "our-habit-hub.firebaseapp.com",
+        projectId: "our-habit-hub",
+        storageBucket: "our-habit-hub.firebasestorage.app",
+        messagingSenderId: "78555830496",
+        appId: "1:78555830496:web:3e457e54729cc11b825885"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    window.db = db;
+    window.firestoreImports = { doc, setDoc, getDoc };
+    window.fbReady = true;
+    
+    // Reload recipe bank now that Firebase is ready
+    if (typeof window.initRecipeBank === 'function') window.initRecipeBank();
+} catch(e) {
+    console.log('Firebase init failed, using localStorage fallback', e);
 }
 </script>
 </body>
