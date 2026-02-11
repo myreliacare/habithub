@@ -193,9 +193,9 @@
  .bingo-grid {
  display: grid;
  grid-template-columns: repeat(4, 1fr);
- gap: 2px;
+ gap: 0;
  margin-bottom: 20px;
- background: #3d2f31;
+ border: 2px solid #a3b899;
  max-width: 500px;
  margin-left: auto;
  margin-right: auto;
@@ -216,10 +216,15 @@
  color: #b59197;
  position: relative;
  line-height: 1.3;
+ border: 1px solid #a3b899;
  }
 
  .bingo-cell.completed {
  background: #b59197;
+ color: #f2ebe0;
+ }
+ .bingo-cell.in-bingo {
+ background: #a3b899;
  color: #f2ebe0;
  }
 
@@ -242,11 +247,12 @@
  }
 
  .controls .btn {
- flex: 1;
- min-width: 120px;
- padding: 12px 20px;
- font-size: 1rem;
+ padding: 10px 20px;
+ font-size: 0.85rem;
  font-weight: 700;
+ background: #a3b899;
+ border: 1px solid #a3b899;
+ color: #1c1c1c;
  }
 
  .stats {
@@ -1049,11 +1055,11 @@
  }
 
  .controls {
- flex-direction: column;
+ flex-direction: row;
  }
 
  .controls .btn {
- width: 100%;
+ width: auto;
  min-width: unset;
  }
 
@@ -1935,6 +1941,33 @@
             }
         }
         /* ===== END MOBILE OPTIMIZATION ===== */
+ /* ===== ROUTINE EDITOR ===== */
+ .routine-editor-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:10001; overflow-y:auto; }
+ .routine-editor-overlay.active { display:block; }
+ .routine-editor { background:#f2ebe0; max-width:600px; margin:20px auto; border:2px solid #b59197; }
+ .routine-editor-header { display:flex; justify-content:space-between; align-items:center; padding:14px 18px; border-bottom:1px solid rgba(181,145,151,0.3); }
+ .routine-editor-header h2 { margin:0; font-size:1.1rem; color:#3d2f31; }
+ .routine-editor-close { background:none; border:none; font-size:1.6rem; color:#b59197; cursor:pointer; line-height:1; }
+ .routine-editor-body { padding:14px 18px; max-height:65vh; overflow-y:auto; }
+ .routine-block-label { font-weight:700; color:#b59197; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.05em; margin:14px 0 8px; border-bottom:1px solid rgba(181,145,151,0.2); padding-bottom:4px; }
+ .routine-block-label:first-child { margin-top:0; }
+ .routine-item-edit { background:#fff; padding:10px 12px; margin-bottom:6px; border:1px solid rgba(181,145,151,0.15); }
+ .routine-edit-row { display:flex; gap:6px; margin-bottom:4px; }
+ .routine-edit-row input { padding:5px 8px; border:1px solid #ddd; font-family:inherit; font-size:0.82rem; background:#fff; color:#3d2f31; }
+ .routine-edit-row .re-time { width:90px; flex:none; }
+ .routine-edit-row .re-title { flex:1; min-width:0; }
+ .routine-edit-details { width:100%; padding:5px 8px; border:1px solid #ddd; font-family:inherit; font-size:0.8rem; min-height:32px; resize:vertical; color:#6b5a5e; background:#fff; box-sizing:border-box; }
+ .routine-edit-details:disabled { background:#f0ebe6; color:#aaa; font-style:italic; }
+ .routine-edit-actions { display:flex; gap:4px; margin-top:4px; }
+ .routine-edit-actions button { background:none; border:1px solid #ddd; padding:2px 8px; font-size:0.72rem; cursor:pointer; font-family:inherit; color:#888; }
+ .routine-edit-actions button:hover { border-color:#b59197; color:#b59197; }
+ .routine-edit-actions .re-del:hover { border-color:#c97a7a; color:#c97a7a; }
+ .routine-add-item { background:none; border:1px dashed rgba(181,145,151,0.4); color:#b59197; padding:6px; width:100%; cursor:pointer; font-family:inherit; font-size:0.82rem; margin-bottom:10px; }
+ .routine-add-item:hover { border-color:#b59197; background:rgba(181,145,151,0.05); }
+ .routine-editor-footer { display:flex; justify-content:flex-end; gap:8px; padding:12px 18px; border-top:1px solid rgba(181,145,151,0.2); }
+ .routine-editor-footer button { padding:8px 20px; font-family:inherit; font-size:0.85rem; cursor:pointer; border:none; }
+ .routine-editor-footer .re-cancel { background:#ddd; color:#666; }
+ .routine-editor-footer .re-save { background:#a3b899; color:#1c1c1c; font-weight:600; }
  </style>
 </head>
 
@@ -2027,9 +2060,11 @@
  <div id="currentDayDisplay" style="color: #b59197; font-weight: 600; font-size: 1.1rem; min-width: 220px; text-align: center;"></div>
  <button onclick="changeDay(1)" style="background: transparent; border: 1px solid #b59197; color: #b59197; padding: 6px 12px; cursor: pointer; font-size: 0.85rem; font-family: inherit; white-space: nowrap;">→</button>
  </div>
+ <div style="font-family:'Dancing Script',cursive; font-size:1.8rem; color:#b59197; margin-bottom:18px;">Kasey's Wellness Routine</div>
 
  <!-- Day-specific schedules -->
  <div id="dailyScheduleContainer" style="display: flex; flex-direction: column; align-items: center;"></div>
+ <button onclick="openRoutineEditor()" style="background:#b59197; color:#fff; border:none; padding:8px 20px; font-family:inherit; font-size:0.85rem; cursor:pointer; margin-top:16px;">Edit Routine</button>
  </div>
 
  <div class="bingo-section">
@@ -2885,6 +2920,22 @@ What's on my mind today..."></textarea>
  </div>
  </div>
 
+ <!-- Routine Editor Modal -->
+ <div class="routine-editor-overlay" id="routineEditorOverlay" onclick="if(event.target===this)closeRoutineEditor()">
+ <div class="routine-editor">
+ <div class="routine-editor-header">
+ <h2>Edit Routine</h2>
+ <button class="routine-editor-close" onclick="closeRoutineEditor()">&times;</button>
+ </div>
+ <div class="routine-editor-body" id="routineEditorBody"></div>
+ <div class="routine-editor-footer">
+ <button class="re-cancel" onclick="resetRoutineToDefaults()" style="margin-right:auto;font-size:0.78rem;padding:6px 12px;">Reset Defaults</button>
+ <button class="re-cancel" onclick="closeRoutineEditor()">Cancel</button>
+ <button class="re-save" onclick="saveRoutineEdits()">Save Changes</button>
+ </div>
+ </div>
+ </div>
+
  <div class="celebration" id="celebration">
  <h2>BINGO!</h2>
  <p>Amazing work! You got 4 in a row!</p>
@@ -3602,12 +3653,33 @@ What's on my mind today..."></textarea>
  const grid = document.getElementById('bingoGrid');
  grid.innerHTML = '';
  
+ // Find cells that are part of a bingo line
+ const inBingo = new Set();
+ const lines = [];
+ for (let i = 0; i < 4; i++) {
+ lines.push([i*4, i*4+1, i*4+2, i*4+3]); // rows
+ lines.push([i, i+4, i+8, i+12]); // cols
+ }
+ lines.push([0, 5, 10, 15]); // diag
+ lines.push([3, 6, 9, 12]); // diag
+ lines.forEach(line => {
+ if (line.every(idx => boardState[idx])) {
+ line.forEach(idx => inBingo.add(idx));
+ }
+ });
+
  currentHabits.forEach((habit, index) => {
  const cell = document.createElement('div');
  cell.className = 'bingo-cell';
  cell.textContent = habit;
  
- if (boardState[index]) cell.classList.add('completed');
+ if (boardState[index]) {
+ if (inBingo.has(index)) {
+ cell.classList.add('in-bingo');
+ } else {
+ cell.classList.add('completed');
+ }
+ }
  cell.onclick = () => toggleCell(index);
  
  grid.appendChild(cell);
@@ -4733,6 +4805,64 @@ What's on my mind today..."></textarea>
  }
  };
 
+ const defaultScheduleItems = {
+ morning: [
+ { id:'km1', time:'8:00 AM', title:'Morning Supplements', details:'• Wellbutrin\n• Life Extension Neuro-Mag (3 caps = 144mg Mg L-threonate)\n• Allergy pill - Kirkland (1 tab cetirizine or loratadine)\nTake with full glass of water on empty stomach' },
+ { id:'km2', time:'8:05 AM', title:'Morning Skin Care (10 min)', details:'', dayContent:'morning.skincare' },
+ { id:'km3', time:'8:15 AM', title:'Feed Wizzy & Moo, refresh water (10 min)', details:'' },
+ { id:'km4', time:'8:25 AM', title:'ALTAR TIME (20 min) + 10000 Lux Light', details:'', dayContent:'morning.altar' },
+ { id:'km5', time:'8:45 AM', title:'WORKOUT (30-45 min)', details:'', dayContent:'morning.workout' },
+ { id:'km6', time:'~9:30 AM', title:'Smoothie + Morning Supplements', details:'Smoothie Recipe (~322 cal, ~43g protein):\n• 1 cup unsweetened almond milk\n• 1.5 tbsp cacao powder (NOT Dutch-processed)\n• 1 scoop ON Gold Standard Banana Cream whey\n• ~1/2 scoop Vital Proteins chocolate collagen (~12g)\n• 5g L-glutamine\n• 1 tsp Nature\'s Way MCT oil\n• Optional: 1 cup frozen spinach, 1/2 cup frozen blueberries\n\nTake WITH smoothie:\n• Thorne Basic Nutrients 2/Day (1 cap)\n• Sports Research Omega-3 (1-2 softgels)\n• Jarrow QH-Absorb CoQ10 200mg (1 softgel)\n• Nutricost Riboflavin 400mg (1 cap)' },
+ { id:'km7', time:'10:00 AM', title:'Creatine + Prep to Leave', details:'Mix flavored creatine (5g) in water. Head out 10–10:30 AM' }
+ ],
+ daytime: [
+ { id:'kd1', time:'10:30-1:30', title:'Pet Care Visits', details:'Client visits\nWalking between homes counts as steps' },
+ { id:'kd2', time:'2:00-3:00 PM', title:'Lunch', details:'Target: ~400-500 cal, protein-focused\nIf low on protein, add protein shake' },
+ { id:'kd3', time:'3:00-7:00 PM', title:'Work Block', details:'Admin, bookings, client management\nSubliminals/music OK in background' },
+ { id:'kd4', time:'5:00 PM', title:'Sunfiber (Optional Timing)', details:'Heather\'s Tummy Fiber (1-2 tsp in water)\nBest 2-3 hours before dinner' }
+ ],
+ evening: [
+ { id:'ke1', time:'7:15 PM', title:'Start Dinner Prep', details:'Wrap up work\nRampages while cooking' },
+ { id:'ke2', time:'7:30 PM', title:'Dinner + Evening Supplements + Kefir', details:'Take WITH dinner:\n• Doctor\'s Best Mag Glycinate (2 tablets = 200mg)\n• Renew Life Women\'s Probiotic 25B (1 cap)\n• Kefir 4-6 oz (side drink)' },
+ { id:'ke3', time:'9:00 PM', title:'Red Light + Vibration Plate + Subliminals (15-20 min)', details:'' },
+ { id:'ke4', time:'9:20 PM', title:'Evening Myofascial Release (5 min)', details:'Suboccipital release, thoracic extension, chest stretch, foam roll' },
+ { id:'ke5', time:'9:25 PM', title:'Evening Skin Care (5-10 min)', details:'', dayContent:'evening.skincare' },
+ { id:'ke6', time:'9:30 PM', title:'Dim Lights', details:'Lamps only. Night mode on screens. Wind down begins' },
+ { id:'ke7', time:'10:30 PM', title:'Celexa + Bedtime Routine', details:'Take Celexa\nTeeth, wind down' },
+ { id:'ke8', time:'11:00 PM', title:'Quetiapine + 4-7-8 Breathing + Lights Out', details:'Take Quetiapine\n4-7-8 breathing technique\nPhone face down or in another room\nTarget: 9 hours sleep (11 PM - 8 AM)' }
+ ]
+ };
+
+ let scheduleData = JSON.parse(JSON.stringify(defaultScheduleItems));
+
+ function loadScheduleData() {
+ const saved = localStorage.getItem('scheduleData_kasey');
+ if (saved) {
+ try { scheduleData = JSON.parse(saved); } catch(e) {}
+ }
+ loadFromFirebase('scheduleData_kasey').then(function(data) {
+ if (data && data.morning) {
+ scheduleData = data;
+ localStorage.setItem('scheduleData_kasey', JSON.stringify(scheduleData));
+ renderDailySchedule();
+ } else if (saved) {
+ syncToFirebase('scheduleData_kasey', scheduleData);
+ }
+ });
+ setupFirebaseListener('scheduleData_kasey', function(data) {
+ if (data && data.morning) {
+ scheduleData = data;
+ localStorage.setItem('scheduleData_kasey', JSON.stringify(scheduleData));
+ renderDailySchedule();
+ }
+ });
+ }
+
+ function saveScheduleData() {
+ localStorage.setItem('scheduleData_kasey', JSON.stringify(scheduleData));
+ syncToFirebase('scheduleData_kasey', scheduleData);
+ }
+
  function changeDay(direction) {
  currentViewingDay += direction;
  if (currentViewingDay > 6) currentViewingDay = 0;
@@ -4740,296 +4870,162 @@ What's on my mind today..."></textarea>
  renderDailySchedule();
  }
 
- function renderDailySchedule() {
- const day = weeklySchedule[currentViewingDay];
- const dayName = dayNames[currentViewingDay];
- const today = new Date();
- const currentDay = today.getDay();
- 
- // Calculate the date for the viewing day
- const dayOffset = currentViewingDay - currentDay;
- const viewingDate = new Date(today);
- viewingDate.setDate(today.getDate() + dayOffset);
- 
- // Format as "Wednesday, February 5"
- const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
- 'July', 'August', 'September', 'October', 'November', 'December'];
- const formattedDate = `${dayName}, ${monthNames[viewingDate.getMonth()]} ${viewingDate.getDate()}`;
- 
- document.getElementById('currentDayDisplay').textContent = formattedDate;
- 
- const container = document.getElementById('dailyScheduleContainer');
- container.innerHTML = `
- <!-- Morning Routine -->
- <div class="day-card">
- <div class="day-header" onclick="this.parentElement.classList.toggle('expanded')">
- <div>
- <div class="day-name"> Morning Routine (8:00 AM - 10:30 AM)</div>
- <div class="day-preview"></div>
- </div>
- <span class="arrow">&#9660;</span>
- </div>
- <div class="day-details">
- <div class="schedule-item">
- <span class="schedule-time">8:00 AM</span>
- <div class="schedule-content">
- <div class="schedule-title"> Morning Supplements</div>
- <div class="schedule-details">
- • Wellbutrin<br>
- • Life Extension Neuro-Mag (3 caps = 144mg Mg L-threonate)<br>
- • Allergy pill - Kirkland (1 tab cetirizine or loratadine)<br>
- <strong>Take with full glass of water on empty stomach</strong>
- </div>
- </div>
- </div>
-
- <div class="schedule-item">
- <span class="schedule-time">8:05 AM</span>
- <div class="schedule-content">
- <div class="schedule-title"> Morning Skin Care (10 min)</div>
- <div class="schedule-details">
- ${day.morning.skincare}
- </div>
- </div>
- </div>
-
- <div class="schedule-item">
- <span class="schedule-time">8:15 AM</span>
- <div class="schedule-content">
- <div class="schedule-title"> Feed Wizzy & Moo, refresh water (10 min)</div>
- <div class="schedule-details">
- </div>
- </div>
- </div>
-
- <div class="schedule-item">
- <span class="schedule-time">8:25 AM</span>
- <div class="schedule-content">
- <div class="schedule-title"> ALTAR TIME (20 min) + 10000 Lux Light</div>
- <div class="schedule-details">
- <strong>Step 1:</strong> Cyclic sighing (5 min)<br>
- <em>Double inhale through nose (first full, second quick top-off), long slow exhale through mouth. Repeat.</em><br><br>
- <strong>Step 2:</strong> EFT tapping (7-8 min) - tap each point ~7 times<br>
- ${day.morning.tapping ? `
- <div class="tapping-collapsible">
- <div class="tapping-header" onclick="this.parentElement.classList.toggle('active')">
- <p class="tapping-header-text">View Today's Tapping Sequence</p>
- <span class="tapping-arrow">&#9660;</span>
- </div>
- <div class="tapping-content">${day.morning.tapping}</div>
- </div>
- ` : '<em>See Resources tab for tapping guide & create your own sequence</em>'}<br>
- <strong>Step 3:</strong> Journaling (5-7 min)<br>
- <div style="margin-top: 8px; padding: 10px; background: #faf8f6; border-left: 3px solid #d4a5a5; font-style: italic;">
- <strong style="color: #b59197;">Today's prompt:</strong> ${day.morning.journalPrompt}
- </div>
- </div>
- </div>
- </div>
-
- <div class="schedule-item">
- <span class="schedule-time">8:45 AM</span>
- <div class="schedule-content">
- <div class="schedule-title"> WORKOUT (30-45 min)</div>
- <div class="schedule-details">
- <button onclick="goToWorkout()" style="background: #a3b899; color: #1c1c1c; border: none; padding: 10px 24px; font-size: 0.9rem; font-weight: 600; font-family: inherit; cursor: pointer; margin: 4px 0;">Start Workout</button><br>
- <em>Subliminals/rampages OK during workout</em>
- </div>
- </div>
- </div>
-
- <div class="schedule-item">
- <span class="schedule-time">~9:30 AM</span>
- <div class="schedule-content">
- <div class="schedule-title"> Smoothie + Morning Supplements</div>
- <div class="schedule-details">
- <strong>Smoothie Recipe (~322 cal, ~43g protein):</strong><br>
- • 1 cup unsweetened almond milk<br>
- • 1.5 tbsp cacao powder (NOT Dutch-processed)<br>
- • 1 scoop ON Gold Standard Banana Cream whey<br>
- • ~1/2 scoop Vital Proteins chocolate collagen (~12g)<br>
- • 5g L-glutamine<br>
- • 1 tsp Nature's Way MCT oil<br>
- • Optional: 1 cup frozen spinach, 1/2 cup frozen blueberries<br><br>
- <strong>Take WITH smoothie:</strong><br>
- • Thorne Basic Nutrients 2/Day (1 cap)<br>
- • Sports Research Omega-3 (1-2 softgels)<br>
- • Jarrow QH-Absorb CoQ10 200mg (1 softgel)<br>
- • Nutricost Riboflavin 400mg (1 cap)
- </div>
- </div>
- </div>
-
- <div class="schedule-item">
- <span class="schedule-time">10:00 AM</span>
- <div class="schedule-content">
- <div class="schedule-title"> Creatine + Prep to Leave</div>
- <div class="schedule-details">
- Mix flavored creatine (5g) in water. Head out 10–10:30 AM
- </div>
- </div>
- </div>
- </div>
- </div>
-
- <!-- Daytime Routine -->
- <div class="day-card">
- <div class="day-header" onclick="this.parentElement.classList.toggle('expanded')">
- <div>
- <div class="day-name"> Daytime Routine (10:30 AM - 7 PM)</div>
- <div class="day-preview"></div>
- </div>
- <span class="arrow">&#9660;</span>
- </div>
- <div class="day-details">
- <div class="schedule-item">
- <span class="schedule-time">10:30 AM -<br>1:30 PM</span>
- <div class="schedule-content">
- <div class="schedule-title"> Pet Care Visits</div>
- <div class="schedule-details">
- Client visits<br>
- Walking between homes counts as steps
- </div>
- </div>
- </div>
-
- <div class="schedule-item">
- <span class="schedule-time">2:00-3:00 PM</span>
- <div class="schedule-content">
- <div class="schedule-title"> Lunch</div>
- <div class="schedule-details">
- Target: ~400-500 cal, protein-focused<br>
- If low on protein, add protein shake
- </div>
- </div>
- </div>
-
- <div class="schedule-item">
- <span class="schedule-time">3:00-7:00 PM</span>
- <div class="schedule-content">
- <div class="schedule-title"> Work Block</div>
- <div class="schedule-details">
- Admin, bookings, client management<br>
- Subliminals/music OK in background
- </div>
- </div>
- </div>
-
- <div class="schedule-item">
- <span class="schedule-time">5:00 PM</span>
- <div class="schedule-content">
- <div class="schedule-title"> Sunfiber (Optional Timing)</div>
- <div class="schedule-details">
- Heather's Tummy Fiber (1-2 tsp in water)<br>
- Best 2-3 hours before dinner
- </div>
- </div>
- </div>
- </div>
- </div>
-
- <!-- Evening Routine -->
- <div class="day-card">
- <div class="day-header" onclick="this.parentElement.classList.toggle('expanded')">
- <div>
- <div class="day-name"> Evening Routine (7 PM - 11 PM)</div>
- <div class="day-preview"></div>
- </div>
- <span class="arrow">&#9660;</span>
- </div>
- <div class="day-details">
- <div class="schedule-item">
- <span class="schedule-time">7:15 PM</span>
- <div class="schedule-content">
- <div class="schedule-title"> Start Dinner Prep</div>
- <div class="schedule-details">
- Wrap up work<br>
- Rampages while cooking
- </div>
- </div>
- </div>
-
- <div class="schedule-item">
- <span class="schedule-time">7:30 PM</span>
- <div class="schedule-content">
- <div class="schedule-title"> Dinner + Evening Supplements + Kefir</div>
- <div class="schedule-details">
- <strong>Take WITH dinner:</strong><br>
- • Doctor's Best Mag Glycinate (2 tablets = 200mg)<br>
- • Renew Life Women's Probiotic 25B (1 cap)<br>
- • Kefir 4-6 oz (side drink)
- </div>
- </div>
- </div>
-
- <div class="schedule-item">
- <span class="schedule-time">9:00 PM</span>
- <div class="schedule-content">
- <div class="schedule-title"> Red Light + Vibration Plate + Subliminals (15-20 min)</div>
- <div class="schedule-details">
- </div>
- </div>
- </div>
-
- <div class="schedule-item">
- <span class="schedule-time">9:20 PM</span>
- <div class="schedule-content">
- <div class="schedule-title"> Evening Myofascial Release (5 min)</div>
- <div class="schedule-details">
- Suboccipital release, thoracic extension, chest stretch, foam roll
- </div>
- </div>
- </div>
-
- <div class="schedule-item">
- <span class="schedule-time">9:25 PM</span>
- <div class="schedule-content">
- <div class="schedule-title"> Evening Skin Care (5-10 min)</div>
- <div class="schedule-details">
- ${day.evening.skincare}
- </div>
- </div>
- </div>
-
- <div class="schedule-item">
- <span class="schedule-time">9:30 PM</span>
- <div class="schedule-content">
- <div class="schedule-title"> Dim Lights</div>
- <div class="schedule-details">
- Lamps only. Night mode on screens. Wind down begins
- </div>
- </div>
- </div>
-
- <div class="schedule-item">
- <span class="schedule-time">10:30 PM</span>
- <div class="schedule-content">
- <div class="schedule-title"> Celexa + Bedtime Routine</div>
- <div class="schedule-details">
- Take Celexa<br>
- Teeth, wind down
- </div>
- </div>
- </div>
-
- <div class="schedule-item">
- <span class="schedule-time">11:00 PM</span>
- <div class="schedule-content">
- <div class="schedule-title"> Quetiapine + 4-7-8 Breathing + Lights Out</div>
- <div class="schedule-details">
- Take Quetiapine<br>
- 4-7-8 breathing technique<br>
- Phone face down or in another room<br>
- <strong>Target: 9 hours sleep (11 PM - 8 AM)</strong>
- </div>
- </div>
- </div>
- </div>
- </div>
- `;
+ function getDayContentHtml(key, day) {
+ if (key === 'morning.skincare') return day.morning.skincare;
+ if (key === 'evening.skincare') return day.evening.skincare;
+ if (key === 'morning.workout') {
+ return '<button onclick="goToWorkout()" style="background: #a3b899; color: #1c1c1c; border: none; padding: 10px 24px; font-size: 0.9rem; font-weight: 600; font-family: inherit; cursor: pointer; margin: 4px 0;">Start Workout</button><br>' + (day.morning.workout || '') + '<br><em>Subliminals/rampages OK during workout</em>';
+ }
+ if (key === 'morning.altar') {
+ var html = '<strong>Step 1:</strong> Cyclic sighing (5 min)<br><em>Double inhale through nose (first full, second quick top-off), long slow exhale through mouth. Repeat.</em><br><br>';
+ html += '<strong>Step 2:</strong> EFT tapping (7-8 min) - tap each point ~7 times<br>';
+ if (day.morning.tapping) {
+ html += '<div class="tapping-collapsible"><div class="tapping-header" onclick="this.parentElement.classList.toggle(\'active\')"><p class="tapping-header-text">View Today\'s Tapping Sequence</p><span class="tapping-arrow">&#9660;</span></div><div class="tapping-content">' + day.morning.tapping + '</div></div>';
+ } else {
+ html += '<em>See Resources tab for tapping guide & create your own sequence</em>';
+ }
+ html += '<br><strong>Step 3:</strong> Journaling (5-7 min)<br>';
+ html += '<div style="margin-top: 8px; padding: 10px; background: #faf8f6; border-left: 3px solid #d4a5a5; font-style: italic;"><strong style="color: #b59197;">Today\'s prompt:</strong> ' + (day.morning.journalPrompt || '') + '</div>';
+ return html;
+ }
+ return '';
  }
 
- document.addEventListener('DOMContentLoaded', function() {
+ function renderDailySchedule() {
+ var day = weeklySchedule[currentViewingDay];
+ var dayName = dayNames[currentViewingDay];
+ var today = new Date();
+ var dayOffset = currentViewingDay - today.getDay();
+ var viewingDate = new Date(today);
+ viewingDate.setDate(today.getDate() + dayOffset);
+ var monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+ document.getElementById('currentDayDisplay').textContent = dayName + ', ' + monthNames[viewingDate.getMonth()] + ' ' + viewingDate.getDate();
+
+ var container = document.getElementById('dailyScheduleContainer');
+
+ function renderBlock(label, timeRange, items) {
+ var h = '<div class="day-card"><div class="day-header" onclick="this.parentElement.classList.toggle(\'expanded\')"><div><div class="day-name"> ' + label + ' (' + timeRange + ')</div><div class="day-preview"></div></div><span class="arrow">&#9660;</span></div><div class="day-details">';
+ items.forEach(function(item) {
+ var details = '';
+ if (item.dayContent) {
+ details = getDayContentHtml(item.dayContent, day);
+ } else {
+ details = (item.details || '').replace(/\n/g, '<br>');
+ }
+ if (item.title.toLowerCase().indexOf('dinner prep') !== -1) {
+ details = '<a href="meal-plan.html" style="display:inline-block;background:#a3b899;color:#1c1c1c;padding:8px 18px;text-decoration:none;font-weight:600;font-size:0.85rem;margin-bottom:6px;">View Tonight\'s Meal Plan</a>' + (details ? '<br>' + details : '');
+ }
+ h += '<div class="schedule-item"><span class="schedule-time">' + item.time + '</span><div class="schedule-content"><div class="schedule-title"> ' + item.title + '</div>';
+ if (details) h += '<div class="schedule-details">' + details + '</div>';
+ h += '</div></div>';
+ });
+ h += '</div></div>';
+ return h;
+ }
+
+ container.innerHTML =
+ renderBlock('Morning Routine', '8:00 AM - 10:30 AM', scheduleData.morning) +
+ renderBlock('Daytime Routine', '10:30 AM - 7 PM', scheduleData.daytime) +
+ renderBlock('Evening Routine', '7 PM - 11 PM', scheduleData.evening);
+ }
+
+ // ===== ROUTINE EDITOR =====
+ function openRoutineEditor() {
+ var body = document.getElementById('routineEditorBody');
+ body.innerHTML =
+ renderEditorBlock('Morning', 'morning', scheduleData.morning) +
+ renderEditorBlock('Daytime', 'daytime', scheduleData.daytime) +
+ renderEditorBlock('Evening', 'evening', scheduleData.evening);
+ document.getElementById('routineEditorOverlay').classList.add('active');
+ }
+
+ function renderEditorBlock(label, key, items) {
+ var h = '<div class="routine-block-label">' + label + '</div>';
+ items.forEach(function(item, i) {
+ var isDayContent = !!item.dayContent;
+ h += '<div class="routine-item-edit" data-block="' + key + '" data-idx="' + i + '"'
+ + (isDayContent ? ' data-daycontent="' + item.dayContent + '"' : '') + '>'
+ + '<div class="routine-edit-row">'
+ + '<input class="re-time" value="' + (item.time||'').replace(/"/g,'&quot;') + '" placeholder="Time">'
+ + '<input class="re-title" value="' + (item.title||'').replace(/"/g,'&quot;') + '" placeholder="Title">'
+ + '</div>'
+ + '<textarea class="routine-edit-details" placeholder="Details (optional)"'
+ + (isDayContent ? ' disabled' : '') + '>'
+ + (isDayContent ? 'Varies by day (skincare/tapping/workout)' : (item.details||'').replace(/</g,'&lt;'))
+ + '</textarea>'
+ + '<div class="routine-edit-actions">'
+ + '<button onclick="moveRoutineItem(\''+key+'\','+i+',-1)">↑</button>'
+ + '<button onclick="moveRoutineItem(\''+key+'\','+i+',1)">↓</button>'
+ + '<button class="re-del" onclick="removeRoutineItem(\''+key+'\','+i+')">✕ Delete</button>'
+ + '</div></div>';
+ });
+ h += '<button class="routine-add-item" onclick="addRoutineItem(\''+key+'\')">+ Add Item</button>';
+ return h;
+ }
+
+ function closeRoutineEditor() {
+ document.getElementById('routineEditorOverlay').classList.remove('active');
+ }
+
+ function readEditorState() {
+ ['morning','daytime','evening'].forEach(function(block) {
+ var els = document.querySelectorAll('.routine-item-edit[data-block="'+block+'"]');
+ scheduleData[block] = Array.from(els).map(function(el, i) {
+ var orig = scheduleData[block][i] || {};
+ var dc = el.getAttribute('data-daycontent') || null;
+ return {
+ id: orig.id || (block[0] + '_' + Date.now() + '_' + i),
+ time: el.querySelector('.re-time').value,
+ title: el.querySelector('.re-title').value,
+ details: dc ? '' : el.querySelector('.routine-edit-details').value,
+ dayContent: dc || undefined
+ };
+ });
+ });
+ }
+
+ function saveRoutineEdits() {
+ readEditorState();
+ saveScheduleData();
+ renderDailySchedule();
+ closeRoutineEditor();
+ }
+
+ function addRoutineItem(block) {
+ readEditorState();
+ scheduleData[block].push({ id: block[0]+'_'+Date.now(), time:'', title:'New Item', details:'' });
+ openRoutineEditor();
+ var body = document.getElementById('routineEditorBody');
+ setTimeout(function(){ body.scrollTop = body.scrollHeight; }, 50);
+ }
+
+ function removeRoutineItem(block, index) {
+ if (!confirm('Delete this item?')) return;
+ readEditorState();
+ scheduleData[block].splice(index, 1);
+ openRoutineEditor();
+ }
+
+ function moveRoutineItem(block, index, direction) {
+ readEditorState();
+ var newIdx = index + direction;
+ if (newIdx < 0 || newIdx >= scheduleData[block].length) return;
+ var items = scheduleData[block];
+ var temp = items[index];
+ items[index] = items[newIdx];
+ items[newIdx] = temp;
+ openRoutineEditor();
+ }
+
+ function resetRoutineToDefaults() {
+ if (!confirm('Reset entire routine to defaults? This will overwrite your edits.')) return;
+ scheduleData = JSON.parse(JSON.stringify(defaultScheduleItems));
+ saveScheduleData();
+ renderDailySchedule();
+ openRoutineEditor();
+ }
+
+  document.addEventListener('DOMContentLoaded', function() {
 
  // Load custom habits first
  loadCustomHabits();
@@ -5051,6 +5047,7 @@ What's on my mind today..."></textarea>
  }
  
  initBoard();
+ loadScheduleData();
  renderDailySchedule();
  loadVideos();
  loadResources();
