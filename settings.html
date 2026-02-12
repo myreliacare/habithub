@@ -8,6 +8,96 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400&family=Cormorant:wght@300;400;500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="settings-engine.js"></script>
+    <script>
+    // Inline engine fallback — ensures settings page works even if external JS fails
+    (function(){
+        if (window.LifeHubSettings) return; // engine loaded fine
+
+        var palettes = {
+            sage:     { accent: '#a3b899', accentHover: '#b4c9aa', accentMuted: 'rgba(163,184,153,0.2)', accentBorder: 'rgba(163,184,153,0.3)', accentText: 'rgba(163,184,153,0.6)' },
+            rose:     { accent: '#c9a9a6', accentHover: '#d9bfbd', accentMuted: 'rgba(201,169,166,0.2)', accentBorder: 'rgba(201,169,166,0.3)', accentText: 'rgba(201,169,166,0.6)' },
+            lavender: { accent: '#b4a7d6', accentHover: '#c7bde3', accentMuted: 'rgba(180,167,214,0.2)', accentBorder: 'rgba(180,167,214,0.3)', accentText: 'rgba(180,167,214,0.6)' },
+            teal:     { accent: '#7ba8a1', accentHover: '#92bab4', accentMuted: 'rgba(123,168,161,0.2)', accentBorder: 'rgba(123,168,161,0.3)', accentText: 'rgba(123,168,161,0.6)' },
+            peach:    { accent: '#d4a59a', accentHover: '#e0b8af', accentMuted: 'rgba(212,165,154,0.2)', accentBorder: 'rgba(212,165,154,0.3)', accentText: 'rgba(212,165,154,0.6)' },
+            gold:     { accent: '#c9b77c', accentHover: '#d6c894', accentMuted: 'rgba(201,183,124,0.2)', accentBorder: 'rgba(201,183,124,0.3)', accentText: 'rgba(201,183,124,0.6)' }
+        };
+        var secondaryPalettes = { sage:'#b59197', rose:'#a3b899', lavender:'#c9a9a6', teal:'#b59197', peach:'#a3b899', gold:'#b59197' };
+        var bgColors = { dark:'#3d2f31', charcoal:'#1a1a1a', navy:'#1e2638', forest:'#1f2e2a' };
+        var bgDarker = { dark:'#2a1f21', charcoal:'#111111', navy:'#141c2a', forest:'#15231f' };
+        var fontStacks = { philosopher:"'Philosopher',Georgia,serif", cormorant:"'Cormorant',Georgia,'Times New Roman',serif", worksans:"'Work Sans',sans-serif", georgia:"Georgia,serif", arial:"Arial,sans-serif" };
+
+        var s;
+        try {
+            s = {
+                appName: localStorage.getItem('appName') || 'Our Life Hub',
+                names: JSON.parse(localStorage.getItem('userNames') || '{"name1":"Kasey","name2":"Charlie"}'),
+                accentColor: localStorage.getItem('accentColor') || 'sage',
+                bgColor: localStorage.getItem('bgColor') || 'dark',
+                fontFamily: localStorage.getItem('fontFamily') || 'philosopher',
+                fontSize: parseInt(localStorage.getItem('fontSize') || '100', 10),
+                archivedPages: JSON.parse(localStorage.getItem('archivedPages') || '[]'),
+                archivedSections: JSON.parse(localStorage.getItem('archivedSections') || '{}'),
+                features: JSON.parse(localStorage.getItem('features') || '{}'),
+                pageLabels: JSON.parse(localStorage.getItem('pageLabels') || '{}')
+            };
+        } catch(e) {
+            s = { appName:'Our Life Hub', names:{name1:'Kasey',name2:'Charlie'}, accentColor:'sage', bgColor:'dark', fontFamily:'philosopher', fontSize:100, archivedPages:[], archivedSections:{}, features:{}, pageLabels:{} };
+        }
+
+        // Apply CSS custom properties
+        var p = palettes[s.accentColor] || palettes.sage;
+        var bg = bgColors[s.bgColor] || bgColors.dark;
+        var bgDk = bgDarker[s.bgColor] || bgDarker.dark;
+        var sec = secondaryPalettes[s.accentColor] || '#b59197';
+        var font = fontStacks[s.fontFamily] || fontStacks.philosopher;
+        var basePx = Math.round(16 * s.fontSize / 100);
+        var root = document.documentElement;
+        root.style.setProperty('--lh-accent', p.accent);
+        root.style.setProperty('--lh-accent-hover', p.accentHover);
+        root.style.setProperty('--lh-accent-muted', p.accentMuted);
+        root.style.setProperty('--lh-accent-border', p.accentBorder);
+        root.style.setProperty('--lh-accent-text', p.accentText);
+        root.style.setProperty('--lh-secondary', sec);
+        root.style.setProperty('--lh-bg', bg);
+        root.style.setProperty('--lh-bg-darker', bgDk);
+        root.style.setProperty('--lh-font', font);
+        root.style.setProperty('--lh-font-size', basePx + 'px');
+        root.style.background = bg;
+        root.style.fontSize = basePx + 'px';
+
+        // Page archiving CSS
+        var pageMap = { home:'index.html', person1:'kasey-hub.html', person2:'charlie-hub.html', dreams:'our-dreams.html', meals:'meal-plan.html', settings:'settings.html' };
+        var archiveCSS = '';
+        s.archivedPages.forEach(function(k){ var h=pageMap[k]; if(h) archiveCSS += 'a.nav-link[href="'+h+'"],a.nav-link-mobile[href="'+h+'"]{display:none!important}\n'; });
+        if (archiveCSS) { var st=document.createElement('style'); st.textContent=archiveCSS; (document.head||document.documentElement).appendChild(st); }
+
+        window.LifeHubSettings = {
+            current: s,
+            palettes: palettes,
+            bgColors: bgColors,
+            bgDarker: bgDarker,
+            fontStacks: fontStacks,
+            secondaryPalettes: secondaryPalettes,
+            getName: function(person) { return person===1||person==='person1' ? s.names.name1 : s.names.name2; },
+            isPageArchived: function(k) { return s.archivedPages.indexOf(k)!==-1; },
+            isSectionArchived: function(pk,sk) { var a=s.archivedSections[pk]; return a?a.indexOf(sk)!==-1:false; },
+            getPageLabel: function(k,fb) { return s.pageLabels[k]||fb; }
+        };
+
+        // Apply names on DOM ready
+        function onReady(fn){ if(document.readyState!=='loading') fn(); else document.addEventListener('DOMContentLoaded',fn); }
+        onReady(function(){
+            document.querySelectorAll('.nav-logo').forEach(function(el){ el.textContent=s.appName; });
+            document.querySelectorAll('.nav-link,.nav-link-mobile').forEach(function(link){
+                var href=link.getAttribute('href')||'';
+                if(href==='kasey-hub.html') link.textContent=s.names.name1;
+                if(href==='charlie-hub.html') link.textContent=s.names.name2;
+            });
+            var title=document.title;
+            if(title.indexOf('Our Life Hub')!==-1) document.title=title.replace('Our Life Hub',s.appName);
+        });
+    })();
+    </script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -762,27 +852,6 @@
         // SETTINGS PAGE LOGIC
         // ══════════════════════════════════════════════
 
-        // Fallback if settings-engine.js didn't load (artifact preview / standalone)
-        if (!window.LifeHubSettings) {
-            window.LifeHubSettings = {
-                current: {
-                    appName: localStorage.getItem('appName') || 'Our Life Hub',
-                    names: JSON.parse(localStorage.getItem('userNames') || '{"name1":"Kasey","name2":"Charlie"}'),
-                    accentColor: localStorage.getItem('accentColor') || 'sage',
-                    bgColor: localStorage.getItem('bgColor') || 'dark',
-                    fontFamily: localStorage.getItem('fontFamily') || 'philosopher',
-                    fontSize: parseInt(localStorage.getItem('fontSize') || '100', 10),
-                    archivedPages: JSON.parse(localStorage.getItem('archivedPages') || '[]'),
-                    archivedSections: JSON.parse(localStorage.getItem('archivedSections') || '{}'),
-                    features: JSON.parse(localStorage.getItem('features') || '{}'),
-                    pageLabels: JSON.parse(localStorage.getItem('pageLabels') || '{}')
-                },
-                getName: function(p) {
-                    var n = this.current.names;
-                    return p === 1 || p === 'person1' ? n.name1 : n.name2;
-                }
-            };
-        }
         const LH = window.LifeHubSettings;
         const S = LH.current;
 
