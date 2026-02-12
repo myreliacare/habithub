@@ -6,47 +6,100 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <title>Our Life Together</title>
-    <script src="settings-engine.js"></script>
     <script>
-    /* Life Hub Settings Engine - Inline */
+    /* Life Hub Settings Engine v2 - Complete Color Rewriting */
     (function(){
         if(window._lhEngineLoaded) return; window._lhEngineLoaded=true;
-        var palettes={sage:{accent:'#a3b899',accentHover:'#b4c9aa'},rose:{accent:'#c9a9a6',accentHover:'#d9bfbd'},lavender:{accent:'#b4a7d6',accentHover:'#c7bde3'},teal:{accent:'#7ba8a1',accentHover:'#92bab4'},peach:{accent:'#d4a59a',accentHover:'#e0b8af'},gold:{accent:'#c9b77c',accentHover:'#d6c894'},cream:{accent:'#e8ddd0',accentHover:'#f2ebe0'},blush:{accent:'#d4919e',accentHover:'#e0a5b0'},coral:{accent:'#d98a7e',accentHover:'#e4a195'},mauve:{accent:'#b8879e',accentHover:'#cba0b4'},berry:{accent:'#9c6b82',accentHover:'#b08295'},periwinkle:{accent:'#8e9cc7',accentHover:'#a3afd6'},seafoam:{accent:'#7bbfb0',accentHover:'#93cec1'},terracotta:{accent:'#c4836a',accentHover:'#d49880'},honey:{accent:'#d4b870',accentHover:'#e0c988'}};
+
+        // ── Color manipulation helpers ──
+        function h2r(h){h=h.replace('#','');return[parseInt(h.substring(0,2),16),parseInt(h.substring(2,4),16),parseInt(h.substring(4,6),16)];}
+        function r2h(r,g,b){return'#'+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1);}
+        function clamp(v){return Math.max(0,Math.min(255,Math.round(v)));}
+        function lighten(hex,pct){var c=h2r(hex);return r2h(clamp(c[0]+(255-c[0])*pct),clamp(c[1]+(255-c[1])*pct),clamp(c[2]+(255-c[2])*pct));}
+        function darken(hex,pct){var c=h2r(hex);return r2h(clamp(c[0]*(1-pct)),clamp(c[1]*(1-pct)),clamp(c[2]*(1-pct)));}
+        function rgbStr(hex){var c=h2r(hex);return c[0]+','+c[1]+','+c[2];}
+
+        // ── Palette definitions ──
+        var palettes={sage:{accent:'#a3b899'},rose:{accent:'#c9a9a6'},lavender:{accent:'#b4a7d6'},teal:{accent:'#7ba8a1'},peach:{accent:'#d4a59a'},gold:{accent:'#c9b77c'},cream:{accent:'#e8ddd0'},blush:{accent:'#d4919e'},coral:{accent:'#d98a7e'},mauve:{accent:'#b8879e'},berry:{accent:'#9c6b82'},periwinkle:{accent:'#8e9cc7'},seafoam:{accent:'#7bbfb0'},terracotta:{accent:'#c4836a'},honey:{accent:'#d4b870'}};
         var secMap={sage:'#b59197',rose:'#a3b899',lavender:'#c9a9a6',teal:'#b59197',peach:'#a3b899',gold:'#b59197',cream:'#b59197',blush:'#a3b899',coral:'#b4a7d6',mauve:'#a3b899',berry:'#c9b77c',periwinkle:'#c9a9a6',seafoam:'#d4a59a',terracotta:'#a3b899',honey:'#b59197'};
         var bgMap={dark:'#3d2f31',charcoal:'#1a1a1a',navy:'#1e2638',forest:'#1f2e2a',cream:'#f5f0e8',wine:'#2d1f2b',slate:'#2a2d35',espresso:'#2b2220',storm:'#252830'};
         var bgDkMap={dark:'#2a1f21',charcoal:'#111111',navy:'#141c2a',forest:'#15231f',cream:'#ebe4d9',wine:'#211520',slate:'#1f2229',espresso:'#1e1816',storm:'#1b1d24'};
         var tcMap={dark:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},charcoal:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},navy:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},forest:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},cream:{t:'#3d2f31',m:'rgba(61,47,49,0.65)',f:'rgba(61,47,49,0.4)'},wine:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},slate:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},espresso:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},storm:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'}};
         var fontMap={philosopher:"'Philosopher',Georgia,serif",cormorant:"'Cormorant',Georgia,'Times New Roman',serif",worksans:"'Work Sans',sans-serif",georgia:"Georgia,serif",arial:"Arial,sans-serif"};
 
+        // ── Read settings ──
         var ac=localStorage.getItem('accentColor')||'sage';
         var bc=localStorage.getItem('bgColor')||'dark';
         var ff=localStorage.getItem('fontFamily')||'philosopher';
         var fs=parseInt(localStorage.getItem('fontSize')||'100',10);
         var appName=localStorage.getItem('appName')||'Our Life Hub';
-        var names=JSON.parse(localStorage.getItem('userNames')||'{"name1":"Kasey","name2":"Charlie"}');
-        var archivedPages=JSON.parse(localStorage.getItem('archivedPages')||'[]');
+        var names;try{names=JSON.parse(localStorage.getItem('userNames')||'{}');}catch(e){names={};}
+        names.name1=names.name1||'Kasey'; names.name2=names.name2||'Charlie';
+        var archivedPages;try{archivedPages=JSON.parse(localStorage.getItem('archivedPages')||'[]');}catch(e){archivedPages=[];}
 
-        var p=palettes[ac]||palettes.sage, bg=bgMap[bc]||bgMap.dark, bgDk=bgDkMap[bc]||bgDkMap.dark;
-        var sec=secMap[ac]||'#b59197', tc=tcMap[bc]||tcMap.dark, font=fontMap[ff]||fontMap.philosopher;
+        var pa=(palettes[ac]||palettes.sage).accent;
+        var sec=secMap[ac]||'#b59197';
+        var bg=bgMap[bc]||bgMap.dark;
+        var bgDk=bgDkMap[bc]||bgDkMap.dark;
+        var tc=tcMap[bc]||tcMap.dark;
+        var font=fontMap[ff]||fontMap.philosopher;
         var basePx=Math.round(16*fs/100);
-        var r=document.documentElement;
-        r.style.setProperty('--lh-accent',p.accent); r.style.setProperty('--lh-accent-hover',p.accentHover);
-        r.style.setProperty('--lh-bg',bg); r.style.setProperty('--lh-bg-darker',bgDk);
-        r.style.setProperty('--lh-secondary',sec); r.style.setProperty('--lh-text',tc.t);
-        r.style.setProperty('--lh-text-muted',tc.m); r.style.setProperty('--lh-text-faint',tc.f);
-        r.style.setProperty('--lh-font',font); r.style.setProperty('--lh-font-size',basePx+'px');
-        r.style.background=bg; r.style.fontSize=basePx+'px';
 
-        function h2r(h){h=h.replace('#','');return parseInt(h.substring(0,2),16)+','+parseInt(h.substring(2,4),16)+','+parseInt(h.substring(4,6),16);}
+        // ── Generate accent color variants ──
+        var A = {
+            vdark:  darken(pa, 0.45),   // #4a5c3f, #4a6a3e
+            dark:   darken(pa, 0.30),    // #6d8a5e, #7d8f76
+            mdark:  darken(pa, 0.15),    // #8fa87a, #8fa882
+            base:   pa,                  // #a3b899
+            light:  lighten(pa, 0.15),   // #b4c9aa, #b5c9a8
+            vlight: lighten(pa, 0.30),   // #b5d4a4, #c4d9b5
+            xlight: lighten(pa, 0.50),   // very light washes
+            hover:  lighten(pa, 0.12)
+        };
+
+        // ── Generate secondary color variants ──
+        var S = {
+            vdark:  darken(sec, 0.45),   // #5a4345, #5a4a4c
+            dark:   darken(sec, 0.30),    // #6b5a5e, #7a6668
+            mdark:  darken(sec, 0.15),    // #9a7a80, #a57f85
+            base:   sec,                  // #b59197
+            light:  lighten(sec, 0.10),   // #c5a1a7, #c9a9a6
+            vlight: lighten(sec, 0.25),   // #d4b5b8, #d4b5ba
+            xlight: lighten(sec, 0.40),   // #e8d5d8
+            redish: darken(sec, 0.10),    // #c97a7a, #d67373 (more saturated)
+        };
+
+        // ── Generate background mid-tones ──
+        var bgMid = lighten(bg, 0.15);   // #4a3a3c, #4a3b3e
+
+        // ── Apply CSS custom properties ──
+        var r=document.documentElement;
+        r.style.setProperty('--lh-accent',A.base);
+        r.style.setProperty('--lh-accent-hover',A.hover);
+        r.style.setProperty('--lh-accent-muted','rgba('+rgbStr(A.base)+',0.2)');
+        r.style.setProperty('--lh-accent-border','rgba('+rgbStr(A.base)+',0.3)');
+        r.style.setProperty('--lh-accent-text','rgba('+rgbStr(A.base)+',0.6)');
+        r.style.setProperty('--lh-bg',bg);
+        r.style.setProperty('--lh-bg-darker',bgDk);
+        r.style.setProperty('--lh-secondary',S.base);
+        r.style.setProperty('--lh-text',tc.t);
+        r.style.setProperty('--lh-text-muted',tc.m);
+        r.style.setProperty('--lh-text-faint',tc.f);
+        r.style.setProperty('--lh-font',font);
+        r.style.setProperty('--lh-font-size',basePx+'px');
+        r.style.background=bg; r.style.fontSize=basePx+'px';
 
         // Archive nav links
         var pageHrefs={home:'index.html',person1:'kasey-hub.html',person2:'charlie-hub.html',dreams:'our-dreams.html',meals:'meal-plan.html',settings:'settings.html'};
         var archCSS='';archivedPages.forEach(function(k){var h=pageHrefs[k];if(h)archCSS+='a.nav-link[href="'+h+'"],a.nav-link-mobile[href="'+h+'"]{display:none!important}\n';});
         if(archCSS){var st=document.createElement('style');st.textContent=archCSS;(document.head||r).appendChild(st);}
 
+        // Expose for settings page
+        window.LifeHubSettings={current:{appName:appName,names:names,accentColor:ac,bgColor:bc,fontFamily:ff,fontSize:fs,archivedPages:archivedPages,archivedSections:JSON.parse(localStorage.getItem('archivedSections')||'{}'),features:JSON.parse(localStorage.getItem('features')||'{}'),pageLabels:JSON.parse(localStorage.getItem('pageLabels')||'{}')},getName:function(p){return p===1||p==='person1'?names.name1:names.name2;}};
+
         function onReady(fn){if(document.readyState!=='loading')fn();else document.addEventListener('DOMContentLoaded',fn);}
         onReady(function(){
-            // Names
+            // ── Apply names ──
             document.querySelectorAll('.nav-logo').forEach(function(el){el.textContent=appName;});
             document.querySelectorAll('.nav-link,.nav-link-mobile').forEach(function(lnk){
                 var href=lnk.getAttribute('href')||'';
@@ -58,66 +111,152 @@
             document.querySelectorAll('[data-lh-name="person2"]').forEach(function(el){el.textContent=names.name2;});
             var title=document.title;
             if(title.indexOf('Our Life Hub')!==-1)document.title=title.replace('Our Life Hub',appName);
-            if(title.indexOf('Kasey')!==-1)document.title=title.replace('Kasey',names.name1);
-            if(title.indexOf('Charlie')!==-1)document.title=title.replace('Charlie',names.name2);
+            if(title.indexOf("Kasey's")!==-1)document.title=title.replace("Kasey's",names.name1+"'s");
+            else if(title.indexOf('Kasey')!==-1)document.title=title.replace('Kasey',names.name1);
+            if(title.indexOf("Charlie's")!==-1)document.title=title.replace("Charlie's",names.name2+"'s");
+            else if(title.indexOf('Charlie')!==-1)document.title=title.replace('Charlie',names.name2);
 
-            // Color rewriting
+            // ── Skip rewriting if all defaults ──
             if(ac==='sage'&&bc==='dark')return;
+
+            // ── Build replacement map ──
             var reps=[];
+
             if(ac!=='sage'){
-                var sr=h2r(sec),ar=h2r(p.accent);
-                reps.push(['#a3b899',p.accent],['#A3B899',p.accent],['#b4c9aa',p.accentHover],['#B4C9AA',p.accentHover]);
-                reps.push(['#7d8f76',p.accent],['#7ba886',p.accent],['#7BA886',p.accent]);
-                reps.push(['#b59197',sec],['#B59197',sec],['#c9a9a6',sec],['#C9A9A6',sec]);
-                reps.push(['#d4b5b8',sec],['#D4B5B8',sec],['#c97a7a',sec],['#C97A7A',sec]);
-                reps.push(['#7a6668','rgba('+sr+',0.6)'],['#9a7a80','rgba('+sr+',0.7)']);
-                reps.push([/rgba\(\s*163,\s*184,\s*153,\s*0\.2\s*\)/g,'rgba('+ar+',0.2)']);
-                reps.push([/rgba\(\s*163,\s*184,\s*153,\s*0\.3\s*\)/g,'rgba('+ar+',0.3)']);
-                reps.push([/rgba\(\s*163,\s*184,\s*153,\s*0\.4\s*\)/g,'rgba('+ar+',0.4)']);
-                reps.push([/rgba\(\s*163,\s*184,\s*153,\s*0\.5\s*\)/g,'rgba('+ar+',0.5)']);
-                reps.push([/rgba\(\s*163,\s*184,\s*153,\s*0\.6\s*\)/g,'rgba('+ar+',0.6)']);
-                reps.push([/rgba\(\s*181,\s*145,\s*151,\s*0\.2\s*\)/g,'rgba('+sr+',0.2)']);
-                reps.push([/rgba\(\s*181,\s*145,\s*151,\s*0\.3\s*\)/g,'rgba('+sr+',0.3)']);
-                reps.push([/rgba\(\s*181,\s*145,\s*151,\s*0\.4\s*\)/g,'rgba('+sr+',0.4)']);
-                reps.push([/rgba\(\s*181,\s*145,\s*151,\s*0\.5\s*\)/g,'rgba('+sr+',0.5)']);
-                reps.push([/rgba\(\s*181,\s*145,\s*151,\s*0\.85\s*\)/g,'rgba('+sr+',0.85)']);
-                reps.push([/rgba\(\s*201,\s*169,\s*166,\s*([0-9.]+)\s*\)/g,'rgba('+sr+',$1)']);
+                var aRgb=rgbStr(A.base), sRgb=rgbStr(S.base);
+
+                // PRIMARY ACCENT — hex values (green family)
+                // Very dark greens
+                reps.push(['#4a5c3f',A.vdark],['#4a6a3e',A.vdark],['#4A5C3F',A.vdark],['#4A6A3E',A.vdark]);
+                // Dark greens
+                reps.push(['#6d8a5e',A.dark],['#5a7a4a',A.dark],['#6D8A5E',A.dark],['#5A7A4A',A.dark]);
+                // Medium-dark greens
+                reps.push(['#7d8f76',A.mdark],['#8fa87a',A.mdark],['#8fa882',A.mdark],['#7a9b6a',A.mdark]);
+                reps.push(['#7D8F76',A.mdark],['#8FA87A',A.mdark],['#8FA882',A.mdark],['#7A9B6A',A.mdark]);
+                // Base greens
+                reps.push(['#a3b899',A.base],['#A3B899',A.base],['#7ba886',A.base],['#7BA886',A.base]);
+                // Light greens
+                reps.push(['#b4c9aa',A.light],['#B4C9AA',A.light],['#b5c9a8',A.light],['#B5C9A8',A.light]);
+                reps.push(['#a8c99b',A.light],['#A8C99B',A.light],['#b8c9ad',A.light],['#B8C9AD',A.light]);
+                // Very light greens
+                reps.push(['#b5d4a4',A.vlight],['#B5D4A4',A.vlight],['#c4d9b5',A.vlight],['#C4D9B5',A.vlight]);
+
+                // SECONDARY ACCENT — hex values (rose family)
+                // Very dark roses
+                reps.push(['#5a4345',S.vdark],['#5a4a4c',S.vdark],['#5A4345',S.vdark],['#5A4A4C',S.vdark]);
+                // Dark roses
+                reps.push(['#6b5a5e',S.dark],['#7a6668',S.dark],['#6B5A5E',S.dark],['#7A6668',S.dark]);
+                // Medium-dark roses
+                reps.push(['#9a7a80',S.mdark],['#a57f85',S.mdark],['#9A7A80',S.mdark],['#A57F85',S.mdark]);
+                reps.push(['#b4828c',S.mdark],['#B4828C',S.mdark]);
+                // Base roses
+                reps.push(['#b59197',S.base],['#B59197',S.base]);
+                // Light roses
+                reps.push(['#c5a1a7',S.light],['#c9a9a6',S.light],['#c8b8bb',S.light]);
+                reps.push(['#C5A1A7',S.light],['#C9A9A6',S.light],['#C8B8BB',S.light]);
+                // Very light roses
+                reps.push(['#d4b5b8',S.vlight],['#d4b5ba',S.vlight],['#d4a5a5',S.vlight],['#d4a5ae',S.vlight]);
+                reps.push(['#D4B5B8',S.vlight],['#D4B5BA',S.vlight],['#D4A5A5',S.vlight],['#D4A5AE',S.vlight]);
+                // Extra light roses
+                reps.push(['#e8d5d8',S.xlight],['#E8D5D8',S.xlight]);
+                // Red-ish accent variants
+                reps.push(['#c97a7a',S.redish],['#C97A7A',S.redish],['#d67373',S.redish],['#D67373',S.redish]);
+
+                // TEAL (index calendar) — map to accent dark
+                reps.push(['#3d6b6b',A.dark],['#3D6B6B',A.dark]);
+                reps.push(['#4a7a7a',A.mdark],['#4A7A7A',A.mdark]);
+                reps.push(['#5a9a9a',A.base],['#5A9A9A',A.base]);
+
+                // GOLD/BROWN accents — map to accent or secondary variants
+                reps.push(['#c4a882',A.light],['#C4A882',A.light],['#d4a882',A.light],['#D4A882',A.light]);
+                reps.push(['#8a7a2e',A.dark],['#8A7A2E',A.dark],['#b5a33d',A.mdark],['#B5A33D',A.mdark]);
+                reps.push(['#c9b84a',A.base],['#C9B84A',A.base]);
+                reps.push(['#8a7a6d',S.dark],['#8A7A6D',S.dark]);
+                reps.push(['#edecd5',A.xlight],['#EDECD5',A.xlight]);
+
+                // PURPLE accents — map to secondary
+                reps.push(['#a08cb4',S.light],['#A08CB4',S.light]);
+                reps.push(['#c7ceea',S.xlight],['#C7CEEA',S.xlight]);
+
+                // PASTEL PALETTE (wellness moods etc) — shift toward accent/secondary
+                reps.push(['#a8e6cf',lighten(A.base,0.40)],['#98d8c8',lighten(A.base,0.35)]);
+                reps.push(['#b4f8c8',lighten(A.base,0.50)]);
+                reps.push(['#4ecdc4',A.base],['#45b7d1',A.mdark]);
+                reps.push(['#95c9b4',A.light]);
+
+                // rgba — PRIMARY ACCENT (sage green rgb: 163,184,153)
+                reps.push([/rgba\(\s*163,\s*184,\s*153,\s*([0-9.]+)\s*\)/g,'rgba('+aRgb+',$1)']);
+                // Other green rgbas
+                reps.push([/rgba\(\s*122,\s*138,\s*110,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(A.dark)+',$1)']);
+                reps.push([/rgba\(\s*168,\s*201,\s*155,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(A.light)+',$1)']);
+                reps.push([/rgba\(\s*123,\s*168,\s*134,\s*([0-9.]+)\s*\)/g,'rgba('+aRgb+',$1)']);
+                reps.push([/rgba\(\s*109,\s*138,\s*94,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(A.dark)+',$1)']);
+                reps.push([/rgba\(\s*125,\s*143,\s*118,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(A.mdark)+',$1)']);
+                // Teal rgba
+                reps.push([/rgba\(\s*61,\s*107,\s*107,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(A.dark)+',$1)']);
+
+                // rgba — SECONDARY (rose rgb: 181,145,151)
+                reps.push([/rgba\(\s*181,\s*145,\s*151,\s*([0-9.]+)\s*\)/g,'rgba('+sRgb+',$1)']);
+                reps.push([/rgba\(\s*201,\s*169,\s*166,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(S.light)+',$1)']);
+                reps.push([/rgba\(\s*180,\s*130,\s*140,\s*([0-9.]+)\s*\)/g,'rgba('+sRgb+',$1)']);
+                reps.push([/rgba\(\s*201,\s*122,\s*122,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(S.redish)+',$1)']);
+                reps.push([/rgba\(\s*160,\s*140,\s*180,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(S.light)+',$1)']);
+                reps.push([/rgba\(\s*196,\s*168,\s*130,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(A.light)+',$1)']);
+                reps.push([/rgba\(\s*201,\s*184,\s*74,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(A.mdark)+',$1)']);
             }
+
             if(bc!=='dark'){
-                reps.push(['#3d2f31',bg],['#3D2F31',bg],['#2a1f21',bgDk],['#2A1F21',bgDk]);
-                reps.push(['#4a3a3c',bg],['#4A3A3C',bg],['#4a3b3e',bg],['#4A3B3E',bg]);
+                // BACKGROUND
+                reps.push(['#3d2f31',bg],['#3D2F31',bg],['#3c2f31',bg],['#3C2F31',bg]);
+                reps.push(['#2a1f21',bgDk],['#2A1F21',bgDk]);
+                reps.push(['#4a3a3c',bgMid],['#4A3A3C',bgMid],['#4a3b3e',bgMid],['#4A3B3E',bgMid]);
+
+                // Background rgbas
+                reps.push([/rgba\(\s*61,\s*47,\s*49,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(bg)+',$1)']);
+                reps.push([/rgba\(\s*60,\s*47,\s*49,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(bg)+',$1)']);
+                reps.push([/rgba\(\s*42,\s*31,\s*33,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(bgDk)+',$1)']);
             }
+
             if(bc==='cream'){
+                // TEXT — flip to dark for light background
                 reps.push(['#f2ebe0',tc.t],['#F2EBE0',tc.t],['#e0d2d0',tc.t],['#E0D2D0',tc.t]);
-                reps.push(['#EBE0D6',tc.t],['#ebe0d6',tc.t],['#f5ede6',tc.t],['#e3d6cc',tc.m]);
-                reps.push([/rgba\(\s*242,\s*235,\s*224,\s*0\.35\s*\)/g,tc.f]);
-                reps.push([/rgba\(\s*242,\s*235,\s*224,\s*0\.4\s*\)/g,tc.f]);
-                reps.push([/rgba\(\s*242,\s*235,\s*224,\s*0\.5\s*\)/g,tc.m]);
-                reps.push([/rgba\(\s*242,\s*235,\s*224,\s*0\.6\s*\)/g,tc.m]);
-                reps.push([/rgba\(\s*242,\s*235,\s*224,\s*0\.7\s*\)/g,tc.m]);
-                reps.push([/rgba\(\s*242,\s*235,\s*224,\s*0\.8\s*\)/g,tc.t]);
+                reps.push(['#EBE0D6',tc.t],['#ebe0d6',tc.t],['#f5ede6',tc.t],['#F5EDE6',tc.t]);
+                reps.push(['#f5f0ed',tc.t],['#F5F0ED',tc.t],['#f0ebe6',tc.t],['#F0EBE6',tc.t]);
+                reps.push(['#f0efe8',tc.t],['#F0EFE8',tc.t],['#faf8f6',tc.t],['#FAF8F6',tc.t]);
+                reps.push(['#f7ebf0',tc.t],['#F7EBEF',tc.t]);
+                reps.push(['#e3d6cc',tc.m],['#E3D6CC',tc.m],['#e0d5cb',tc.m],['#E0D5CB',tc.m]);
+                reps.push([/rgba\(\s*242,\s*235,\s*224,\s*([0-9.]+)\s*\)/g,tc.m]);
+                reps.push([/rgba\(\s*224,\s*210,\s*208,\s*([0-9.]+)\s*\)/g,tc.m]);
+                // White text used in some buttons → dark
+                reps.push(['#fff',tc.t],['#FFF',tc.t]);
             }
+
+            // ── Apply replacements ──
+            function applyReps(text){
+                reps.forEach(function(pair){
+                    if(pair[0] instanceof RegExp)text=text.replace(pair[0],pair[1]);
+                    else text=text.split(pair[0]).join(pair[1]);
+                });
+                return text;
+            }
+
             // Rewrite <style> tags
             document.querySelectorAll('style').forEach(function(s){
                 var css=s.textContent,orig=css;
-                reps.forEach(function(pair){
-                    if(pair[0] instanceof RegExp)css=css.replace(pair[0],pair[1]);
-                    else css=css.split(pair[0]).join(pair[1]);
-                });
+                css=applyReps(css);
                 if(css!==orig)s.textContent=css;
             });
+
             // Rewrite inline styles
             document.querySelectorAll('[style]').forEach(function(el){
                 var st=el.getAttribute('style'),orig=st;
-                reps.forEach(function(pair){
-                    if(pair[0] instanceof RegExp)st=st.replace(pair[0],pair[1]);
-                    else st=st.split(pair[0]).join(pair[1]);
-                });
+                st=applyReps(st);
                 if(st!==orig)el.setAttribute('style',st);
             });
-            // Override CSS custom properties (meal-plan)
+
+            // Override CSS custom properties (meal-plan uses :root vars)
             var ov=document.createElement('style');
-            ov.textContent=':root{--dark-bg:'+bg+'!important;--card-bg:'+bgDk+'!important;--sage-green:'+p.accent+'!important;--muted-sage:'+p.accent+'!important;--light-text:'+tc.t+'!important;--cream:'+tc.t+'!important;--border-color:rgba('+h2r(p.accent)+',0.2)!important}';
+            ov.textContent=':root{--dark-bg:'+bg+'!important;--card-bg:'+bgDk+'!important;--sage-green:'+A.base+'!important;--muted-sage:'+A.mdark+'!important;--light-text:'+tc.t+'!important;--cream:'+tc.t+'!important;--border-color:rgba('+rgbStr(A.base)+',0.2)!important}';
             document.head.appendChild(ov);
         });
     })();
