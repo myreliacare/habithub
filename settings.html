@@ -14,16 +14,47 @@
         if (window.LifeHubSettings) return; // engine loaded fine
 
         var palettes = {
-            sage:     { accent: '#a3b899', accentHover: '#b4c9aa', accentMuted: 'rgba(163,184,153,0.2)', accentBorder: 'rgba(163,184,153,0.3)', accentText: 'rgba(163,184,153,0.6)' },
-            rose:     { accent: '#c9a9a6', accentHover: '#d9bfbd', accentMuted: 'rgba(201,169,166,0.2)', accentBorder: 'rgba(201,169,166,0.3)', accentText: 'rgba(201,169,166,0.6)' },
-            lavender: { accent: '#b4a7d6', accentHover: '#c7bde3', accentMuted: 'rgba(180,167,214,0.2)', accentBorder: 'rgba(180,167,214,0.3)', accentText: 'rgba(180,167,214,0.6)' },
-            teal:     { accent: '#7ba8a1', accentHover: '#92bab4', accentMuted: 'rgba(123,168,161,0.2)', accentBorder: 'rgba(123,168,161,0.3)', accentText: 'rgba(123,168,161,0.6)' },
-            peach:    { accent: '#d4a59a', accentHover: '#e0b8af', accentMuted: 'rgba(212,165,154,0.2)', accentBorder: 'rgba(212,165,154,0.3)', accentText: 'rgba(212,165,154,0.6)' },
-            gold:     { accent: '#c9b77c', accentHover: '#d6c894', accentMuted: 'rgba(201,183,124,0.2)', accentBorder: 'rgba(201,183,124,0.3)', accentText: 'rgba(201,183,124,0.6)' }
+            sage:       { accent: '#a3b899', accentHover: '#b4c9aa', accentMuted: 'rgba(163,184,153,0.2)', accentBorder: 'rgba(163,184,153,0.3)', accentText: 'rgba(163,184,153,0.6)' },
+            rose:       { accent: '#c9a9a6', accentHover: '#d9bfbd', accentMuted: 'rgba(201,169,166,0.2)', accentBorder: 'rgba(201,169,166,0.3)', accentText: 'rgba(201,169,166,0.6)' },
+            lavender:   { accent: '#b4a7d6', accentHover: '#c7bde3', accentMuted: 'rgba(180,167,214,0.2)', accentBorder: 'rgba(180,167,214,0.3)', accentText: 'rgba(180,167,214,0.6)' },
+            teal:       { accent: '#7ba8a1', accentHover: '#92bab4', accentMuted: 'rgba(123,168,161,0.2)', accentBorder: 'rgba(123,168,161,0.3)', accentText: 'rgba(123,168,161,0.6)' },
+            peach:      { accent: '#d4a59a', accentHover: '#e0b8af', accentMuted: 'rgba(212,165,154,0.2)', accentBorder: 'rgba(212,165,154,0.3)', accentText: 'rgba(212,165,154,0.6)' },
+            gold:       { accent: '#c9b77c', accentHover: '#d6c894', accentMuted: 'rgba(201,183,124,0.2)', accentBorder: 'rgba(201,183,124,0.3)', accentText: 'rgba(201,183,124,0.6)' },
+            cream:      { accent: '#e8ddd0', accentHover: '#f2ebe0', accentMuted: 'rgba(232,221,208,0.2)', accentBorder: 'rgba(232,221,208,0.3)', accentText: 'rgba(232,221,208,0.6)' },
+            blush:      { accent: '#d4919e', accentHover: '#e0a5b0', accentMuted: 'rgba(212,145,158,0.2)', accentBorder: 'rgba(212,145,158,0.3)', accentText: 'rgba(212,145,158,0.6)' },
+            coral:      { accent: '#d98a7e', accentHover: '#e4a195', accentMuted: 'rgba(217,138,126,0.2)', accentBorder: 'rgba(217,138,126,0.3)', accentText: 'rgba(217,138,126,0.6)' },
+            mauve:      { accent: '#b8879e', accentHover: '#cba0b4', accentMuted: 'rgba(184,135,158,0.2)', accentBorder: 'rgba(184,135,158,0.3)', accentText: 'rgba(184,135,158,0.6)' },
+            berry:      { accent: '#9c6b82', accentHover: '#b08295', accentMuted: 'rgba(156,107,130,0.2)', accentBorder: 'rgba(156,107,130,0.3)', accentText: 'rgba(156,107,130,0.6)' },
+            periwinkle: { accent: '#8e9cc7', accentHover: '#a3afd6', accentMuted: 'rgba(142,156,199,0.2)', accentBorder: 'rgba(142,156,199,0.3)', accentText: 'rgba(142,156,199,0.6)' },
+            seafoam:    { accent: '#7bbfb0', accentHover: '#93cec1', accentMuted: 'rgba(123,191,176,0.2)', accentBorder: 'rgba(123,191,176,0.3)', accentText: 'rgba(123,191,176,0.6)' },
+            terracotta: { accent: '#c4836a', accentHover: '#d49880', accentMuted: 'rgba(196,131,106,0.2)', accentBorder: 'rgba(196,131,106,0.3)', accentText: 'rgba(196,131,106,0.6)' },
+            honey:      { accent: '#d4b870', accentHover: '#e0c988', accentMuted: 'rgba(212,184,112,0.2)', accentBorder: 'rgba(212,184,112,0.3)', accentText: 'rgba(212,184,112,0.6)' }
         };
-        var secondaryPalettes = { sage:'#b59197', rose:'#a3b899', lavender:'#c9a9a6', teal:'#b59197', peach:'#a3b899', gold:'#b59197' };
-        var bgColors = { dark:'#3d2f31', charcoal:'#1a1a1a', navy:'#1e2638', forest:'#1f2e2a' };
-        var bgDarker = { dark:'#2a1f21', charcoal:'#111111', navy:'#141c2a', forest:'#15231f' };
+        var secondaryPalettes = {
+            sage:'#b59197', rose:'#a3b899', lavender:'#c9a9a6', teal:'#b59197',
+            peach:'#a3b899', gold:'#b59197', cream:'#b59197', blush:'#a3b899',
+            coral:'#b4a7d6', mauve:'#a3b899', berry:'#c9b77c', periwinkle:'#c9a9a6',
+            seafoam:'#d4a59a', terracotta:'#a3b899', honey:'#b59197'
+        };
+        var bgColors = {
+            dark:'#3d2f31', charcoal:'#1a1a1a', navy:'#1e2638', forest:'#1f2e2a',
+            cream:'#f5f0e8', wine:'#2d1f2b', slate:'#2a2d35', espresso:'#2b2220', storm:'#252830'
+        };
+        var bgDarker = {
+            dark:'#2a1f21', charcoal:'#111111', navy:'#141c2a', forest:'#15231f',
+            cream:'#ebe4d9', wine:'#211520', slate:'#1f2229', espresso:'#1e1816', storm:'#1b1d24'
+        };
+        var textColors = {
+            dark:     { text:'#e0d2d0', textMuted:'rgba(242,235,224,0.6)', textFaint:'rgba(242,235,224,0.4)' },
+            charcoal: { text:'#e0d2d0', textMuted:'rgba(242,235,224,0.6)', textFaint:'rgba(242,235,224,0.4)' },
+            navy:     { text:'#e0d2d0', textMuted:'rgba(242,235,224,0.6)', textFaint:'rgba(242,235,224,0.4)' },
+            forest:   { text:'#e0d2d0', textMuted:'rgba(242,235,224,0.6)', textFaint:'rgba(242,235,224,0.4)' },
+            cream:    { text:'#3d2f31', textMuted:'rgba(61,47,49,0.65)',    textFaint:'rgba(61,47,49,0.4)' },
+            wine:     { text:'#e0d2d0', textMuted:'rgba(242,235,224,0.6)', textFaint:'rgba(242,235,224,0.4)' },
+            slate:    { text:'#e0d2d0', textMuted:'rgba(242,235,224,0.6)', textFaint:'rgba(242,235,224,0.4)' },
+            espresso: { text:'#e0d2d0', textMuted:'rgba(242,235,224,0.6)', textFaint:'rgba(242,235,224,0.4)' },
+            storm:    { text:'#e0d2d0', textMuted:'rgba(242,235,224,0.6)', textFaint:'rgba(242,235,224,0.4)' }
+        };
         var fontStacks = { philosopher:"'Philosopher',Georgia,serif", cormorant:"'Cormorant',Georgia,'Times New Roman',serif", worksans:"'Work Sans',sans-serif", georgia:"Georgia,serif", arial:"Arial,sans-serif" };
 
         var s;
@@ -49,6 +80,7 @@
         var bg = bgColors[s.bgColor] || bgColors.dark;
         var bgDk = bgDarker[s.bgColor] || bgDarker.dark;
         var sec = secondaryPalettes[s.accentColor] || '#b59197';
+        var tc = textColors[s.bgColor] || textColors.dark;
         var font = fontStacks[s.fontFamily] || fontStacks.philosopher;
         var basePx = Math.round(16 * s.fontSize / 100);
         var root = document.documentElement;
@@ -60,6 +92,9 @@
         root.style.setProperty('--lh-secondary', sec);
         root.style.setProperty('--lh-bg', bg);
         root.style.setProperty('--lh-bg-darker', bgDk);
+        root.style.setProperty('--lh-text', tc.text);
+        root.style.setProperty('--lh-text-muted', tc.textMuted);
+        root.style.setProperty('--lh-text-faint', tc.textFaint);
         root.style.setProperty('--lh-font', font);
         root.style.setProperty('--lh-font-size', basePx + 'px');
         root.style.background = bg;
@@ -78,6 +113,7 @@
             bgDarker: bgDarker,
             fontStacks: fontStacks,
             secondaryPalettes: secondaryPalettes,
+            textColors: textColors,
             getName: function(person) { return person===1||person==='person1' ? s.names.name1 : s.names.name2; },
             isPageArchived: function(k) { return s.archivedPages.indexOf(k)!==-1; },
             isSectionArchived: function(pk,sk) { var a=s.archivedSections[pk]; return a?a.indexOf(sk)!==-1:false; },
@@ -105,7 +141,7 @@
         
         body {
             background: var(--lh-bg, #3d2f31) !important;
-            color: #e0d2d0;
+            color: var(--lh-text, #e0d2d0);
             font-family: var(--lh-font, 'Philosopher', Georgia, serif);
             font-weight: 500;
             min-height: 100vh;
@@ -140,14 +176,14 @@
         }
         .nav-links { display: flex !important; gap: 28px !important; align-items: center !important; }
         .nav-link {
-            color: rgba(242,235,224,0.6) !important;
+            color: var(--lh-text-muted, rgba(242,235,224,0.6)) !important;
             text-decoration: none !important;
             font-size: 0.88rem !important;
             font-weight: 500 !important;
             white-space: nowrap !important;
             transition: color 0.2s !important;
         }
-        .nav-link:hover { color: #f2ebe0 !important; }
+        .nav-link:hover { color: var(--lh-text, #f2ebe0) !important; }
         .nav-link.active { color: var(--lh-accent, #a3b899) !important; }
         .nav-refresh {
             display: block; background: none; border: none;
@@ -176,12 +212,12 @@
         }
         .nav-overlay.open { display: flex !important; }
         .nav-link-mobile {
-            color: rgba(242,235,224,0.7) !important; text-decoration: none !important;
+            color: var(--lh-text-muted, rgba(242,235,224,0.7)) !important; text-decoration: none !important;
             font-size: 1.05rem !important; font-family: var(--lh-font, 'Philosopher', Georgia, serif) !important;
             font-weight: 500 !important; padding: 12px 40px !important;
             display: block !important; width: 100% !important; text-align: center !important;
         }
-        .nav-link-mobile:hover { color: #f2ebe0 !important; }
+        .nav-link-mobile:hover { color: var(--lh-text, #f2ebe0) !important; }
         .nav-link-mobile.active { color: var(--lh-accent, #a3b899) !important; }
         @media (max-width: 768px) {
             .nav-hamburger { display: block !important; }
@@ -202,7 +238,7 @@
             margin-bottom: 8px;
         }
         .page-subtitle {
-            color: rgba(242,235,224,0.6);
+            color: var(--lh-text-muted, rgba(242,235,224,0.6));
             font-size: 1rem;
         }
 
@@ -224,7 +260,7 @@
         }
 
         .section-description {
-            color: rgba(242,235,224,0.5);
+            color: var(--lh-text-muted, rgba(242,235,224,0.5));
             font-size: 0.85rem;
             margin-bottom: 20px;
             line-height: 1.5;
@@ -243,14 +279,14 @@
 
         .setting-label {
             display: block;
-            color: #f2ebe0;
+            color: var(--lh-text, #f2ebe0);
             font-size: 1rem;
             margin-bottom: 6px;
             font-weight: 600;
         }
 
         .setting-description {
-            color: rgba(242,235,224,0.5);
+            color: var(--lh-text-muted, rgba(242,235,224,0.5));
             font-size: 0.85rem;
             margin-bottom: 12px;
         }
@@ -259,7 +295,7 @@
             width: 100%;
             background: rgba(61,47,49,0.3);
             border: 1px solid var(--lh-accent-border, rgba(163,184,153,0.25));
-            color: #f2ebe0;
+            color: var(--lh-text, #f2ebe0);
             padding: 12px 16px;
             font-size: 0.95rem;
             font-family: inherit;
@@ -275,7 +311,7 @@
             width: 100%;
             background: rgba(61,47,49,0.3);
             border: 1px solid var(--lh-accent-border, rgba(163,184,153,0.25));
-            color: #f2ebe0;
+            color: var(--lh-text, #f2ebe0);
             padding: 12px 16px;
             font-size: 0.95rem;
             font-family: inherit;
@@ -329,7 +365,7 @@
             padding: 12px 16px;
             border-left: 3px solid var(--lh-accent, #a3b899);
             font-size: 0.9rem;
-            color: rgba(242,235,224,0.8);
+            color: var(--lh-text, rgba(242,235,224,0.8));
         }
 
         .warning-box {
@@ -337,7 +373,7 @@
             padding: 12px 16px;
             border-left: 3px solid #c9a9a6;
             font-size: 0.9rem;
-            color: rgba(242,235,224,0.8);
+            color: var(--lh-text, rgba(242,235,224,0.8));
         }
 
         /* Color Grid */
@@ -364,7 +400,7 @@
             width: 100%; height: 36px; margin-bottom: 6px;
             border: 1px solid rgba(242,235,224,0.2);
         }
-        .color-name { font-size: 0.8rem; color: #f2ebe0; }
+        .color-name { font-size: 0.8rem; color: var(--lh-text, #f2ebe0); }
 
         /* Toggle Switch */
         .setting-toggle {
@@ -408,7 +444,7 @@
             background: rgba(61,47,49,0.5);
             border-left: 2px solid var(--lh-accent, #a3b899);
         }
-        .habit-text { flex: 1; color: #f2ebe0; font-size: 0.9rem; }
+        .habit-text { flex: 1; color: var(--lh-text, #f2ebe0); font-size: 0.9rem; }
         .habit-actions { display: flex; gap: 8px; }
 
         /* Archive Grid */
@@ -443,12 +479,12 @@
             flex-shrink: 0;
         }
         .archive-item-name {
-            color: #f2ebe0;
+            color: var(--lh-text, #f2ebe0);
             font-size: 0.9rem;
             font-weight: 600;
         }
         .archive-item-desc {
-            color: rgba(242,235,224,0.4);
+            color: var(--lh-text-faint, rgba(242,235,224,0.4));
             font-size: 0.8rem;
         }
         .archive-toggle-btn {
@@ -481,7 +517,7 @@
             font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 0.12em;
-            color: rgba(242,235,224,0.4);
+            color: var(--lh-text-faint, rgba(242,235,224,0.4));
             margin-bottom: 8px;
             padding-left: 4px;
         }
@@ -582,13 +618,13 @@
                 <label class="setting-label">Page Labels</label>
                 <p class="setting-description">Rename how pages appear in the navigation (leave blank for defaults)</p>
                 <div style="display: grid; grid-template-columns: 100px 1fr; gap: 8px; align-items: center; margin-top: 8px;">
-                    <span style="color: rgba(242,235,224,0.5); font-size: 0.85rem;">Home:</span>
+                    <span class="setting-description" style="margin-bottom: 0;">Home:</span>
                     <input type="text" id="labelHome" class="setting-input" placeholder="Home" style="padding: 8px 12px;">
-                    <span style="color: rgba(242,235,224,0.5); font-size: 0.85rem;">Dreams:</span>
+                    <span class="setting-description" style="margin-bottom: 0;">Dreams:</span>
                     <input type="text" id="labelDreams" class="setting-input" placeholder="Us ♡" style="padding: 8px 12px;">
-                    <span style="color: rgba(242,235,224,0.5); font-size: 0.85rem;">Meals:</span>
+                    <span class="setting-description" style="margin-bottom: 0;">Meals:</span>
                     <input type="text" id="labelMeals" class="setting-input" placeholder="Meals" style="padding: 8px 12px;">
-                    <span style="color: rgba(242,235,224,0.5); font-size: 0.85rem;">Settings:</span>
+                    <span class="setting-description" style="margin-bottom: 0;">Settings:</span>
                     <input type="text" id="labelSettings" class="setting-input" placeholder="Settings" style="padding: 8px 12px;">
                 </div>
                 <button class="btn btn-inline" onclick="savePageLabels()">Save Labels</button>
@@ -730,11 +766,11 @@
                 <label class="setting-label" id="mealPerson1Label">Person 1 Targets</label>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px;">
                     <div>
-                        <span style="color: rgba(242,235,224,0.5); font-size: 0.85rem; display: block; margin-bottom: 4px;">Calories/day</span>
+                        <span class="setting-description" style="display: block; margin-bottom: 4px;">Calories/day</span>
                         <input type="text" id="meal1Calories" class="setting-input" placeholder="1,350-1,700" style="padding: 8px 12px;">
                     </div>
                     <div>
-                        <span style="color: rgba(242,235,224,0.5); font-size: 0.85rem; display: block; margin-bottom: 4px;">Protein/day</span>
+                        <span class="setting-description" style="display: block; margin-bottom: 4px;">Protein/day</span>
                         <input type="text" id="meal1Protein" class="setting-input" placeholder="140-165g" style="padding: 8px 12px;">
                     </div>
                 </div>
@@ -744,11 +780,11 @@
                 <label class="setting-label" id="mealPerson2Label">Person 2 Targets</label>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px;">
                     <div>
-                        <span style="color: rgba(242,235,224,0.5); font-size: 0.85rem; display: block; margin-bottom: 4px;">Calories/day</span>
+                        <span class="setting-description" style="display: block; margin-bottom: 4px;">Calories/day</span>
                         <input type="text" id="meal2Calories" class="setting-input" placeholder="2,200-2,500" style="padding: 8px 12px;">
                     </div>
                     <div>
-                        <span style="color: rgba(242,235,224,0.5); font-size: 0.85rem; display: block; margin-bottom: 4px;">Protein/day</span>
+                        <span class="setting-description" style="display: block; margin-bottom: 4px;">Protein/day</span>
                         <input type="text" id="meal2Protein" class="setting-input" placeholder="180-210g" style="padding: 8px 12px;">
                     </div>
                 </div>
@@ -884,19 +920,33 @@
 
         // ── Color Definitions ──
         const colorDefs = {
-            sage:     { name: 'Sage Green',  hex: '#a3b899' },
-            rose:     { name: 'Dusty Rose',  hex: '#c9a9a6' },
-            lavender: { name: 'Lavender',    hex: '#b4a7d6' },
-            teal:     { name: 'Soft Teal',   hex: '#7ba8a1' },
-            peach:    { name: 'Peachy',       hex: '#d4a59a' },
-            gold:     { name: 'Warm Gold',   hex: '#c9b77c' }
+            sage:       { name: 'Sage Green',    hex: '#a3b899' },
+            rose:       { name: 'Dusty Rose',    hex: '#c9a9a6' },
+            cream:      { name: 'Warm Cream',    hex: '#e8ddd0' },
+            blush:      { name: 'Valentine Blush', hex: '#d4919e' },
+            coral:      { name: 'Living Coral',  hex: '#d98a7e' },
+            peach:      { name: 'Soft Peach',    hex: '#d4a59a' },
+            mauve:      { name: 'Mauve Dream',   hex: '#b8879e' },
+            berry:      { name: 'Wild Berry',    hex: '#9c6b82' },
+            lavender:   { name: 'Lavender',      hex: '#b4a7d6' },
+            periwinkle: { name: 'Periwinkle',    hex: '#8e9cc7' },
+            teal:       { name: 'Soft Teal',     hex: '#7ba8a1' },
+            seafoam:    { name: 'Seafoam',       hex: '#7bbfb0' },
+            gold:       { name: 'Warm Gold',     hex: '#c9b77c' },
+            honey:      { name: 'Honey',         hex: '#d4b870' },
+            terracotta: { name: 'Terracotta',    hex: '#c4836a' }
         };
 
         const bgColorDefs = {
-            dark:     { name: 'Dark Plum',    hex: '#3d2f31' },
-            charcoal: { name: 'Charcoal',     hex: '#1a1a1a' },
-            navy:     { name: 'Deep Navy',    hex: '#1e2638' },
-            forest:   { name: 'Forest Green', hex: '#1f2e2a' }
+            dark:     { name: 'Dark Plum',     hex: '#3d2f31' },
+            wine:     { name: 'Wine',          hex: '#2d1f2b' },
+            espresso: { name: 'Espresso',      hex: '#2b2220' },
+            charcoal: { name: 'Charcoal',      hex: '#1a1a1a' },
+            navy:     { name: 'Deep Navy',     hex: '#1e2638' },
+            storm:    { name: 'Stormy Night',  hex: '#252830' },
+            slate:    { name: 'Cool Slate',    hex: '#2a2d35' },
+            forest:   { name: 'Forest',        hex: '#1f2e2a' },
+            cream:    { name: 'Warm Cream',    hex: '#f5f0e8' }
         };
 
         // ── Page & Section Definitions ──
