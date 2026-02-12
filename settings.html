@@ -62,6 +62,7 @@
                 appName: localStorage.getItem('appName') || 'Our Life Hub',
                 names: JSON.parse(localStorage.getItem('userNames') || '{"name1":"Kasey","name2":"Charlie"}'),
                 accentColor: localStorage.getItem('accentColor') || 'sage',
+                secondaryColor: localStorage.getItem('secondaryColor') || '',
                 bgColor: localStorage.getItem('bgColor') || 'dark',
                 fontFamily: localStorage.getItem('fontFamily') || 'philosopher',
                 fontSize: parseInt(localStorage.getItem('fontSize') || '100', 10),
@@ -71,14 +72,16 @@
                 pageLabels: JSON.parse(localStorage.getItem('pageLabels') || '{}')
             };
         } catch(e) {
-            s = { appName:'Our Life Hub', names:{name1:'Kasey',name2:'Charlie'}, accentColor:'sage', bgColor:'dark', fontFamily:'philosopher', fontSize:100, archivedPages:[], archivedSections:{}, features:{}, pageLabels:{} };
+            s = { appName:'Our Life Hub', names:{name1:'Kasey',name2:'Charlie'}, accentColor:'sage', secondaryColor:'', bgColor:'dark', fontFamily:'philosopher', fontSize:100, archivedPages:[], archivedSections:{}, features:{}, pageLabels:{} };
         }
 
         // Apply CSS custom properties
         var p = palettes[s.accentColor] || palettes.sage;
         var bg = bgColors[s.bgColor] || bgColors.dark;
         var bgDk = bgDarker[s.bgColor] || bgDarker.dark;
-        var sec = secondaryPalettes[s.accentColor] || '#b59197';
+        var defaultSecMap = { sage:'rose', rose:'sage', lavender:'rose', teal:'rose', peach:'sage', gold:'rose', cream:'rose', blush:'sage', coral:'lavender', mauve:'sage', berry:'gold', periwinkle:'rose', seafoam:'peach', terracotta:'sage', honey:'rose' };
+        var secKey = s.secondaryColor || defaultSecMap[s.accentColor] || 'rose';
+        var sec = (palettes[secKey] || palettes.rose).accent;
         var tc = textColors[s.bgColor] || textColors.dark;
         var font = fontStacks[s.fontFamily] || fontStacks.philosopher;
         var basePx = Math.round(16 * s.fontSize / 100);
@@ -113,6 +116,8 @@
             fontStacks: fontStacks,
             secondaryPalettes: secondaryPalettes,
             textColors: textColors,
+            accentHexMap: Object.keys(palettes).reduce(function(m,k){m[k]=palettes[k].accent;return m;},{}),
+            defaultSecMap: defaultSecMap,
             getName: function(person) { return person===1||person==='person1' ? s.names.name1 : s.names.name2; },
             isPageArchived: function(k) { return s.archivedPages.indexOf(k)!==-1; },
             isSectionArchived: function(pk,sk) { var a=s.archivedSections[pk]; return a?a.indexOf(sk)!==-1:false; },
@@ -376,30 +381,20 @@
         }
 
         /* Color Grid */
-        .color-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 10px;
-            margin-top: 12px;
+        .color-select-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 8px;
         }
-        .color-option {
-            border: 2px solid transparent;
-            padding: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-            background: rgba(61,47,49,0.3);
-            text-align: center;
+        .color-preview {
+            width: 36px; height: 36px; min-width: 36px;
+            border: 2px solid rgba(242,235,224,0.2);
+            border-radius: 8px;
         }
-        .color-option:hover { background: rgba(61,47,49,0.5); }
-        .color-option.selected {
-            border-color: var(--lh-accent, #a3b899);
-            background: var(--lh-accent-muted, rgba(163,184,153,0.1));
+        .color-select-row .setting-select {
+            flex: 1;
         }
-        .color-swatch {
-            width: 100%; height: 36px; margin-bottom: 6px;
-            border: 1px solid rgba(242,235,224,0.2);
-        }
-        .color-name { font-size: 0.8rem; color: var(--lh-text, #f2ebe0); }
 
         /* Toggle Switch */
         .setting-toggle {
@@ -540,13 +535,11 @@
             .container { padding: 16px 16px 60px; }
             .settings-section { padding: 20px 16px; }
             .page-title { font-size: 1.8rem; }
-            .color-grid { grid-template-columns: repeat(3, 1fr); }
         }
         @media screen and (max-width: 380px) {
             .container { padding: 12px 10px 60px; }
             .settings-section { padding: 16px 12px; }
             .setting-label { font-size: 0.9rem; }
-            .color-grid { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
@@ -639,19 +632,28 @@
 
             <div class="setting-item">
                 <label class="setting-label">Accent Color</label>
-                <p class="setting-description">Primary color used for buttons, links, and highlights across the app</p>
-                <div class="color-grid" id="accentColorGrid"></div>
-                <div class="info-box" style="margin-top: 12px;">
-                    Current: <span id="currentColor" style="font-weight: 600;">Sage Green</span>
+                <p class="setting-description">Primary color used for buttons, links, and highlights</p>
+                <div class="color-select-row">
+                    <span class="color-preview" id="accentPreview"></span>
+                    <select id="accentColorSelect" class="setting-select" onchange="setAccentColor(this.value)"></select>
                 </div>
             </div>
 
             <div class="setting-item">
-                <label class="setting-label">Background Color</label>
+                <label class="setting-label">Secondary Color</label>
+                <p class="setting-description">Used for secondary elements, person hubs, and complementary accents</p>
+                <div class="color-select-row">
+                    <span class="color-preview" id="secondaryPreview"></span>
+                    <select id="secondaryColorSelect" class="setting-select" onchange="setSecondaryColor(this.value)"></select>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <label class="setting-label">Background</label>
                 <p class="setting-description">Background color for all pages</p>
-                <div class="color-grid" id="bgColorGrid"></div>
-                <div class="info-box" style="margin-top: 12px;">
-                    Current: <span id="currentBgColor" style="font-weight: 600;">Dark Plum</span>
+                <div class="color-select-row">
+                    <span class="color-preview" id="bgPreview"></span>
+                    <select id="bgColorSelect" class="setting-select" onchange="setBackgroundColor(this.value)"></select>
                 </div>
             </div>
 
@@ -898,6 +900,24 @@
             setTimeout(() => el.classList.remove('show'), 2000);
         }
 
+        // ── Firebase Settings Sync ──
+        function syncToFirebase() {
+            if (!window.db || !window.firestoreImports) return;
+            try {
+                const keys = ['accentColor','secondaryColor','bgColor','fontFamily','fontSize','appName','userNames','archivedPages','archivedSections','pageLabels','features','customHabits_person1','customHabits_person2','customPrompts','customChallenges','timezone','weekStart','mealSettings'];
+                const data = {};
+                keys.forEach(k => {
+                    const v = localStorage.getItem(k);
+                    if (v !== null) data[k] = v;
+                });
+                data._lastUpdated = new Date().toISOString();
+                const fi = window.firestoreImports;
+                fi.setDoc(fi.doc(window.db, 'settings', 'global'), data, { merge: true })
+                    .catch(e => console.log('Settings sync failed:', e));
+            } catch(e) { console.log('Settings sync error:', e); }
+        }
+        window.syncToFirebase = syncToFirebase;
+
         // ── Default Habits ──
         const defaultHabits = {
             person1: [
@@ -1004,26 +1024,33 @@
         // BUILD UI
         // ══════════════════════════════════════════════
 
-        function buildColorGrids() {
-            // Accent colors
-            const accentGrid = document.getElementById('accentColorGrid');
-            accentGrid.innerHTML = Object.keys(colorDefs).map(key => {
-                const c = colorDefs[key];
-                const selected = S.accentColor === key ? ' selected' : '';
-                return '<div class="color-option' + selected + '" data-color="' + key + '" onclick="setAccentColor(\'' + key + '\')">' +
-                    '<div class="color-swatch" style="background: ' + c.hex + ';"></div>' +
-                    '<div class="color-name">' + c.name + '</div></div>';
-            }).join('');
+        function buildColorDropdowns() {
+            const defaultSecMap = (LH && LH.defaultSecMap) || { sage:'rose', rose:'sage', lavender:'rose', teal:'rose', peach:'sage', gold:'rose', cream:'rose', blush:'sage', coral:'lavender', mauve:'sage', berry:'gold', periwinkle:'rose', seafoam:'peach', terracotta:'sage', honey:'rose' };
 
-            // Background colors
-            const bgGrid = document.getElementById('bgColorGrid');
-            bgGrid.innerHTML = Object.keys(bgColorDefs).map(key => {
-                const c = bgColorDefs[key];
-                const selected = S.bgColor === key ? ' selected' : '';
-                return '<div class="color-option' + selected + '" data-bgcolor="' + key + '" onclick="setBackgroundColor(\'' + key + '\')">' +
-                    '<div class="color-swatch" style="background: ' + c.hex + ';"></div>' +
-                    '<div class="color-name">' + c.name + '</div></div>';
+            // Accent dropdown
+            const accentSel = document.getElementById('accentColorSelect');
+            accentSel.innerHTML = Object.keys(colorDefs).map(key => {
+                const c = colorDefs[key];
+                return '<option value="' + key + '"' + (S.accentColor === key ? ' selected' : '') + '>' + c.name + '</option>';
             }).join('');
+            document.getElementById('accentPreview').style.background = colorDefs[S.accentColor].hex;
+
+            // Secondary dropdown
+            const secSel = document.getElementById('secondaryColorSelect');
+            const currentSec = S.secondaryColor || defaultSecMap[S.accentColor] || 'rose';
+            secSel.innerHTML = Object.keys(colorDefs).map(key => {
+                const c = colorDefs[key];
+                return '<option value="' + key + '"' + (currentSec === key ? ' selected' : '') + '>' + c.name + '</option>';
+            }).join('');
+            document.getElementById('secondaryPreview').style.background = (colorDefs[currentSec] || colorDefs.rose).hex;
+
+            // Background dropdown
+            const bgSel = document.getElementById('bgColorSelect');
+            bgSel.innerHTML = Object.keys(bgColorDefs).map(key => {
+                const c = bgColorDefs[key];
+                return '<option value="' + key + '"' + (S.bgColor === key ? ' selected' : '') + '>' + c.name + '</option>';
+            }).join('');
+            document.getElementById('bgPreview').style.background = bgColorDefs[S.bgColor].hex;
         }
 
         function buildPageArchiveGrid() {
@@ -1090,7 +1117,7 @@
         window.saveAppName = function() {
             const val = document.getElementById('appName').value || 'Our Life Hub';
             localStorage.setItem('appName', val);
-            flash('appNameFlash');
+            flash('appNameFlash'); syncToFirebase();
             document.querySelector('.nav-logo').textContent = val;
         };
 
@@ -1101,7 +1128,7 @@
                 name2: document.getElementById('name2').value || 'Charlie'
             };
             localStorage.setItem('userNames', JSON.stringify(names));
-            flash('namesFlash');
+            flash('namesFlash'); syncToFirebase();
             // Update nav links live
             document.querySelectorAll('.nav-link, .nav-link-mobile').forEach(link => {
                 const href = link.getAttribute('href') || '';
@@ -1127,27 +1154,30 @@
             if (meals) labels.meals = meals;
             if (settings) labels.settings = settings;
             localStorage.setItem('pageLabels', JSON.stringify(labels));
-            flash('labelsFlash');
+            flash('labelsFlash'); syncToFirebase();
         };
 
         // Accent Color
         window.setAccentColor = function(key) {
             localStorage.setItem('accentColor', key);
-            document.getElementById('currentColor').textContent = colorDefs[key].name;
-            document.querySelectorAll('.color-option[data-color]').forEach(el => el.classList.remove('selected'));
-            const selected = document.querySelector('[data-color="' + key + '"]');
-            if (selected) selected.classList.add('selected');
-            // Reload to apply across the page via engine
+            document.getElementById('accentPreview').style.background = colorDefs[key].hex;
+            syncToFirebase();
+            location.reload();
+        };
+
+        // Secondary Color
+        window.setSecondaryColor = function(key) {
+            localStorage.setItem('secondaryColor', key);
+            document.getElementById('secondaryPreview').style.background = colorDefs[key].hex;
+            syncToFirebase();
             location.reload();
         };
 
         // Background Color
         window.setBackgroundColor = function(key) {
             localStorage.setItem('bgColor', key);
-            document.getElementById('currentBgColor').textContent = bgColorDefs[key].name;
-            document.querySelectorAll('.color-option[data-bgcolor]').forEach(el => el.classList.remove('selected'));
-            const selected = document.querySelector('[data-bgcolor="' + key + '"]');
-            if (selected) selected.classList.add('selected');
+            document.getElementById('bgPreview').style.background = bgColorDefs[key].hex;
+            syncToFirebase();
             location.reload();
         };
 
@@ -1155,7 +1185,7 @@
         window.setFontFamily = function() {
             const val = document.getElementById('fontFamily').value;
             localStorage.setItem('fontFamily', val);
-            location.reload();
+            syncToFirebase(); location.reload();
         };
 
         // Font Size
@@ -1164,7 +1194,7 @@
             current += (direction * 10);
             current = Math.max(80, Math.min(130, current));
             localStorage.setItem('fontSize', current.toString());
-            document.getElementById('fontSizeDisplay').textContent = current + '%';
+            document.getElementById('fontSizeDisplay').textContent = current + '%'; syncToFirebase();
             document.documentElement.style.fontSize = (16 * current / 100) + 'px';
         };
 
@@ -1179,7 +1209,7 @@
             }
             localStorage.setItem('archivedPages', JSON.stringify(archived));
             S.archivedPages = archived;
-            buildPageArchiveGrid();
+            buildPageArchiveGrid(); syncToFirebase();
             // Live-update nav
             location.reload();
         };
@@ -1196,7 +1226,7 @@
                 archived[pageKey].push(sectionKey);
             }
             localStorage.setItem('archivedSections', JSON.stringify(archived));
-            S.archivedSections = archived;
+            S.archivedSections = archived; syncToFirebase();
             buildSectionArchiveContainer();
         };
 
@@ -1209,7 +1239,7 @@
             habits.push(text);
             localStorage.setItem('customHabits_' + person, JSON.stringify(habits));
             input.value = '';
-            renderHabits(person);
+            renderHabits(person); syncToFirebase();
         };
 
         window.deleteHabit = function(person, index) {
@@ -1217,7 +1247,7 @@
             const habits = JSON.parse(localStorage.getItem('customHabits_' + person) || JSON.stringify(defaultHabits[person]));
             habits.splice(index, 1);
             localStorage.setItem('customHabits_' + person, JSON.stringify(habits));
-            renderHabits(person);
+            renderHabits(person); syncToFirebase();
         };
 
         function renderHabits(person) {
@@ -1237,7 +1267,7 @@
             if (arr.length < 10) { alert('Please enter at least 10 prompts (one per line)'); return; }
             localStorage.setItem('customPrompts', JSON.stringify(arr));
             document.getElementById('promptCount').textContent = arr.length;
-            flash('promptsFlash');
+            flash('promptsFlash'); syncToFirebase();
         };
 
         // Custom Challenges
@@ -1247,7 +1277,7 @@
             if (arr.length !== 12) { alert('Please enter exactly 12 challenges (one per line, for each month)'); return; }
             localStorage.setItem('customChallenges', JSON.stringify(arr));
             document.getElementById('challengeCount').textContent = arr.length;
-            flash('challengesFlash');
+            flash('challengesFlash'); syncToFirebase();
         };
 
         // Meal Settings
@@ -1263,17 +1293,17 @@
                 }
             };
             localStorage.setItem('mealSettings', JSON.stringify(settings));
-            flash('mealsFlash');
+            flash('mealsFlash'); syncToFirebase();
         };
 
         // Timezone
         window.saveTimezone = function() {
-            localStorage.setItem('timezone', document.getElementById('timezone').value);
+            localStorage.setItem('timezone', document.getElementById('timezone').value); syncToFirebase();
         };
 
         // Week Start
         window.saveWeekStart = function() {
-            localStorage.setItem('weekStart', document.getElementById('weekStart').value);
+            localStorage.setItem('weekStart', document.getElementById('weekStart').value); syncToFirebase();
         };
 
         // Export
@@ -1350,12 +1380,6 @@
             document.getElementById('labelMeals').value = labels.meals || '';
             document.getElementById('labelSettings').value = labels.settings || '';
 
-            // Accent color
-            document.getElementById('currentColor').textContent = (colorDefs[S.accentColor] || colorDefs.sage).name;
-
-            // Background color
-            document.getElementById('currentBgColor').textContent = (bgColorDefs[S.bgColor] || bgColorDefs.dark).name;
-
             // Font
             document.getElementById('fontFamily').value = S.fontFamily;
 
@@ -1363,7 +1387,7 @@
             document.getElementById('fontSizeDisplay').textContent = S.fontSize + '%';
 
             // Build grids
-            buildColorGrids();
+            buildColorDropdowns();
             buildPageArchiveGrid();
             buildSectionArchiveContainer();
 
