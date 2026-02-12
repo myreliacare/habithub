@@ -8,6 +8,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#2a1f21">
     <title>Our Life Hub</title>
+    <script src="settings-engine.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Philosopher:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -1426,13 +1427,13 @@ button, .btn, a, .nav-refresh {
             </div>
             </div>
             <div>
-                <h1 class="home-title">Our Life Hub</h1>
+                <h1 class="home-title" data-lh-name="app">Our Life Hub</h1>
                 <p class="home-date" id="homeDate"></p>
             </div>
         </div>
 
         <!-- REMINDER SECTION -->
-        <div class="reminder-section">
+        <div class="reminder-section" data-lh-section="reminders">
             <div class="current-reminder visible" id="currentReminder">
                 <div class="reminder-content">
                     <div class="reminder-info">
@@ -1472,7 +1473,7 @@ button, .btn, a, .nav-refresh {
         </div>
 
         <!-- Calendar Section -->
-        <div class="section">
+        <div class="section" data-lh-section="calendar">
             <div class="calendar-header">
                 <div class="calendar-nav">
                     <button onclick="calendarPrevious()">←</button>
@@ -1544,7 +1545,7 @@ button, .btn, a, .nav-refresh {
         </div>
 
         <!-- Grocery List -->
-        <div class="section">
+        <div class="section" data-lh-section="grocery">
             <div class="collapsible-header" onclick="toggleGroceryList()">
                 <div class="section-title" style="margin-bottom: 0;">Grocery List</div>
                 <span class="expand-icon" id="groceryIcon" style="transform: rotate(-90deg);">▼</span>
@@ -1559,7 +1560,7 @@ button, .btn, a, .nav-refresh {
         </div>
 
         <!-- Phone Book -->
-        <div class="section">
+        <div class="section" data-lh-section="phonebook">
             <div class="phonebook-header" onclick="togglePhonebook()">
                 <div class="section-title" style="margin-bottom: 0;">Phone Book</div>
                 <span class="expand-icon" id="phonebookIcon" style="transform: rotate(-90deg);">▼</span>
