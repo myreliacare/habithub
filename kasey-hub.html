@@ -41,9 +41,17 @@
         names.name1=names.name1||'Kasey'; names.name2=names.name2||'Charlie';
         var archivedPages;try{archivedPages=JSON.parse(localStorage.getItem('archivedPages')||'[]');}catch(e){archivedPages=[];}
 
+        // Person 1 hub theme overrides
+        var p1o;try{p1o=JSON.parse(localStorage.getItem('person1Appearance')||'{}');}catch(e){p1o={};}
+        if(p1o.accentColor)ac=p1o.accentColor;
+        if(p1o.secondaryColor)sc=p1o.secondaryColor;
+        if(p1o.bgColor)bc=p1o.bgColor;
+        if(p1o.fontFamily)ff=p1o.fontFamily;
+        if(p1o.headingFont)hf=p1o.headingFont;
+
         // Resolve colors
         var pa=accentHexMap[ac]||accentHexMap.sage;
-        var secHex=accentHexMap[sc]||accentHexMap.rose;
+        var secHex=accentHexMap[sc]||accentHexMap.rosegold;
         var bg=bgMap[bc]||bgMap.dark;
         var bgDk=bgDkMap[bc]||bgDkMap.dark;
         var tc=tcMap[bc]||tcMap.dark;
