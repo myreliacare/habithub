@@ -20,8 +20,8 @@
         // ── Palette definitions (v3 — matches settings page) ──
         var accentHexMap={sage:'#a3b899',blush:'#d4919e',cream:'#e8ddd0',periwinkle:'#8e9cc7',dustylilac:'#c3a6c9',powderblue:'#a4c2d8',softmint:'#a8d8c4',moss:'#8a9c6b',burntsienna:'#c97856',rosegold:'#d4a4a4',dustyteal:'#6d9e9e',petalpink:'#e8b4b8',apricot:'#e8b088',palejade:'#8ec4a8',raspberry:'#b0607a',denim:'#6888a8',nude:'#d4b8a8',obsidian:'#181818',darkplum:'#3d2f31',storm:'#252830'};
         var defaultSecMap={sage:'rosegold',blush:'sage',cream:'rosegold',periwinkle:'rosegold',dustylilac:'rosegold',powderblue:'rosegold',softmint:'rosegold',moss:'rosegold',burntsienna:'sage',rosegold:'sage',dustyteal:'rosegold',petalpink:'sage',apricot:'sage',palejade:'rosegold',raspberry:'sage',denim:'rosegold',nude:'sage',obsidian:'rosegold',darkplum:'sage',storm:'rosegold'};
-        var bgMap={dark:'#3d2f31',forest:'#1f2e2a',espresso:'#2b2220',storm:'#252830',midnight:'#141420',warmcocoa:'#362a28',deepteal:'#1a2e2e',warmlinen:'#f0e8dc',dustymauve:'#332830',obsidian:'#181818',softblush:'#f2e2e4',bordeaux:'#301820'};
-        var bgDkMap={dark:'#2a1f21',forest:'#15231f',espresso:'#1e1816',storm:'#1b1d24',midnight:'#0d0d16',warmcocoa:'#281e1c',deepteal:'#122020',warmlinen:'#e4dace',dustymauve:'#261c24',obsidian:'#101010',softblush:'#e8d6d9',bordeaux:'#221018'};
+        var bgMap={dark:'#3d2f31',forest:'#1f2e2a',espresso:'#2b2220',storm:'#252830',midnight:'#141420',warmcocoa:'#362a28',deepteal:'#1a2e2e',warmlinen:'#f0e8dc',dustymauve:'#332830',obsidian:'#181818',softblush:'#f0d4da',bordeaux:'#301820'};
+        var bgDkMap={dark:'#2a1f21',forest:'#15231f',espresso:'#1e1816',storm:'#1b1d24',midnight:'#0d0d16',warmcocoa:'#281e1c',deepteal:'#122020',warmlinen:'#e4dace',dustymauve:'#261c24',obsidian:'#101010',softblush:'#e5c8cf',bordeaux:'#221018'};
         var tcMap={dark:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},forest:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},espresso:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},storm:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},midnight:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},warmcocoa:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},deepteal:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},warmlinen:{t:'#3d2f31',m:'rgba(61,47,49,0.65)',f:'rgba(61,47,49,0.4)'},dustymauve:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},obsidian:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},softblush:{t:'#3d2f31',m:'rgba(61,47,49,0.65)',f:'rgba(61,47,49,0.4)'},bordeaux:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'}};
         var fontMap={philosopher:"'Philosopher',Georgia,serif",cormorant:"'Cormorant Garamond',Georgia,serif",worksans:"'Work Sans',sans-serif",baloo:"'Baloo 2',cursive",lora:"'Lora',Georgia,serif",cardo:"'Cardo',Georgia,serif",playfair:"'Playfair Display',Georgia,serif",kalam:"'Kalam',cursive",lobster:"'Lobster',cursive",indieflower:"'Indie Flower',cursive",gilda:"'Gilda Display',Georgia,serif",cormorantinfant:"'Cormorant Infant',Georgia,serif",dmserif:"'DM Serif Display',Georgia,serif",tenor:"'Tenor Sans',sans-serif",dancing:"'Dancing Script',cursive",satisfy:"'Satisfy',cursive",greatvibes:"'Great Vibes',cursive",abril:"'Abril Fatface',Georgia,serif"};
 
@@ -109,7 +109,7 @@
         if(neededFonts.length){var link=document.createElement('link');link.rel='stylesheet';link.href='https://fonts.googleapis.com/css2?'+neededFonts.map(function(f){return'family='+f;}).join('&')+'&display=swap';document.head.appendChild(link);}
 
         // Heading font override
-        var hfSt=document.createElement('style');hfSt.textContent='.nav-logo,.page-title,.home-title,.main-title,.journal-title,.spellbook-title,.calendar-title,.schedule-title{font-family:var(--lh-heading-font)!important}';(document.head||r).appendChild(hfSt);
+        var hfSt=document.createElement('style');hfSt.textContent='body{font-family:'+font+'!important} .top-nav,.nav-link,.nav-link-mobile{font-family:'+font+'!important} .nav-logo,.page-title,.home-title,.main-title,.journal-title,.spellbook-title,.calendar-title,.schedule-title{font-family:'+hFont+'!important}';(document.head||r).appendChild(hfSt);
 
         // Archive nav links
         var pageHrefs={home:'index.html',person1:'kasey-hub.html',person2:'charlie-hub.html',dreams:'our-dreams.html',meals:'meal-plan.html',settings:'settings.html'};
@@ -139,7 +139,7 @@
             else if(title.indexOf('Charlie')!==-1)document.title=title.replace('Charlie',names.name2);
 
             // ── Skip rewriting if all defaults ──
-            if(ac==='sage'&&bc==='dark')return;
+            if(ac==='sage'&&sc===(defaultSecMap.sage||'rosegold')&&bc==='dark')return;
 
             // ── Build replacement map ──
             var reps=[];
@@ -163,27 +163,6 @@
                 // Very light greens
                 reps.push(['#b5d4a4',A.vlight],['#B5D4A4',A.vlight],['#c4d9b5',A.vlight],['#C4D9B5',A.vlight]);
 
-                // SECONDARY ACCENT — hex values (rose family)
-                // Very dark roses
-                reps.push(['#5a4345',S.vdark],['#5a4a4c',S.vdark],['#5A4345',S.vdark],['#5A4A4C',S.vdark]);
-                // Dark roses
-                reps.push(['#6b5a5e',S.dark],['#7a6668',S.dark],['#6B5A5E',S.dark],['#7A6668',S.dark]);
-                // Medium-dark roses
-                reps.push(['#9a7a80',S.mdark],['#a57f85',S.mdark],['#9A7A80',S.mdark],['#A57F85',S.mdark]);
-                reps.push(['#b4828c',S.mdark],['#B4828C',S.mdark]);
-                // Base roses
-                reps.push(['#b59197',S.base],['#B59197',S.base]);
-                // Light roses
-                reps.push(['#c5a1a7',S.light],['#c9a9a6',S.light],['#c8b8bb',S.light]);
-                reps.push(['#C5A1A7',S.light],['#C9A9A6',S.light],['#C8B8BB',S.light]);
-                // Very light roses
-                reps.push(['#d4b5b8',S.vlight],['#d4b5ba',S.vlight],['#d4a5a5',S.vlight],['#d4a5ae',S.vlight]);
-                reps.push(['#D4B5B8',S.vlight],['#D4B5BA',S.vlight],['#D4A5A5',S.vlight],['#D4A5AE',S.vlight]);
-                // Extra light roses
-                reps.push(['#e8d5d8',S.xlight],['#E8D5D8',S.xlight]);
-                // Red-ish accent variants
-                reps.push(['#c97a7a',S.redish],['#C97A7A',S.redish],['#d67373',S.redish],['#D67373',S.redish]);
-
                 // TEAL (index calendar) — map to accent dark
                 reps.push(['#3d6b6b',A.dark],['#3D6B6B',A.dark]);
                 reps.push(['#4a7a7a',A.mdark],['#4A7A7A',A.mdark]);
@@ -193,12 +172,7 @@
                 reps.push(['#c4a882',A.light],['#C4A882',A.light],['#d4a882',A.light],['#D4A882',A.light]);
                 reps.push(['#8a7a2e',A.dark],['#8A7A2E',A.dark],['#b5a33d',A.mdark],['#B5A33D',A.mdark]);
                 reps.push(['#c9b84a',A.base],['#C9B84A',A.base]);
-                reps.push(['#8a7a6d',S.dark],['#8A7A6D',S.dark]);
                 reps.push(['#edecd5',A.xlight],['#EDECD5',A.xlight]);
-
-                // PURPLE accents — map to secondary
-                reps.push(['#a08cb4',S.light],['#A08CB4',S.light]);
-                reps.push(['#c7ceea',S.xlight],['#C7CEEA',S.xlight]);
 
                 // PASTEL PALETTE (wellness moods etc) — shift toward accent/secondary
                 reps.push(['#a8e6cf',lighten(A.base,0.40)],['#98d8c8',lighten(A.base,0.35)]);
@@ -216,15 +190,35 @@
                 reps.push([/rgba\(\s*125,\s*143,\s*118,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(A.mdark)+',$1)']);
                 // Teal rgba
                 reps.push([/rgba\(\s*61,\s*107,\s*107,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(A.dark)+',$1)']);
-
-                // rgba — SECONDARY (rose rgb: 181,145,151)
-                reps.push([/rgba\(\s*181,\s*145,\s*151,\s*([0-9.]+)\s*\)/g,'rgba('+sRgb+',$1)']);
-                reps.push([/rgba\(\s*201,\s*169,\s*166,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(S.light)+',$1)']);
-                reps.push([/rgba\(\s*180,\s*130,\s*140,\s*([0-9.]+)\s*\)/g,'rgba('+sRgb+',$1)']);
-                reps.push([/rgba\(\s*201,\s*122,\s*122,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(S.redish)+',$1)']);
-                reps.push([/rgba\(\s*160,\s*140,\s*180,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(S.light)+',$1)']);
+                // Gold/brown rgba
                 reps.push([/rgba\(\s*196,\s*168,\s*130,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(A.light)+',$1)']);
                 reps.push([/rgba\(\s*201,\s*184,\s*74,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(A.mdark)+',$1)']);
+            }
+
+            // SECONDARY — always remap if different from default
+            if(sc!==(defaultSecMap.sage||'rosegold')||ac!=='sage'){
+                var sRgb2=rgbStr(S.base);
+                // hex values (rose family)
+                reps.push(['#5a4345',S.vdark],['#5a4a4c',S.vdark],['#5A4345',S.vdark],['#5A4A4C',S.vdark]);
+                reps.push(['#6b5a5e',S.dark],['#7a6668',S.dark],['#6B5A5E',S.dark],['#7A6668',S.dark]);
+                reps.push(['#9a7a80',S.mdark],['#a57f85',S.mdark],['#9A7A80',S.mdark],['#A57F85',S.mdark]);
+                reps.push(['#b4828c',S.mdark],['#B4828C',S.mdark]);
+                reps.push(['#b59197',S.base],['#B59197',S.base]);
+                reps.push(['#c5a1a7',S.light],['#c9a9a6',S.light],['#c8b8bb',S.light]);
+                reps.push(['#C5A1A7',S.light],['#C9A9A6',S.light],['#C8B8BB',S.light]);
+                reps.push(['#d4b5b8',S.vlight],['#d4b5ba',S.vlight],['#d4a5a5',S.vlight],['#d4a5ae',S.vlight]);
+                reps.push(['#D4B5B8',S.vlight],['#D4B5BA',S.vlight],['#D4A5A5',S.vlight],['#D4A5AE',S.vlight]);
+                reps.push(['#e8d5d8',S.xlight],['#E8D5D8',S.xlight]);
+                reps.push(['#c97a7a',S.redish],['#C97A7A',S.redish],['#d67373',S.redish],['#D67373',S.redish]);
+                reps.push(['#8a7a6d',S.dark],['#8A7A6D',S.dark]);
+                reps.push(['#a08cb4',S.light],['#A08CB4',S.light]);
+                reps.push(['#c7ceea',S.xlight],['#C7CEEA',S.xlight]);
+                // rgba rose family
+                reps.push([/rgba\(\s*181,\s*145,\s*151,\s*([0-9.]+)\s*\)/g,'rgba('+sRgb2+',$1)']);
+                reps.push([/rgba\(\s*201,\s*169,\s*166,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(S.light)+',$1)']);
+                reps.push([/rgba\(\s*180,\s*130,\s*140,\s*([0-9.]+)\s*\)/g,'rgba('+sRgb2+',$1)']);
+                reps.push([/rgba\(\s*201,\s*122,\s*122,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(S.redish)+',$1)']);
+                reps.push([/rgba\(\s*160,\s*140,\s*180,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(S.light)+',$1)']);
             }
 
             if(bc!=='dark'){
@@ -239,7 +233,7 @@
                 reps.push([/rgba\(\s*42,\s*31,\s*33,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(bgDk)+',$1)']);
             }
 
-            if(bc==='cream'){
+            if(bc==='warmlinen'||bc==='softblush'){
                 // TEXT — flip to dark for light background
                 reps.push(['#f2ebe0',tc.t],['#F2EBE0',tc.t],['#e0d2d0',tc.t],['#E0D2D0',tc.t]);
                 reps.push(['#EBE0D6',tc.t],['#ebe0d6',tc.t],['#f5ede6',tc.t],['#F5EDE6',tc.t]);
