@@ -17,58 +17,41 @@
         function darken(hex,pct){var c=h2r(hex);return r2h(clamp(c[0]*(1-pct)),clamp(c[1]*(1-pct)),clamp(c[2]*(1-pct)));}
         function rgbStr(hex){var c=h2r(hex);return c[0]+','+c[1]+','+c[2];}
 
-        // ── Palette definitions ──
-        var palettes={sage:{accent:'#a3b899'},rose:{accent:'#c9a9a6'},lavender:{accent:'#b4a7d6'},teal:{accent:'#7ba8a1'},peach:{accent:'#d4a59a'},gold:{accent:'#c9b77c'},cream:{accent:'#e8ddd0'},blush:{accent:'#d4919e'},coral:{accent:'#d98a7e'},mauve:{accent:'#b8879e'},berry:{accent:'#9c6b82'},periwinkle:{accent:'#8e9cc7'},seafoam:{accent:'#7bbfb0'},terracotta:{accent:'#c4836a'},honey:{accent:'#d4b870'}};
-        var secMap={sage:'#b59197',rose:'#a3b899',lavender:'#c9a9a6',teal:'#b59197',peach:'#a3b899',gold:'#b59197',cream:'#b59197',blush:'#a3b899',coral:'#b4a7d6',mauve:'#a3b899',berry:'#c9b77c',periwinkle:'#c9a9a6',seafoam:'#d4a59a',terracotta:'#a3b899',honey:'#b59197'};
-        var bgMap={dark:'#3d2f31',charcoal:'#1a1a1a',navy:'#1e2638',forest:'#1f2e2a',cream:'#f5f0e8',wine:'#2d1f2b',slate:'#2a2d35',espresso:'#2b2220',storm:'#252830'};
-        var bgDkMap={dark:'#2a1f21',charcoal:'#111111',navy:'#141c2a',forest:'#15231f',cream:'#ebe4d9',wine:'#211520',slate:'#1f2229',espresso:'#1e1816',storm:'#1b1d24'};
-        var tcMap={dark:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},charcoal:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},navy:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},forest:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},cream:{t:'#3d2f31',m:'rgba(61,47,49,0.65)',f:'rgba(61,47,49,0.4)'},wine:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},slate:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},espresso:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},storm:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'}};
-        var fontMap={philosopher:"'Philosopher',Georgia,serif",cormorant:"'Cormorant',Georgia,'Times New Roman',serif",worksans:"'Work Sans',sans-serif",georgia:"Georgia,serif",arial:"Arial,sans-serif"};
+        // ── Palette definitions (v3) ──
+        var accentHexMap={sage:'#a3b899',blush:'#d4919e',cream:'#e8ddd0',periwinkle:'#8e9cc7',dustylilac:'#c3a6c9',powderblue:'#a4c2d8',softmint:'#a8d8c4',moss:'#8a9c6b',burntsienna:'#c97856',rosegold:'#d4a4a4',dustyteal:'#6d9e9e',petalpink:'#e8b4b8',apricot:'#e8b088',palejade:'#8ec4a8',raspberry:'#b0607a',denim:'#6888a8',nude:'#d4b8a8',obsidian:'#181818',darkplum:'#3d2f31',storm:'#252830'};
+        var defaultSecMap={sage:'rosegold',blush:'sage',cream:'rosegold',periwinkle:'rosegold',dustylilac:'rosegold',powderblue:'rosegold',softmint:'rosegold',moss:'rosegold',burntsienna:'sage',rosegold:'sage',dustyteal:'rosegold',petalpink:'sage',apricot:'sage',palejade:'rosegold',raspberry:'sage',denim:'rosegold',nude:'sage',obsidian:'rosegold',darkplum:'sage',storm:'rosegold'};
+        var bgMap={dark:'#3d2f31',forest:'#1f2e2a',espresso:'#2b2220',storm:'#252830',midnight:'#141420',warmcocoa:'#362a28',deepteal:'#1a2e2e',warmlinen:'#f0e8dc',dustymauve:'#332830',obsidian:'#181818',softblush:'#f0d4da',bordeaux:'#301820'};
+        var bgDkMap={dark:'#2a1f21',forest:'#15231f',espresso:'#1e1816',storm:'#1b1d24',midnight:'#0d0d16',warmcocoa:'#281e1c',deepteal:'#122020',warmlinen:'#e4dace',dustymauve:'#261c24',obsidian:'#101010',softblush:'#e5c8cf',bordeaux:'#221018'};
+        var tcMap={dark:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},forest:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},espresso:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},storm:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},midnight:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},warmcocoa:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},deepteal:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},warmlinen:{t:'#3d2f31',m:'rgba(61,47,49,0.65)',f:'rgba(61,47,49,0.4)'},dustymauve:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},obsidian:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},softblush:{t:'#3d2f31',m:'rgba(61,47,49,0.65)',f:'rgba(61,47,49,0.4)'},bordeaux:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'}};
+        var fontMap={philosopher:"'Philosopher',Georgia,serif",cormorant:"'Cormorant Garamond',Georgia,serif",worksans:"'Work Sans',sans-serif",baloo:"'Baloo 2',cursive",lora:"'Lora',Georgia,serif",cardo:"'Cardo',Georgia,serif",playfair:"'Playfair Display',Georgia,serif",kalam:"'Kalam',cursive",lobster:"'Lobster',cursive",indieflower:"'Indie Flower',cursive",gilda:"'Gilda Display',Georgia,serif",cormorantinfant:"'Cormorant Infant',Georgia,serif",dmserif:"'DM Serif Display',Georgia,serif",tenor:"'Tenor Sans',sans-serif",dancing:"'Dancing Script',cursive",satisfy:"'Satisfy',cursive",greatvibes:"'Great Vibes',cursive",abril:"'Abril Fatface',Georgia,serif"};
 
         // ── Read settings ──
         var ac=localStorage.getItem('accentColor')||'sage';
+        var sc=localStorage.getItem('secondaryColor')||'';
         var bc=localStorage.getItem('bgColor')||'dark';
         var ff=localStorage.getItem('fontFamily')||'philosopher';
+        var hf=localStorage.getItem('headingFont')||'philosopher';
         var fs=parseInt(localStorage.getItem('fontSize')||'100',10);
         var appName=localStorage.getItem('appName')||'Our Life Hub';
         var names;try{names=JSON.parse(localStorage.getItem('userNames')||'{}');}catch(e){names={};}
         names.name1=names.name1||'Kasey'; names.name2=names.name2||'Charlie';
         var archivedPages;try{archivedPages=JSON.parse(localStorage.getItem('archivedPages')||'[]');}catch(e){archivedPages=[];}
 
-        var pa=(palettes[ac]||palettes.sage).accent;
-        var sec=secMap[ac]||'#b59197';
+        // Resolve colors
+        var secKey=sc||defaultSecMap[ac]||'rosegold';
+        var pa=accentHexMap[ac]||accentHexMap.sage;
+        var secHex=accentHexMap[secKey]||accentHexMap.rosegold;
         var bg=bgMap[bc]||bgMap.dark;
         var bgDk=bgDkMap[bc]||bgDkMap.dark;
         var tc=tcMap[bc]||tcMap.dark;
         var font=fontMap[ff]||fontMap.philosopher;
+        var hFont=fontMap[hf]||fontMap.philosopher;
         var basePx=Math.round(16*fs/100);
 
-        // ── Generate accent color variants ──
-        var A = {
-            vdark:  darken(pa, 0.45),   // #4a5c3f, #4a6a3e
-            dark:   darken(pa, 0.30),    // #6d8a5e, #7d8f76
-            mdark:  darken(pa, 0.15),    // #8fa87a, #8fa882
-            base:   pa,                  // #a3b899
-            light:  lighten(pa, 0.15),   // #b4c9aa, #b5c9a8
-            vlight: lighten(pa, 0.30),   // #b5d4a4, #c4d9b5
-            xlight: lighten(pa, 0.50),   // very light washes
-            hover:  lighten(pa, 0.12)
-        };
-
-        // ── Generate secondary color variants ──
-        var S = {
-            vdark:  darken(sec, 0.45),   // #5a4345, #5a4a4c
-            dark:   darken(sec, 0.30),    // #6b5a5e, #7a6668
-            mdark:  darken(sec, 0.15),    // #9a7a80, #a57f85
-            base:   sec,                  // #b59197
-            light:  lighten(sec, 0.10),   // #c5a1a7, #c9a9a6
-            vlight: lighten(sec, 0.25),   // #d4b5b8, #d4b5ba
-            xlight: lighten(sec, 0.40),   // #e8d5d8
-            redish: darken(sec, 0.10),    // #c97a7a, #d67373 (more saturated)
-        };
-
-        // ── Generate background mid-tones ──
-        var bgMid = lighten(bg, 0.15);   // #4a3a3c, #4a3b3e
+        // ── Generate color variants ──
+        var A={vdark:darken(pa,0.45),dark:darken(pa,0.30),mdark:darken(pa,0.15),base:pa,light:lighten(pa,0.15),vlight:lighten(pa,0.30),xlight:lighten(pa,0.50),hover:lighten(pa,0.12)};
+        var S={vdark:darken(secHex,0.45),dark:darken(secHex,0.30),mdark:darken(secHex,0.15),base:secHex,light:lighten(secHex,0.10),vlight:lighten(secHex,0.25),xlight:lighten(secHex,0.40),redish:darken(secHex,0.10)};
+        var bgMid=lighten(bg,0.15);
 
         // ── Apply CSS custom properties ──
         var r=document.documentElement;
@@ -80,20 +63,33 @@
         r.style.setProperty('--lh-bg',bg);
         r.style.setProperty('--lh-bg-darker',bgDk);
         r.style.setProperty('--lh-secondary',S.base);
+        var sR=parseInt(secHex.slice(1,3),16),sG=parseInt(secHex.slice(3,5),16),sB=parseInt(secHex.slice(5,7),16);
+        r.style.setProperty('--lh-secondary-muted','rgba('+sR+','+sG+','+sB+',0.15)');
+        r.style.setProperty('--lh-secondary-border','rgba('+sR+','+sG+','+sB+',0.3)');
         r.style.setProperty('--lh-text',tc.t);
         r.style.setProperty('--lh-text-muted',tc.m);
         r.style.setProperty('--lh-text-faint',tc.f);
         r.style.setProperty('--lh-font',font);
+        r.style.setProperty('--lh-heading-font',hFont);
         r.style.setProperty('--lh-font-size',basePx+'px');
         r.style.background=bg; r.style.fontSize=basePx+'px';
+
+        // Load fonts
+        var fontUrls={philosopher:'Philosopher:ital,wght@0,400;0,700;1,400',cormorant:'Cormorant+Garamond:wght@300;400;500;600;700',worksans:'Work+Sans:wght@400;500;600;700;800',baloo:'Baloo+2:wght@400;500;600;700;800',lora:'Lora:ital,wght@0,400;0,500;0,600;0,700;1,400',cardo:'Cardo:ital,wght@0,400;0,700;1,400',playfair:'Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400',kalam:'Kalam:wght@300;400;700',lobster:'Lobster',indieflower:'Indie+Flower',gilda:'Gilda+Display',cormorantinfant:'Cormorant+Infant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400',dmserif:'DM+Serif+Display:ital@0;1',tenor:'Tenor+Sans',dancing:'Dancing+Script:wght@400;500;600;700',satisfy:'Satisfy',greatvibes:'Great+Vibes',abril:'Abril+Fatface'};
+        var neededFonts=[];
+        [ff,hf].forEach(function(f){if(fontUrls[f]&&neededFonts.indexOf(fontUrls[f])===-1)neededFonts.push(fontUrls[f]);});
+        if(neededFonts.length){var link=document.createElement('link');link.rel='stylesheet';link.href='https://fonts.googleapis.com/css2?'+neededFonts.map(function(f){return'family='+f;}).join('&')+'&display=swap';document.head.appendChild(link);}
+
+        // Body + heading font injection
+        var hfSt=document.createElement('style');hfSt.textContent='body{font-family:'+font+'!important} .top-nav,.nav-link,.nav-link-mobile{font-family:'+font+'!important} .nav-logo,.page-title,.home-title,.main-title{font-family:'+hFont+'!important}';(document.head||r).appendChild(hfSt);
 
         // Archive nav links
         var pageHrefs={home:'index.html',person1:'kasey-hub.html',person2:'charlie-hub.html',dreams:'our-dreams.html',meals:'meal-plan.html',settings:'settings.html'};
         var archCSS='';archivedPages.forEach(function(k){var h=pageHrefs[k];if(h)archCSS+='a.nav-link[href="'+h+'"],a.nav-link-mobile[href="'+h+'"]{display:none!important}\n';});
         if(archCSS){var st=document.createElement('style');st.textContent=archCSS;(document.head||r).appendChild(st);}
 
-        // Expose for settings page
-        window.LifeHubSettings={current:{appName:appName,names:names,accentColor:ac,bgColor:bc,fontFamily:ff,fontSize:fs,archivedPages:archivedPages,archivedSections:JSON.parse(localStorage.getItem('archivedSections')||'{}'),features:JSON.parse(localStorage.getItem('features')||'{}'),pageLabels:JSON.parse(localStorage.getItem('pageLabels')||'{}')},getName:function(p){return p===1||p==='person1'?names.name1:names.name2;}};
+        // Expose globally
+        window.LifeHubSettings={current:{appName:appName,names:names,accentColor:ac,secondaryColor:sc,bgColor:bc,fontFamily:ff,headingFont:hf,fontSize:fs,archivedPages:archivedPages,archivedSections:JSON.parse(localStorage.getItem('archivedSections')||'{}'),features:JSON.parse(localStorage.getItem('features')||'{}'),pageLabels:JSON.parse(localStorage.getItem('pageLabels')||'{}')},getName:function(p){return p===1||p==='person1'?names.name1:names.name2;},accentHexMap:accentHexMap,defaultSecMap:defaultSecMap};
 
         function onReady(fn){if(document.readyState!=='loading')fn();else document.addEventListener('DOMContentLoaded',fn);}
         onReady(function(){
@@ -115,92 +111,67 @@
             else if(title.indexOf('Charlie')!==-1)document.title=title.replace('Charlie',names.name2);
 
             // ── Skip rewriting if all defaults ──
-            if(ac==='sage'&&bc==='dark')return;
+            if(ac==='sage'&&secKey===(defaultSecMap.sage||'rosegold')&&bc==='dark')return;
 
             // ── Build replacement map ──
             var reps=[];
 
             if(ac!=='sage'){
-                var aRgb=rgbStr(A.base), sRgb=rgbStr(S.base);
+                var aRgb=rgbStr(A.base);
 
                 // PRIMARY ACCENT — hex values (green family)
-                // Very dark greens
                 reps.push(['#4a5c3f',A.vdark],['#4a6a3e',A.vdark],['#4A5C3F',A.vdark],['#4A6A3E',A.vdark]);
-                // Dark greens
                 reps.push(['#6d8a5e',A.dark],['#5a7a4a',A.dark],['#6D8A5E',A.dark],['#5A7A4A',A.dark]);
-                // Medium-dark greens
                 reps.push(['#7d8f76',A.mdark],['#8fa87a',A.mdark],['#8fa882',A.mdark],['#7a9b6a',A.mdark]);
                 reps.push(['#7D8F76',A.mdark],['#8FA87A',A.mdark],['#8FA882',A.mdark],['#7A9B6A',A.mdark]);
-                // Base greens
                 reps.push(['#a3b899',A.base],['#A3B899',A.base],['#7ba886',A.base],['#7BA886',A.base]);
-                // Light greens
                 reps.push(['#b4c9aa',A.light],['#B4C9AA',A.light],['#b5c9a8',A.light],['#B5C9A8',A.light]);
                 reps.push(['#a8c99b',A.light],['#A8C99B',A.light],['#b8c9ad',A.light],['#B8C9AD',A.light]);
-                // Very light greens
                 reps.push(['#b5d4a4',A.vlight],['#B5D4A4',A.vlight],['#c4d9b5',A.vlight],['#C4D9B5',A.vlight]);
-
-                // SECONDARY ACCENT — hex values (rose family)
-                // Very dark roses
-                reps.push(['#5a4345',S.vdark],['#5a4a4c',S.vdark],['#5A4345',S.vdark],['#5A4A4C',S.vdark]);
-                // Dark roses
-                reps.push(['#6b5a5e',S.dark],['#7a6668',S.dark],['#6B5A5E',S.dark],['#7A6668',S.dark]);
-                // Medium-dark roses
-                reps.push(['#9a7a80',S.mdark],['#a57f85',S.mdark],['#9A7A80',S.mdark],['#A57F85',S.mdark]);
-                reps.push(['#b4828c',S.mdark],['#B4828C',S.mdark]);
-                // Base roses
-                reps.push(['#b59197',S.base],['#B59197',S.base]);
-                // Light roses
-                reps.push(['#c5a1a7',S.light],['#c9a9a6',S.light],['#c8b8bb',S.light]);
-                reps.push(['#C5A1A7',S.light],['#C9A9A6',S.light],['#C8B8BB',S.light]);
-                // Very light roses
-                reps.push(['#d4b5b8',S.vlight],['#d4b5ba',S.vlight],['#d4a5a5',S.vlight],['#d4a5ae',S.vlight]);
-                reps.push(['#D4B5B8',S.vlight],['#D4B5BA',S.vlight],['#D4A5A5',S.vlight],['#D4A5AE',S.vlight]);
-                // Extra light roses
-                reps.push(['#e8d5d8',S.xlight],['#E8D5D8',S.xlight]);
-                // Red-ish accent variants
-                reps.push(['#c97a7a',S.redish],['#C97A7A',S.redish],['#d67373',S.redish],['#D67373',S.redish]);
-
-                // TEAL (index calendar) — map to accent dark
-                reps.push(['#3d6b6b',A.dark],['#3D6B6B',A.dark]);
-                reps.push(['#4a7a7a',A.mdark],['#4A7A7A',A.mdark]);
-                reps.push(['#5a9a9a',A.base],['#5A9A9A',A.base]);
-
-                // GOLD/BROWN accents — map to accent or secondary variants
+                // TEAL
+                reps.push(['#3d6b6b',A.dark],['#3D6B6B',A.dark],['#4a7a7a',A.mdark],['#4A7A7A',A.mdark],['#5a9a9a',A.base],['#5A9A9A',A.base]);
+                // GOLD/BROWN
                 reps.push(['#c4a882',A.light],['#C4A882',A.light],['#d4a882',A.light],['#D4A882',A.light]);
                 reps.push(['#8a7a2e',A.dark],['#8A7A2E',A.dark],['#b5a33d',A.mdark],['#B5A33D',A.mdark]);
                 reps.push(['#c9b84a',A.base],['#C9B84A',A.base]);
-                reps.push(['#8a7a6d',S.dark],['#8A7A6D',S.dark]);
                 reps.push(['#edecd5',A.xlight],['#EDECD5',A.xlight]);
-
-                // PURPLE accents — map to secondary
-                reps.push(['#a08cb4',S.light],['#A08CB4',S.light]);
-                reps.push(['#c7ceea',S.xlight],['#C7CEEA',S.xlight]);
-
-                // PASTEL PALETTE (wellness moods etc) — shift toward accent/secondary
-                reps.push(['#a8e6cf',lighten(A.base,0.40)],['#98d8c8',lighten(A.base,0.35)]);
-                reps.push(['#b4f8c8',lighten(A.base,0.50)]);
-                reps.push(['#4ecdc4',A.base],['#45b7d1',A.mdark]);
-                reps.push(['#95c9b4',A.light]);
-
-                // rgba — PRIMARY ACCENT (sage green rgb: 163,184,153)
+                // PASTELS
+                reps.push(['#a8e6cf',lighten(A.base,0.40)],['#98d8c8',lighten(A.base,0.35)],['#b4f8c8',lighten(A.base,0.50)]);
+                reps.push(['#4ecdc4',A.base],['#45b7d1',A.mdark],['#95c9b4',A.light]);
+                // rgba green
                 reps.push([/rgba\(\s*163,\s*184,\s*153,\s*([0-9.]+)\s*\)/g,'rgba('+aRgb+',$1)']);
-                // Other green rgbas
                 reps.push([/rgba\(\s*122,\s*138,\s*110,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(A.dark)+',$1)']);
                 reps.push([/rgba\(\s*168,\s*201,\s*155,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(A.light)+',$1)']);
                 reps.push([/rgba\(\s*123,\s*168,\s*134,\s*([0-9.]+)\s*\)/g,'rgba('+aRgb+',$1)']);
                 reps.push([/rgba\(\s*109,\s*138,\s*94,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(A.dark)+',$1)']);
                 reps.push([/rgba\(\s*125,\s*143,\s*118,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(A.mdark)+',$1)']);
-                // Teal rgba
                 reps.push([/rgba\(\s*61,\s*107,\s*107,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(A.dark)+',$1)']);
+                reps.push([/rgba\(\s*196,\s*168,\s*130,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(A.light)+',$1)']);
+                reps.push([/rgba\(\s*201,\s*184,\s*74,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(A.mdark)+',$1)']);
+            }
 
-                // rgba — SECONDARY (rose rgb: 181,145,151)
+            // SECONDARY — always remap if different from default
+            if(secKey!==(defaultSecMap.sage||'rosegold')||ac!=='sage'){
+                var sRgb=rgbStr(S.base);
+                reps.push(['#5a4345',S.vdark],['#5a4a4c',S.vdark],['#5A4345',S.vdark],['#5A4A4C',S.vdark]);
+                reps.push(['#6b5a5e',S.dark],['#7a6668',S.dark],['#6B5A5E',S.dark],['#7A6668',S.dark]);
+                reps.push(['#9a7a80',S.mdark],['#a57f85',S.mdark],['#9A7A80',S.mdark],['#A57F85',S.mdark]);
+                reps.push(['#b4828c',S.mdark],['#B4828C',S.mdark]);
+                reps.push(['#b59197',S.base],['#B59197',S.base]);
+                reps.push(['#c5a1a7',S.light],['#c9a9a6',S.light],['#c8b8bb',S.light]);
+                reps.push(['#C5A1A7',S.light],['#C9A9A6',S.light],['#C8B8BB',S.light]);
+                reps.push(['#d4b5b8',S.vlight],['#d4b5ba',S.vlight],['#d4a5a5',S.vlight],['#d4a5ae',S.vlight]);
+                reps.push(['#D4B5B8',S.vlight],['#D4B5BA',S.vlight],['#D4A5A5',S.vlight],['#D4A5AE',S.vlight]);
+                reps.push(['#e8d5d8',S.xlight],['#E8D5D8',S.xlight]);
+                reps.push(['#c97a7a',S.redish],['#C97A7A',S.redish],['#d67373',S.redish],['#D67373',S.redish]);
+                reps.push(['#8a7a6d',S.dark],['#8A7A6D',S.dark]);
+                reps.push(['#a08cb4',S.light],['#A08CB4',S.light]);
+                reps.push(['#c7ceea',S.xlight],['#C7CEEA',S.xlight]);
                 reps.push([/rgba\(\s*181,\s*145,\s*151,\s*([0-9.]+)\s*\)/g,'rgba('+sRgb+',$1)']);
                 reps.push([/rgba\(\s*201,\s*169,\s*166,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(S.light)+',$1)']);
                 reps.push([/rgba\(\s*180,\s*130,\s*140,\s*([0-9.]+)\s*\)/g,'rgba('+sRgb+',$1)']);
                 reps.push([/rgba\(\s*201,\s*122,\s*122,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(S.redish)+',$1)']);
                 reps.push([/rgba\(\s*160,\s*140,\s*180,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(S.light)+',$1)']);
-                reps.push([/rgba\(\s*196,\s*168,\s*130,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(A.light)+',$1)']);
-                reps.push([/rgba\(\s*201,\s*184,\s*74,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(A.mdark)+',$1)']);
             }
 
             if(bc!=='dark'){
@@ -215,7 +186,7 @@
                 reps.push([/rgba\(\s*42,\s*31,\s*33,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(bgDk)+',$1)']);
             }
 
-            if(bc==='cream'){
+            if(bc==='warmlinen'||bc==='softblush'){
                 // TEXT — flip to dark for light background
                 reps.push(['#f2ebe0',tc.t],['#F2EBE0',tc.t],['#e0d2d0',tc.t],['#E0D2D0',tc.t]);
                 reps.push(['#EBE0D6',tc.t],['#ebe0d6',tc.t],['#f5ede6',tc.t],['#F5EDE6',tc.t]);
