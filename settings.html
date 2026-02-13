@@ -1213,6 +1213,39 @@
 
         function toggleSection(id) {
             document.getElementById(id).classList.toggle('open');
+            _saveOpenSections();
+        }
+
+        function _saveOpenSections() {
+            var open = [];
+            document.querySelectorAll('.settings-section.open').forEach(function(el) { open.push(el.id); });
+            sessionStorage.setItem('_settingsOpenSections', JSON.stringify(open));
+        }
+
+        function _saveUIState(dropdownId) {
+            _saveOpenSections();
+            if (dropdownId) sessionStorage.setItem('_settingsOpenDD', dropdownId);
+        }
+
+        function _restoreUIState() {
+            try {
+                var sections = JSON.parse(sessionStorage.getItem('_settingsOpenSections') || '[]');
+                if (sections.length) {
+                    document.querySelectorAll('.settings-section').forEach(function(el) {
+                        if (sections.indexOf(el.id) !== -1) el.classList.add('open');
+                        else el.classList.remove('open');
+                    });
+                }
+                var ddId = sessionStorage.getItem('_settingsOpenDD');
+                if (ddId) {
+                    sessionStorage.removeItem('_settingsOpenDD');
+                    var dd = document.getElementById(ddId);
+                    if (dd) {
+                        dd.classList.add('open');
+                        setTimeout(function() { dd.scrollIntoView({block:'center',behavior:'instant'}); }, 50);
+                    }
+                }
+            } catch(e) {}
         }
 
         // ── Utility: flash a save indicator ──
@@ -1225,7 +1258,8 @@
 
         // ── Firebase Settings Sync ──
         function syncToFirebase() {
-            if (!window.db || !window.firestoreImports) return;
+            localStorage.setItem('_settingsLastSaved', Date.now().toString());
+            if (!window.db || !window.firestoreImports) return Promise.resolve();
             try {
                 const keys = ['accentColor','secondaryColor','bgColor','fontFamily','headingFont','fontSize','appName','userNames','archivedPages','archivedSections','pageLabels','features','customHabits_person1','customHabits_person2','customPrompts','customChallenges','timezone','weekStart','mealSettings','person1Appearance','person2Appearance'];
                 const data = {};
@@ -1233,11 +1267,11 @@
                     const v = localStorage.getItem(k);
                     if (v !== null) data[k] = v;
                 });
-                data._lastUpdated = new Date().toISOString();
+                data._lastUpdated = Date.now();
                 const fi = window.firestoreImports;
-                fi.setDoc(fi.doc(window.db, 'settings', 'global'), data, { merge: true })
-                    .catch(e => console.log('Settings sync failed:', e));
-            } catch(e) { console.log('Settings sync error:', e); }
+                return fi.setDoc(fi.doc(window.db, 'settings', 'global'), data, { merge: true })
+                    .catch(e => { console.log('Settings sync failed:', e); });
+            } catch(e) { console.log('Settings sync error:', e); return Promise.resolve(); }
         }
         window.syncToFirebase = syncToFirebase;
 
@@ -1669,24 +1703,24 @@
         window.setAccentColor = function(key) {
             localStorage.setItem('accentColor', key);
             document.getElementById('accentPreview').style.background = colorDefs[key].hex;
-            syncToFirebase();
-            location.reload();
+            _saveUIState('accentDropdown');
+            syncToFirebase().then(function(){ location.reload(); });
         };
 
         // Secondary Color
         window.setSecondaryColor = function(key) {
             localStorage.setItem('secondaryColor', key);
             document.getElementById('secondaryPreview').style.background = colorDefs[key].hex;
-            syncToFirebase();
-            location.reload();
+            _saveUIState('secondaryDropdown');
+            syncToFirebase().then(function(){ location.reload(); });
         };
 
         // Background Color
         window.setBackgroundColor = function(key) {
             localStorage.setItem('bgColor', key);
             document.getElementById('bgPreview').style.background = bgColorDefs[key].hex;
-            syncToFirebase();
-            location.reload();
+            _saveUIState('bgDropdown');
+            syncToFirebase().then(function(){ location.reload(); });
         };
 
         // Sync font select elements to display in their selected font
@@ -1711,14 +1745,16 @@
         window.setFontFamily = function() {
             const val = document.getElementById('fontFamily').value;
             localStorage.setItem('fontFamily', val);
-            syncToFirebase(); location.reload();
+            _saveUIState();
+            syncToFirebase().then(function(){ location.reload(); });
         };
 
         // Heading Font
         window.setHeadingFont = function() {
             const val = document.getElementById('headingFont').value;
             localStorage.setItem('headingFont', val);
-            syncToFirebase(); location.reload();
+            _saveUIState();
+            syncToFirebase().then(function(){ location.reload(); });
         };
 
         // Font Size
@@ -1742,9 +1778,9 @@
             }
             localStorage.setItem('archivedPages', JSON.stringify(archived));
             S.archivedPages = archived;
-            buildPageArchiveGrid(); syncToFirebase();
+            buildPageArchiveGrid();
             // Live-update nav
-            location.reload();
+            syncToFirebase().then(function(){ location.reload(); });
         };
 
         // Section Archive
@@ -1869,8 +1905,9 @@
                         Object.keys(data.localStorage).forEach(key => {
                             localStorage.setItem(key, data.localStorage[key]);
                         });
+                        localStorage.setItem('_settingsLastSaved', Date.now().toString());
                         alert('Data restored! The page will now reload.');
-                        location.reload();
+                        syncToFirebase().then(function(){ location.reload(); });
                     }
                 } catch (err) {
                     alert('Error reading backup file: ' + err.message);
@@ -1887,8 +1924,9 @@
                 'customChallenges', 'timezone', 'weekStart', 'archivedPages', 'archivedSections',
                 'pageLabels', 'mealSettings', 'person1Appearance', 'person2Appearance'];
             keys.forEach(key => localStorage.removeItem(key));
+            localStorage.setItem('_settingsLastSaved', Date.now().toString());
             alert('Settings reset! The page will now reload.');
-            location.reload();
+            syncToFirebase().then(function(){ location.reload(); });
         };
 
         // ══════════════════════════════════════════════
@@ -1969,6 +2007,7 @@
         }
 
         loadSettings();
+        _restoreUIState();
     </script>
 
     <script>
