@@ -1330,6 +1330,35 @@
             accent-color: var(--sage-green);
         }
 
+        .gen-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 12px;
+            background: rgba(163, 184, 153, 0.08);
+            border: 1px solid rgba(163, 184, 153, 0.2);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: rgba(224, 210, 208, 0.6);
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+        .gen-chip:has(input:checked) {
+            background: rgba(163, 184, 153, 0.2);
+            border-color: rgba(163, 184, 153, 0.5);
+            color: var(--light-text);
+        }
+        .gen-chip:hover {
+            border-color: rgba(163, 184, 153, 0.4);
+        }
+        .gen-chip input[type="checkbox"] {
+            accent-color: var(--sage-green);
+            width: 13px;
+            height: 13px;
+            margin: 0;
+        }
+
         .diet-tag {
             display: inline-flex;
             align-items: center;
@@ -1661,7 +1690,7 @@
             </div>
             <div class="gen-checkbox-row">
                 <input type="checkbox" id="gen-new-recipes" checked>
-                <label for="gen-new-recipes">Suggest ~20% new recipe ideas</label>
+                <label for="gen-new-recipes">Include ~30% new recipe ideas</label>
             </div>
             <div class="gen-checkbox-row">
                 <input type="checkbox" id="gen-no-repeat" checked>
@@ -1670,6 +1699,61 @@
             <div class="gen-checkbox-row">
                 <input type="checkbox" id="gen-prep-days" checked>
                 <label for="gen-prep-days">Include prep day schedules</label>
+            </div>
+        </div>
+
+        <div class="gen-section">
+            <h3>Vibe</h3>
+            <div class="gen-row">
+                <span class="gen-label">Spice Level</span>
+                <select class="gen-input" id="gen-spice">
+                    <option value="mild">Mild — keep it chill</option>
+                    <option value="medium">Medium — some kick</option>
+                    <option value="hot" selected>Hot — we love spice 🌶️</option>
+                    <option value="extra">Extra — bring the heat 🔥</option>
+                </select>
+            </div>
+            <div class="gen-row" style="flex-direction:column;align-items:flex-start;gap:6px;">
+                <span class="gen-label">Cuisine Focus <span style="opacity:0.4;font-weight:400;font-size:0.7rem;">(pick any)</span></span>
+                <div style="display:flex;flex-wrap:wrap;gap:6px;width:100%;">
+                    <label class="gen-chip"><input type="checkbox" value="mediterranean" id="gen-c-med" checked> Mediterranean</label>
+                    <label class="gen-chip"><input type="checkbox" value="mexican" id="gen-c-mex" checked> Mexican / Tex-Mex</label>
+                    <label class="gen-chip"><input type="checkbox" value="asian" id="gen-c-asian"> Asian-inspired</label>
+                    <label class="gen-chip"><input type="checkbox" value="italian" id="gen-c-ital" checked> Italian</label>
+                    <label class="gen-chip"><input type="checkbox" value="comfort" id="gen-c-comfort"> Comfort food</label>
+                    <label class="gen-chip"><input type="checkbox" value="indian" id="gen-c-indian"> Indian</label>
+                    <label class="gen-chip"><input type="checkbox" value="korean" id="gen-c-korean"> Korean</label>
+                    <label class="gen-chip"><input type="checkbox" value="middleeastern" id="gen-c-me"> Middle Eastern</label>
+                </div>
+            </div>
+            <div class="gen-row">
+                <span class="gen-label">Dinner Effort</span>
+                <select class="gen-input" id="gen-effort">
+                    <option value="quick">Quick — 20 min or less</option>
+                    <option value="normal" selected>Normal — 20-35 min</option>
+                    <option value="involved">Worth it — up to 45 min</option>
+                </select>
+            </div>
+            <div class="gen-row">
+                <span class="gen-label">Grocery Runs</span>
+                <select class="gen-input" id="gen-grocery-runs">
+                    <option value="minimal" selected>Minimal — reuse ingredients across days</option>
+                    <option value="moderate">Moderate — some variety is fine</option>
+                    <option value="variety">Max variety — don't care about overlap</option>
+                </select>
+            </div>
+            <div class="gen-row" style="flex-direction:column;align-items:flex-start;gap:6px;">
+                <span class="gen-label">Dessert Style <span style="opacity:0.4;font-weight:400;font-size:0.7rem;">(pick any)</span></span>
+                <div style="display:flex;flex-wrap:wrap;gap:6px;width:100%;">
+                    <label class="gen-chip"><input type="checkbox" value="light" id="gen-d-light" checked> Light & healthy</label>
+                    <label class="gen-chip"><input type="checkbox" value="protein" id="gen-d-protein" checked> Protein-packed</label>
+                    <label class="gen-chip"><input type="checkbox" value="treat" id="gen-d-treat"> Real treats</label>
+                    <label class="gen-chip"><input type="checkbox" value="skip" id="gen-d-skip"> Skip desserts</label>
+                </div>
+            </div>
+            <div class="gen-row" style="flex-direction:column;align-items:flex-start;gap:6px;">
+                <span class="gen-label">Special Requests</span>
+                <input type="text" id="gen-special" class="gen-input" style="width:100%;box-sizing:border-box;" placeholder="e.g. &quot;more one-pot meals&quot;, &quot;use up the ricotta&quot;, &quot;lighter lunches&quot;">
             </div>
         </div>
 
@@ -3802,44 +3886,160 @@ function initGenerateView() {
             if (e.key === 'Enter') { e.preventDefault(); addDietTag(); }
         });
     }
+    
+    // Dessert: "Skip" unchecks others, and checking others unchecks "Skip"
+    var skipEl = document.getElementById('gen-d-skip');
+    var otherDesserts = ['gen-d-light', 'gen-d-protein', 'gen-d-treat'];
+    if (skipEl && !skipEl._listenerAdded) {
+        skipEl.addEventListener('change', function() {
+            if (this.checked) {
+                otherDesserts.forEach(function(id) { document.getElementById(id).checked = false; });
+            }
+        });
+        skipEl._listenerAdded = true;
+    }
+    otherDesserts.forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el && !el._listenerAdded) {
+            el.addEventListener('change', function() {
+                if (this.checked) skipEl.checked = false;
+            });
+            el._listenerAdded = true;
+        }
+    });
 }
 
 function buildSkeletonPrompt(startDate, duration, recipeSummary, opts) {
-    return 'Generate a ' + duration + '-day meal plan skeleton. Output ONLY meal names and daily totals.\n\n' +
-        'TARGETS: Kasey: 140-165g protein, ~1,350 cal/day. Charlie: 180-210g protein, ~2,200-2,500 cal/day.\n' +
+    // Spice level instruction
+    var spiceText = { mild: 'Keep spice levels mild — no hot sauce, minimal red pepper flakes.', medium: 'Medium spice — some heat is good but not every meal.', hot: 'We love spicy food — generous red pepper flakes, hot sauce, chipotle, jalapeño.', extra: 'MAX SPICE — every dinner should have real heat. Chipotle, gochujang, habanero, sriracha, cayenne.' };
+    
+    // Cuisine labels
+    var cuisineLabels = { mediterranean: 'Mediterranean', mexican: 'Mexican/Tex-Mex', asian: 'Asian-inspired', italian: 'Italian', comfort: 'Comfort food', indian: 'Indian', korean: 'Korean', middleeastern: 'Middle Eastern', mixed: 'Mixed variety' };
+    var cuisineStr = opts.cuisines.map(function(c) { return cuisineLabels[c] || c; }).join(', ');
+    var cuisineInstruction = opts.cuisines.length >= 4 ? 'Wide variety of cuisines including: ' + cuisineStr + '. Mix them throughout the week.' :
+        opts.cuisines.length === 1 && opts.cuisines[0] === 'mixed' ? 'Mix cuisines throughout the week — Mediterranean, Mexican, Asian, Italian, comfort food.' :
+        'Focus on these cuisines: ' + cuisineStr + '. Distribute them across the plan.';
+    
+    // Effort level
+    var effortText = { quick: 'All dinners must be 20 min or less — one-pot, sheet pan, or assembly meals only.', normal: 'Dinners should be 20-35 min with simple techniques.', involved: 'Dinners can take up to 45 min — stuffed dishes, baked meals, multi-step recipes are fine.' };
+    
+    // Grocery strategy
+    var groceryText = { minimal: 'IMPORTANT: Reuse the same core ingredients across multiple days to minimize the grocery list. Overlap proteins, grains, and produce.', moderate: 'Some ingredient overlap is fine but mix it up enough to keep things interesting.', variety: 'Maximize variety — different proteins, grains, and flavors each day.' };
+    
+    // Dessert styles
+    var dessertLabels = { light: 'light & healthy (under 200 cal, fruit/yogurt based)', protein: 'protein-packed (chia pudding, protein bark, yogurt bowls)', treat: 'real treats (chocolate mousse, baked crumbles, warm brownies, under 300 cal)' };
+    var skipDessert = opts.skipDessert;
+    var dessertInstruction = '';
+    if (skipDessert) {
+        dessertInstruction = 'NO desserts. Only Breakfast, Lunch, and Dinner.';
+    } else {
+        var dessertStyles = opts.desserts.filter(function(d) { return d !== 'skip'; }).map(function(d) { return dessertLabels[d] || d; });
+        if (dessertStyles.length > 1) {
+            dessertInstruction = 'Mix dessert styles throughout the week: ' + dessertStyles.join('; ') + '.';
+        } else if (dessertStyles.length === 1) {
+            dessertInstruction = 'Desserts should be ' + dessertStyles[0] + '.';
+        } else {
+            dessertInstruction = 'Include a light dessert each day — under 200 cal.';
+        }
+    }
+    
+    var prompt = 'Generate a ' + duration + '-day meal plan skeleton. Output ONLY meal names and daily totals.\n\n' +
+        'TARGETS: Kasey: 140-165g protein, ~1,500-1,700 cal/day. Charlie: 180-210g protein, ~2,200-2,500 cal/day.\n' +
         'RESTRICTIONS: ' + getDietaryRestrictionsForPrompt() + '\n' +
-        'STRUCTURE: Breakfast (grab-and-go), Lunch (batch prep), Dinner (fresh 20-35min), Dessert (light 100-200cal)\n' +
+        'STRUCTURE: Breakfast (grab-and-go or prepped), Lunch (batch prep), Dinner (fresh cook)' + (skipDessert ? '' : ', Dessert') + '\n\n' +
+        '--- PREFERENCES ---\n' +
+        (spiceText[opts.spice] || spiceText.hot) + '\n' +
+        cuisineInstruction + '\n' +
+        (effortText[opts.effort] || effortText.normal) + '\n' +
+        (groceryText[opts.groceryRuns] || groceryText.minimal) + '\n' +
+        dessertInstruction + '\n' +
         (opts.noRepeat ? 'No same meal on consecutive days.\n' : '') +
-        (opts.favorFavs ? 'Prioritize FAV recipes.\n' : '') +
-        'Mix cuisines. Love spicy food.\n' +
+        (opts.favorFavs ? 'Prioritize FAV recipes from the bank.\n' : '') +
         (opts.prepDays ? 'Mark 2 prep days per week.\n' : '') +
-        (opts.newRecipes ? '~80% from bank, ~20% new ideas (mark with isNew:true). For new recipes include protein and calories in portion.\n' : 'Use ONLY recipes from bank.\n') +
+        (opts.newRecipes ? '~70% from bank, ~30% new creative ideas (mark with isNew:true). New recipes should fit the cuisine/spice preferences. Include protein and calories in portion.\n' : 'Use ONLY recipes from bank.\n') +
+        (opts.special ? '\nSPECIAL REQUEST: ' + opts.special + '\n' : '') +
         '\nRECIPE BANK:\n' + recipeSummary + '\n\n' +
         'START: ' + startDate + ', ' + duration + ' days.\n\n' +
         'Return ONLY a JSON array. No markdown. No backticks. COMPACT format:\n' +
         '[{"day":1,"theme":"Italian","protein":"148g","calories":"1,560","prep":null,' +
         '"meals":[{"type":"Breakfast","name":"Exact Recipe Name From Bank","portion":"42g protein - 420 cal","isNew":false},' +
         '{"type":"Lunch","name":"Name","portion":"38g protein - 450 cal","isNew":false},' +
-        '{"type":"Dinner","name":"Name","portion":"48g protein - 520 cal","isNew":false},' +
-        '{"type":"Dessert","name":"Name","portion":"8g protein - 150 cal","isNew":false}]}]\n\n' +
-        'IMPORTANT: Use EXACT recipe names from the bank. Only include type, name, portion, and isNew per meal. Nothing else.';
+        '{"type":"Dinner","name":"Name","portion":"48g protein - 520 cal","isNew":false}' +
+        (skipDessert ? '' : ',{"type":"Dessert","name":"Name","portion":"8g protein - 150 cal","isNew":false}') +
+        ']}]\n\n' +
+        'IMPORTANT: Use EXACT recipe names from the bank for bank recipes. Only include type, name, portion, and isNew per meal. Nothing else.';
+    
+    return prompt;
 }
 
+
 async function callAI(prompt) {
-    var response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            model: 'claude-sonnet-4-20250514',
-            max_tokens: 4000,
-            messages: [{ role: 'user', content: prompt }]
-        })
-    });
-    var data = await response.json();
-    if (!data.content || !data.content[0]) throw new Error(data.error?.message || 'No response from AI');
+    var response;
+    try {
+        response = await fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                model: 'claude-sonnet-4-20250514',
+                max_tokens: 8000,
+                system: 'You are a meal plan generator. You ONLY output raw JSON — no markdown, no backticks, no explanation. Just the JSON array.',
+                messages: [{ role: 'user', content: prompt }]
+            })
+        });
+    } catch(netErr) {
+        throw new Error('Network error — this feature only works inside the Claude.ai artifact viewer. If you downloaded this file, open it through Claude instead. (' + netErr.message + ')');
+    }
+    
+    var rawText;
+    try {
+        rawText = await response.text();
+    } catch(readErr) {
+        throw new Error('Could not read API response: ' + readErr.message);
+    }
+    
+    if (!response.ok) {
+        // Try to extract a useful error message
+        try {
+            var errData = JSON.parse(rawText);
+            throw new Error('API error (' + response.status + '): ' + (errData.error?.message || rawText.substring(0, 200)));
+        } catch(parseErr) {
+            if (parseErr.message.indexOf('API error') === 0) throw parseErr;
+            throw new Error('API error (' + response.status + '): ' + rawText.substring(0, 200));
+        }
+    }
+    
+    var data;
+    try {
+        data = JSON.parse(rawText);
+    } catch(jsonErr) {
+        throw new Error('Invalid JSON from API: ' + rawText.substring(0, 200));
+    }
+    
+    if (!data.content || !data.content[0]) {
+        throw new Error('Empty response from AI. Try again.');
+    }
+    
     var text = data.content.map(function(c) { return c.text || ''; }).join('');
     text = text.replace(/```json|```/g, '').trim();
-    return JSON.parse(text);
+    
+    // Try to extract JSON from the response even if there's text around it
+    var jsonStart = text.indexOf('[');
+    var jsonEnd = text.lastIndexOf(']');
+    if (jsonStart === -1 || jsonEnd === -1) {
+        // Try object format
+        jsonStart = text.indexOf('{');
+        jsonEnd = text.lastIndexOf('}');
+    }
+    if (jsonStart !== -1 && jsonEnd !== -1 && jsonEnd > jsonStart) {
+        text = text.substring(jsonStart, jsonEnd + 1);
+    }
+    
+    try {
+        return JSON.parse(text);
+    } catch(parseErr) {
+        console.error('AI response text:', text.substring(0, 500));
+        throw new Error('Could not parse AI response as JSON. The AI may have returned text instead of data. Try again.');
+    }
 }
 
 function hydrateSkeletonWithRecipes(skeleton) {
@@ -3956,13 +4156,45 @@ async function generatePlan() {
     status.style.display = 'block';
     preview.style.display = 'none';
     
+    // Make sure recipe bank is populated
+    if (recipeBank.length === 0) {
+        status.innerHTML = '<span class="gen-spinner"></span> Building recipe bank...';
+        recipeBank = extractRecipesFromPlan();
+        if (recipeBank.length === 0) {
+            status.innerHTML = 'Error: No recipes found in the current plan. Cannot generate.';
+            btn.disabled = false;
+            return;
+        }
+    }
+    
     var startDate = document.getElementById('gen-start-date').value;
     var duration = parseInt(document.getElementById('gen-duration').value);
+    // Read multi-select cuisines
+    var cuisineIds = ['gen-c-med','gen-c-mex','gen-c-asian','gen-c-ital','gen-c-comfort','gen-c-indian','gen-c-korean','gen-c-me'];
+    var cuisines = cuisineIds.map(function(id) {
+        var el = document.getElementById(id);
+        return el && el.checked ? el.value : null;
+    }).filter(Boolean);
+    
+    // Read multi-select dessert styles
+    var dessertIds = ['gen-d-light','gen-d-protein','gen-d-treat','gen-d-skip'];
+    var desserts = dessertIds.map(function(id) {
+        var el = document.getElementById(id);
+        return el && el.checked ? el.value : null;
+    }).filter(Boolean);
+    
     var opts = {
         favorFavs: document.getElementById('gen-favor-favs').checked,
         newRecipes: document.getElementById('gen-new-recipes').checked,
         noRepeat: document.getElementById('gen-no-repeat').checked,
-        prepDays: document.getElementById('gen-prep-days').checked
+        prepDays: document.getElementById('gen-prep-days').checked,
+        spice: document.getElementById('gen-spice').value,
+        cuisines: cuisines.length > 0 ? cuisines : ['mixed'],
+        effort: document.getElementById('gen-effort').value,
+        groceryRuns: document.getElementById('gen-grocery-runs').value,
+        desserts: desserts,
+        skipDessert: desserts.indexOf('skip') !== -1,
+        special: (document.getElementById('gen-special').value || '').trim()
     };
     
     var recipeSummary = recipeBank.filter(function(r) { return r.type !== 'Snack'; }).map(function(r) {
@@ -3972,7 +4204,7 @@ async function generatePlan() {
     
     try {
         // Phase 1: Get lightweight skeleton from AI
-        status.innerHTML = '<span class="gen-spinner"></span> Planning meals...';
+        status.innerHTML = '<span class="gen-spinner"></span> Planning meals (' + recipeBank.length + ' recipes in bank)...';
         var prompt = buildSkeletonPrompt(startDate, duration, recipeSummary, opts);
         var skeleton = await callAI(prompt);
         
@@ -3999,7 +4231,9 @@ async function generatePlan() {
         
     } catch(e) {
         console.error('Generation error:', e);
-        status.innerHTML = 'Error: ' + e.message + '<br><button class="gen-btn gen-btn-secondary" onclick="generatePlan()" style="margin-top:12px;width:auto;padding:10px 20px;">Try Again</button>';
+        var errorMsg = e.message || 'Unknown error';
+        status.innerHTML = '<div style="color:#d4919e;margin-bottom:12px;">⚠ ' + errorMsg + '</div>' +
+            '<button class="gen-btn gen-btn-secondary" onclick="generatePlan()" style="width:auto;padding:10px 20px;">Try Again</button>';
         btn.disabled = false;
     }
 }
