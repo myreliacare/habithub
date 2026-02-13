@@ -382,6 +382,19 @@
             font-size: 0.78rem;
             margin-bottom: 3px;
         }
+        .hub-theme-block {
+            padding: 12px;
+            background: var(--lh-bg, rgba(61,47,49,0.15));
+            border: 1px solid var(--lh-accent-border, rgba(163,184,153,0.1));
+            border-radius: 6px;
+        }
+        .hub-theme-grid {
+            display: grid;
+            grid-template-columns: 90px 1fr;
+            gap: 6px;
+            align-items: center;
+            margin-top: 6px;
+        }
 
         .setting-input {
             width: 100%;
@@ -876,6 +889,69 @@
             </div>
         </div>
 
+        <!-- 2b. PERSONAL HUB THEMES -->
+        <div class="settings-section" id="sec-hubthemes">
+            <div class="section-header" onclick="toggleSection('sec-hubthemes')">
+                <h2 class="section-title">Personal Hub Themes</h2>
+                <span class="section-arrow">▾</span>
+            </div>
+            <div class="section-body">
+                <p class="section-description">Override the global theme on each person's hub. Leave on "Use Global" to inherit the shared theme.</p>
+
+                <div class="hub-theme-block">
+                    <label class="setting-label" id="hubTheme1Label">Kasey's Hub</label>
+                    <div class="hub-theme-grid">
+                        <span class="field-hint">Accent</span>
+                        <select id="p1Accent" class="setting-select-inline" onchange="savePersonTheme(1)">
+                            <option value="">Use Global</option>
+                        </select>
+                        <span class="field-hint">Secondary</span>
+                        <select id="p1Secondary" class="setting-select-inline" onchange="savePersonTheme(1)">
+                            <option value="">Use Global</option>
+                        </select>
+                        <span class="field-hint">Background</span>
+                        <select id="p1Bg" class="setting-select-inline" onchange="savePersonTheme(1)">
+                            <option value="">Use Global</option>
+                        </select>
+                        <span class="field-hint">Body Font</span>
+                        <select id="p1Font" class="setting-select-inline" onchange="savePersonTheme(1)">
+                            <option value="">Use Global</option>
+                        </select>
+                        <span class="field-hint">Heading Font</span>
+                        <select id="p1HFont" class="setting-select-inline" onchange="savePersonTheme(1)">
+                            <option value="">Use Global</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="hub-theme-block" style="margin-top:16px;">
+                    <label class="setting-label" id="hubTheme2Label">Charlie's Hub</label>
+                    <div class="hub-theme-grid">
+                        <span class="field-hint">Accent</span>
+                        <select id="p2Accent" class="setting-select-inline" onchange="savePersonTheme(2)">
+                            <option value="">Use Global</option>
+                        </select>
+                        <span class="field-hint">Secondary</span>
+                        <select id="p2Secondary" class="setting-select-inline" onchange="savePersonTheme(2)">
+                            <option value="">Use Global</option>
+                        </select>
+                        <span class="field-hint">Background</span>
+                        <select id="p2Bg" class="setting-select-inline" onchange="savePersonTheme(2)">
+                            <option value="">Use Global</option>
+                        </select>
+                        <span class="field-hint">Body Font</span>
+                        <select id="p2Font" class="setting-select-inline" onchange="savePersonTheme(2)">
+                            <option value="">Use Global</option>
+                        </select>
+                        <span class="field-hint">Heading Font</span>
+                        <select id="p2HFont" class="setting-select-inline" onchange="savePersonTheme(2)">
+                            <option value="">Use Global</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- 3. PAGE MANAGEMENT -->
         <div class="settings-section" id="sec-pages">
             <div class="section-header" onclick="toggleSection('sec-pages')">
@@ -1094,7 +1170,7 @@
         function syncToFirebase() {
             if (!window.db || !window.firestoreImports) return;
             try {
-                const keys = ['accentColor','secondaryColor','bgColor','fontFamily','headingFont','fontSize','appName','userNames','archivedPages','archivedSections','pageLabels','features','customHabits_person1','customHabits_person2','customPrompts','customChallenges','timezone','weekStart','mealSettings'];
+                const keys = ['accentColor','secondaryColor','bgColor','fontFamily','headingFont','fontSize','appName','userNames','archivedPages','archivedSections','pageLabels','features','customHabits_person1','customHabits_person2','customPrompts','customChallenges','timezone','weekStart','mealSettings','person1Appearance','person2Appearance'];
                 const data = {};
                 keys.forEach(k => {
                     const v = localStorage.getItem(k);
@@ -1286,6 +1362,79 @@
             }).join('');
         }
 
+        // ── Person Hub Theme Overrides ──
+        function buildPersonThemeDropdowns() {
+            const accentNames = {
+                sage:'Sage Green',blush:'Blush',cream:'Cream',periwinkle:'Periwinkle',dustylilac:'Dusty Lilac',
+                powderblue:'Powder Blue',softmint:'Soft Mint',moss:'Moss',burntsienna:'Burnt Sienna',
+                rosegold:'Rose Gold',dustyteal:'Dusty Teal',petalpink:'Petal Pink',apricot:'Apricot',
+                palejade:'Pale Jade',raspberry:'Raspberry',denim:'Denim',nude:'Nude',
+                obsidian:'Obsidian',darkplum:'Dark Plum',storm:'Storm'
+            };
+            const bgColorNames = {
+                dark:'Dark Plum',forest:'Forest',espresso:'Espresso',storm:'Storm',midnight:'Midnight',
+                warmcocoa:'Warm Cocoa',deepteal:'Deep Teal',warmlinen:'Warm Linen',dustymauve:'Dusty Mauve',
+                obsidian:'Obsidian',softblush:'Soft Blush',bordeaux:'Bordeaux'
+            };
+            const fontNames = {
+                philosopher:'Philosopher',cormorant:'Cormorant Garamond',worksans:'Work Sans',baloo:'Baloo 2',
+                lora:'Lora',cardo:'Cardo',playfair:'Playfair Display',kalam:'Kalam',lobster:'Lobster',
+                indieflower:'Indie Flower',gilda:'Gilda Display',cormorantinfant:'Cormorant Infant',
+                dmserif:'DM Serif Display',tenor:'Tenor Sans'
+            };
+            const hFontNames = Object.assign({}, fontNames, {
+                dancing:'Dancing Script',satisfy:'Satisfy',greatvibes:'Great Vibes',abril:'Abril Fatface'
+            });
+
+            function fillSelect(id, names) {
+                const sel = document.getElementById(id);
+                if (!sel) return;
+                sel.innerHTML = '<option value="">Use Global</option>';
+                Object.keys(names).forEach(k => {
+                    sel.innerHTML += '<option value="'+k+'">'+names[k]+'</option>';
+                });
+            }
+
+            [1,2].forEach(n => {
+                const p = 'p' + n;
+                fillSelect(p+'Accent', accentNames);
+                fillSelect(p+'Secondary', accentNames);
+                fillSelect(p+'Bg', bgColorNames);
+                fillSelect(p+'Font', fontNames);
+                fillSelect(p+'HFont', hFontNames);
+            });
+        }
+
+        function loadPersonThemes() {
+            [1,2].forEach(n => {
+                const p = 'p' + n;
+                let po = {};
+                try { po = JSON.parse(localStorage.getItem('person'+n+'Appearance') || '{}'); } catch(e) {}
+                const map = {Accent:'accentColor',Secondary:'secondaryColor',Bg:'bgColor',Font:'fontFamily',HFont:'headingFont'};
+                Object.keys(map).forEach(suffix => {
+                    const el = document.getElementById(p+suffix);
+                    if (el) el.value = po[map[suffix]] || '';
+                });
+            });
+        }
+
+        window.savePersonTheme = function(n) {
+            const p = 'p' + n;
+            const key = 'person' + n + 'Appearance';
+            const obj = {};
+            const map = {Accent:'accentColor',Secondary:'secondaryColor',Bg:'bgColor',Font:'fontFamily',HFont:'headingFont'};
+            Object.keys(map).forEach(suffix => {
+                const val = document.getElementById(p+suffix).value;
+                if (val) obj[map[suffix]] = val;
+            });
+            if (Object.keys(obj).length > 0) {
+                localStorage.setItem(key, JSON.stringify(obj));
+            } else {
+                localStorage.removeItem(key);
+            }
+            syncToFirebase();
+        };
+
         function buildSectionArchiveContainer() {
             const container = document.getElementById('sectionArchiveContainer');
             const archived = S.archivedSections;
@@ -1355,6 +1504,8 @@
             document.getElementById('habits2Label').textContent = names.name2 + "'s Habits";
             document.getElementById('mealPerson1Label').textContent = names.name1 + "'s Targets";
             document.getElementById('mealPerson2Label').textContent = names.name2 + "'s Targets";
+            if(document.getElementById('hubTheme1Label')) document.getElementById('hubTheme1Label').textContent = names.name1 + "'s Hub";
+            if(document.getElementById('hubTheme2Label')) document.getElementById('hubTheme2Label').textContent = names.name2 + "'s Hub";
         };
 
         // Page Labels
@@ -1574,7 +1725,7 @@
             const keys = ['appName', 'userNames', 'accentColor', 'bgColor', 'fontFamily', 'fontSize',
                 'features', 'customHabits_person1', 'customHabits_person2', 'customPrompts',
                 'customChallenges', 'timezone', 'weekStart', 'archivedPages', 'archivedSections',
-                'pageLabels', 'mealSettings'];
+                'pageLabels', 'mealSettings', 'person1Appearance', 'person2Appearance'];
             keys.forEach(key => localStorage.removeItem(key));
             alert('Settings reset! The page will now reload.');
             location.reload();
@@ -1592,6 +1743,8 @@
             document.getElementById('name2').value = S.names.name2;
             document.getElementById('habits1Label').textContent = S.names.name1 + "'s Habits";
             document.getElementById('habits2Label').textContent = S.names.name2 + "'s Habits";
+            if(document.getElementById('hubTheme1Label')) document.getElementById('hubTheme1Label').textContent = S.names.name1 + "'s Hub";
+            if(document.getElementById('hubTheme2Label')) document.getElementById('hubTheme2Label').textContent = S.names.name2 + "'s Hub";
             document.getElementById('mealPerson1Label').textContent = S.names.name1 + "'s Targets";
             document.getElementById('mealPerson2Label').textContent = S.names.name2 + "'s Targets";
 
@@ -1611,6 +1764,8 @@
 
             // Build grids
             buildColorDropdowns();
+            buildPersonThemeDropdowns();
+            loadPersonThemes();
             buildPageArchiveGrid();
             buildSectionArchiveContainer();
 
