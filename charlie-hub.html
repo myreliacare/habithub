@@ -109,7 +109,7 @@
         if(neededFonts.length){var link=document.createElement('link');link.rel='stylesheet';link.href='https://fonts.googleapis.com/css2?'+neededFonts.map(function(f){return'family='+f;}).join('&')+'&display=swap';document.head.appendChild(link);}
 
         // Heading font override
-        var hfSt=document.createElement('style');hfSt.textContent='body{font-family:'+font+'!important} .top-nav,.nav-link,.nav-link-mobile{font-family:'+font+'!important} .nav-logo,.page-title,.home-title,.main-title,.journal-title,.spellbook-title,.calendar-title,.schedule-title{font-family:'+hFont+'!important}';(document.head||r).appendChild(hfSt);
+        var hfSt=document.createElement('style');hfSt.textContent='body{font-family:'+font+'!important} .top-nav,.nav-link,.nav-link-mobile{font-family:'+font+'!important} .nav-logo,.page-title,.home-title,.main-title{font-family:'+hFont+'!important}';(document.head||r).appendChild(hfSt);
 
         // Archive nav links
         var pageHrefs={home:'index.html',person1:'kasey-hub.html',person2:'charlie-hub.html',dreams:'our-dreams.html',meals:'meal-plan.html',settings:'settings.html'};
