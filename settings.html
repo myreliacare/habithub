@@ -13,48 +13,65 @@
         if (window.LifeHubSettings) return; // engine loaded fine
 
         var palettes = {
-            sage:       { accent: '#a3b899', accentHover: '#b4c9aa', accentMuted: 'rgba(163,184,153,0.2)', accentBorder: 'rgba(163,184,153,0.3)', accentText: 'rgba(163,184,153,0.6)' },
-            rose:       { accent: '#c9a9a6', accentHover: '#d9bfbd', accentMuted: 'rgba(201,169,166,0.2)', accentBorder: 'rgba(201,169,166,0.3)', accentText: 'rgba(201,169,166,0.6)' },
-            lavender:   { accent: '#b4a7d6', accentHover: '#c7bde3', accentMuted: 'rgba(180,167,214,0.2)', accentBorder: 'rgba(180,167,214,0.3)', accentText: 'rgba(180,167,214,0.6)' },
-            teal:       { accent: '#7ba8a1', accentHover: '#92bab4', accentMuted: 'rgba(123,168,161,0.2)', accentBorder: 'rgba(123,168,161,0.3)', accentText: 'rgba(123,168,161,0.6)' },
-            peach:      { accent: '#d4a59a', accentHover: '#e0b8af', accentMuted: 'rgba(212,165,154,0.2)', accentBorder: 'rgba(212,165,154,0.3)', accentText: 'rgba(212,165,154,0.6)' },
-            gold:       { accent: '#c9b77c', accentHover: '#d6c894', accentMuted: 'rgba(201,183,124,0.2)', accentBorder: 'rgba(201,183,124,0.3)', accentText: 'rgba(201,183,124,0.6)' },
-            cream:      { accent: '#e8ddd0', accentHover: '#f2ebe0', accentMuted: 'rgba(232,221,208,0.2)', accentBorder: 'rgba(232,221,208,0.3)', accentText: 'rgba(232,221,208,0.6)' },
-            blush:      { accent: '#d4919e', accentHover: '#e0a5b0', accentMuted: 'rgba(212,145,158,0.2)', accentBorder: 'rgba(212,145,158,0.3)', accentText: 'rgba(212,145,158,0.6)' },
-            coral:      { accent: '#d98a7e', accentHover: '#e4a195', accentMuted: 'rgba(217,138,126,0.2)', accentBorder: 'rgba(217,138,126,0.3)', accentText: 'rgba(217,138,126,0.6)' },
-            mauve:      { accent: '#b8879e', accentHover: '#cba0b4', accentMuted: 'rgba(184,135,158,0.2)', accentBorder: 'rgba(184,135,158,0.3)', accentText: 'rgba(184,135,158,0.6)' },
-            berry:      { accent: '#9c6b82', accentHover: '#b08295', accentMuted: 'rgba(156,107,130,0.2)', accentBorder: 'rgba(156,107,130,0.3)', accentText: 'rgba(156,107,130,0.6)' },
-            periwinkle: { accent: '#8e9cc7', accentHover: '#a3afd6', accentMuted: 'rgba(142,156,199,0.2)', accentBorder: 'rgba(142,156,199,0.3)', accentText: 'rgba(142,156,199,0.6)' },
-            seafoam:    { accent: '#7bbfb0', accentHover: '#93cec1', accentMuted: 'rgba(123,191,176,0.2)', accentBorder: 'rgba(123,191,176,0.3)', accentText: 'rgba(123,191,176,0.6)' },
-            terracotta: { accent: '#c4836a', accentHover: '#d49880', accentMuted: 'rgba(196,131,106,0.2)', accentBorder: 'rgba(196,131,106,0.3)', accentText: 'rgba(196,131,106,0.6)' },
-            honey:      { accent: '#d4b870', accentHover: '#e0c988', accentMuted: 'rgba(212,184,112,0.2)', accentBorder: 'rgba(212,184,112,0.3)', accentText: 'rgba(212,184,112,0.6)' }
+            sage:        { accent: '#a3b899', accentHover: '#aec1a5', accentMuted: 'rgba(163,184,153,0.2)', accentBorder: 'rgba(163,184,153,0.3)', accentText: 'rgba(163,184,153,0.6)' },
+            blush:       { accent: '#d4919e', accentHover: '#d99eaa', accentMuted: 'rgba(212,145,158,0.2)', accentBorder: 'rgba(212,145,158,0.3)', accentText: 'rgba(212,145,158,0.6)' },
+            cream:       { accent: '#e8ddd0', accentHover: '#ebe1d6', accentMuted: 'rgba(232,221,208,0.2)', accentBorder: 'rgba(232,221,208,0.3)', accentText: 'rgba(232,221,208,0.6)' },
+            periwinkle:  { accent: '#8e9cc7', accentHover: '#9ca8ce', accentMuted: 'rgba(142,156,199,0.2)', accentBorder: 'rgba(142,156,199,0.3)', accentText: 'rgba(142,156,199,0.6)' },
+            dustylilac:  { accent: '#c3a6c9', accentHover: '#cab1cf', accentMuted: 'rgba(195,166,201,0.2)', accentBorder: 'rgba(195,166,201,0.3)', accentText: 'rgba(195,166,201,0.6)' },
+            powderblue:  { accent: '#a4c2d8', accentHover: '#afc9dd', accentMuted: 'rgba(164,194,216,0.2)', accentBorder: 'rgba(164,194,216,0.3)', accentText: 'rgba(164,194,216,0.6)' },
+            softmint:    { accent: '#a8d8c4', accentHover: '#b2ddcb', accentMuted: 'rgba(168,216,196,0.2)', accentBorder: 'rgba(168,216,196,0.3)', accentText: 'rgba(168,216,196,0.6)' },
+            moss:        { accent: '#8a9c6b', accentHover: '#98a87d', accentMuted: 'rgba(138,156,107,0.2)', accentBorder: 'rgba(138,156,107,0.3)', accentText: 'rgba(138,156,107,0.6)' },
+            burntsienna: { accent: '#c97856', accentHover: '#cf886a', accentMuted: 'rgba(201,120,86,0.2)', accentBorder: 'rgba(201,120,86,0.3)', accentText: 'rgba(201,120,86,0.6)' },
+            rosegold:    { accent: '#d4a4a4', accentHover: '#d9afaf', accentMuted: 'rgba(212,164,164,0.2)', accentBorder: 'rgba(212,164,164,0.3)', accentText: 'rgba(212,164,164,0.6)' },
+            dustyteal:   { accent: '#6d9e9e', accentHover: '#7faaaa', accentMuted: 'rgba(109,158,158,0.2)', accentBorder: 'rgba(109,158,158,0.3)', accentText: 'rgba(109,158,158,0.6)' },
+            petalpink:   { accent: '#e8b4b8', accentHover: '#ebbdc1', accentMuted: 'rgba(232,180,184,0.2)', accentBorder: 'rgba(232,180,184,0.3)', accentText: 'rgba(232,180,184,0.6)' },
+            apricot:     { accent: '#e8b088', accentHover: '#ebb996', accentMuted: 'rgba(232,176,136,0.2)', accentBorder: 'rgba(232,176,136,0.3)', accentText: 'rgba(232,176,136,0.6)' },
+            palejade:    { accent: '#8ec4a8', accentHover: '#9ccbb2', accentMuted: 'rgba(142,196,168,0.2)', accentBorder: 'rgba(142,196,168,0.3)', accentText: 'rgba(142,196,168,0.6)' },
+            raspberry:   { accent: '#b0607a', accentHover: '#b9738a', accentMuted: 'rgba(176,96,122,0.2)', accentBorder: 'rgba(176,96,122,0.3)', accentText: 'rgba(176,96,122,0.6)' },
+            denim:       { accent: '#6888a8', accentHover: '#7a96b2', accentMuted: 'rgba(104,136,168,0.2)', accentBorder: 'rgba(104,136,168,0.3)', accentText: 'rgba(104,136,168,0.6)' },
+            nude:        { accent: '#d4b8a8', accentHover: '#d9c1b2', accentMuted: 'rgba(212,184,168,0.2)', accentBorder: 'rgba(212,184,168,0.3)', accentText: 'rgba(212,184,168,0.6)' },
+            obsidian:    { accent: '#181818', accentHover: '#2a2a2a', accentMuted: 'rgba(24,24,24,0.2)', accentBorder: 'rgba(24,24,24,0.3)', accentText: 'rgba(24,24,24,0.6)' },
+            darkplum:    { accent: '#3d2f31', accentHover: '#4e3e40', accentMuted: 'rgba(61,47,49,0.2)', accentBorder: 'rgba(61,47,49,0.3)', accentText: 'rgba(61,47,49,0.6)' },
+            storm:       { accent: '#252830', accentHover: '#363a44', accentMuted: 'rgba(37,40,48,0.2)', accentBorder: 'rgba(37,40,48,0.3)', accentText: 'rgba(37,40,48,0.6)' }
         };
         var secondaryPalettes = {
-            sage:'#b59197', rose:'#a3b899', lavender:'#c9a9a6', teal:'#b59197',
-            peach:'#a3b899', gold:'#b59197', cream:'#b59197', blush:'#a3b899',
-            coral:'#b4a7d6', mauve:'#a3b899', berry:'#c9b77c', periwinkle:'#c9a9a6',
-            seafoam:'#d4a59a', terracotta:'#a3b899', honey:'#b59197'
+            sage:'#d4a4a4',blush:'#a3b899',cream:'#d4a4a4',
+            periwinkle:'#d4a4a4',dustylilac:'#d4a4a4',powderblue:'#d4a4a4',softmint:'#d4a4a4',
+            moss:'#d4a4a4',burntsienna:'#a3b899',rosegold:'#a3b899',
+            dustyteal:'#d4a4a4',petalpink:'#a3b899',
+            apricot:'#a3b899',palejade:'#d4a4a4',raspberry:'#a3b899',
+            denim:'#d4a4a4',nude:'#a3b899',
+            obsidian:'#d4a4a4',darkplum:'#a3b899',storm:'#d4a4a4'
         };
         var bgColors = {
-            dark:'#3d2f31', charcoal:'#1a1a1a', navy:'#1e2638', forest:'#1f2e2a',
-            cream:'#f5f0e8', wine:'#2d1f2b', slate:'#2a2d35', espresso:'#2b2220', storm:'#252830'
+            dark:'#3d2f31',  forest:'#1f2e2a', 
+            espresso:'#2b2220',  storm:'#252830', midnight:'#141420',
+            warmcocoa:'#362a28', deepteal:'#1a2e2e',  
+            warmlinen:'#f0e8dc', dustymauve:'#332830', obsidian:'#181818', softblush:'#f2e2e4',
+             bordeaux:'#301820'
         };
         var bgDarker = {
-            dark:'#2a1f21', charcoal:'#111111', navy:'#141c2a', forest:'#15231f',
-            cream:'#ebe4d9', wine:'#211520', slate:'#1f2229', espresso:'#1e1816', storm:'#1b1d24'
+            dark:'#2a1f21',  forest:'#15231f', 
+            espresso:'#1e1816',  storm:'#1b1d24', midnight:'#0d0d16',
+            warmcocoa:'#281e1c', deepteal:'#122020',  
+            warmlinen:'#e4dace', dustymauve:'#261c24', obsidian:'#101010', softblush:'#e8d6d9',
+             bordeaux:'#221018'
         };
         var textColors = {
-            dark:     { text:'#e0d2d0', textMuted:'rgba(242,235,224,0.6)', textFaint:'rgba(242,235,224,0.4)' },
-            charcoal: { text:'#e0d2d0', textMuted:'rgba(242,235,224,0.6)', textFaint:'rgba(242,235,224,0.4)' },
-            navy:     { text:'#e0d2d0', textMuted:'rgba(242,235,224,0.6)', textFaint:'rgba(242,235,224,0.4)' },
-            forest:   { text:'#e0d2d0', textMuted:'rgba(242,235,224,0.6)', textFaint:'rgba(242,235,224,0.4)' },
-            cream:    { text:'#3d2f31', textMuted:'rgba(61,47,49,0.65)',    textFaint:'rgba(61,47,49,0.4)' },
-            wine:     { text:'#e0d2d0', textMuted:'rgba(242,235,224,0.6)', textFaint:'rgba(242,235,224,0.4)' },
-            slate:    { text:'#e0d2d0', textMuted:'rgba(242,235,224,0.6)', textFaint:'rgba(242,235,224,0.4)' },
-            espresso: { text:'#e0d2d0', textMuted:'rgba(242,235,224,0.6)', textFaint:'rgba(242,235,224,0.4)' },
-            storm:    { text:'#e0d2d0', textMuted:'rgba(242,235,224,0.6)', textFaint:'rgba(242,235,224,0.4)' }
+            dark:        { text:'#e0d2d0', textMuted:'rgba(242,235,224,0.6)', textFaint:'rgba(242,235,224,0.4)' },
+            forest:      { text:'#e0d2d0', textMuted:'rgba(242,235,224,0.6)', textFaint:'rgba(242,235,224,0.4)' },
+            espresso:    { text:'#e0d2d0', textMuted:'rgba(242,235,224,0.6)', textFaint:'rgba(242,235,224,0.4)' },
+            storm:       { text:'#e0d2d0', textMuted:'rgba(242,235,224,0.6)', textFaint:'rgba(242,235,224,0.4)' },
+            midnight:    { text:'#e0d2d0', textMuted:'rgba(242,235,224,0.6)', textFaint:'rgba(242,235,224,0.4)' },
+            warmcocoa:   { text:'#e0d2d0', textMuted:'rgba(242,235,224,0.6)', textFaint:'rgba(242,235,224,0.4)' },
+            deepteal:    { text:'#e0d2d0', textMuted:'rgba(242,235,224,0.6)', textFaint:'rgba(242,235,224,0.4)' },
+            warmlinen:   { text:'#3d2f31', textMuted:'rgba(61,47,49,0.65)',    textFaint:'rgba(61,47,49,0.4)' },
+            dustymauve:  { text:'#e0d2d0', textMuted:'rgba(242,235,224,0.6)', textFaint:'rgba(242,235,224,0.4)' },
+            obsidian:    { text:'#e0d2d0', textMuted:'rgba(242,235,224,0.6)', textFaint:'rgba(242,235,224,0.4)' },
+            softblush:   { text:'#3d2f31', textMuted:'rgba(61,47,49,0.65)',    textFaint:'rgba(61,47,49,0.4)' },
+            bordeaux:    { text:'#e0d2d0', textMuted:'rgba(242,235,224,0.6)', textFaint:'rgba(242,235,224,0.4)' }
         };
-        var fontStacks = { philosopher:"'Philosopher',Georgia,serif", cormorant:"'Cormorant',Georgia,'Times New Roman',serif", worksans:"'Work Sans',sans-serif", georgia:"Georgia,serif", arial:"Arial,sans-serif" };
+        var fontStacks = { philosopher:"'Philosopher',Georgia,serif", cormorant:"'Cormorant Garamond',Georgia,serif", worksans:"'Work Sans',sans-serif", baloo:"'Baloo 2',cursive", lora:"'Lora',Georgia,serif", cardo:"'Cardo',Georgia,serif", playfair:"'Playfair Display',Georgia,serif", kalam:"'Kalam',cursive", lobster:"'Lobster',cursive", indieflower:"'Indie Flower',cursive", gilda:"'Gilda Display',Georgia,serif", cormorantinfant:"'Cormorant Infant',Georgia,serif", dmserif:"'DM Serif Display',Georgia,serif", tenor:"'Tenor Sans',sans-serif", dancing:"'Dancing Script',cursive", satisfy:"'Satisfy',cursive", greatvibes:"'Great Vibes',cursive", abril:"'Abril Fatface',Georgia,serif" };
 
         var s;
         try {
@@ -65,6 +82,7 @@
                 secondaryColor: localStorage.getItem('secondaryColor') || '',
                 bgColor: localStorage.getItem('bgColor') || 'dark',
                 fontFamily: localStorage.getItem('fontFamily') || 'philosopher',
+                headingFont: localStorage.getItem('headingFont') || 'philosopher',
                 fontSize: parseInt(localStorage.getItem('fontSize') || '100', 10),
                 archivedPages: JSON.parse(localStorage.getItem('archivedPages') || '[]'),
                 archivedSections: JSON.parse(localStorage.getItem('archivedSections') || '{}'),
@@ -72,18 +90,19 @@
                 pageLabels: JSON.parse(localStorage.getItem('pageLabels') || '{}')
             };
         } catch(e) {
-            s = { appName:'Our Life Hub', names:{name1:'Kasey',name2:'Charlie'}, accentColor:'sage', secondaryColor:'', bgColor:'dark', fontFamily:'philosopher', fontSize:100, archivedPages:[], archivedSections:{}, features:{}, pageLabels:{} };
+            s = { appName:'Our Life Hub', names:{name1:'Kasey',name2:'Charlie'}, accentColor:'sage', secondaryColor:'', bgColor:'dark', fontFamily:'philosopher', headingFont:'philosopher', fontSize:100, archivedPages:[], archivedSections:{}, features:{}, pageLabels:{} };
         }
 
         // Apply CSS custom properties
         var p = palettes[s.accentColor] || palettes.sage;
         var bg = bgColors[s.bgColor] || bgColors.dark;
         var bgDk = bgDarker[s.bgColor] || bgDarker.dark;
-        var defaultSecMap = { sage:'rose', rose:'sage', lavender:'rose', teal:'rose', peach:'sage', gold:'rose', cream:'rose', blush:'sage', coral:'lavender', mauve:'sage', berry:'gold', periwinkle:'rose', seafoam:'peach', terracotta:'sage', honey:'rose' };
-        var secKey = s.secondaryColor || defaultSecMap[s.accentColor] || 'rose';
+        var defaultSecMap = { sage:'rosegold', blush:'sage', cream:'rosegold', periwinkle:'rosegold', dustylilac:'rosegold', powderblue:'rosegold', softmint:'rosegold', moss:'rosegold', burntsienna:'sage', rosegold:'sage', dustyteal:'rosegold', petalpink:'sage', apricot:'sage', palejade:'rosegold', raspberry:'sage', denim:'rosegold', nude:'sage', obsidian:'rosegold', darkplum:'sage', storm:'rosegold' };
+        var secKey = s.secondaryColor || defaultSecMap[s.accentColor] || 'rosegold';
         var sec = (palettes[secKey] || palettes.rose).accent;
         var tc = textColors[s.bgColor] || textColors.dark;
         var font = fontStacks[s.fontFamily] || fontStacks.philosopher;
+        var hFont = fontStacks[s.headingFont] || fontStacks.philosopher;
         var basePx = Math.round(16 * s.fontSize / 100);
         var root = document.documentElement;
         root.style.setProperty('--lh-accent', p.accent);
@@ -92,15 +111,30 @@
         root.style.setProperty('--lh-accent-border', p.accentBorder);
         root.style.setProperty('--lh-accent-text', p.accentText);
         root.style.setProperty('--lh-secondary', sec);
+        // Compute secondary variants from hex
+        var secR = parseInt(sec.slice(1,3),16), secG = parseInt(sec.slice(3,5),16), secB = parseInt(sec.slice(5,7),16);
+        root.style.setProperty('--lh-secondary-muted', 'rgba('+secR+','+secG+','+secB+',0.15)');
+        root.style.setProperty('--lh-secondary-border', 'rgba('+secR+','+secG+','+secB+',0.3)');
         root.style.setProperty('--lh-bg', bg);
         root.style.setProperty('--lh-bg-darker', bgDk);
         root.style.setProperty('--lh-text', tc.text);
         root.style.setProperty('--lh-text-muted', tc.textMuted);
         root.style.setProperty('--lh-text-faint', tc.textFaint);
         root.style.setProperty('--lh-font', font);
+        root.style.setProperty('--lh-heading-font', hFont);
         root.style.setProperty('--lh-font-size', basePx + 'px');
         root.style.background = bg;
         root.style.fontSize = basePx + 'px';
+
+        // Load fonts dynamically
+        var fontUrls = {philosopher:'Philosopher:ital,wght@0,400;0,700;1,400',cormorant:'Cormorant+Garamond:wght@300;400;500;600;700',worksans:'Work+Sans:wght@400;500;600;700;800',baloo:'Baloo+2:wght@400;500;600;700;800',lora:'Lora:ital,wght@0,400;0,500;0,600;0,700;1,400',cardo:'Cardo:ital,wght@0,400;0,700;1,400',playfair:'Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400',kalam:'Kalam:wght@300;400;700',lobster:'Lobster',indieflower:'Indie+Flower',gilda:'Gilda+Display',cormorantinfant:'Cormorant+Infant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400',dmserif:'DM+Serif+Display:ital@0;1',tenor:'Tenor+Sans',dancing:'Dancing+Script:wght@400;500;600;700',satisfy:'Satisfy',greatvibes:'Great+Vibes',abril:'Abril+Fatface'};
+        var needed = [];
+        [s.fontFamily, s.headingFont].forEach(function(f){ if(fontUrls[f] && needed.indexOf(fontUrls[f])===-1) needed.push(fontUrls[f]); });
+        if(needed.length){ var lnk=document.createElement('link'); lnk.rel='stylesheet'; lnk.href='https://fonts.googleapis.com/css2?'+needed.map(function(f){return'family='+f;}).join('&')+'&display=swap'; document.head.appendChild(lnk); }
+
+        // Heading font override
+        // Heading font - always apply to all heading/title/label elements
+        var hfSt=document.createElement('style'); hfSt.textContent='.nav-logo,.page-title,.home-title,.main-title,.journal-title,.spellbook-title,.calendar-title,.schedule-title{font-family:var(--lh-heading-font)!important}'; document.head.appendChild(hfSt);
 
         // Page archiving CSS
         var pageMap = { home:'index.html', person1:'kasey-hub.html', person2:'charlie-hub.html', dreams:'our-dreams.html', meals:'meal-plan.html', settings:'settings.html' };
@@ -174,6 +208,7 @@
         .nav-logo {
             font-size: 1.1rem !important;
             font-weight: 700 !important;
+            font-family: var(--lh-heading-font, var(--lh-font, 'Philosopher', Georgia, serif)) !important;
             color: var(--lh-accent, #a3b899) !important;
             text-decoration: none !important;
             white-space: nowrap !important;
@@ -250,54 +285,107 @@
         .settings-section {
             background: var(--lh-bg-darker, #2a1f21);
             border: 1px solid var(--lh-accent-border, rgba(163,184,153,0.2));
-            padding: 28px;
-            margin-bottom: 24px;
+            margin-bottom: 6px;
+            overflow: hidden;
         }
-
+        .section-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 13px 20px; cursor: pointer; user-select: none; transition: background 0.15s;
+        }
+        .section-header:hover { background: var(--lh-accent-muted, rgba(163,184,153,0.06)); }
         .section-title {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: var(--lh-accent, #a3b899);
-            margin-bottom: 20px;
-            font-weight: 700;
+            font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.14em;
+            color: var(--lh-accent, #a3b899); font-weight: 700; margin: 0;
         }
-
+        .section-arrow {
+            color: var(--lh-text-muted, rgba(242,235,224,0.4)); font-size: 0.7rem; transition: transform 0.2s;
+        }
+        .settings-section.open .section-arrow { transform: rotate(180deg); }
+        .section-body { display: none; padding: 0 20px 16px; }
+        .settings-section.open .section-body { display: block; }
         .section-description {
-            color: var(--lh-text-muted, rgba(242,235,224,0.5));
-            font-size: 0.85rem;
-            margin-bottom: 20px;
-            line-height: 1.5;
+            color: var(--lh-text-muted, rgba(242,235,224,0.5)); font-size: 0.8rem; margin-bottom: 12px; line-height: 1.4;
         }
-
-        .setting-item {
-            margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--lh-accent-border, rgba(163,184,153,0.1));
-        }
-        .setting-item:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
+        .setting-item { margin-bottom: 14px; }
+        .setting-item:last-child { margin-bottom: 0; }
 
         .setting-label {
             display: block;
             color: var(--lh-text, #f2ebe0);
-            font-size: 1rem;
+            font-size: 0.92rem;
             margin-bottom: 6px;
             font-weight: 600;
         }
 
         .setting-description {
             color: var(--lh-text-muted, rgba(242,235,224,0.5));
-            font-size: 0.85rem;
-            margin-bottom: 12px;
+            font-size: 0.82rem;
+            margin-bottom: 10px;
+        }
+
+        .setting-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .setting-label-inline {
+            color: var(--lh-text, #f2ebe0);
+            font-size: 0.88rem;
+            font-weight: 600;
+            white-space: nowrap;
+            min-width: 90px;
+        }
+        .setting-input-inline {
+            flex: 1;
+            background: var(--lh-bg-darker, rgba(61,47,49,0.3));
+            border: 1px solid var(--lh-accent-border, rgba(163,184,153,0.25));
+            color: var(--lh-text, #f2ebe0);
+            padding: 8px 12px;
+            font-size: 0.88rem;
+            font-family: inherit;
+            border-radius: 4px;
+        }
+        .setting-input-inline:focus {
+            outline: none;
+            border-color: var(--lh-accent, #a3b899);
+        }
+        .setting-select-inline {
+            flex: 1;
+            background: var(--lh-bg-darker, #2a1f21);
+            border: 1px solid var(--lh-accent-border, rgba(163,184,153,0.25));
+            color: var(--lh-text, #f2ebe0);
+            padding: 8px 12px;
+            font-size: 0.88rem;
+            font-family: inherit;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .setting-select-inline option {
+            background: var(--lh-bg-darker, #2a1f21);
+            color: var(--lh-text, #f2ebe0);
+        }
+        .label-grid {
+            display: grid;
+            grid-template-columns: 70px 1fr;
+            gap: 6px;
+            align-items: center;
+        }
+        .label-tag {
+            color: var(--lh-text-muted, rgba(242,235,224,0.5));
+            font-size: 0.8rem;
+        }
+        .field-hint {
+            display: block;
+            color: var(--lh-text-muted, rgba(242,235,224,0.5));
+            font-size: 0.78rem;
+            margin-bottom: 3px;
         }
 
         .setting-input {
             width: 100%;
-            background: rgba(61,47,49,0.3);
+            background: var(--lh-bg-darker, rgba(61,47,49,0.3));
             border: 1px solid var(--lh-accent-border, rgba(163,184,153,0.25));
             color: var(--lh-text, #f2ebe0);
             padding: 12px 16px;
@@ -308,18 +396,24 @@
         .setting-input:focus {
             outline: none;
             border-color: var(--lh-accent, #a3b899);
-            background: rgba(61,47,49,0.5);
+            background: var(--lh-bg-darker, rgba(61,47,49,0.5));
         }
 
         .setting-select {
             width: 100%;
-            background: rgba(61,47,49,0.3);
+            background: var(--lh-bg-darker, #2a1f21);
             border: 1px solid var(--lh-accent-border, rgba(163,184,153,0.25));
             color: var(--lh-text, #f2ebe0);
             padding: 12px 16px;
             font-size: 0.95rem;
             font-family: inherit;
             cursor: pointer;
+            border-radius: 6px;
+        }
+        .setting-select option {
+            background: var(--lh-bg-darker, #2a1f21);
+            color: var(--lh-text, #f2ebe0);
+            padding: 8px;
         }
         .setting-select:focus {
             outline: none;
@@ -354,10 +448,10 @@
 
         .btn-danger {
             background: transparent;
-            border: 1px solid rgba(201,169,166,0.4);
-            color: #c9a9a6;
+            border: 1px solid var(--lh-secondary-border, rgba(201,169,166,0.4));
+            color: var(--lh-secondary, #c9a9a6);
         }
-        .btn-danger:hover { background: rgba(201,169,166,0.1); }
+        .btn-danger:hover { background: var(--lh-secondary-muted, rgba(201,169,166,0.1)); }
 
         .btn-small { padding: 6px 14px; font-size: 0.8rem; }
 
@@ -373,27 +467,84 @@
         }
 
         .warning-box {
-            background: rgba(201,169,166,0.1);
+            background: var(--lh-secondary-muted, rgba(201,169,166,0.1));
             padding: 12px 16px;
-            border-left: 3px solid #c9a9a6;
+            border-left: 3px solid var(--lh-secondary, #c9a9a6);
             font-size: 0.9rem;
             color: var(--lh-text, rgba(242,235,224,0.8));
         }
 
         /* Color Grid */
-        .color-select-row {
+        .color-dropdown {
+            position: relative;
+            margin-top: 8px;
+        }
+        .color-dropdown-trigger {
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-top: 8px;
+            padding: 10px 14px;
+            background: var(--lh-bg-darker, #2a1f21);
+            border: 1px solid var(--lh-accent-border, rgba(163,184,153,0.25));
+            border-radius: 6px;
+            cursor: pointer;
+            transition: border-color 0.2s;
         }
-        .color-preview {
-            width: 36px; height: 36px; min-width: 36px;
-            border: 2px solid rgba(242,235,224,0.2);
-            border-radius: 8px;
+        .color-dropdown-trigger:hover {
+            border-color: var(--lh-accent, #a3b899);
         }
-        .color-select-row .setting-select {
+        .color-dd-swatch {
+            width: 24px; height: 24px; min-width: 24px;
+            border-radius: 4px;
+            border: 1px solid rgba(128,128,128,0.25);
+        }
+        .color-dd-label {
             flex: 1;
+            color: var(--lh-text, #f2ebe0);
+            font-size: 0.95rem;
+        }
+        .color-dd-arrow {
+            color: var(--lh-text-muted, rgba(242,235,224,0.5));
+            font-size: 0.9rem;
+            transition: transform 0.2s;
+        }
+        .color-dropdown.open .color-dd-arrow {
+            transform: rotate(180deg);
+        }
+        .color-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0; right: 0;
+            background: var(--lh-bg-darker, #2a1f21);
+            border: 1px solid var(--lh-accent-border, rgba(163,184,153,0.25));
+            border-top: none;
+            border-radius: 0 0 6px 6px;
+            max-height: 260px;
+            overflow-y: auto;
+            z-index: 100;
+        }
+        .color-dropdown.open .color-dropdown-menu {
+            display: block;
+        }
+        .color-dd-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 9px 14px;
+            cursor: pointer;
+            transition: background 0.15s;
+            color: var(--lh-text, #f2ebe0);
+            font-size: 0.9rem;
+        }
+        .color-dd-option:hover {
+            background: rgba(163,184,153,0.12);
+        }
+        .color-dd-option.active {
+            background: var(--lh-accent-muted, rgba(163,184,153,0.15));
+        }
+        .color-dd-option .color-dd-swatch {
+            width: 20px; height: 20px; min-width: 20px;
         }
 
         /* Toggle Switch */
@@ -415,7 +566,7 @@
         .toggle-slider {
             position: absolute; top: 3px; left: 3px;
             width: 20px; height: 20px;
-            background: #f2ebe0; border-radius: 50%;
+            background: var(--lh-text, #f2ebe0); border-radius: 50%;
             transition: transform 0.3s;
         }
         .toggle-switch.active .toggle-slider { transform: translateX(24px); }
@@ -427,7 +578,7 @@
             border: 1px solid var(--lh-accent-border, rgba(163,184,153,0.2));
             padding: 12px;
             margin-top: 12px;
-            background: rgba(61,47,49,0.3);
+            background: var(--lh-bg-darker, rgba(61,47,49,0.3));
         }
         .habit-item {
             display: flex;
@@ -435,7 +586,7 @@
             align-items: center;
             padding: 8px;
             margin-bottom: 8px;
-            background: rgba(61,47,49,0.5);
+            background: var(--lh-bg, rgba(61,47,49,0.5));
             border-left: 2px solid var(--lh-accent, #a3b899);
         }
         .habit-text { flex: 1; color: var(--lh-text, #f2ebe0); font-size: 0.9rem; }
@@ -452,7 +603,7 @@
             align-items: center;
             justify-content: space-between;
             padding: 12px 16px;
-            background: rgba(61,47,49,0.3);
+            background: var(--lh-bg-darker, rgba(61,47,49,0.3));
             border: 1px solid var(--lh-accent-border, rgba(163,184,153,0.15));
             transition: all 0.2s;
         }
@@ -496,11 +647,11 @@
             background: var(--lh-accent-muted, rgba(163,184,153,0.1));
         }
         .archive-toggle-btn.restore {
-            border-color: rgba(201,169,166,0.3);
-            color: #c9a9a6;
+            border-color: var(--lh-secondary-border, rgba(201,169,166,0.3));
+            color: var(--lh-secondary, #c9a9a6);
         }
         .archive-toggle-btn.restore:hover {
-            background: rgba(201,169,166,0.1);
+            background: var(--lh-secondary-muted, rgba(201,169,166,0.1));
         }
 
         /* Section Groups in Archive */
@@ -533,13 +684,17 @@
         @media screen and (max-width: 768px) {
             input, textarea, select { font-size: 16px !important; }
             .container { padding: 16px 16px 60px; }
-            .settings-section { padding: 20px 16px; }
+            .section-body { padding: 0 16px 14px; }
+            .section-header { padding: 12px 16px; }
             .page-title { font-size: 1.8rem; }
+            .setting-row { flex-direction: column; align-items: stretch; gap: 4px; }
+            .setting-label-inline { min-width: auto; }
+            .label-grid { grid-template-columns: 60px 1fr; }
         }
         @media screen and (max-width: 380px) {
             .container { padding: 12px 10px 60px; }
-            .settings-section { padding: 16px 12px; }
-            .setting-label { font-size: 0.9rem; }
+            .section-body { padding: 0 12px 12px; }
+            .section-header { padding: 10px 12px; }
         }
     </style>
 </head>
@@ -578,288 +733,319 @@
             <p class="page-subtitle">Customize your Life Hub experience</p>
         </div>
 
-        <!-- ═══════════════════════════════════════════ -->
         <!-- 1. BRANDING & IDENTITY -->
-        <!-- ═══════════════════════════════════════════ -->
-        <div class="settings-section">
-            <h2 class="section-title">Branding & Identity</h2>
-
-            <div class="setting-item">
-                <label class="setting-label">App Name</label>
-                <p class="setting-description">Displayed in the navigation bar and page titles across all pages</p>
-                <input type="text" id="appName" class="setting-input" placeholder="Our Life Hub">
-                <button class="btn btn-inline" onclick="saveAppName()">Save App Name</button>
-                <span class="save-flash" id="appNameFlash">✓ Saved</span>
+        <div class="settings-section open" id="sec-branding">
+            <div class="section-header" onclick="toggleSection('sec-branding')">
+                <h2 class="section-title">Branding & Identity</h2>
+                <span class="section-arrow">▾</span>
             </div>
-
-            <div class="setting-item">
-                <label class="setting-label">Person 1 Name</label>
-                <p class="setting-description">Used for the first person's hub, nav link, wishlists, and meal plan</p>
-                <input type="text" id="name1" class="setting-input" placeholder="Kasey">
-            </div>
-
-            <div class="setting-item">
-                <label class="setting-label">Person 2 Name</label>
-                <p class="setting-description">Used for the second person's hub, nav link, wishlists, and meal plan</p>
-                <input type="text" id="name2" class="setting-input" placeholder="Charlie">
-                <button class="btn btn-inline" onclick="saveNames()">Save Names</button>
-                <span class="save-flash" id="namesFlash">✓ Saved</span>
-            </div>
-
-            <div class="setting-item">
-                <label class="setting-label">Page Labels</label>
-                <p class="setting-description">Rename how pages appear in the navigation (leave blank for defaults)</p>
-                <div style="display: grid; grid-template-columns: 100px 1fr; gap: 8px; align-items: center; margin-top: 8px;">
-                    <span class="setting-description" style="margin-bottom: 0;">Home:</span>
-                    <input type="text" id="labelHome" class="setting-input" placeholder="Home" style="padding: 8px 12px;">
-                    <span class="setting-description" style="margin-bottom: 0;">Dreams:</span>
-                    <input type="text" id="labelDreams" class="setting-input" placeholder="Us ♡" style="padding: 8px 12px;">
-                    <span class="setting-description" style="margin-bottom: 0;">Meals:</span>
-                    <input type="text" id="labelMeals" class="setting-input" placeholder="Meals" style="padding: 8px 12px;">
-                    <span class="setting-description" style="margin-bottom: 0;">Settings:</span>
-                    <input type="text" id="labelSettings" class="setting-input" placeholder="Settings" style="padding: 8px 12px;">
+            <div class="section-body">
+                <div class="setting-row">
+                    <label class="setting-label-inline">App Name</label>
+                    <input type="text" id="appName" class="setting-input-inline" placeholder="Our Life Hub">
                 </div>
-                <button class="btn btn-inline" onclick="savePageLabels()">Save Labels</button>
-                <span class="save-flash" id="labelsFlash">✓ Saved</span>
+                <div class="setting-row">
+                    <label class="setting-label-inline">Person 1</label>
+                    <input type="text" id="name1" class="setting-input-inline" placeholder="Kasey">
+                </div>
+                <div class="setting-row">
+                    <label class="setting-label-inline">Person 2</label>
+                    <input type="text" id="name2" class="setting-input-inline" placeholder="Charlie">
+                </div>
+                <div style="text-align:right;margin-top:6px;">
+                    <button class="btn btn-small" onclick="saveAppName();saveNames()">Save</button>
+                    <span class="save-flash" id="appNameFlash">✓ Saved</span>
+                    <span class="save-flash" id="namesFlash"></span>
+                </div>
+
+                <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--lh-accent-border,rgba(163,184,153,0.1));">
+                    <label class="setting-label" style="margin-bottom:8px;">Page Labels</label>
+                    <div class="label-grid">
+                        <span class="label-tag">Home</span>
+                        <input type="text" id="labelHome" class="setting-input-inline" placeholder="Home">
+                        <span class="label-tag">Dreams</span>
+                        <input type="text" id="labelDreams" class="setting-input-inline" placeholder="Us ♡">
+                        <span class="label-tag">Meals</span>
+                        <input type="text" id="labelMeals" class="setting-input-inline" placeholder="Meals">
+                        <span class="label-tag">Settings</span>
+                        <input type="text" id="labelSettings" class="setting-input-inline" placeholder="Settings">
+                    </div>
+                    <div style="text-align:right;margin-top:6px;">
+                        <button class="btn btn-small" onclick="savePageLabels()">Save Labels</button>
+                        <span class="save-flash" id="labelsFlash">✓ Saved</span>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- ═══════════════════════════════════════════ -->
         <!-- 2. APPEARANCE -->
-        <!-- ═══════════════════════════════════════════ -->
-        <div class="settings-section">
-            <h2 class="section-title">Appearance</h2>
-
-            <div class="setting-item">
-                <label class="setting-label">Accent Color</label>
-                <p class="setting-description">Primary color used for buttons, links, and highlights</p>
-                <div class="color-select-row">
-                    <span class="color-preview" id="accentPreview"></span>
-                    <select id="accentColorSelect" class="setting-select" onchange="setAccentColor(this.value)"></select>
+        <div class="settings-section open" id="sec-appearance">
+            <div class="section-header" onclick="toggleSection('sec-appearance')">
+                <h2 class="section-title">Appearance</h2>
+                <span class="section-arrow">▾</span>
+            </div>
+            <div class="section-body">
+                <div class="setting-item">
+                    <label class="setting-label">Accent Color</label>
+                    <div class="color-dropdown" id="accentDropdown">
+                        <div class="color-dropdown-trigger" onclick="toggleColorDropdown('accent')">
+                            <span class="color-dd-swatch" id="accentPreview"></span>
+                            <span class="color-dd-label" id="accentLabel">Sage Green</span>
+                            <span class="color-dd-arrow">▾</span>
+                        </div>
+                        <div class="color-dropdown-menu" id="accentMenu"></div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="setting-item">
-                <label class="setting-label">Secondary Color</label>
-                <p class="setting-description">Used for secondary elements, person hubs, and complementary accents</p>
-                <div class="color-select-row">
-                    <span class="color-preview" id="secondaryPreview"></span>
-                    <select id="secondaryColorSelect" class="setting-select" onchange="setSecondaryColor(this.value)"></select>
+                <div class="setting-item">
+                    <label class="setting-label">Secondary Color</label>
+                    <div class="color-dropdown" id="secondaryDropdown">
+                        <div class="color-dropdown-trigger" onclick="toggleColorDropdown('secondary')">
+                            <span class="color-dd-swatch" id="secondaryPreview"></span>
+                            <span class="color-dd-label" id="secondaryLabel">Dusty Rose</span>
+                            <span class="color-dd-arrow">▾</span>
+                        </div>
+                        <div class="color-dropdown-menu" id="secondaryMenu"></div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="setting-item">
-                <label class="setting-label">Background</label>
-                <p class="setting-description">Background color for all pages</p>
-                <div class="color-select-row">
-                    <span class="color-preview" id="bgPreview"></span>
-                    <select id="bgColorSelect" class="setting-select" onchange="setBackgroundColor(this.value)"></select>
+                <div class="setting-item">
+                    <label class="setting-label">Background</label>
+                    <div class="color-dropdown" id="bgDropdown">
+                        <div class="color-dropdown-trigger" onclick="toggleColorDropdown('bg')">
+                            <span class="color-dd-swatch" id="bgPreview"></span>
+                            <span class="color-dd-label" id="bgLabel">Dark Plum</span>
+                            <span class="color-dd-arrow">▾</span>
+                        </div>
+                        <div class="color-dropdown-menu" id="bgMenu"></div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="setting-item">
-                <label class="setting-label">Font Family</label>
-                <p class="setting-description">Primary font used throughout the app</p>
-                <select id="fontFamily" class="setting-select" onchange="setFontFamily()">
-                    <option value="philosopher">Philosopher (Default)</option>
-                    <option value="cormorant">Cormorant (Elegant Serif)</option>
-                    <option value="worksans">Work Sans (Modern Sans)</option>
-                    <option value="georgia">Georgia (Classic Serif)</option>
-                    <option value="arial">Arial (Clean Sans)</option>
-                </select>
-            </div>
+                <div class="setting-row">
+                    <label class="setting-label-inline">Body Font</label>
+                    <select id="fontFamily" class="setting-select-inline" onchange="setFontFamily()">
+                        <option value="philosopher">Philosopher</option>
+                        <option value="cormorant">Cormorant Garamond</option>
+                        <option value="worksans">Work Sans</option>
+                        <option value="baloo">Baloo 2</option>
+                        <option value="lora">Lora</option>
+                        <option value="cardo">Cardo</option>
+                        <option value="playfair">Playfair Display</option>
+                        <option value="kalam">Kalam</option>
+                        <option value="lobster">Lobster</option>
+                        <option value="indieflower">Indie Flower</option>
+                        <option value="gilda">Gilda Display</option>
+                        <option value="cormorantinfant">Cormorant Infant</option>
+                        <option value="dmserif">DM Serif Display</option>
+                        <option value="tenor">Tenor Sans</option>
+                    </select>
+                </div>
 
-            <div class="setting-item">
-                <label class="setting-label">Font Size</label>
-                <p class="setting-description">Adjust the base font size for readability</p>
-                <div style="display: flex; align-items: center; gap: 16px; margin-top: 12px;">
-                    <button class="btn-secondary btn btn-small" onclick="adjustFontSize(-1)">A−</button>
-                    <span id="fontSizeDisplay" style="color: var(--lh-accent); font-weight: 600; min-width: 40px; text-align: center;">100%</span>
-                    <button class="btn-secondary btn btn-small" onclick="adjustFontSize(1)">A+</button>
+                <div class="setting-row">
+                    <label class="setting-label-inline">Heading Font</label>
+                    <select id="headingFont" class="setting-select-inline" onchange="setHeadingFont()">
+                        <option value="philosopher">Philosopher</option>
+                        <option value="cormorant">Cormorant Garamond</option>
+                        <option value="worksans">Work Sans</option>
+                        <option value="baloo">Baloo 2</option>
+                        <option value="lora">Lora</option>
+                        <option value="cardo">Cardo</option>
+                        <option value="playfair">Playfair Display</option>
+                        <option value="kalam">Kalam</option>
+                        <option value="lobster">Lobster</option>
+                        <option value="indieflower">Indie Flower</option>
+                        <option value="gilda">Gilda Display</option>
+                        <option value="cormorantinfant">Cormorant Infant</option>
+                        <option value="dmserif">DM Serif Display</option>
+                        <option value="tenor">Tenor Sans</option>
+                        <option value="dancing">Dancing Script</option>
+                        <option value="satisfy">Satisfy</option>
+                        <option value="greatvibes">Great Vibes</option>
+                        <option value="abril">Abril Fatface</option>
+                    </select>
+                </div>
+
+                <div class="setting-row">
+                    <label class="setting-label-inline">Font Size</label>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <button class="btn-secondary btn btn-small" onclick="adjustFontSize(-1)">A−</button>
+                        <span id="fontSizeDisplay" style="color:var(--lh-accent);font-weight:600;min-width:36px;text-align:center;">100%</span>
+                        <button class="btn-secondary btn btn-small" onclick="adjustFontSize(1)">A+</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- ═══════════════════════════════════════════ -->
-        <!-- 3. PAGE MANAGEMENT (Archive pages) -->
-        <!-- ═══════════════════════════════════════════ -->
-        <div class="settings-section">
-            <h2 class="section-title">Page Management</h2>
-            <p class="section-description">Archive pages to hide them from the navigation. Archived pages keep all their data intact and can be restored at any time. The Settings page cannot be archived.</p>
-
-            <div class="archive-grid" id="pageArchiveGrid"></div>
+        <!-- 3. PAGE MANAGEMENT -->
+        <div class="settings-section" id="sec-pages">
+            <div class="section-header" onclick="toggleSection('sec-pages')">
+                <h2 class="section-title">Page Management</h2>
+                <span class="section-arrow">▾</span>
+            </div>
+            <div class="section-body">
+                <div class="archive-grid" id="pageArchiveGrid"></div>
+            </div>
         </div>
 
-        <!-- ═══════════════════════════════════════════ -->
-        <!-- 4. SECTION MANAGEMENT (Archive sections) -->
-        <!-- ═══════════════════════════════════════════ -->
-        <div class="settings-section">
-            <h2 class="section-title">Section Management</h2>
-            <p class="section-description">Archive individual sections within each page. Archived sections are hidden from view but their data is preserved.</p>
-
-            <div id="sectionArchiveContainer"></div>
+        <!-- 4. SECTION MANAGEMENT -->
+        <div class="settings-section" id="sec-sections">
+            <div class="section-header" onclick="toggleSection('sec-sections')">
+                <h2 class="section-title">Section Management</h2>
+                <span class="section-arrow">▾</span>
+            </div>
+            <div class="section-body">
+                <div id="sectionArchiveContainer"></div>
+            </div>
         </div>
 
-        <!-- ═══════════════════════════════════════════ -->
         <!-- 5. HABIT CUSTOMIZATION -->
-        <!-- ═══════════════════════════════════════════ -->
-        <div class="settings-section">
-            <h2 class="section-title">Habit Customization</h2>
-
-            <div class="setting-item">
-                <label class="setting-label" id="habits1Label">Person 1 Habits</label>
-                <p class="setting-description">Customize the habit bingo card for the first person</p>
-                <div id="habits1List" class="habit-list"></div>
-                <div style="display: flex; gap: 8px; margin-top: 12px;">
-                    <input type="text" id="newHabit1" class="setting-input" placeholder="Add new habit..." style="flex: 1;" onkeypress="if(event.key==='Enter') addHabit('person1')">
-                    <button class="btn" onclick="addHabit('person1')">Add</button>
-                </div>
+        <div class="settings-section" id="sec-habits">
+            <div class="section-header" onclick="toggleSection('sec-habits')">
+                <h2 class="section-title">Habit Customization</h2>
+                <span class="section-arrow">▾</span>
             </div>
-
-            <div class="setting-item">
-                <label class="setting-label" id="habits2Label">Person 2 Habits</label>
-                <p class="setting-description">Customize the habit bingo card for the second person</p>
-                <div id="habits2List" class="habit-list"></div>
-                <div style="display: flex; gap: 8px; margin-top: 12px;">
-                    <input type="text" id="newHabit2" class="setting-input" placeholder="Add new habit..." style="flex: 1;" onkeypress="if(event.key==='Enter') addHabit('person2')">
-                    <button class="btn" onclick="addHabit('person2')">Add</button>
+            <div class="section-body">
+                <div class="setting-item">
+                    <label class="setting-label" id="habits1Label">Person 1 Habits</label>
+                    <div id="habits1List" class="habit-list"></div>
+                    <div style="display:flex;gap:8px;margin-top:8px;">
+                        <input type="text" id="newHabit1" class="setting-input" placeholder="Add new habit..." style="flex:1;padding:8px 12px;" onkeypress="if(event.key==='Enter') addHabit('person1')">
+                        <button class="btn btn-small" onclick="addHabit('person1')">Add</button>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label class="setting-label" id="habits2Label">Person 2 Habits</label>
+                    <div id="habits2List" class="habit-list"></div>
+                    <div style="display:flex;gap:8px;margin-top:8px;">
+                        <input type="text" id="newHabit2" class="setting-input" placeholder="Add new habit..." style="flex:1;padding:8px 12px;" onkeypress="if(event.key==='Enter') addHabit('person2')">
+                        <button class="btn btn-small" onclick="addHabit('person2')">Add</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- ═══════════════════════════════════════════ -->
-        <!-- 6. CONTENT CUSTOMIZATION -->
-        <!-- ═══════════════════════════════════════════ -->
-        <div class="settings-section">
-            <h2 class="section-title">Content Customization</h2>
-
-            <div class="setting-item">
-                <label class="setting-label">Custom Daily Prompts</label>
-                <p class="setting-description">Relationship prompts shown on the home page (one per line, minimum 10)</p>
-                <textarea id="customPrompts" class="setting-input" placeholder="What's one thing I did today that made you smile?&#10;What's your favorite memory of us from this past month?&#10;What's one way I can support you better this week?"></textarea>
-                <button class="btn btn-inline" onclick="saveCustomPrompts()">Save Prompts</button>
-                <span class="save-flash" id="promptsFlash">✓ Saved</span>
-                <div class="info-box" style="margin-top: 8px;">
-                    <span id="promptCount">0</span> custom prompts saved
-                </div>
+        <!-- 6. CONTENT -->
+        <div class="settings-section" id="sec-content">
+            <div class="section-header" onclick="toggleSection('sec-content')">
+                <h2 class="section-title">Content</h2>
+                <span class="section-arrow">▾</span>
             </div>
-
-            <div class="setting-item">
-                <label class="setting-label">Custom Monthly Challenges</label>
-                <p class="setting-description">One challenge per line, exactly 12 (one for each month)</p>
-                <textarea id="customChallenges" class="setting-input" placeholder="Write each other a love letter&#10;Go on a walk together 3 times per week&#10;Try a new restaurant"></textarea>
-                <button class="btn btn-inline" onclick="saveCustomChallenges()">Save Challenges</button>
-                <span class="save-flash" id="challengesFlash">✓ Saved</span>
-                <div class="info-box" style="margin-top: 8px;">
-                    <span id="challengeCount">0</span> custom challenges saved
+            <div class="section-body">
+                <div class="setting-item">
+                    <label class="setting-label">Daily Prompts <span style="font-weight:400;color:var(--lh-text-muted);font-size:0.8rem;">(one per line, min 10)</span></label>
+                    <textarea id="customPrompts" class="setting-input" style="min-height:80px;resize:vertical;" placeholder="What's one thing I did today that made you smile?&#10;What's your favorite memory of us from this past month?"></textarea>
+                    <div style="display:flex;align-items:center;gap:12px;margin-top:6px;">
+                        <button class="btn btn-small" onclick="saveCustomPrompts()">Save</button>
+                        <span class="save-flash" id="promptsFlash">✓ Saved</span>
+                        <span style="color:var(--lh-text-faint);font-size:0.78rem;"><span id="promptCount">0</span> saved</span>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label class="setting-label">Monthly Challenges <span style="font-weight:400;color:var(--lh-text-muted);font-size:0.8rem;">(one per line, exactly 12)</span></label>
+                    <textarea id="customChallenges" class="setting-input" style="min-height:80px;resize:vertical;" placeholder="Write each other a love letter&#10;Go on a walk together 3 times per week"></textarea>
+                    <div style="display:flex;align-items:center;gap:12px;margin-top:6px;">
+                        <button class="btn btn-small" onclick="saveCustomChallenges()">Save</button>
+                        <span class="save-flash" id="challengesFlash">✓ Saved</span>
+                        <span style="color:var(--lh-text-faint);font-size:0.78rem;"><span id="challengeCount">0</span> saved</span>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- ═══════════════════════════════════════════ -->
-        <!-- 7. MEAL PLAN SETTINGS -->
-        <!-- ═══════════════════════════════════════════ -->
-        <div class="settings-section">
-            <h2 class="section-title">Meal Plan Settings</h2>
-            <p class="section-description">Configure nutritional targets for each person. These values are used for meal planning and grocery list generation.</p>
-
-            <div class="setting-item">
-                <label class="setting-label" id="mealPerson1Label">Person 1 Targets</label>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px;">
-                    <div>
-                        <span class="setting-description" style="display: block; margin-bottom: 4px;">Calories/day</span>
-                        <input type="text" id="meal1Calories" class="setting-input" placeholder="1,350-1,700" style="padding: 8px 12px;">
-                    </div>
-                    <div>
-                        <span class="setting-description" style="display: block; margin-bottom: 4px;">Protein/day</span>
-                        <input type="text" id="meal1Protein" class="setting-input" placeholder="140-165g" style="padding: 8px 12px;">
-                    </div>
-                </div>
+        <!-- 7. MEAL PLAN -->
+        <div class="settings-section" id="sec-meals">
+            <div class="section-header" onclick="toggleSection('sec-meals')">
+                <h2 class="section-title">Meal Plan</h2>
+                <span class="section-arrow">▾</span>
             </div>
-
-            <div class="setting-item">
-                <label class="setting-label" id="mealPerson2Label">Person 2 Targets</label>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px;">
-                    <div>
-                        <span class="setting-description" style="display: block; margin-bottom: 4px;">Calories/day</span>
-                        <input type="text" id="meal2Calories" class="setting-input" placeholder="2,200-2,500" style="padding: 8px 12px;">
-                    </div>
-                    <div>
-                        <span class="setting-description" style="display: block; margin-bottom: 4px;">Protein/day</span>
-                        <input type="text" id="meal2Protein" class="setting-input" placeholder="180-210g" style="padding: 8px 12px;">
+            <div class="section-body">
+                <div class="setting-item">
+                    <label class="setting-label" id="mealPerson1Label">Person 1 Targets</label>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;">
+                        <div>
+                            <span class="field-hint">Calories/day</span>
+                            <input type="text" id="meal1Calories" class="setting-input" placeholder="1,350-1,700" style="padding:8px 12px;">
+                        </div>
+                        <div>
+                            <span class="field-hint">Protein/day</span>
+                            <input type="text" id="meal1Protein" class="setting-input" placeholder="140-165g" style="padding:8px 12px;">
+                        </div>
                     </div>
                 </div>
-                <button class="btn btn-inline" onclick="saveMealSettings()">Save Meal Settings</button>
-                <span class="save-flash" id="mealsFlash">✓ Saved</span>
+                <div class="setting-item">
+                    <label class="setting-label" id="mealPerson2Label">Person 2 Targets</label>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;">
+                        <div>
+                            <span class="field-hint">Calories/day</span>
+                            <input type="text" id="meal2Calories" class="setting-input" placeholder="2,200-2,500" style="padding:8px 12px;">
+                        </div>
+                        <div>
+                            <span class="field-hint">Protein/day</span>
+                            <input type="text" id="meal2Protein" class="setting-input" placeholder="180-210g" style="padding:8px 12px;">
+                        </div>
+                    </div>
+                    <div style="text-align:right;margin-top:6px;">
+                        <button class="btn btn-small" onclick="saveMealSettings()">Save Meal Settings</button>
+                        <span class="save-flash" id="mealsFlash">✓ Saved</span>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- ═══════════════════════════════════════════ -->
         <!-- 8. PREFERENCES -->
-        <!-- ═══════════════════════════════════════════ -->
-        <div class="settings-section">
-            <h2 class="section-title">Preferences</h2>
-
-            <div class="setting-item">
-                <label class="setting-label">Time Zone</label>
-                <p class="setting-description">Used for accurate date and time display</p>
-                <select id="timezone" class="setting-select" onchange="saveTimezone()">
-                    <option value="America/New_York">Eastern (ET)</option>
-                    <option value="America/Chicago">Central (CT)</option>
-                    <option value="America/Denver">Mountain (MT)</option>
-                    <option value="America/Los_Angeles">Pacific (PT)</option>
-                    <option value="America/Anchorage">Alaska (AKT)</option>
-                    <option value="Pacific/Honolulu">Hawaii (HST)</option>
-                </select>
+        <div class="settings-section" id="sec-prefs">
+            <div class="section-header" onclick="toggleSection('sec-prefs')">
+                <h2 class="section-title">Preferences</h2>
+                <span class="section-arrow">▾</span>
             </div>
-
-            <div class="setting-item">
-                <label class="setting-label">Week Start Day</label>
-                <p class="setting-description">Which day your week starts on for calendar views</p>
-                <select id="weekStart" class="setting-select" onchange="saveWeekStart()">
-                    <option value="0">Sunday</option>
-                    <option value="1">Monday</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- ═══════════════════════════════════════════ -->
-        <!-- 9. DATA MANAGEMENT -->
-        <!-- ═══════════════════════════════════════════ -->
-        <div class="settings-section">
-            <h2 class="section-title">Data Management</h2>
-
-            <div class="setting-item">
-                <label class="setting-label">Export All Data</label>
-                <p class="setting-description">Download a complete backup of all your Life Hub data and settings</p>
-                <button class="btn-secondary btn" onclick="exportData()">Download Backup</button>
-            </div>
-
-            <div class="setting-item">
-                <label class="setting-label">Import Data</label>
-                <p class="setting-description">Restore from a previous backup file</p>
-                <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
-                <button class="btn-secondary btn" onclick="document.getElementById('importFile').click()">Import Backup</button>
-            </div>
-
-            <div class="setting-item">
-                <label class="setting-label">Reset All Settings</label>
-                <p class="setting-description">Reset customizations to defaults (keeps your habit data, calendar events, etc.)</p>
-                <button class="btn-danger btn" onclick="resetSettings()">Reset to Defaults</button>
-            </div>
-        </div>
-
-        <!-- ═══════════════════════════════════════════ -->
-        <!-- 10. ABOUT -->
-        <!-- ═══════════════════════════════════════════ -->
-        <div class="settings-section">
-            <h2 class="section-title">About</h2>
-            <div class="setting-item">
-                <label class="setting-label" data-lh-name="app">Our Life Hub</label>
-                <p class="setting-description">Version 2.0 — Fully Customizable</p>
-                <div class="info-box">
-                    Your personal habit tracking and life management system. All data is stored locally in your browser and synced to Firebase for backup and multi-device access. Customize everything from this settings page — no code required.
+            <div class="section-body">
+                <div class="setting-row">
+                    <label class="setting-label-inline">Time Zone</label>
+                    <select id="timezone" class="setting-select-inline" onchange="saveTimezone()">
+                        <option value="America/New_York">Eastern (ET)</option>
+                        <option value="America/Chicago">Central (CT)</option>
+                        <option value="America/Denver">Mountain (MT)</option>
+                        <option value="America/Los_Angeles">Pacific (PT)</option>
+                        <option value="America/Anchorage">Alaska (AKT)</option>
+                        <option value="Pacific/Honolulu">Hawaii (HST)</option>
+                    </select>
                 </div>
+                <div class="setting-row">
+                    <label class="setting-label-inline">Week Starts</label>
+                    <select id="weekStart" class="setting-select-inline" onchange="saveWeekStart()">
+                        <option value="0">Sunday</option>
+                        <option value="1">Monday</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 9. DATA -->
+        <div class="settings-section" id="sec-data">
+            <div class="section-header" onclick="toggleSection('sec-data')">
+                <h2 class="section-title">Data Management</h2>
+                <span class="section-arrow">▾</span>
+            </div>
+            <div class="section-body">
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                    <button class="btn-secondary btn btn-small" onclick="exportData()">Export Backup</button>
+                    <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importData(event)">
+                    <button class="btn-secondary btn btn-small" onclick="document.getElementById('importFile').click()">Import Backup</button>
+                    <button class="btn-danger btn btn-small" onclick="resetSettings()">Reset to Defaults</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 10. ABOUT -->
+        <div class="settings-section" id="sec-about">
+            <div class="section-header" onclick="toggleSection('sec-about')">
+                <h2 class="section-title">About</h2>
+                <span class="section-arrow">▾</span>
+            </div>
+            <div class="section-body">
+                <p style="color:var(--lh-text-muted);font-size:0.82rem;line-height:1.5;">
+                    <strong data-lh-name="app" style="color:var(--lh-text);">Our Life Hub</strong> v2.0 — Personal habit tracking & life management. Data stored locally + synced to Firebase.
+                </p>
             </div>
         </div>
     </div>
@@ -892,6 +1078,10 @@
         const LH = window.LifeHubSettings;
         const S = LH.current;
 
+        function toggleSection(id) {
+            document.getElementById(id).classList.toggle('open');
+        }
+
         // ── Utility: flash a save indicator ──
         function flash(id) {
             const el = document.getElementById(id);
@@ -904,7 +1094,7 @@
         function syncToFirebase() {
             if (!window.db || !window.firestoreImports) return;
             try {
-                const keys = ['accentColor','secondaryColor','bgColor','fontFamily','fontSize','appName','userNames','archivedPages','archivedSections','pageLabels','features','customHabits_person1','customHabits_person2','customPrompts','customChallenges','timezone','weekStart','mealSettings'];
+                const keys = ['accentColor','secondaryColor','bgColor','fontFamily','headingFont','fontSize','appName','userNames','archivedPages','archivedSections','pageLabels','features','customHabits_person1','customHabits_person2','customPrompts','customChallenges','timezone','weekStart','mealSettings'];
                 const data = {};
                 keys.forEach(k => {
                     const v = localStorage.getItem(k);
@@ -939,33 +1129,40 @@
 
         // ── Color Definitions ──
         const colorDefs = {
-            sage:       { name: 'Sage Green',    hex: '#a3b899' },
-            rose:       { name: 'Dusty Rose',    hex: '#c9a9a6' },
-            cream:      { name: 'Warm Cream',    hex: '#e8ddd0' },
-            blush:      { name: 'Valentine Blush', hex: '#d4919e' },
-            coral:      { name: 'Living Coral',  hex: '#d98a7e' },
-            peach:      { name: 'Soft Peach',    hex: '#d4a59a' },
-            mauve:      { name: 'Mauve Dream',   hex: '#b8879e' },
-            berry:      { name: 'Wild Berry',    hex: '#9c6b82' },
-            lavender:   { name: 'Lavender',      hex: '#b4a7d6' },
-            periwinkle: { name: 'Periwinkle',    hex: '#8e9cc7' },
-            teal:       { name: 'Soft Teal',     hex: '#7ba8a1' },
-            seafoam:    { name: 'Seafoam',       hex: '#7bbfb0' },
-            gold:       { name: 'Warm Gold',     hex: '#c9b77c' },
-            honey:      { name: 'Honey',         hex: '#d4b870' },
-            terracotta: { name: 'Terracotta',    hex: '#c4836a' }
+            sage:        { name: 'Sage Green',    hex: '#a3b899' },
+            blush:       { name: 'Blush',         hex: '#d4919e' },
+            periwinkle:  { name: 'Periwinkle',    hex: '#8e9cc7' },
+            dustylilac:  { name: 'Dusty Lilac',   hex: '#c3a6c9' },
+            powderblue:  { name: 'Powder Blue',   hex: '#a4c2d8' },
+            softmint:    { name: 'Soft Mint',     hex: '#a8d8c4' },
+            moss:        { name: 'Moss',          hex: '#8a9c6b' },
+            burntsienna: { name: 'Burnt Sienna',  hex: '#c97856' },
+            rosegold:    { name: 'Rose Gold',     hex: '#d4a4a4' },
+            dustyteal:   { name: 'Dusty Teal',    hex: '#6d9e9e' },
+            petalpink:   { name: 'Petal Pink',    hex: '#e8b4b8' },
+            apricot:     { name: 'Apricot',       hex: '#e8b088' },
+            palejade:    { name: 'Pale Jade',     hex: '#8ec4a8' },
+            raspberry:   { name: 'Raspberry',     hex: '#b0607a' },
+            denim:       { name: 'Denim',         hex: '#6888a8' },
+            nude:        { name: 'Nude',          hex: '#d4b8a8' },
+            obsidian:    { name: 'Obsidian',      hex: '#181818' },
+            darkplum:    { name: 'Dark Plum',     hex: '#3d2f31' },
+            storm:       { name: 'Storm',         hex: '#252830' }
         };
 
         const bgColorDefs = {
-            dark:     { name: 'Dark Plum',     hex: '#3d2f31' },
-            wine:     { name: 'Wine',          hex: '#2d1f2b' },
-            espresso: { name: 'Espresso',      hex: '#2b2220' },
-            charcoal: { name: 'Charcoal',      hex: '#1a1a1a' },
-            navy:     { name: 'Deep Navy',     hex: '#1e2638' },
-            storm:    { name: 'Stormy Night',  hex: '#252830' },
-            slate:    { name: 'Cool Slate',    hex: '#2a2d35' },
-            forest:   { name: 'Forest',        hex: '#1f2e2a' },
-            cream:    { name: 'Warm Cream',    hex: '#f5f0e8' }
+            dark:        { name: 'Dark Plum',     hex: '#3d2f31' },
+            forest:      { name: 'Forest',        hex: '#1f2e2a' },
+            espresso:    { name: 'Espresso',      hex: '#2b2220' },
+            storm:       { name: 'Storm',         hex: '#252830' },
+            midnight:    { name: 'Midnight',      hex: '#141420' },
+            warmcocoa:   { name: 'Warm Cocoa',    hex: '#362a28' },
+            deepteal:    { name: 'Deep Teal',     hex: '#1a2e2e' },
+            warmlinen:   { name: 'Warm Linen',    hex: '#f0e8dc' },
+            dustymauve:  { name: 'Dusty Mauve',   hex: '#332830' },
+            obsidian:    { name: 'Obsidian',      hex: '#181818' },
+            softblush:   { name: 'Soft Blush',    hex: '#f2e2e4' },
+            bordeaux:    { name: 'Bordeaux',      hex: '#301820' }
         };
 
         // ── Page & Section Definitions ──
@@ -1025,33 +1222,51 @@
         // ══════════════════════════════════════════════
 
         function buildColorDropdowns() {
-            const defaultSecMap = (LH && LH.defaultSecMap) || { sage:'rose', rose:'sage', lavender:'rose', teal:'rose', peach:'sage', gold:'rose', cream:'rose', blush:'sage', coral:'lavender', mauve:'sage', berry:'gold', periwinkle:'rose', seafoam:'peach', terracotta:'sage', honey:'rose' };
+            const defaultSecMap = (LH && LH.defaultSecMap) || { sage:'rosegold', blush:'sage', cream:'rosegold', periwinkle:'rosegold', dustylilac:'rosegold', powderblue:'rosegold', softmint:'rosegold', moss:'rosegold', burntsienna:'sage', rosegold:'sage', dustyteal:'rosegold', petalpink:'sage', apricot:'sage', palejade:'rosegold', raspberry:'sage', denim:'rosegold', nude:'sage', obsidian:'rosegold', darkplum:'sage', storm:'rosegold' };
 
-            // Accent dropdown
-            const accentSel = document.getElementById('accentColorSelect');
-            accentSel.innerHTML = Object.keys(colorDefs).map(key => {
-                const c = colorDefs[key];
-                return '<option value="' + key + '"' + (S.accentColor === key ? ' selected' : '') + '>' + c.name + '</option>';
-            }).join('');
-            document.getElementById('accentPreview').style.background = colorDefs[S.accentColor].hex;
+            function buildMenu(menuId, defs, currentKey, callback) {
+                const menu = document.getElementById(menuId);
+                menu.innerHTML = Object.keys(defs).map(key => {
+                    const c = defs[key];
+                    return '<div class="color-dd-option' + (currentKey === key ? ' active' : '') + '" onclick="' + callback + '(\'' + key + '\')">' +
+                        '<span class="color-dd-swatch" style="background:' + c.hex + '"></span>' +
+                        '<span>' + c.name + '</span></div>';
+                }).join('');
+            }
 
-            // Secondary dropdown
-            const secSel = document.getElementById('secondaryColorSelect');
-            const currentSec = S.secondaryColor || defaultSecMap[S.accentColor] || 'rose';
-            secSel.innerHTML = Object.keys(colorDefs).map(key => {
-                const c = colorDefs[key];
-                return '<option value="' + key + '"' + (currentSec === key ? ' selected' : '') + '>' + c.name + '</option>';
-            }).join('');
-            document.getElementById('secondaryPreview').style.background = (colorDefs[currentSec] || colorDefs.rose).hex;
+            // Accent
+            const accentDef = colorDefs[S.accentColor] || colorDefs.sage;
+            buildMenu('accentMenu', colorDefs, S.accentColor, 'setAccentColor');
+            document.getElementById('accentPreview').style.background = accentDef.hex;
+            document.getElementById('accentLabel').textContent = accentDef.name;
 
-            // Background dropdown
-            const bgSel = document.getElementById('bgColorSelect');
-            bgSel.innerHTML = Object.keys(bgColorDefs).map(key => {
-                const c = bgColorDefs[key];
-                return '<option value="' + key + '"' + (S.bgColor === key ? ' selected' : '') + '>' + c.name + '</option>';
-            }).join('');
-            document.getElementById('bgPreview').style.background = bgColorDefs[S.bgColor].hex;
+            // Secondary
+            const currentSec = S.secondaryColor || (defaultSecMap && defaultSecMap[S.accentColor]) || 'rosegold';
+            const secDef = colorDefs[currentSec] || colorDefs.rose;
+            buildMenu('secondaryMenu', colorDefs, currentSec, 'setSecondaryColor');
+            document.getElementById('secondaryPreview').style.background = secDef.hex;
+            document.getElementById('secondaryLabel').textContent = secDef.name;
+
+            // Background
+            const bgDef = bgColorDefs[S.bgColor] || bgColorDefs.dark;
+            buildMenu('bgMenu', bgColorDefs, S.bgColor, 'setBackgroundColor');
+            document.getElementById('bgPreview').style.background = bgDef.hex;
+            document.getElementById('bgLabel').textContent = bgDef.name;
         }
+
+        window.toggleColorDropdown = function(which) {
+            const dd = document.getElementById(which + 'Dropdown');
+            const wasOpen = dd.classList.contains('open');
+            // Close all
+            document.querySelectorAll('.color-dropdown.open').forEach(d => d.classList.remove('open'));
+            if (!wasOpen) dd.classList.add('open');
+        };
+        // Close on outside click
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.color-dropdown')) {
+                document.querySelectorAll('.color-dropdown.open').forEach(d => d.classList.remove('open'));
+            }
+        });
 
         function buildPageArchiveGrid() {
             const grid = document.getElementById('pageArchiveGrid');
@@ -1185,6 +1400,13 @@
         window.setFontFamily = function() {
             const val = document.getElementById('fontFamily').value;
             localStorage.setItem('fontFamily', val);
+            syncToFirebase(); location.reload();
+        };
+
+        // Heading Font
+        window.setHeadingFont = function() {
+            const val = document.getElementById('headingFont').value;
+            localStorage.setItem('headingFont', val);
             syncToFirebase(); location.reload();
         };
 
@@ -1382,6 +1604,7 @@
 
             // Font
             document.getElementById('fontFamily').value = S.fontFamily;
+            document.getElementById('headingFont').value = S.headingFont || 'philosopher';
 
             // Font size
             document.getElementById('fontSizeDisplay').textContent = S.fontSize + '%';
