@@ -220,8 +220,12 @@
             fs.getDoc(fs.doc(window.db, 'settings', 'global')).then(function(snap) {
                 if (!snap.exists()) return;
                 var remote = snap.data();
+                var localTs = parseInt(localStorage.getItem('_settingsLastSaved') || '0', 10);
+                var remoteTs = remote._lastUpdated || 0;
+                if (typeof remoteTs === 'string') remoteTs = new Date(remoteTs).getTime() || 0;
+                if (localTs > 0 && localTs >= remoteTs) return;
                 var changed = false;
-                var keys = ['accentColor','secondaryColor','bgColor','fontFamily','headingFont','fontSize','appName','userNames','archivedPages','archivedSections','pageLabels','features','customHabits_person1','customHabits_person2','customPrompts','customChallenges','timezone','weekStart','mealSettings'];
+                var keys = ['accentColor','secondaryColor','bgColor','fontFamily','headingFont','fontSize','appName','userNames','archivedPages','archivedSections','pageLabels','features','customHabits_person1','customHabits_person2','customPrompts','customChallenges','timezone','weekStart','mealSettings','person1Appearance','person2Appearance'];
                 keys.forEach(function(key) {
                     if (remote[key] !== undefined) {
                         var local = localStorage.getItem(key);
@@ -232,7 +236,7 @@
                         }
                     }
                 });
-                if (changed) location.reload();
+                if (changed) { localStorage.setItem('_settingsLastSaved', remoteTs.toString()); location.reload(); }
             }).catch(function(e) { console.log('Settings sync check failed:', e); });
         };
         // Hook into firebaseReady event
