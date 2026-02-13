@@ -20,8 +20,8 @@
         function darken(hex,pct){var c=h2r(hex);return r2h(clamp(c[0]*(1-pct)),clamp(c[1]*(1-pct)),clamp(c[2]*(1-pct)));}
         function rgbStr(hex){var c=h2r(hex);return c[0]+','+c[1]+','+c[2];}
 
-        var accentHexMap={sage:'#a3b899',blush:'#d4919e',cream:'#e8ddd0',periwinkle:'#8e9cc7',dustylilac:'#c3a6c9',powderblue:'#a4c2d8',softmint:'#a8d8c4',moss:'#8a9c6b',burntsienna:'#c97856',rosegold:'#d4a4a4',dustyteal:'#6d9e9e',petalpink:'#e8b4b8',apricot:'#e8b088',palejade:'#8ec4a8',raspberry:'#b0607a',denim:'#6888a8',nude:'#d4b8a8',obsidian:'#181818',darkplum:'#3d2f31',storm:'#252830'};
-        var defaultSecMap={sage:'rosegold',blush:'sage',cream:'rosegold',periwinkle:'rosegold',dustylilac:'rosegold',powderblue:'rosegold',softmint:'rosegold',moss:'rosegold',burntsienna:'sage',rosegold:'sage',dustyteal:'rosegold',petalpink:'sage',apricot:'sage',palejade:'rosegold',raspberry:'sage',denim:'rosegold',nude:'sage',obsidian:'rosegold',darkplum:'sage',storm:'rosegold'};
+        var accentHexMap={sage:'#a3b899',blush:'#d4919e',cream:'#e8ddd0',periwinkle:'#8e9cc7',dustylilac:'#c3a6c9',powderblue:'#a4c2d8',softmint:'#a8d8c4',moss:'#8a9c6b',burntsienna:'#c97856',dustyteal:'#6d9e9e',petalpink:'#e8b4b8',apricot:'#e8b088',palejade:'#8ec4a8',raspberry:'#b0607a',denim:'#6888a8',nude:'#d4b8a8',obsidian:'#181818',darkplum:'#3d2f31',storm:'#252830'};
+        var defaultSecMap={sage:'petalpink',blush:'sage',cream:'petalpink',periwinkle:'petalpink',dustylilac:'petalpink',powderblue:'petalpink',softmint:'petalpink',moss:'petalpink',burntsienna:'sage',petalpink:'sage',dustyteal:'petalpink',apricot:'sage',palejade:'petalpink',raspberry:'sage',denim:'petalpink',nude:'sage',obsidian:'petalpink',darkplum:'sage',storm:'petalpink'};
         var bgMap={dark:'#3d2f31',forest:'#1f2e2a',espresso:'#2b2220',storm:'#252830',midnight:'#141420',warmcocoa:'#362a28',deepteal:'#1a2e2e',warmlinen:'#f0e8dc',dustymauve:'#332830',obsidian:'#181818',softblush:'#f0d4da',bordeaux:'#301820'};
         var bgDkMap={dark:'#2a1f21',forest:'#15231f',espresso:'#1e1816',storm:'#1b1d24',midnight:'#0d0d16',warmcocoa:'#281e1c',deepteal:'#122020',warmlinen:'#e4dace',dustymauve:'#261c24',obsidian:'#101010',softblush:'#e5c8cf',bordeaux:'#221018'};
         var tcMap={dark:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},forest:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},espresso:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},storm:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},midnight:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},warmcocoa:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},deepteal:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},warmlinen:{t:'#3d2f31',m:'rgba(61,47,49,0.65)',f:'rgba(61,47,49,0.4)'},dustymauve:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},obsidian:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'},softblush:{t:'#3d2f31',m:'rgba(61,47,49,0.65)',f:'rgba(61,47,49,0.4)'},bordeaux:{t:'#e0d2d0',m:'rgba(242,235,224,0.6)',f:'rgba(242,235,224,0.4)'}};
@@ -29,7 +29,11 @@
 
         // Read settings
         var ac=localStorage.getItem('accentColor')||'sage';
-        var sc=localStorage.getItem('secondaryColor')||defaultSecMap[ac]||'rosegold';
+        var sc=localStorage.getItem('secondaryColor')||defaultSecMap[ac]||'petalpink';
+        // Migrate removed color keys
+        if(ac==='rosegold'){ac='petalpink';localStorage.setItem('accentColor','petalpink');}
+        if(sc==='rosegold'){sc='petalpink';localStorage.setItem('secondaryColor','petalpink');}
+
         var bc=localStorage.getItem('bgColor')||'dark';
         var ff=localStorage.getItem('fontFamily')||'philosopher';
         var hf=localStorage.getItem('headingFont')||'philosopher';
@@ -108,7 +112,7 @@
             else if(title.indexOf('Charlie')!==-1)document.title=title.replace('Charlie',names.name2);
 
             // Skip rewriting if all defaults
-            if(ac==='sage'&&sc===(defaultSecMap.sage||'rosegold')&&bc==='dark')return;
+            if(ac==='sage'&&sc===(defaultSecMap.sage||'petalpink')&&bc==='dark')return;
 
             // Build computed variant families
             var A={vdark:darken(pa,0.45),dark:darken(pa,0.30),mdark:darken(pa,0.15),base:pa,light:lighten(pa,0.15),vlight:lighten(pa,0.30),xlight:lighten(pa,0.50)};
@@ -151,7 +155,7 @@
             }
 
             // SECONDARY always remap if different from default rose
-            if(sc!=='rosegold'||ac!=='sage'){
+            if(sc!=='petalpink'||ac!=='sage'){
                 reps.push(['#5a4345',S.vdark],['#5a4a4c',S.vdark],['#5A4345',S.vdark],['#5A4A4C',S.vdark]);
                 reps.push(['#6b5a5e',S.dark],['#7a6668',S.dark],['#6B5A5E',S.dark],['#7A6668',S.dark]);
                 reps.push(['#9a7a80',S.mdark],['#a57f85',S.mdark],['#9A7A80',S.mdark],['#A57F85',S.mdark]);
@@ -175,9 +179,17 @@
             }
 
             if(bc!=='dark'){
-                reps.push(['#3d2f31',bg],['#3D2F31',bg],['#3c2f31',bg],['#3C2F31',bg]);
-                reps.push(['#2a1f21',bgDk],['#2A1F21',bgDk]);
-                reps.push(['#4a3a3c',bgMid],['#4A3A3C',bgMid],['#4a3b3e',bgMid],['#4A3B3E',bgMid]);
+                var isLight=(bc==='warmlinen'||bc==='softblush');
+                if(isLight){
+                    var cardBgSolid='#ffffff';
+                    reps.push(['#3d2f31',cardBgSolid],['#3D2F31',cardBgSolid],['#3c2f31',cardBgSolid],['#3C2F31',cardBgSolid]);
+                    reps.push(['#2a1f21',cardBgSolid],['#2A1F21',cardBgSolid]);
+                    reps.push(['#4a3a3c',cardBgSolid],['#4A3A3C',cardBgSolid],['#4a3b3e',cardBgSolid],['#4A3B3E',cardBgSolid]);
+                } else {
+                    reps.push(['#3d2f31',bg],['#3D2F31',bg],['#3c2f31',bg],['#3C2F31',bg]);
+                    reps.push(['#2a1f21',bgDk],['#2A1F21',bgDk]);
+                    reps.push(['#4a3a3c',bgMid],['#4A3A3C',bgMid],['#4a3b3e',bgMid],['#4A3B3E',bgMid]);
+                }
                 reps.push([/rgba\(\s*61,\s*47,\s*49,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(bg)+',$1)']);
                 reps.push([/rgba\(\s*60,\s*47,\s*49,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(bg)+',$1)']);
                 reps.push([/rgba\(\s*42,\s*31,\s*33,\s*([0-9.]+)\s*\)/g,'rgba('+rgbStr(bgDk)+',$1)']);
@@ -200,6 +212,25 @@
             var ov=document.createElement('style');
             ov.textContent=':root{--dark-bg:'+bg+'!important;--card-bg:'+bgDk+'!important;--sage-green:'+A.base+'!important;--muted-sage:'+A.mdark+'!important;--light-text:'+tc.t+'!important;--cream:'+tc.t+'!important;--border-color:rgba('+aRgb+',0.2)!important}';
             document.head.appendChild(ov);
+            // Light background comprehensive override
+            if(bc==='warmlinen'||bc==='softblush'){
+                var lo=document.createElement('style');
+                var navBg=darken(bg,0.55);
+                var navBgDk=darken(bg,0.62);
+                lo.textContent=[
+                    'html,body{background:'+bg+'!important;color:'+tc.t+'!important}',
+                    '.top-nav{background:'+navBg+'!important;border-bottom:1px solid rgba(0,0,0,0.1)!important}',
+                    '.nav-overlay{background:'+navBgDk+'!important}',
+                    '.section,.card{background:rgba(255,255,255,0.88)!important;border:1px solid rgba(0,0,0,0.08)!important;box-shadow:0 1px 4px rgba(0,0,0,0.06)!important}',
+                    '.section-title,.card-title{color:'+tc.t+'!important}',
+                    '.nav-hamburger span{background:'+tc.t+'!important}',
+                    '.sync-status{background:rgba(255,255,255,0.9)!important;border-color:rgba(0,0,0,0.1)!important}',
+                    'input,textarea,select{background:rgba(255,255,255,0.7)!important;color:'+tc.t+'!important;border-color:rgba(0,0,0,0.12)!important}',
+                    'button{color:'+tc.t+'}',
+                    '.nav-refresh{color:rgba(255,255,255,0.7)!important}'
+                ].join('\n');
+                document.head.appendChild(lo);
+            }
         });
 
         // ── Firebase Settings Sync ──
