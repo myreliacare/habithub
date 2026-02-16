@@ -1890,9 +1890,22 @@ button, .btn, a, .nav-refresh {
                     </div>
                     <div class="reminder-form-row">
                         <label>Frequency</label>
-                        <select id="reminderModalFrequency">
+                        <select id="reminderModalFrequency" onchange="toggleWeeklyDayPicker()">
                             <option value="once">One-time</option>
+                            <option value="weekly">Weekly</option>
                             <option value="yearly">Yearly</option>
+                        </select>
+                    </div>
+                    <div class="reminder-form-row" id="weeklyDayRow" style="display:none;">
+                        <label>Day of Week</label>
+                        <select id="reminderModalDayOfWeek">
+                            <option value="0">Sunday</option>
+                            <option value="1">Monday</option>
+                            <option value="2">Tuesday</option>
+                            <option value="3">Wednesday</option>
+                            <option value="4">Thursday</option>
+                            <option value="5">Friday</option>
+                            <option value="6">Saturday</option>
                         </select>
                     </div>
                 </div>
@@ -2213,7 +2226,10 @@ button, .btn, a, .nav-refresh {
             
             // Financial
             { id: 23, title: "Check free annual credit report", notifyDate: { month: 1, day: 31 }, frequency: "yearly", link: "https://www.annualcreditreport.com" },
-            { id: 24, title: "Review & update insurance policies", notifyDate: { month: 11, day: 1 }, frequency: "yearly" }
+            { id: 24, title: "Review & update insurance policies", notifyDate: { month: 11, day: 1 }, frequency: "yearly" },
+            
+            // Weekly
+            { id: 25, title: "Kasey's injection", frequency: "weekly", dayOfWeek: 6 }
         ];
 
         async function loadLifeReminders() {
@@ -2263,6 +2279,24 @@ button, .btn, a, .nav-refresh {
                 if (snoozed > today) return snoozed;
             }
             
+            // Handle weekly reminders first (they don't need notifyDate)
+            if (reminder.frequency === 'weekly') {
+                const targetDay = reminder.dayOfWeek !== undefined ? reminder.dayOfWeek : 6; // default Saturday
+                const todayDay = today.getDay();
+                let daysAhead = targetDay - todayDay;
+                if (daysAhead < 0) daysAhead += 7;
+                // If it's today and already marked done this week, push to next week
+                if (daysAhead === 0 && reminder.lastDone) {
+                    const lastDoneDate = new Date(reminder.lastDone);
+                    lastDoneDate.setHours(0, 0, 0, 0);
+                    const daysSinceLastDone = Math.floor((today - lastDoneDate) / (1000 * 60 * 60 * 24));
+                    if (daysSinceLastDone < 1) daysAhead = 7;
+                }
+                const nextDate = new Date(today);
+                nextDate.setDate(nextDate.getDate() + daysAhead);
+                return nextDate;
+            }
+
             // Normalize notifyDate to {month, day} regardless of format
             let nd = reminder.notifyDate;
             if (typeof nd === 'string') {
@@ -2442,6 +2476,10 @@ button, .btn, a, .nav-refresh {
                     lifeReminders[index].lastDone = new Date().toISOString();
                     lifeReminders[index].snoozedUntil = null;
                     // console.log('✓ Updated yearly reminder:', lifeReminders[index]);
+                } else if (reminder.frequency === 'weekly') {
+                    // Weekly reminder - set lastDone to push to next week
+                    lifeReminders[index].lastDone = new Date().toISOString();
+                    lifeReminders[index].snoozedUntil = null;
                 } else {
                     // One-time reminder - remove it completely
                     // console.log('✓ Removing one-time reminder:', lifeReminders[index].title);
@@ -2584,7 +2622,7 @@ button, .btn, a, .nav-refresh {
                 const nextDate = new Date(getNextNotifyDate(reminder));
                 const daysUntil = getDaysUntilNotify(reminder);
                 const isOverdue = daysUntil < 0;
-                const frequencyText = reminder.frequency === 'yearly' ? 'Yearly' : 'One-time';
+                const frequencyText = reminder.frequency === 'yearly' ? 'Yearly' : reminder.frequency === 'weekly' ? 'Every ' + ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][reminder.dayOfWeek || 0] : 'One-time';
                 
                 let linkHtml = '';
                 if (reminder.link) {
@@ -2611,13 +2649,28 @@ button, .btn, a, .nav-refresh {
             }).join('');
         }
 
+        function toggleWeeklyDayPicker() {
+            const freq = document.getElementById('reminderModalFrequency').value;
+            const dayRow = document.getElementById('weeklyDayRow');
+            const dateRow = document.getElementById('reminderModalDate').closest('.reminder-form-row') || document.getElementById('reminderModalDate').parentElement;
+            if (freq === 'weekly') {
+                dayRow.style.display = '';
+                dateRow.style.display = 'none';
+            } else {
+                dayRow.style.display = 'none';
+                dateRow.style.display = '';
+            }
+        }
+
         function clearReminderForm() {
             document.getElementById('reminderModalTitle').value = '';
             document.getElementById('reminderModalDate').value = '';
             document.getElementById('reminderModalFrequency').value = 'once';
             document.getElementById('reminderModalLink').value = '';
             document.getElementById('reminderModalEditId').value = '';
+            document.getElementById('reminderModalDayOfWeek').value = '6';
             document.getElementById('reminderFormTitle').textContent = 'Add New Reminder';
+            toggleWeeklyDayPicker();
         }
 
         function editReminder(id) {
@@ -2640,6 +2693,10 @@ button, .btn, a, .nav-refresh {
             document.getElementById('reminderModalFrequency').value = reminder.frequency || 'once';
             document.getElementById('reminderModalLink').value = reminder.link || '';
             document.getElementById('reminderModalEditId').value = id;
+            if (reminder.dayOfWeek !== undefined) {
+                document.getElementById('reminderModalDayOfWeek').value = reminder.dayOfWeek;
+            }
+            toggleWeeklyDayPicker();
             document.getElementById('reminderFormTitle').textContent = 'Edit Reminder';
             
             document.querySelector('.reminder-modal').scrollTop = 0;
@@ -2660,32 +2717,40 @@ button, .btn, a, .nav-refresh {
             const editId = document.getElementById('reminderModalEditId').value;
             
             if (!title) { alert('Please enter a reminder title'); return; }
-            if (!date) { alert('Please select a notify date'); return; }
+            if (frequency !== 'weekly' && !date) { alert('Please select a notify date'); return; }
             
-            const dateParts = date.split('-');
-            const notifyDateObj = {
-                month: parseInt(dateParts[1], 10),
-                day: parseInt(dateParts[2], 10)
-            };
+            let notifyDateObj = null;
+            if (date) {
+                const dateParts = date.split('-');
+                notifyDateObj = {
+                    month: parseInt(dateParts[1], 10),
+                    day: parseInt(dateParts[2], 10)
+                };
+            }
+            
+            const dayOfWeek = frequency === 'weekly' ? parseInt(document.getElementById('reminderModalDayOfWeek').value, 10) : undefined;
             
             if (editId) {
                 const index = lifeReminders.findIndex(r => String(r.id) === String(editId));
                 if (index !== -1) {
                     lifeReminders[index].title = title;
-                    lifeReminders[index].notifyDate = notifyDateObj;
+                    if (notifyDateObj) lifeReminders[index].notifyDate = notifyDateObj;
                     lifeReminders[index].frequency = frequency;
                     lifeReminders[index].link = link || null;
+                    if (dayOfWeek !== undefined) lifeReminders[index].dayOfWeek = dayOfWeek;
+                    else delete lifeReminders[index].dayOfWeek;
                 }
             } else {
                 const newReminder = {
                     id: Date.now().toString(),
                     title: title,
-                    notifyDate: notifyDateObj,
                     frequency: frequency,
                     link: link || null,
                     lastDone: null,
                     snoozedUntil: null
                 };
+                if (notifyDateObj) newReminder.notifyDate = notifyDateObj;
+                if (dayOfWeek !== undefined) newReminder.dayOfWeek = dayOfWeek;
                 lifeReminders.push(newReminder);
             }
             
