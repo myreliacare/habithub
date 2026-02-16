@@ -1292,6 +1292,118 @@
             }
         }
         /* ===== END MOBILE OPTIMIZATION ===== */
+
+        /* ===== WELLNESS TRACKER ===== */
+        .wellness-subsection {
+            margin-bottom: 28px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid rgba(123, 168, 134, 0.15);
+        }
+        .wellness-subsection:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .wellness-subsection:has(+ .wellness-history-divider) { border-bottom: none; padding-bottom: 8px; }
+        .wellness-subtitle {
+            color: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            letter-spacing: 0.02em;
+        }
+        .wellness-add-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .wellness-input {
+            padding: 8px 10px;
+            font-size: 0.85rem;
+            font-family: inherit;
+            flex: 1;
+            min-width: 90px;
+            color: inherit;
+        }
+        .wellness-input-wide { flex: 2; min-width: 140px; }
+        .wellness-input:focus { outline: none; }
+        .wellness-add-btn {
+            flex: 0 0 auto !important;
+            padding: 8px 14px !important;
+            font-size: 0.8rem !important;
+            white-space: nowrap;
+        }
+        .wellness-table-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .wellness-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        .wellness-table th {
+            color: #7ba886;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 6px 10px;
+            text-align: left;
+            border-bottom: 1px solid rgba(123, 168, 134, 0.25);
+            white-space: nowrap;
+        }
+        .wellness-table td {
+            color: inherit;
+            padding: 8px 10px;
+            border-bottom: 1px solid rgba(123, 168, 134, 0.08);
+            white-space: nowrap;
+        }
+        .wellness-table tr:hover td {
+            background: rgba(123, 168, 134, 0.06);
+        }
+        .wellness-delete-btn {
+            background: none;
+            border: none;
+            color: #b59197;
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 2px 6px;
+            line-height: 1;
+            opacity: 0.5;
+        }
+        .wellness-delete-btn:hover { opacity: 1; }
+        .wellness-change-pos { color: #7ba886; font-size: 0.8rem; }
+        .wellness-change-neg { color: #b59197; font-size: 0.8rem; }
+        .wellness-change-zero { color: #7a6668; font-size: 0.8rem; }
+        .wellness-empty { color: #7a6668; font-style: italic; padding: 12px 0; font-size: 0.85rem; }
+        .wellness-history-divider {
+            border: none;
+            border-top: 1px solid rgba(123, 168, 134, 0.3);
+            margin: 0 0 24px;
+            text-align: center;
+        }
+        .wellness-history-divider::after {
+            content: 'history';
+            display: inline-block;
+            position: relative;
+            top: -0.7em;
+            padding: 0 14px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #7a6668;
+            font-weight: 600;
+        }
+        @media (max-width: 480px) {
+            .wellness-add-row { flex-direction: column; }
+            .wellness-input, .wellness-input-wide { min-width: 100%; flex: unset; }
+            .wellness-add-btn { width: auto; align-self: flex-end; }
+            .wellness-measure-row { flex-direction: row !important; flex-wrap: wrap; }
+            .wellness-measure-row .wellness-input { min-width: 0 !important; flex: 1 1 30% !important; }
+            .wellness-measure-row .wellness-add-btn { flex: 0 0 auto !important; }
+            .wellness-table { font-size: 0.78rem; }
+            .wellness-table th, .wellness-table td { padding: 6px 6px; }
+        }
+        /* ===== END WELLNESS TRACKER ===== */
     </style>
 </head>
 <body>
@@ -1340,6 +1452,7 @@
                 <option value="home">Dream Home</option>
                 <option value="pets">Future Pets</option>
                 <option value="traditions">Traditions</option>
+                <option value="wellness">Wellness</option>
             </select>
         </div>
 
@@ -2045,6 +2158,103 @@
 
                 <div class="dream-list" id="traditions-list">
                     <div class="empty-state">What traditions do you want to create together?</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- WELLNESS TAB -->
+        <div id="wellness-tab" class="dreams-tab">
+            <div class="section">
+                <h2 class="section-title">Wellness Tracker</h2>
+
+                <!-- ═══ ALL ENTRY FORMS ═══ -->
+                <div class="wellness-subsection">
+                    <h3 class="wellness-subtitle">Log Injection</h3>
+                    <div class="wellness-add-row">
+                        <input type="date" id="injectionDate" class="wellness-input">
+                        <input type="text" id="injectionDose" class="wellness-input" placeholder="Dose (e.g. 0.25mg)">
+                        <input type="text" id="injectionNotes" class="wellness-input wellness-input-wide" placeholder="Notes (optional)">
+                        <button class="add-dream-btn wellness-add-btn" onclick="addInjection()">+ Add</button>
+                    </div>
+                </div>
+
+                <div class="wellness-subsection">
+                    <h3 class="wellness-subtitle">Log Weigh-In</h3>
+                    <div class="wellness-add-row">
+                        <input type="date" id="weightDate" class="wellness-input">
+                        <input type="number" id="weightKasey" class="wellness-input" placeholder="Kasey (lbs)" step="0.1" data-lh-name="person1">
+                        <input type="number" id="weightCharlie" class="wellness-input" placeholder="Charlie (lbs)" step="0.1" data-lh-name="person2">
+                        <button class="add-dream-btn wellness-add-btn" onclick="addWeight()">+ Add</button>
+                    </div>
+                </div>
+
+                <div class="wellness-subsection">
+                    <h3 class="wellness-subtitle"><span data-lh-name="person1">Kasey's</span> Measurements</h3>
+                    <div class="wellness-add-row wellness-measure-row">
+                        <input type="date" id="measureDate1" class="wellness-input">
+                        <input type="number" id="measureBust1" class="wellness-input" placeholder="Bust" step="0.1">
+                        <input type="number" id="measureWaist1" class="wellness-input" placeholder="Waist" step="0.1">
+                        <input type="number" id="measureHips1" class="wellness-input" placeholder="Hips" step="0.1">
+                        <input type="number" id="measureArm1" class="wellness-input" placeholder="Arm" step="0.1">
+                        <input type="number" id="measureThigh1" class="wellness-input" placeholder="Thigh" step="0.1">
+                        <button class="add-dream-btn wellness-add-btn" onclick="addMeasurement('person1')">+ Add</button>
+                    </div>
+                </div>
+
+                <div class="wellness-subsection">
+                    <h3 class="wellness-subtitle"><span data-lh-name="person2">Charlie's</span> Measurements</h3>
+                    <div class="wellness-add-row wellness-measure-row">
+                        <input type="date" id="measureDate2" class="wellness-input">
+                        <input type="number" id="measureChest2" class="wellness-input" placeholder="Chest" step="0.1">
+                        <input type="number" id="measureWaist2" class="wellness-input" placeholder="Waist" step="0.1">
+                        <input type="number" id="measureHips2" class="wellness-input" placeholder="Hips" step="0.1">
+                        <input type="number" id="measureArm2" class="wellness-input" placeholder="Arm" step="0.1">
+                        <input type="number" id="measureThigh2" class="wellness-input" placeholder="Thigh" step="0.1">
+                        <button class="add-dream-btn wellness-add-btn" onclick="addMeasurement('person2')">+ Add</button>
+                    </div>
+                </div>
+
+                <!-- ═══ ALL HISTORY ═══ -->
+                <div class="wellness-history-divider"></div>
+
+                <div class="wellness-subsection">
+                    <h3 class="wellness-subtitle">Injection History</h3>
+                    <div id="injectionList" class="wellness-table-wrap">
+                        <table class="wellness-table">
+                            <thead><tr><th>Date</th><th>Dose</th><th>Notes</th><th></th></tr></thead>
+                            <tbody id="injectionBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="wellness-subsection">
+                    <h3 class="wellness-subtitle">Weight History</h3>
+                    <div id="weightList" class="wellness-table-wrap">
+                        <table class="wellness-table">
+                            <thead><tr><th>Date</th><th data-lh-name="person1">Kasey</th><th data-lh-name="person2">Charlie</th><th>Change</th><th></th></tr></thead>
+                            <tbody id="weightBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="wellness-subsection">
+                    <h3 class="wellness-subtitle"><span data-lh-name="person1">Kasey's</span> Measurement History</h3>
+                    <div id="measureList1" class="wellness-table-wrap">
+                        <table class="wellness-table wellness-table-wide">
+                            <thead><tr><th>Date</th><th>Bust</th><th>Waist</th><th>Hips</th><th>Arm</th><th>Thigh</th><th></th></tr></thead>
+                            <tbody id="measureBody1"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="wellness-subsection">
+                    <h3 class="wellness-subtitle"><span data-lh-name="person2">Charlie's</span> Measurement History</h3>
+                    <div id="measureList2" class="wellness-table-wrap">
+                        <table class="wellness-table wellness-table-wide">
+                            <thead><tr><th>Date</th><th>Chest</th><th>Waist</th><th>Hips</th><th>Arm</th><th>Thigh</th><th></th></tr></thead>
+                            <tbody id="measureBody2"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -2849,6 +3059,212 @@
             }
         }
 
+        // ===== WELLNESS TRACKER =====
+        var wellnessData = { injections: [], weights: [], measurements: [] };
+
+        function loadWellnessLocal() {
+            try {
+                var d = localStorage.getItem('dreams_wellness');
+                if (d) wellnessData = JSON.parse(d);
+            } catch(e) {}
+            // Ensure arrays exist
+            if (!wellnessData.injections) wellnessData.injections = [];
+            if (!wellnessData.weights) wellnessData.weights = [];
+            if (!wellnessData.measurements_person1) wellnessData.measurements_person1 = wellnessData.measurements || [];
+            if (!wellnessData.measurements_person2) wellnessData.measurements_person2 = [];
+            delete wellnessData.measurements; // migrate old key
+        }
+
+        function saveWellnessLocal() {
+            try { localStorage.setItem('dreams_wellness', JSON.stringify(wellnessData)); } catch(e) {}
+        }
+
+        function syncWellnessToFirestore() {
+            if (window.dreamsDb && window.fsModule) {
+                try {
+                    var docRef = window.fsModule.doc(window.dreamsDb, 'dreams', 'wellness');
+                    window.fsModule.setDoc(docRef, wellnessData).catch(function(err) {});
+                } catch(e) {}
+            }
+        }
+
+        function saveWellness() {
+            saveWellnessLocal();
+            syncWellnessToFirestore();
+        }
+
+        function fmtDate(dateStr) {
+            if (!dateStr) return '';
+            var d = new Date(dateStr + 'T00:00:00');
+            return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        function todayStr() {
+            var d = new Date();
+            return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+        }
+
+        // --- Injections ---
+        window.addInjection = function() {
+            var dateInput = document.getElementById('injectionDate');
+            var doseInput = document.getElementById('injectionDose');
+            var notesInput = document.getElementById('injectionNotes');
+            var date = dateInput.value || todayStr();
+            var dose = doseInput.value.trim();
+            if (!dose) { doseInput.focus(); return; }
+            wellnessData.injections.unshift({ id: Date.now().toString(), date: date, dose: dose, notes: notesInput.value.trim() });
+            wellnessData.injections.sort(function(a,b) { return b.date.localeCompare(a.date); });
+            saveWellness();
+            renderInjections();
+            dateInput.value = ''; doseInput.value = ''; notesInput.value = '';
+        };
+
+        window.deleteInjection = function(id) {
+            wellnessData.injections = wellnessData.injections.filter(function(r) { return r.id !== id; });
+            saveWellness();
+            renderInjections();
+        };
+
+        function renderInjections() {
+            var tbody = document.getElementById('injectionBody');
+            if (!wellnessData.injections.length) {
+                tbody.innerHTML = '<tr><td colspan="4" class="wellness-empty">No injections logged yet</td></tr>';
+                return;
+            }
+            tbody.innerHTML = wellnessData.injections.map(function(r) {
+                return '<tr><td>' + fmtDate(r.date) + '</td><td>' + escapeHtml(r.dose) + '</td><td>' + escapeHtml(r.notes || '') + '</td><td><button class="wellness-delete-btn" onclick="deleteInjection(\'' + r.id + '\')">&times;</button></td></tr>';
+            }).join('');
+        }
+
+        // --- Weights ---
+        window.addWeight = function() {
+            var dateInput = document.getElementById('weightDate');
+            var k = document.getElementById('weightKasey');
+            var c = document.getElementById('weightCharlie');
+            var date = dateInput.value || todayStr();
+            var kv = k.value ? parseFloat(k.value) : null;
+            var cv = c.value ? parseFloat(c.value) : null;
+            if (kv === null && cv === null) { k.focus(); return; }
+            wellnessData.weights.unshift({ id: Date.now().toString(), date: date, kasey: kv, charlie: cv });
+            wellnessData.weights.sort(function(a,b) { return b.date.localeCompare(a.date); });
+            saveWellness();
+            renderWeights();
+            dateInput.value = ''; k.value = ''; c.value = '';
+        };
+
+        window.deleteWeight = function(id) {
+            wellnessData.weights = wellnessData.weights.filter(function(r) { return r.id !== id; });
+            saveWellness();
+            renderWeights();
+        };
+
+        function weightChange(entries, index, person) {
+            if (index >= entries.length - 1) return '';
+            var current = entries[index][person];
+            var prev = entries[index + 1][person];
+            if (current === null || prev === null) return '';
+            var diff = current - prev;
+            if (diff === 0) return '<span class="wellness-change-zero">0</span>';
+            var sign = diff > 0 ? '+' : '';
+            var cls = diff < 0 ? 'wellness-change-neg' : 'wellness-change-pos';
+            return '<span class="' + cls + '">' + sign + diff.toFixed(1) + '</span>';
+        }
+
+        function renderWeights() {
+            var tbody = document.getElementById('weightBody');
+            var names = window.LifeHubSettings ? window.LifeHubSettings.current.names : { name1: 'Kasey', name2: 'Charlie' };
+            // Update header names
+            document.querySelectorAll('#weightList th[data-lh-name="person1"]').forEach(function(el) { el.textContent = names.name1; });
+            document.querySelectorAll('#weightList th[data-lh-name="person2"]').forEach(function(el) { el.textContent = names.name2; });
+            if (!wellnessData.weights.length) {
+                tbody.innerHTML = '<tr><td colspan="5" class="wellness-empty">No weigh-ins logged yet</td></tr>';
+                return;
+            }
+            tbody.innerHTML = wellnessData.weights.map(function(r, i) {
+                var kStr = r.kasey !== null ? r.kasey.toFixed(1) : '—';
+                var cStr = r.charlie !== null ? r.charlie.toFixed(1) : '—';
+                var changeK = weightChange(wellnessData.weights, i, 'kasey');
+                var changeC = weightChange(wellnessData.weights, i, 'charlie');
+                var changeStr = '';
+                if (changeK || changeC) changeStr = (changeK || '') + (changeK && changeC ? ' / ' : '') + (changeC || '');
+                return '<tr><td>' + fmtDate(r.date) + '</td><td>' + kStr + '</td><td>' + cStr + '</td><td>' + changeStr + '</td><td><button class="wellness-delete-btn" onclick="deleteWeight(\'' + r.id + '\')">&times;</button></td></tr>';
+            }).join('');
+        }
+
+        // --- Measurements (per person) ---
+        window.addMeasurement = function(person) {
+            var suffix = person === 'person1' ? '1' : '2';
+            var key = 'measurements_' + person;
+            var dateInput = document.getElementById('measureDate' + suffix);
+            var date = dateInput.value || todayStr();
+            var fieldIds = person === 'person1'
+                ? ['measureBust1','measureWaist1','measureHips1','measureArm1','measureThigh1']
+                : ['measureChest2','measureWaist2','measureHips2','measureArm2','measureThigh2'];
+            var fieldKeys = person === 'person1'
+                ? ['bust','waist','hips','arm','thigh']
+                : ['chest','waist','hips','arm','thigh'];
+            var entry = { id: Date.now().toString(), date: date };
+            var hasValue = false;
+            fieldKeys.forEach(function(fk, i) {
+                var el = document.getElementById(fieldIds[i]);
+                entry[fk] = el.value ? parseFloat(el.value) : null;
+                if (entry[fk] !== null) hasValue = true;
+            });
+            if (!hasValue) { document.getElementById(fieldIds[0]).focus(); return; }
+            wellnessData[key].unshift(entry);
+            wellnessData[key].sort(function(a,b) { return b.date.localeCompare(a.date); });
+            saveWellness();
+            renderMeasurements(person);
+            dateInput.value = '';
+            fieldIds.forEach(function(id) { document.getElementById(id).value = ''; });
+        };
+
+        window.deleteMeasurement = function(person, id) {
+            var key = 'measurements_' + person;
+            wellnessData[key] = wellnessData[key].filter(function(r) { return r.id !== id; });
+            saveWellness();
+            renderMeasurements(person);
+        };
+
+        function measureChange(entries, index, field) {
+            if (index >= entries.length - 1) return '';
+            var current = entries[index][field];
+            var prev = entries[index + 1][field];
+            if (current === null || current === undefined || prev === null || prev === undefined) return '';
+            var diff = current - prev;
+            if (diff === 0) return '';
+            var sign = diff > 0 ? '+' : '';
+            var cls = diff < 0 ? 'wellness-change-neg' : 'wellness-change-pos';
+            return ' <span class="' + cls + '">(' + sign + diff.toFixed(1) + ')</span>';
+        }
+
+        function renderMeasurements(person) {
+            var suffix = person === 'person1' ? '1' : '2';
+            var key = 'measurements_' + person;
+            var tbody = document.getElementById('measureBody' + suffix);
+            var data = wellnessData[key] || [];
+            var fields = person === 'person1' ? ['bust','waist','hips','arm','thigh'] : ['chest','waist','hips','arm','thigh'];
+            if (!data.length) {
+                tbody.innerHTML = '<tr><td colspan="7" class="wellness-empty">No measurements logged yet</td></tr>';
+                return;
+            }
+            tbody.innerHTML = data.map(function(r, i) {
+                var cells = fields.map(function(f) {
+                    var val = r[f] !== null && r[f] !== undefined ? r[f].toFixed(1) + '"' + measureChange(data, i, f) : '—';
+                    return '<td>' + val + '</td>';
+                }).join('');
+                return '<tr><td>' + fmtDate(r.date) + '</td>' + cells + '<td><button class="wellness-delete-btn" onclick="deleteMeasurement(\'' + person + '\',\'' + r.id + '\')">&times;</button></td></tr>';
+            }).join('');
+        }
+
+        function renderAllWellness() {
+            renderInjections();
+            renderWeights();
+            renderMeasurements('person1');
+            renderMeasurements('person2');
+        }
+        // ===== END WELLNESS TRACKER =====
+
         // === LOAD LOCAL DATA IMMEDIATELY ===
         categories.forEach(function(cat) {
             dreams[cat] = loadFromLocal(cat);
@@ -2856,6 +3272,10 @@
             saveToLocal(cat);
             renderDreams(cat);
         });
+
+        // Load wellness tracker data
+        loadWellnessLocal();
+        renderAllWellness();
 
         // === LOAD FIREBASE (FIRESTORE) IN BACKGROUND ===
         (async function() {
@@ -2940,6 +3360,31 @@
                         // Firestore error -- keep using local data
                     });
                 });
+
+                // Wellness tracker real-time listener
+                (function() {
+                    var wellnessRef = fsModule.doc(db, 'dreams', 'wellness');
+                    var ignoreWellness = false;
+                    fsModule.onSnapshot(wellnessRef, function(snapshot) {
+                        if (ignoreWellness) { ignoreWellness = false; return; }
+                        if (snapshot.exists()) {
+                            var data = snapshot.data();
+                            if (data.injections) wellnessData.injections = data.injections;
+                            if (data.weights) wellnessData.weights = data.weights;
+                            if (data.measurements_person1) wellnessData.measurements_person1 = data.measurements_person1;
+                            else if (data.measurements) wellnessData.measurements_person1 = data.measurements; // migrate
+                            if (data.measurements_person2) wellnessData.measurements_person2 = data.measurements_person2;
+                            saveWellnessLocal();
+                            renderAllWellness();
+                        } else {
+                            // No data in Firestore yet -- push local up
+                            if (wellnessData.injections.length || wellnessData.weights.length || wellnessData.measurements_person1.length || wellnessData.measurements_person2.length) {
+                                ignoreWellness = true;
+                                syncWellnessToFirestore();
+                            }
+                        }
+                    }, function(error) {});
+                })();
 
             } catch(e) {
                 // Firebase failed to load -- local storage still works
