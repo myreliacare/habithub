@@ -955,6 +955,7 @@
         }
         .modal-container.kasey-modal .modal-section li .step-number {
             background: var(--lh-secondary, #e8b4b8);
+            color: #2a1f21;
         }
         .modal-container.kasey-modal .tip-box {
             background: var(--lh-secondary-muted, rgba(232,180,184,0.1));
@@ -1673,7 +1674,7 @@
 <a href="settings.html" class="nav-link">Settings</a>
 </div>
 <div style="display:flex;align-items:center;gap:2px;">
-<button onclick="location.reload()" aria-label="Refresh" style="background:none;border:none;color:rgba(224,210,208,0.6);font-size:1.2rem;cursor:pointer;padding:6px;">&#x21bb;</button>
+<button onclick="location.reload()" aria-label="Refresh" style="background:none;border:none;color:var(--lh-accent, #a3b899);font-size:1.2rem;cursor:pointer;padding:6px;">&#x21bb;</button>
 <button class="nav-hamburger" id="navHamburger" onclick="toggleNav()" aria-label="Menu">
     <span></span>
     <span></span>
@@ -1738,9 +1739,9 @@
         <div class="calendar-header-row" style="display:none;">
             <span id="cal-month-label">FEBRUARY 2026</span>
         </div>
-        <div class="week-label">WEEK 1 <span id="week1-range"></span> <button onclick="regenWeek(1)" style="float:right;background:none;border:1px solid rgba(163,184,153,0.3);color:var(--sage-green);font-family:'Philosopher',serif;font-size:0.55rem;padding:2px 8px;border-radius:4px;cursor:pointer;opacity:0.6;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">↻ Regenerate</button></div>
+        <div class="week-label">WEEK 1 <span id="week1-range"></span> <button onclick="regenWeek(1)" style="float:right;background:none;border:1px solid var(--lh-secondary-border, rgba(232,180,184,0.3));color:var(--lh-secondary, #e8b4b8);font-family:'Philosopher',serif;font-size:0.55rem;padding:2px 8px;border-radius:4px;cursor:pointer;opacity:0.6;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">↻ Regenerate</button></div>
         <div class="week-grid" id="week1"></div>
-        <div class="week-label">WEEK 2 <span id="week2-range"></span> <button onclick="regenWeek(2)" style="float:right;background:none;border:1px solid rgba(163,184,153,0.3);color:var(--sage-green);font-family:'Philosopher',serif;font-size:0.55rem;padding:2px 8px;border-radius:4px;cursor:pointer;opacity:0.6;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">↻ Regenerate</button></div>
+        <div class="week-label">WEEK 2 <span id="week2-range"></span> <button onclick="regenWeek(2)" style="float:right;background:none;border:1px solid var(--lh-secondary-border, rgba(232,180,184,0.3));color:var(--lh-secondary, #e8b4b8);font-family:'Philosopher',serif;font-size:0.55rem;padding:2px 8px;border-radius:4px;cursor:pointer;opacity:0.6;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">↻ Regenerate</button></div>
         <div class="week-grid" id="week2"></div>
     </div>
     
@@ -2449,27 +2450,27 @@ const mealData = {
         goals: { protein: "140-165g", calories: "1,500-1,700" },
         days: [
             {
-                day: 1, theme: "Bolognese Night", protein: "143g", calories: "1,580", prep: "PREP DAY — Prep Session 1 + Grocery Run 1 (covers Week 1)",
+                day: 1, theme: "Bolognese Night", protein: "137g", calories: "1,520", prep: "PREP DAY — Prep Session 1 + Grocery Run 1 (covers Week 1)",
                 meals: [
-                    { type: "Breakfast", icon: "🌅", name: "Cacao Berry Smoothie Bowl", portion: "42g protein - 420 cal", color: "#a3b899",
+                    { type: "Breakfast", icon: "🌅", name: "Cacao Berry Smoothie Bowl", portion: "40g protein - 320 cal", color: "#a3b899",
                         ingredients: ["1 cup unsweetened almond milk", "1.5 tbsp cacao powder (NOT Dutch-processed)", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "1 scoop ON Gold Standard Banana Cream whey", "1/2 cup frozen blueberries", "1/2 cup nonfat Greek yogurt", "--- TOPPINGS ---", "2 tbsp walnuts, chopped", "1 tbsp ground flaxseed", "1 tsp honey"],
                         steps: ["Blend almond milk, cacao, collagen, L-glutamine, MCT oil, whey, blueberries, and yogurt until thick.", "Pour into bowl.", "Top with walnuts, flaxseed, honey drizzle."],
                         tip: "Prep day fuel! Blend this up first thing — full supplement stack to power through your big cook. Frozen blueberries from the freezer, no fresh produce needed.",
                         portions: ["42g protein", "420 cal", "8g fiber", "5 min"]
                     },
-                    { type: "Lunch", icon: "☀️", name: "Chipotle Chicken Wrap", portion: "42g protein - 460 cal", color: "#a3b899",
+                    { type: "Lunch", icon: "☀️", name: "Chipotle Chicken Wrap", portion: "40g protein - 360 cal", color: "#a3b899",
                         ingredients: ["4 oz shredded chicken (from prep)", "1 Mission Carb Balance tortilla", "1 tbsp chipotle in adobo, minced", "1/4 cup cooked brown rice", "2 tbsp Mexican blend shredded cheese", "2 tbsp salsa", "Squeeze of lime"],
                         steps: ["Warm tortilla in a dry pan or microwave 15 sec.", "Layer rice, chicken, chipotle, cheese, salsa.", "Squeeze lime over. Wrap and eat."],
                         tip: "Cook the chicken first thing during prep — by lunchtime you'll have smoky chipotle chicken ready to wrap. Capsaicin from chipotles is thermogenic and anti-inflammatory.",
                         portions: ["42g protein", "460 cal", "9g fiber", "5 min"]
                     },
-                    { type: "Dinner", icon: "🌙", name: "Cauliflower Bolognese over Protein Spaghetti", portion: "45g protein - 530 cal", color: "#a3b899",
+                    { type: "Dinner", icon: "🌙", name: "Cauliflower Bolognese over Protein Spaghetti", portion: "43g protein - 400 cal", color: "#a3b899",
                         ingredients: ["9 oz ground turkey (93% lean)", "2 cups frozen riced cauliflower", "2 cups marinara sauce", "7 oz Kroger Protein Grain & Legume Spaghetti", "1/4 cup diced onion", "2 cloves garlic, minced", "1 tbsp olive oil", "2 tbsp shredded Parmesan", "Red pepper flakes", "1/2 tsp Italian seasoning", "Pinch of sugar (optional — cuts acidity)", "Salt, pepper"],
                         steps: ["Boil water for spaghetti. Cook protein pasta 1 min LESS than package says (it'll finish cooking in sauce).", "While pasta cooks: heat olive oil in a large skillet. Sauté onion 3 min until softened.", "Add garlic, cook 30 sec until fragrant.", "Add ground turkey, break into small crumbles. Cook 5-6 min until browned.", "Stir in riced cauliflower, cook 3 min until it softens and disappears into the meat.", "Pour in marinara. Add Italian seasoning, red pepper flakes, and optional pinch of sugar. Simmer 10 min.", "Drain pasta, toss directly into the sauce. Let it absorb for 1 min.", "Plate and top with Parmesan. Crack more black pepper on top.", "PLATE FOR TWO: Kasey = smaller portion (~4 oz turkey, 3 oz pasta). Charlie = larger portion (~5 oz turkey, 4 oz pasta). Eyeball roughly 40/60 split on the sauce and veggies."],
                         tip: "Cauliflower is cruciferous — ricing it into the sauce sneaks in cancer-fighting sulforaphane without anyone noticing. The protein spaghetti adds extra fiber. Cooked tomato sauce = maximum lycopene. The pinch of sugar is a restaurant trick to balance the acid.",
                         portions: ["45g protein", "530 cal", "10g fiber", "25 min"]
                     },
-                    { type: "Dessert", icon: "🍨", name: "Yogurt Bark", portion: "14g protein - 170 cal", color: "#c4a882",
+                    { type: "Dessert", icon: "🍨", name: "Yogurt Bark", portion: "14g protein - 140 cal", color: "#c4a882",
                         ingredients: ["1 cup nonfat Greek yogurt", "1 tsp honey", "1/2 tsp vanilla extract", "3/4 cup fresh berries (raspberries, blueberries, or mixed)", "1 tbsp mini dark chocolate chips", "1 tbsp crushed walnuts", "1 tsp chia seeds"],
                         steps: ["Grab from prep — already made and frozen during your prep session. Break off a piece and enjoy."],
                         tip: "Already prepped! Berries have the highest antioxidant content of any fruit — ellagic acid is a potent anti-cancer compound. Walnuts add omega-3s, chia adds fiber.",
@@ -2478,27 +2479,27 @@ const mealData = {
                 ]
             },
             {
-                day: 2, theme: "Italian Comfort", protein: "143g", calories: "1,550",
+                day: 2, theme: "Italian Comfort", protein: "137g", calories: "1,490",
                 meals: [
-                    { type: "Breakfast", icon: "🌅", name: "Kefir Berry Smoothie", portion: "35g protein - 380 cal", color: "#a3b899",
+                    { type: "Breakfast", icon: "🌅", name: "Kefir Berry Smoothie", portion: "33g protein - 280 cal", color: "#a3b899",
                         ingredients: ["1 cup Lifeway strawberry kefir", "1/2 cup frozen mixed berries", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "1/2 banana"],
                         steps: ["Add all ingredients to a blender.", "Blend until smooth, about 30 seconds.", "Pour and drink."],
                         tip: "Kefir has 12+ strains of probiotics vs yogurt's 2-3. This is a gut health powerhouse. The frozen berries make it thick like a milkshake.",
                         portions: ["35g protein", "380 cal", "4g fiber", "3 min"]
                     },
-                    { type: "Lunch", icon: "☀️", name: "Lemony Chicken & Grain Bowl", portion: "42g protein - 480 cal", color: "#a3b899",
+                    { type: "Lunch", icon: "☀️", name: "Lemony Chicken & Grain Bowl", portion: "40g protein - 380 cal", color: "#a3b899",
                         ingredients: ["5 oz grilled chicken (from prep)", "1/2 cup cooked farro or quinoa (from prep)", "1/4 cup chickpeas", "1/4 cup roasted red peppers (jarred)", "1 cup spinach", "1 tbsp olive oil", "Juice of 1/2 lemon", "Garlic powder, red pepper flakes"],
                         steps: ["Reheat chicken and grains.", "Toss spinach with olive oil and lemon juice to slightly wilt.", "Assemble bowl: grains, chicken, chickpeas, roasted red peppers, spinach.", "Sprinkle with garlic powder and red pepper flakes."],
                         tip: "Chickpeas provide folate for DNA repair. Roasted red peppers are loaded with vitamin C. The lemon-olive oil dressing is classic Mediterranean.",
                         portions: ["42g protein", "480 cal", "8g fiber", "3 min reheat"]
                     },
-                    { type: "Dinner", icon: "🌙", name: "Turkey & Ricotta Stuffed Zucchini Boats", portion: "46g protein - 520 cal", color: "#a3b899",
+                    { type: "Dinner", icon: "🌙", name: "Turkey & Ricotta Stuffed Zucchini Boats", portion: "44g protein - 390 cal", color: "#a3b899",
                         ingredients: ["3 medium zucchini, halved lengthwise", "9 oz ground turkey (93% lean)", "1 cup ricotta cheese", "2 cups baby spinach, chopped", "2 cloves garlic, minced", "1/4 cup shredded Parmesan", "1 cup marinara sauce", "1 cup shredded mozzarella", "Italian seasoning, red pepper flakes", "1 tbsp olive oil"],
                         steps: ["Preheat oven to 375°F. Halve zucchini lengthwise and scoop out the centers with a spoon (save the scooped bits).", "Heat olive oil in a skillet. Brown ground turkey with garlic, breaking into small crumbles. Season with Italian seasoning and red pepper flakes.", "Chop the scooped zucchini centers and stir into the turkey along with spinach. Cook 1-2 min until spinach wilts.", "Remove from heat. Stir in ricotta and half the Parmesan.", "Fill each zucchini half with the turkey-ricotta mixture, packing it in.", "Spoon marinara over the top. Pile on mozzarella and remaining Parmesan.", "Bake 25-30 min until zucchini is tender and cheese is golden and bubbly.", "PLATE FOR TWO: Make 6 boat halves total. Kasey = 2 halves. Charlie = 3-4 halves. Extra sauce spooned over both."],
                         tip: "Use the fresh zucchini and ricotta tonight before they go bad. The turkey gives it substance and the scooped zucchini centers go right back into the filling so nothing is wasted. Marinara provides lycopene. This is serious comfort food.",
                         portions: ["46g protein", "520 cal", "5g fiber", "35 min"]
                     },
-                    { type: "Dessert", icon: "🍨", name: "Chocolate Cottage Cheese Pudding", portion: "20g protein - 170 cal", color: "#c4a882",
+                    { type: "Dessert", icon: "🍨", name: "Chocolate Cottage Cheese Pudding", portion: "20g protein - 140 cal", color: "#c4a882",
                         ingredients: ["1/2 cup low-fat cottage cheese", "1.5 tbsp cacao powder (NOT Dutch-processed)", "1 tsp honey", "1/4 tsp vanilla extract", "Pinch of sea salt", "1 tbsp mini dark chocolate chips"],
                         steps: ["Blend cottage cheese, cacao, honey, vanilla, and salt until completely smooth (about 30 sec in blender or food processor).", "Scoop into a bowl. Top with chocolate chips.", "Eat immediately or chill 30 min for a firmer mousse texture."],
                         tip: "Tastes like chocolate mousse. 20g protein and under 170 cal. The salt makes the chocolate sing. Cacao flavanols are heart-healthy antioxidants.",
@@ -2507,27 +2508,27 @@ const mealData = {
                 ]
             },
             {
-                day: 3, theme: "Stew Night", protein: "143g", calories: "1,570",
+                day: 3, theme: "Stew Night", protein: "137g", calories: "1,510",
                 meals: [
-                    { type: "Breakfast", icon: "🌅", name: "Peach Cobbler Overnight Oats", portion: "38g protein - 410 cal", color: "#a3b899",
+                    { type: "Breakfast", icon: "🌅", name: "Peach Cobbler Overnight Oats", portion: "36g protein - 310 cal", color: "#a3b899",
                         ingredients: ["1/2 cup rolled oats", "1 cup unsweetened almond milk", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "1 scoop ON Gold Standard Banana Cream whey", "1 tsp chia seeds", "1 tsp cinnamon", "1/4 tsp nutmeg", "--- MORNING TOPPINGS ---", "1/2 cup frozen peaches (move to fridge night before)", "1 tbsp chopped walnuts", "1 tsp honey drizzle"],
                         steps: ["Grab your jar from prep. Move frozen peaches to fridge the night before.", "Morning: top with thawed peaches (should be soft from overnight in fridge), walnuts, honey."],
                         tip: "Made during Prep Session 1 — just grab and add toppings. Full supplement stack with warm cinnamon-nutmeg spice. Peach antioxidants + walnut omega-3s.",
                         portions: ["38g protein", "410 cal", "6g fiber", "3 min + overnight"]
                     },
-                    { type: "Lunch", icon: "☀️", name: "Chicken Burrito Bowl", portion: "43g protein - 480 cal", color: "#a3b899",
+                    { type: "Lunch", icon: "☀️", name: "Chicken Burrito Bowl", portion: "41g protein - 380 cal", color: "#a3b899",
                         ingredients: ["5 oz grilled chicken (from prep)", "1/2 cup cooked brown rice", "1/2 cup black beans", "1/4 cup corn", "2 tbsp crumbled feta", "Squeeze of lime", "Hot sauce", "1 tbsp olive oil"],
                         steps: ["Reheat chicken, rice, beans, and corn.", "Assemble bowl. Top with feta and a big squeeze of lime.", "Hot sauce to taste."],
                         tip: "Feta + lime gives this a totally different vibe than the salsa-cheese version. Black beans and whole grain rice provide resistant starch that feeds anti-cancer gut bacteria.",
                         portions: ["43g protein", "480 cal", "9g fiber", "3 min reheat"]
                     },
-                    { type: "Dinner", icon: "🌙", name: "Spicy Red Lentil & Cauliflower Stew + Chicken", portion: "48g protein - 510 cal", color: "#a3b899",
+                    { type: "Dinner", icon: "🌙", name: "Spicy Red Lentil & Cauliflower Stew + Chicken", portion: "46g protein - 380 cal", color: "#a3b899",
                         ingredients: ["9 oz grilled chicken breast (from prep)", "1 cup red lentils", "2 cups cauliflower florets", "1/2 cup diced carrots", "2 cups marinara sauce", "1/2 cup diced onion", "2 cloves garlic, minced", "Red pepper flakes, garlic powder, cumin", "1 tbsp olive oil", "Fresh parsley", "Squeeze of lemon"],
                         steps: ["Heat olive oil. Sauté onion and garlic 3 min.", "Add garlic powder, cumin, red pepper flakes. Cook 30 seconds.", "Add lentils, marinara, cauliflower, carrots, and 1.5 cups water.", "Simmer 20 min until lentils are soft and stew is thick.", "Serve topped with sliced chicken, parsley, and a squeeze of lemon.", "PLATE FOR TWO: Divide stew roughly 40/60 (Kasey/Charlie). Top Kasey's bowl with 4 oz sliced chicken, Charlie's with 5 oz. Squeeze lemon over both."],
                         tip: "Red lentils provide incredible fiber plus folate for DNA repair. Cauliflower is cruciferous (sulforaphane). Cooked tomato sauce maximizes lycopene. This is one of the most cancer-protective meals in the plan.",
                         portions: ["48g protein", "510 cal", "14g fiber", "30 min"]
                     },
-                    { type: "Dessert", icon: "🍨", name: "Yogurt Bark", portion: "14g protein - 170 cal", color: "#c4a882",
+                    { type: "Dessert", icon: "🍨", name: "Yogurt Bark", portion: "14g protein - 140 cal", color: "#c4a882",
                         ingredients: ["1 cup nonfat Greek yogurt", "1 tsp honey", "1/2 tsp vanilla extract", "3/4 cup fresh berries (raspberries, blueberries, or mixed)", "1 tbsp mini dark chocolate chips", "1 tbsp crushed walnuts", "1 tsp chia seeds"],
                         steps: ["Grab from prep — already made and frozen during your prep session. Break off a piece and enjoy."],
                         tip: "Already prepped! Berries have the highest antioxidant content of any fruit — ellagic acid is a potent anti-cancer compound. Walnuts add omega-3s, chia adds fiber.",
@@ -2536,27 +2537,27 @@ const mealData = {
                 ]
             },
             {
-                day: 4, theme: "Enchilada Night", protein: "138g", calories: "1,520", prep: "PREP DAY — Prep Session 2 (mid-week refresh)",
+                day: 4, theme: "Enchilada Night", protein: "132g", calories: "1,460", prep: "PREP DAY — Prep Session 2 (mid-week refresh)",
                 meals: [
-                    { type: "Breakfast", icon: "🌅", name: "Protein Yogurt Parfait", portion: "30g protein - 350 cal", color: "#a3b899",
+                    { type: "Breakfast", icon: "🌅", name: "Protein Yogurt Parfait", portion: "28g protein - 250 cal", color: "#a3b899",
                         ingredients: ["1 cup Oikos Triple Zero vanilla Greek yogurt", "1/2 cup fresh strawberries, sliced", "2 tbsp walnuts, chopped", "1 tsp honey drizzle"],
                         steps: ["Scoop yogurt into a bowl.", "Top with fresh strawberries, walnuts, and honey."],
                         tip: "Use up those fresh strawberries! Ellagic acid in strawberries has been shown to suppress cancer cell growth. Yogurt probiotics support gut health.",
                         portions: ["30g protein", "350 cal", "3g fiber", "3 min"]
                     },
-                    { type: "Lunch", icon: "☀️", name: "Chipotle Chicken Wrap", portion: "42g protein - 460 cal", color: "#a3b899",
+                    { type: "Lunch", icon: "☀️", name: "Chipotle Chicken Wrap", portion: "40g protein - 360 cal", color: "#a3b899",
                         ingredients: ["4 oz shredded chicken (from prep)", "1 Mission Carb Balance tortilla", "1 tbsp chipotle in adobo, minced", "1/4 cup cooked brown rice", "2 tbsp Mexican blend shredded cheese", "2 tbsp salsa", "Squeeze of lime"],
                         steps: ["Warm tortilla in a dry pan or microwave 15 sec.", "Layer rice, chicken, chipotle, cheese, salsa.", "Squeeze lime over. Wrap and eat."],
                         tip: "Same great wrap from prep — still delicious, still easy. The carb balance tortilla keeps this high-fiber and high-protein.",
                         portions: ["42g protein", "460 cal", "9g fiber", "5 min"]
                     },
-                    { type: "Dinner", icon: "🌙", name: "Spicy Turkey Enchiladas", portion: "46g protein - 540 cal", color: "#a3b899",
+                    { type: "Dinner", icon: "🌙", name: "Spicy Turkey Enchiladas", portion: "44g protein - 410 cal", color: "#a3b899",
                         ingredients: ["12 oz ground turkey (93% lean)", "1/4 cup diced onion", "2 cloves garlic, minced", "1 tsp cumin", "1 tsp chili powder", "Red pepper flakes", "6 Mission Carb Balance tortillas", "2 cups enchilada sauce", "1 cup Mexican blend shredded cheese", "2 tbsp sour cream", "Hot sauce"],
                         steps: ["Preheat oven to 375°F.", "Brown ground turkey with onion, garlic, cumin, chili powder, and red pepper flakes.", "Divide turkey mix between tortillas. Roll up and place seam-down in a baking dish.", "Pour enchilada sauce over. Top with cheese.", "Bake 20 min until bubbly and golden.", "Top with sour cream and hot sauce.", "PLATE FOR TWO: Kasey = 2-3 enchiladas. Charlie = 3-4 enchiladas. Split sour cream and hot sauce evenly."],
                         tip: "First day eating prepped food! Cumin and chili powder both have anti-inflammatory properties. The carb balance tortillas keep the fiber high. Make a couple extra for Charlie's portions.",
                         portions: ["46g protein", "540 cal", "8g fiber", "35 min"]
                     },
-                    { type: "Dessert", icon: "🍨", name: "Chocolate Cottage Cheese Pudding", portion: "20g protein - 170 cal", color: "#c4a882",
+                    { type: "Dessert", icon: "🍨", name: "Chocolate Cottage Cheese Pudding", portion: "20g protein - 140 cal", color: "#c4a882",
                         ingredients: ["1/2 cup low-fat cottage cheese", "1.5 tbsp cacao powder (NOT Dutch-processed)", "1 tsp honey", "1/4 tsp vanilla extract", "Pinch of sea salt", "1 tbsp mini dark chocolate chips"],
                         steps: ["Blend cottage cheese, cacao, honey, vanilla, and salt until completely smooth (about 30 sec in blender or food processor).", "Scoop into a bowl. Top with chocolate chips.", "Eat immediately or chill 30 min for a firmer mousse texture."],
                         tip: "Tastes like chocolate mousse. 20g protein and under 170 cal. The salt makes the chocolate sing. Cacao flavanols are heart-healthy antioxidants.",
@@ -2565,27 +2566,27 @@ const mealData = {
                 ]
             },
             {
-                day: 5, theme: "Comfort Alfredo", protein: "148g", calories: "1,610",
+                day: 5, theme: "Comfort Alfredo", protein: "142g", calories: "1,550",
                 meals: [
-                    { type: "Breakfast", icon: "🌅", name: "Cacao-Berry Overnight Oats", portion: "44g protein - 430 cal", color: "#a3b899",
+                    { type: "Breakfast", icon: "🌅", name: "Cacao-Berry Overnight Oats", portion: "42g protein - 330 cal", color: "#a3b899",
                         ingredients: ["1/2 cup rolled oats", "1 cup unsweetened almond milk", "1.5 tbsp cacao powder (NOT Dutch-processed)", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "1 scoop ON Gold Standard Banana Cream whey", "1 tsp chia seeds", "--- MORNING TOPPINGS ---", "1/2 cup frozen mixed berries (move to fridge night before)", "1 tbsp walnuts", "1 tsp honey"],
                         steps: ["Combine oats, almond milk, cacao, collagen, L-glutamine, MCT oil, whey, and chia seeds in a jar.", "Stir well. Refrigerate overnight.", "Top with thawed berries, walnuts, and honey before eating."],
                         tip: "Prepped — grab from fridge. Cacao oats are basically dessert for breakfast but with your full supplement stack built in.",
                         portions: ["44g protein", "430 cal", "10g fiber", "0 min"]
                     },
-                    { type: "Lunch", icon: "☀️", name: "Chicken Fajita Bowl", portion: "44g protein - 490 cal", color: "#a3b899",
+                    { type: "Lunch", icon: "☀️", name: "Chicken Fajita Bowl", portion: "42g protein - 390 cal", color: "#a3b899",
                         ingredients: ["K: 5 oz / C: 6.5 oz prepped chicken (from Session 2)", "1/2 cup cooked brown rice", "1/4 cup black beans", "1/3 bell pepper, sliced", "1/4 onion, sliced", "1 tsp fajita seasoning (cumin, chili, garlic, paprika)", "2 tbsp salsa", "1 tbsp sour cream", "Squeeze of lime", "Hot sauce"],
                         steps: ["Quick-sear sliced peppers and onions in a hot pan with fajita seasoning (2 min).", "Bowl: rice, prepped chicken (warm in microwave), fajita veggies.", "Top with beans, salsa, sour cream, lime."],
                         tip: "The charred peppers and onions take this from basic to restaurant-quality. Capsaicin from peppers is anti-inflammatory. Bell peppers have more vitamin C than oranges.",
                         portions: ["44g protein", "490 cal", "6g fiber", "10 min"]
                     },
-                    { type: "Dinner", icon: "🌙", name: "Chicken Alfredo with Protein Pasta", portion: "46g protein - 520 cal", color: "#a3b899",
+                    { type: "Dinner", icon: "🌙", name: "Chicken Alfredo with Protein Pasta", portion: "44g protein - 390 cal", color: "#a3b899",
                         ingredients: ["12 oz chicken breast, butterflied or pounded thin", "7 oz Kroger Protein Grain & Legume Spaghetti", "2/3 cup alfredo sauce (light or regular)", "1 cup baby spinach", "2 cloves garlic, minced", "1 tbsp olive oil", "2 tbsp shredded Parmesan", "Red pepper flakes", "Salt, pepper", "Squeeze of lemon (brightens the cream)"],
                         steps: ["Cook protein pasta al dente. Reserve 1/4 cup pasta water before draining.", "Season chicken generously with salt and pepper. Heat olive oil in skillet over medium-high.", "Sear chicken 4-5 min per side until golden and cooked through. Remove, rest 5 min, then slice.", "In the same pan (keep the brown bits!), add garlic — cook 30 sec.", "Add alfredo sauce and a splash of pasta water. Stir to loosen the fond from the pan.", "Toss in spinach until just wilted. Add drained pasta and toss to coat.", "Plate pasta, lay chicken slices on top. Finish with Parmesan, red pepper flakes, and a squeeze of lemon.", "PLATE FOR TWO: Toss all pasta and spinach together in the sauce. Kasey = smaller bowl (~3 oz pasta, 5 oz chicken). Charlie = larger bowl (~4 oz pasta, 7 oz chicken). Parmesan on both."],
                         tip: "The brown bits from the chicken (fond) make the alfredo sauce taste way richer. The lemon squeeze at the end cuts through the cream and makes the whole dish brighter. Spinach sneaks in folate and iron.",
                         portions: ["46g protein", "520 cal", "6g fiber", "20 min"]
                     },
-                    { type: "Dessert", icon: "🍨", name: "Yogurt Bark", portion: "14g protein - 170 cal", color: "#c4a882",
+                    { type: "Dessert", icon: "🍨", name: "Yogurt Bark", portion: "14g protein - 140 cal", color: "#c4a882",
                         ingredients: ["1 cup nonfat Greek yogurt", "1 tsp honey", "1/2 tsp vanilla extract", "3/4 cup fresh berries (raspberries, blueberries, or mixed)", "1 tbsp mini dark chocolate chips", "1 tbsp crushed walnuts", "1 tsp chia seeds"],
                         steps: ["Grab from prep — already made and frozen during your prep session. Break off a piece and enjoy."],
                         tip: "Already prepped! Berries have the highest antioxidant content of any fruit — ellagic acid is a potent anti-cancer compound. Walnuts add omega-3s, chia adds fiber.",
@@ -2594,27 +2595,27 @@ const mealData = {
                 ]
             },
             {
-                day: 6, theme: "Sweet Potato Spice", protein: "145g", calories: "1,530",
+                day: 6, theme: "Sweet Potato Spice", protein: "139g", calories: "1,470",
                 meals: [
-                    { type: "Breakfast", icon: "🌅", name: "Egg Muffin Cups + Morning Shake", portion: "38g protein - 380 cal", color: "#a3b899",
+                    { type: "Breakfast", icon: "🌅", name: "Egg Muffin Cups + Morning Shake", portion: "36g protein - 280 cal", color: "#a3b899",
                         ingredients: ["--- MORNING BOOST SHAKE ---", "1 cup unsweetened almond milk", "1.5 tbsp cacao powder (NOT Dutch-processed)", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "--- EGG MUFFIN CUPS (x2) ---", "2 eggs (from batch)", "Spinach, onion, cheese (baked in)"],
                         steps: ["Blend shake ingredients and sip alongside breakfast.", "Reheat 2 egg muffin cups in microwave ~45 sec."],
                         tip: "Grab from freezer if you're into the second batch, or fridge if they're fresh from last prep. The shake gets your supplements in.",
                         portions: ["38g protein", "380 cal", "2g fiber", "2 min reheat"]
                     },
-                    { type: "Lunch", icon: "☀️", name: "Greek Chicken & Hummus Bowl", portion: "43g protein - 470 cal", color: "#a3b899",
+                    { type: "Lunch", icon: "☀️", name: "Greek Chicken & Hummus Bowl", portion: "41g protein - 370 cal", color: "#a3b899",
                         ingredients: ["K: 5 oz / C: 6.5 oz prepped chicken (from Session 2)", "1/2 cup cooked brown rice", "1/4 cup hummus", "1/4 cucumber, diced", "2 tbsp crumbled feta", "Roasted red pepper strips", "1 tbsp olive oil", "Squeeze of lemon", "Dried oregano", "Red pepper flakes"],
                         steps: ["Bowl: rice, prepped chicken (warm or cold).", "Add hummus on the side, cucumber, roasted red peppers, feta.", "Drizzle with olive oil, lemon, oregano, red pepper flakes."],
                         tip: "Mediterranean-style lunch with chickpea fiber from hummus plus healthy fats from olive oil and feta. Cucumber adds hydration. No cooking needed — just assemble.",
                         portions: ["43g protein", "470 cal", "5g fiber", "5 min"]
                     },
-                    { type: "Dinner", icon: "🌙", name: "Spicy Black Bean & Sweet Potato Bowl", portion: "44g protein - 510 cal", color: "#a3b899",
+                    { type: "Dinner", icon: "🌙", name: "Spicy Black Bean & Sweet Potato Bowl", portion: "42g protein - 380 cal", color: "#a3b899",
                         ingredients: ["9 oz prepped chicken (from Session 2), diced", "1 medium sweet potato, cubed (roasted during Session 2)", "1 cup black beans", "1/4 cup corn", "2 tbsp crumbled feta", "1/4 cup cooked brown rice or quinoa", "1 tbsp olive oil", "1 tsp cumin", "1/2 tsp chili powder", "Garlic powder, red pepper flakes", "Squeeze of lime", "Hot sauce"],
                         steps: ["Sweet potato should already be roasted from prep. If not: toss cubed sweet potato with olive oil, cumin, chili powder, garlic powder. Roast 400°F 25 min.", "Warm black beans and corn with a pinch of cumin.", "Warm prepped chicken.", "Bowl: rice, sweet potato, chicken, beans, corn.", "Top with feta, lime squeeze, hot sauce.", "PLATE FOR TWO: Split sweet potato roughly even. Kasey = 4 oz chicken + ½ cup rice + smaller bean portion. Charlie = 5 oz chicken + ⅔ cup rice + rest of beans. Feta and lime on both."],
                         tip: "Sweet potato provides beta-carotene safely from food. Black beans are antioxidant powerhouses. Cumin has anti-cancer properties. The prepped chicken makes this a 5-minute assembly.",
                         portions: ["44g protein", "510 cal", "12g fiber", "10 min"]
                     },
-                    { type: "Dessert", icon: "🍨", name: "Chocolate Cottage Cheese Pudding", portion: "20g protein - 170 cal", color: "#c4a882",
+                    { type: "Dessert", icon: "🍨", name: "Chocolate Cottage Cheese Pudding", portion: "20g protein - 140 cal", color: "#c4a882",
                         ingredients: ["1/2 cup low-fat cottage cheese", "1.5 tbsp cacao powder (NOT Dutch-processed)", "1 tsp honey", "1/4 tsp vanilla extract", "Pinch of sea salt", "1 tbsp mini dark chocolate chips"],
                         steps: ["Blend cottage cheese, cacao, honey, vanilla, and salt until completely smooth (about 30 sec in blender or food processor).", "Scoop into a bowl. Top with chocolate chips.", "Eat immediately or chill 30 min for a firmer mousse texture."],
                         tip: "Tastes like chocolate mousse. 20g protein and under 170 cal. The salt makes the chocolate sing. Cacao flavanols are heart-healthy antioxidants.",
@@ -2623,27 +2624,27 @@ const mealData = {
                 ]
             },
             {
-                day: 7, theme: "Chipotle Orzo", protein: "142g", calories: "1,580",
+                day: 7, theme: "Chipotle Orzo", protein: "136g", calories: "1,520",
                 meals: [
-                    { type: "Breakfast", icon: "🌅", name: "Apple Pie Breakfast Bowl", portion: "36g protein - 400 cal", color: "#a3b899",
+                    { type: "Breakfast", icon: "🌅", name: "Apple Pie Breakfast Bowl", portion: "34g protein - 300 cal", color: "#a3b899",
                         ingredients: ["1/2 cup rolled oats", "1 cup unsweetened almond milk", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "1 scoop ON Gold Standard Banana Cream whey", "1 tsp chia seeds", "1 tsp cinnamon", "1/4 tsp nutmeg", "Pinch of allspice", "--- MORNING TOPPINGS ---", "1/2 medium apple, diced", "1 tbsp walnuts, chopped", "1 tbsp maple syrup", "1 tbsp hemp hearts"],
                         steps: ["Grab your jar from prep — same batch as Day 5, with apple pie spices instead of cacao.", "Morning: top with diced apple, walnuts, maple syrup, and hemp hearts."],
                         tip: "Made during Prep Session 2. Apple pie spices in your overnight oats. Full supplement stack built in. Apple pectin fiber, walnut omega-3s, cinnamon blood sugar regulation.",
                         portions: ["36g protein", "400 cal", "6g fiber", "5 min + overnight"]
                     },
-                    { type: "Lunch", icon: "☀️", name: "Spicy Chicken & Black Bean Bowl", portion: "44g protein - 490 cal", color: "#a3b899",
+                    { type: "Lunch", icon: "☀️", name: "Spicy Chicken & Black Bean Bowl", portion: "42g protein - 390 cal", color: "#a3b899",
                         ingredients: ["5 oz chicken breast, seasoned (from prep)", "1/2 cup black beans", "1/2 cup cooked brown rice", "1/4 cup corn", "2 tbsp Mexican blend shredded cheese", "2 tbsp salsa", "Hot sauce, garlic powder"],
                         steps: ["Reheat prepped chicken, rice, beans, and corn.", "Top with cheese, salsa, hot sauce."],
                         tip: "This bowl is a repeat for a reason — high-fiber, high-protein, and you never get tired of it with enough hot sauce.",
                         portions: ["44g protein", "490 cal", "10g fiber", "3 min reheat"]
                     },
-                    { type: "Dinner", icon: "🌙", name: "One-Pot Chipotle Chicken & Orzo", portion: "48g protein - 520 cal", color: "#a3b899",
+                    { type: "Dinner", icon: "🌙", name: "One-Pot Chipotle Chicken & Orzo", portion: "46g protein - 390 cal", color: "#a3b899",
                         ingredients: ["12 oz chicken breast", "1 cup orzo (or use protein spaghetti broken into pieces)", "2 cups marinara sauce", "1 cup baby spinach", "1-2 chipotle peppers in adobo, minced", "3 cloves garlic, minced", "1 tbsp olive oil", "2 tbsp shredded Parmesan", "2 cups chicken broth", "Red pepper flakes"],
                         steps: ["Season chicken. Sear in olive oil 5-6 min per side. Remove and set aside.", "Sauté garlic and minced chipotles 30 seconds.", "Add marinara, broth, and orzo. Stir. Simmer 10 min until orzo is tender.", "Nestle chicken back in. Cook 5 more min.", "Stir in spinach until wilted. Top with Parmesan and red pepper flakes.", "PLATE FOR TWO: Divide the orzo + sauce roughly 40/60. Slice chicken — Kasey gets 5 oz, Charlie gets 7 oz. Parmesan on both."],
                         tip: "Smoky chipotle + marinara is an incredible combo. The one-pot method means the orzo soaks up all that smoky tomato flavor. Lycopene from the marinara, allicin from garlic, capsaicin from chipotle.",
                         portions: ["48g protein", "520 cal", "6g fiber", "25 min"]
                     },
-                    { type: "Dessert", icon: "🍨", name: "Yogurt Bark", portion: "14g protein - 170 cal", color: "#c4a882",
+                    { type: "Dessert", icon: "🍨", name: "Yogurt Bark", portion: "14g protein - 140 cal", color: "#c4a882",
                         ingredients: ["1 cup nonfat Greek yogurt", "1 tsp honey", "1/2 tsp vanilla extract", "3/4 cup fresh berries (raspberries, blueberries, or mixed)", "1 tbsp mini dark chocolate chips", "1 tbsp crushed walnuts", "1 tsp chia seeds"],
                         steps: ["Grab from prep — already made and frozen during your prep session. Break off a piece and enjoy."],
                         tip: "Already prepped! Berries have the highest antioxidant content of any fruit — ellagic acid is a potent anti-cancer compound. Walnuts add omega-3s, chia adds fiber.",
@@ -2652,27 +2653,27 @@ const mealData = {
                 ]
             },
             {
-                day: 8, theme: "Teriyaki Night", protein: "131g", calories: "1,580", prep: "PREP DAY — Prep Session 3 + Grocery Run 2 (covers Week 2)",
+                day: 8, theme: "Teriyaki Night", protein: "125g", calories: "1,520", prep: "PREP DAY — Prep Session 3 + Grocery Run 2 (covers Week 2)",
                 meals: [
-                    { type: "Breakfast", icon: "🌅", name: "Strawberry Chocolate Overnight Oats", portion: "40g protein - 430 cal", color: "#a3b899",
+                    { type: "Breakfast", icon: "🌅", name: "Strawberry Chocolate Overnight Oats", portion: "38g protein - 330 cal", color: "#a3b899",
                         ingredients: ["1/2 cup rolled oats", "1 cup unsweetened almond milk", "1.5 tbsp cacao powder (NOT Dutch-processed)", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "1 scoop ON Gold Standard Banana Cream whey", "1 tsp chia seeds", "--- MORNING TOPPINGS ---", "1/2 cup fresh strawberries, sliced", "1 tbsp mini dark chocolate chips (melted for the top layer)", "1 tbsp hemp hearts"],
                         steps: ["Grab your jar from prep — made during Prep Session 3.", "Morning: melt chocolate chips in the microwave (30 sec). Drizzle over the top for a solid chocolate layer.", "Top with fresh strawberry slices and hemp hearts."],
                         tip: "The chocolate top layer sets up like magic. Full supplement stack built in. Strawberry ellagic acid, cacao flavanols, hemp complete protein.",
                         portions: ["40g protein", "430 cal", "7g fiber", "5 min + overnight"]
                     },
-                    { type: "Lunch", icon: "☀️", name: "Turkey Taco Wrap", portion: "40g protein - 450 cal", color: "#a3b899",
+                    { type: "Lunch", icon: "☀️", name: "Turkey Taco Wrap", portion: "38g protein - 350 cal", color: "#a3b899",
                         ingredients: ["4 oz seasoned ground turkey (from prep)", "1 Mission Carb Balance tortilla", "1/4 cup cooked brown rice", "2 tbsp Mexican blend shredded cheese", "2 tbsp salsa", "Hot sauce", "1 tbsp sour cream"],
                         steps: ["Warm tortilla. Reheat turkey and rice.", "Layer turkey, rice, cheese, salsa, sour cream.", "Wrap and eat. Add hot sauce."],
                         tip: "Prepped turkey makes this a 3-minute assembly. The carb balance tortillas have more fiber than most whole wheat breads.",
                         portions: ["40g protein", "450 cal", "8g fiber", "3 min"]
                     },
-                    { type: "Dinner", icon: "🌙", name: "Chicken Teriyaki Bowl", portion: "46g protein - 520 cal", color: "#a3b899",
+                    { type: "Dinner", icon: "🌙", name: "Chicken Teriyaki Bowl", portion: "44g protein - 390 cal", color: "#a3b899",
                         ingredients: ["14 oz chicken breast, cubed", "1 cup cooked white or brown rice", "--- TERIYAKI SAUCE ---", "2 tbsp teriyaki sauce", "1 tsp dark soy sauce", "1 tsp honey", "1/2 tsp garlic powder", "Pinch of salt", "--- CHILI CUCUMBER SALAD ---", "1/2 English cucumber, sliced thin", "1 tsp rice wine vinegar", "1/2 tsp sesame oil", "Red pepper flakes", "Pinch of salt", "--- RAW CARROT SALAD ---", "1 medium carrot, peeled into ribbons", "1 tsp rice wine vinegar", "1/2 tsp sesame oil", "Pinch of salt"],
                         steps: ["Cook rice if not prepped. Cube chicken breast.", "Mix teriyaki sauce ingredients in a small bowl.", "Sear chicken in a hot pan 5-6 min, tossing until golden. Add teriyaki sauce, cook 1-2 min until glazed.", "While chicken cooks, toss cucumber with rice vinegar, sesame oil, red pepper flakes, salt.", "Peel carrot into ribbons, toss with rice vinegar, sesame oil, salt.", "Bowl: rice on the bottom, teriyaki chicken on top, cucumber and carrot salads on the sides.", "PLATE FOR TWO: Rice on both plates. Kasey = 6 oz teriyaki chicken + half the cucumber and carrot salads. Charlie = 8 oz chicken + rest. Both get the cold salads on the side."],
                         tip: "Fresh and vibrant. The cold cucumber and carrot salads contrast the warm teriyaki perfectly. Ginger and garlic are both anti-inflammatory powerhouses.",
                         portions: ["46g protein", "520 cal", "3g fiber", "20 min"]
                     },
-                    { type: "Dessert", icon: "🍨", name: "Caramelized Banana Bites", portion: "5g protein - 180 cal", color: "#c4a882",
+                    { type: "Dessert", icon: "🍨", name: "Caramelized Banana Bites", portion: "5g protein - 150 cal", color: "#c4a882",
                         ingredients: ["1 medium banana, sliced into rounds", "1 tsp coconut oil", "1 tbsp almond butter", "1 tsp honey", "1/2 tsp cinnamon", "1 tbsp toasted coconut flakes", "1 tsp mini dark chocolate chips", "Pinch of flaky sea salt"],
                         steps: ["Heat coconut oil in a pan over medium heat.", "Lay banana rounds flat, cook 1-2 min per side until golden and caramelized.", "Plate the banana bites. Drizzle almond butter and honey over top.", "Sprinkle cinnamon, coconut flakes, chocolate chips, and sea salt."],
                         tip: "All the best parts of the banana toast, minus the bread. Caramelizing concentrates the natural sugars. The almond butter + chocolate + sea salt combo is unreal.",
@@ -2681,27 +2682,27 @@ const mealData = {
                 ]
             },
             {
-                day: 9, theme: "Lemon Garlic", protein: "140g", calories: "1,510",
+                day: 9, theme: "Lemon Garlic", protein: "134g", calories: "1,450",
                 meals: [
-                    { type: "Breakfast", icon: "🌅", name: "Baked Protein Pancake Bowls", portion: "38g protein - 400 cal", color: "#a3b899",
+                    { type: "Breakfast", icon: "🌅", name: "Baked Protein Pancake Bowls", portion: "36g protein - 300 cal", color: "#a3b899",
                         ingredients: ["1/3 cup rolled oats, blended into flour", "1 scoop ON Gold Standard Banana Cream whey", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "1 egg", "1/4 cup nonfat Greek yogurt", "1/4 cup unsweetened almond milk", "1/2 tsp baking powder", "1/2 tsp vanilla", "--- TOPPINGS ---", "1/4 cup mixed berries (fresh, or thaw frozen in fridge overnight)", "1 tsp maple syrup", "1 tbsp chopped walnuts"],
                         steps: ["Preheat 350°F. Blend oats into flour.", "Mix oat flour, whey, collagen, L-glutamine, MCT oil, egg, yogurt, almond milk, baking powder, vanilla.", "Pour into greased oven-safe ramekin or muffin tin.", "Bake 20 min until golden and set.", "Top with berries, maple syrup, walnuts."],
                         tip: "Make batter the night before and bake in the morning while you get ready — hands-off breakfast. Full supplement stack baked right in. The yogurt keeps it fluffy and moist.",
                         portions: ["38g protein", "400 cal", "4g fiber", "25 min"]
                     },
-                    { type: "Lunch", icon: "☀️", name: "Spicy Black Bean Quesadilla", portion: "32g protein - 420 cal", color: "#a3b899",
+                    { type: "Lunch", icon: "☀️", name: "Spicy Black Bean Quesadilla", portion: "30g protein - 320 cal", color: "#a3b899",
                         ingredients: ["2 Mission Carb Balance tortillas", "1/2 cup black beans, drained", "1/3 cup Mexican blend shredded cheese", "2 tbsp salsa", "Hot sauce", "1 tbsp sour cream", "1 Galbani string cheese on the side"],
                         steps: ["Warm a tortilla in a dry pan over medium heat.", "Spread black beans on half, top with cheese.", "Fold and cook 2-3 min per side until golden and melty.", "Repeat with second tortilla if hungry.", "Dip in salsa and sour cream. Hit with hot sauce."],
                         tip: "Quick pantry lunch — nothing to reheat, just assemble. Black beans are loaded with antioxidants and fiber. String cheese on the side bumps the protein.",
                         portions: ["32g protein", "420 cal", "12g fiber", "5 min"]
                     },
-                    { type: "Dinner", icon: "🌙", name: "Lemon Garlic Chicken over Farro", portion: "48g protein - 530 cal", color: "#a3b899",
+                    { type: "Dinner", icon: "🌙", name: "Lemon Garlic Chicken over Farro", portion: "46g protein - 400 cal", color: "#a3b899",
                         ingredients: ["14 oz chicken breast cutlets", "1 cup cooked farro", "1 tbsp olive oil", "3 cloves garlic, minced", "Juice of 1 lemon", "1/2 tsp oregano", "Red pepper flakes", "2 cups roasted carrots", "2 tbsp shredded Parmesan", "Salt & pepper"],
                         steps: ["Cook farro according to package directions.", "Season chicken with salt, pepper, oregano, red pepper flakes.", "Heat olive oil in a pan over medium-high. Sear chicken 5-6 min per side until golden.", "In the last minute, add garlic to the pan. Squeeze lemon over everything.", "Toss carrots with olive oil, salt, roast at 400°F for 20 min.", "Plate farro, top with chicken, carrots, pan juices, and Parmesan.", "PLATE FOR TWO: Kasey = ½ cup farro, 6 oz chicken, half the carrots. Charlie = ⅔ cup farro, 8 oz chicken, rest of carrots. Spoon pan juices over both. Parmesan on top."],
                         tip: "Use the fresh chicken cutlets tonight — they need to be cooked first. Garlic contains allicin with potent anti-cancer properties. Lemon boosts iron absorption. Cook extra chicken and farro for lunch prep!",
                         portions: ["48g protein", "530 cal", "6g fiber", "30 min"]
                     },
-                    { type: "Dessert", icon: "🍨", name: "Strawberry Cheesecake Protein Fluff", portion: "22g protein - 160 cal", color: "#c4a882",
+                    { type: "Dessert", icon: "🍨", name: "Strawberry Cheesecake Protein Fluff", portion: "22g protein - 130 cal", color: "#c4a882",
                         ingredients: ["1/2 cup low-fat cottage cheese", "1/4 cup nonfat Greek yogurt", "1/2 cup fresh strawberries, diced", "1 tsp honey", "1/4 tsp vanilla extract", "1 tbsp graham cracker crumbs"],
                         steps: ["Blend cottage cheese and yogurt until smooth.", "Fold in strawberries, honey, and vanilla.", "Top with graham cracker crumbs."],
                         tip: "Cottage cheese blended smooth tastes like cheesecake filling — 22g protein. Strawberry ellagic acid, casein for slow digestion.",
@@ -2710,27 +2711,27 @@ const mealData = {
                 ]
             },
             {
-                day: 10, theme: "Enchilada Night (Round 2)", protein: "129g", calories: "1,570",
+                day: 10, theme: "Enchilada Night (Round 2)", protein: "123g", calories: "1,510",
                 meals: [
-                    { type: "Breakfast", icon: "🌅", name: "Chocolate Banana Protein Smoothie", portion: "38g protein - 400 cal", color: "#a3b899",
+                    { type: "Breakfast", icon: "🌅", name: "Chocolate Banana Protein Smoothie", portion: "36g protein - 300 cal", color: "#a3b899",
                         ingredients: ["1 cup unsweetened almond milk", "1 scoop banana cream whey protein", "1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "1 medium banana", "1.5 tbsp cacao powder (NOT Dutch-processed)", "1 tbsp chia seeds", "1/2 cup ice"],
                         steps: ["Add almond milk, protein powder, collagen, L-glutamine, MCT oil, and cacao powder to blender.", "Add banana and ice.", "Blend until smooth and thick.", "Pour into a glass or bowl. Top with chia seeds."],
                         tip: "Chocolate + banana is a classic combo. The cacao gives you flavanols for heart health while the collagen + L-glutamine stack handles gut health. Full supplement stack in one glass.",
                         portions: ["38g protein", "400 cal", "5g fiber", "5 min"]
                     },
-                    { type: "Lunch", icon: "☀️", name: "Turkey Taco Wrap", portion: "40g protein - 450 cal", color: "#a3b899",
+                    { type: "Lunch", icon: "☀️", name: "Turkey Taco Wrap", portion: "38g protein - 350 cal", color: "#a3b899",
                         ingredients: ["4 oz seasoned ground turkey (from prep)", "1 Mission Carb Balance tortilla", "1/4 cup cooked brown rice", "2 tbsp Mexican blend shredded cheese", "2 tbsp salsa", "Hot sauce", "1 tbsp sour cream"],
                         steps: ["Warm tortilla. Reheat turkey and rice.", "Layer, wrap, eat."],
                         tip: "Quick assembly from prepped ingredients. The carb balance tortillas are doing a lot of heavy lifting on fiber here.",
                         portions: ["40g protein", "450 cal", "8g fiber", "3 min"]
                     },
-                    { type: "Dinner", icon: "🌙", name: "Spicy Turkey Enchiladas (Round 2)", portion: "46g protein - 540 cal", color: "#a3b899",
+                    { type: "Dinner", icon: "🌙", name: "Spicy Turkey Enchiladas (Round 2)", portion: "44g protein - 410 cal", color: "#a3b899",
                         ingredients: ["12 oz ground turkey (93% lean)", "1/4 cup diced onion", "2 cloves garlic, minced", "1 tsp cumin", "1 tsp chili powder", "Red pepper flakes", "6 Mission Carb Balance tortillas", "2 cups enchilada sauce", "1 cup Mexican blend shredded cheese", "2 tbsp sour cream", "Hot sauce"],
                         steps: ["Preheat oven to 375°F.", "Brown turkey with onion, garlic, cumin, chili powder, red pepper flakes.", "Roll in tortillas, place in baking dish. Cover with enchilada sauce and cheese.", "Bake 20 min. Top with sour cream and hot sauce.", "PLATE FOR TWO: Same as Day 4 — Kasey = 2-3 enchiladas, Charlie = 3-4. Sour cream and hot sauce on both."],
                         tip: "Round 2! These were good enough the first time to earn a repeat. You know the drill by now. Cumin and chili powder both have anti-inflammatory properties.",
                         portions: ["46g protein", "540 cal", "8g fiber", "35 min"]
                     },
-                    { type: "Dessert", icon: "🍨", name: "Caramelized Banana Bites", portion: "5g protein - 180 cal", color: "#c4a882",
+                    { type: "Dessert", icon: "🍨", name: "Caramelized Banana Bites", portion: "5g protein - 150 cal", color: "#c4a882",
                         ingredients: ["1 medium banana, sliced into rounds", "1 tsp coconut oil", "1 tbsp almond butter", "1 tsp honey", "1/2 tsp cinnamon", "1 tbsp toasted coconut flakes", "1 tsp mini dark chocolate chips", "Pinch of flaky sea salt"],
                         steps: ["Heat coconut oil in a pan over medium heat.", "Lay banana rounds flat, cook 1-2 min per side until golden and caramelized.", "Plate the banana bites. Drizzle almond butter and honey over top.", "Sprinkle cinnamon, coconut flakes, chocolate chips, and sea salt."],
                         tip: "All the best parts of the banana toast, minus the bread. Caramelizing concentrates the natural sugars. The almond butter + chocolate + sea salt combo is unreal.",
@@ -2739,27 +2740,27 @@ const mealData = {
                 ]
             },
             {
-                day: 11, theme: "Creamy Lemon", protein: "143g", calories: "1,520", prep: "PREP DAY — Prep Session 4 (final mid-week refresh)",
+                day: 11, theme: "Creamy Lemon", protein: "137g", calories: "1,460", prep: "PREP DAY — Prep Session 4 (final mid-week refresh)",
                 meals: [
-                    { type: "Breakfast", icon: "🌅", name: "Mango-Coconut Overnight Oats", portion: "35g protein - 410 cal", color: "#a3b899",
+                    { type: "Breakfast", icon: "🌅", name: "Mango-Coconut Overnight Oats", portion: "33g protein - 310 cal", color: "#a3b899",
                         ingredients: ["1/2 cup rolled oats", "1/2 cup unsweetened almond milk", "1/4 cup Simple Truth light coconut milk", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "3 tbsp hemp hearts", "1 tsp chia seeds", "--- MORNING TOPPINGS ---", "1/2 cup frozen mango (move to fridge night before)", "1 tbsp walnuts", "1 tsp honey"],
                         steps: ["Grab your jar from prep — made Day 10 evening with ingredients from Prep Session 3 grocery run.", "Top with thawed mango, walnuts, and honey."],
                         tip: "Coconut milk adds medium-chain fatty acids and a tropical vibe. Mango provides beta-carotene and vitamin C. Uses up that coconut milk.",
                         portions: ["35g protein", "410 cal", "8g fiber", "0 min"]
                     },
-                    { type: "Lunch", icon: "☀️", name: "White Bean & Spinach Soup", portion: "38g protein - 420 cal", color: "#a3b899",
+                    { type: "Lunch", icon: "☀️", name: "White Bean & Spinach Soup", portion: "36g protein - 320 cal", color: "#a3b899",
                         ingredients: ["5 oz shredded chicken (from prep)", "1 cup cannellini beans", "2 cups baby spinach", "1 cup marinara sauce", "2 cloves garlic", "1/2 cup diced carrots", "1 tbsp olive oil", "4 cups low-sodium chicken broth", "Italian seasoning, garlic powder, red pepper flakes"],
                         steps: ["Reheat a portion of the prepped soup.", "Top with a drizzle of olive oil and Parmesan if you want."],
                         tip: "White beans are loaded with resistant starch that feeds anti-cancer gut bacteria. Combined with spinach and tomato sauce, this is a Mediterranean powerhouse.",
                         portions: ["38g protein", "420 cal", "12g fiber", "3 min reheat"]
                     },
-                    { type: "Dinner", icon: "🌙", name: "Creamy Lemon Chicken & Farro", portion: "48g protein - 530 cal", color: "#a3b899",
+                    { type: "Dinner", icon: "🌙", name: "Creamy Lemon Chicken & Farro", portion: "46g protein - 400 cal", color: "#a3b899",
                         ingredients: ["14 oz chicken breast", "1 cup cooked farro", "1 cup baby spinach", "3 cloves garlic, minced", "Juice of 1 lemon", "1/4 cup chicken broth", "2 tbsp coconut milk (or splash of cream)", "1 tbsp olive oil", "2 tbsp shredded Parmesan", "Red pepper flakes", "Salt & pepper"],
                         steps: ["Cook farro if not prepped already.", "Season chicken. Sear in olive oil 5-6 min per side. Remove and let rest.", "In the same pan, sauté garlic 30 seconds.", "Add broth and lemon juice. Let it reduce by half (~2 min).", "Stir in coconut milk. Add spinach, wilt down.", "Slice chicken. Serve over farro with the creamy lemon sauce spooned over. Top with Parmesan and red pepper flakes.", "PLATE FOR TWO: Kasey = ½ cup farro + 6 oz sliced chicken + half the creamy lemon sauce. Charlie = ⅔ cup farro + 8 oz chicken + rest of sauce. Red pepper flakes on both."],
                         tip: "This is the Mediterranean diet at its best — olive oil, lemon, garlic, whole grains, greens. The pan sauce comes together in 3 minutes and tastes restaurant-quality.",
                         portions: ["48g protein", "530 cal", "6g fiber", "25 min"]
                     },
-                    { type: "Dessert", icon: "🍨", name: "Strawberry Cheesecake Protein Fluff", portion: "22g protein - 160 cal", color: "#c4a882",
+                    { type: "Dessert", icon: "🍨", name: "Strawberry Cheesecake Protein Fluff", portion: "22g protein - 130 cal", color: "#c4a882",
                         ingredients: ["1/2 cup low-fat cottage cheese", "1/4 cup nonfat Greek yogurt", "1/2 cup fresh strawberries, diced", "1 tsp honey", "1/4 tsp vanilla extract", "1 tbsp graham cracker crumbs"],
                         steps: ["Blend cottage cheese and yogurt until smooth.", "Fold in strawberries, honey, and vanilla.", "Top with graham cracker crumbs."],
                         tip: "Cottage cheese blended smooth tastes like cheesecake filling — 22g protein. Strawberry ellagic acid, casein for slow digestion.",
@@ -2768,27 +2769,27 @@ const mealData = {
                 ]
             },
             {
-                day: 12, theme: "Basil Night", protein: "135g", calories: "1,570",
+                day: 12, theme: "Basil Night", protein: "129g", calories: "1,510",
                 meals: [
-                    { type: "Breakfast", icon: "🌅", name: "Egg Muffin Cups + Morning Shake", portion: "38g protein - 380 cal", color: "#a3b899",
+                    { type: "Breakfast", icon: "🌅", name: "Egg Muffin Cups + Morning Shake", portion: "36g protein - 280 cal", color: "#a3b899",
                         ingredients: ["--- MORNING BOOST SHAKE ---", "1 cup unsweetened almond milk", "1.5 tbsp cacao powder (NOT Dutch-processed)", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "--- EGG MUFFIN CUPS (x2) ---", "2 eggs (from batch)", "Spinach, onion, cheese (baked in)"],
                         steps: ["Blend shake ingredients and sip alongside breakfast.", "Reheat 2 egg muffin cups in microwave ~45 sec."],
                         tip: "Last round of egg cups! If you've been freezing them, they reheat perfectly. Shake gets the supplements in.",
                         portions: ["38g protein", "380 cal", "2g fiber", "2 min reheat"]
                     },
-                    { type: "Lunch", icon: "☀️", name: "Chicken Enchilada Bowl", portion: "44g protein - 490 cal", color: "#a3b899",
+                    { type: "Lunch", icon: "☀️", name: "Chicken Enchilada Bowl", portion: "42g protein - 390 cal", color: "#a3b899",
                         ingredients: ["5 oz shredded chicken (from prep)", "1/2 cup cooked brown rice", "1/2 cup black beans", "1/2 cup enchilada sauce", "1/4 cup Mexican blend shredded cheese", "--- TOPPINGS ---", "2 tbsp sour cream", "2 tbsp salsa", "Squeeze of lime", "Hot sauce"],
                         steps: ["Reheat chicken, rice, beans, and enchilada sauce together.", "Top with cheese (it'll melt into the warm bowl).", "Add sour cream, salsa, lime, hot sauce."],
                         tip: "Deconstructed enchiladas without the tortilla-rolling hassle. All the same flavors, easier to portion. Enchilada sauce has capsaicin + lycopene.",
                         portions: ["44g protein", "490 cal", "9g fiber", "5 min reheat"]
                     },
-                    { type: "Dinner", icon: "🌙", name: "One-Pot Basil Chicken & Orzo in Marinara", portion: "48g protein - 520 cal", color: "#a3b899",
+                    { type: "Dinner", icon: "🌙", name: "One-Pot Basil Chicken & Orzo in Marinara", portion: "46g protein - 390 cal", color: "#a3b899",
                         ingredients: ["12 oz chicken breast", "1 cup orzo (or broken protein spaghetti)", "2 cups marinara sauce", "1 cup baby spinach", "1/2 cup diced carrots", "3 cloves garlic, minced", "1 tbsp olive oil", "Fresh basil (or dried)", "2 tbsp shredded Parmesan", "2 cups chicken broth", "Red pepper flakes"],
                         steps: ["Sear seasoned chicken in olive oil. Remove and set aside.", "Sauté garlic and carrots 2 min.", "Add marinara, broth, and orzo. Stir and simmer 10 min.", "Nestle chicken back in. Cook 5 more min until chicken is done.", "Stir in spinach until wilted. Top with basil, Parmesan, red pepper flakes.", "PLATE FOR TWO: Divide orzo + sauce roughly 40/60. Kasey = 5 oz chicken, Charlie = 7 oz. Basil and Parmesan on both."],
                         tip: "One-pot wonder. The orzo absorbs all the marinara flavor. Cooked tomato sauce = max lycopene. Garlic, spinach, olive oil — this is textbook Mediterranean.",
                         portions: ["48g protein", "520 cal", "7g fiber", "25 min"]
                     },
-                    { type: "Dessert", icon: "🍨", name: "Caramelized Banana Bites", portion: "5g protein - 180 cal", color: "#c4a882",
+                    { type: "Dessert", icon: "🍨", name: "Caramelized Banana Bites", portion: "5g protein - 150 cal", color: "#c4a882",
                         ingredients: ["1 medium banana, sliced into rounds", "1 tsp coconut oil", "1 tbsp almond butter", "1 tsp honey", "1/2 tsp cinnamon", "1 tbsp toasted coconut flakes", "1 tsp mini dark chocolate chips", "Pinch of flaky sea salt"],
                         steps: ["Heat coconut oil in a pan over medium heat.", "Lay banana rounds flat, cook 1-2 min per side until golden and caramelized.", "Plate the banana bites. Drizzle almond butter and honey over top.", "Sprinkle cinnamon, coconut flakes, chocolate chips, and sea salt."],
                         tip: "All the best parts of the banana toast, minus the bread. Caramelizing concentrates the natural sugars. The almond butter + chocolate + sea salt combo is unreal.",
@@ -2797,27 +2798,27 @@ const mealData = {
                 ]
             },
             {
-                day: 13, theme: "Cajun Friday", protein: "150g", calories: "1,560",
+                day: 13, theme: "Cajun Friday", protein: "144g", calories: "1,500",
                 meals: [
-                    { type: "Breakfast", icon: "🌅", name: "Protein Yogurt Parfait + Morning Shake", portion: "38g protein - 400 cal", color: "#a3b899",
+                    { type: "Breakfast", icon: "🌅", name: "Protein Yogurt Parfait + Morning Shake", portion: "36g protein - 300 cal", color: "#a3b899",
                         ingredients: ["--- MORNING BOOST SHAKE ---", "1 cup unsweetened almond milk", "1.5 tbsp cacao powder (NOT Dutch-processed)", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "--- PARFAIT ---", "1 cup Oikos Triple Zero vanilla Greek yogurt", "1/2 cup fresh strawberries, sliced", "2 tbsp walnuts, chopped", "1 tsp honey drizzle"],
                         steps: ["Blend shake ingredients and sip alongside breakfast.", "Scoop yogurt into a bowl. Top with strawberries, walnuts, and honey."],
                         tip: "No prep done yet so keep it simple — shake gets your supplements in, parfait is high-protein and zero effort. Use up those fresh strawberries!",
                         portions: ["38g protein", "400 cal", "3g fiber", "5 min"]
                     },
-                    { type: "Lunch", icon: "☀️", name: "Blackened Chicken & Rice Bowl", portion: "44g protein - 480 cal", color: "#a3b899",
+                    { type: "Lunch", icon: "☀️", name: "Blackened Chicken & Rice Bowl", portion: "42g protein - 380 cal", color: "#a3b899",
                         ingredients: ["K: 5 oz / C: 6.5 oz prepped chicken (from Session 3)", "1/2 cup cooked brown rice", "1 cup steamed broccoli or green beans", "Squeeze of lemon", "--- BLACKENING SPICE (toss with chicken) ---", "1/2 tsp smoked paprika", "1/4 tsp cayenne", "1/2 tsp garlic powder", "1/4 tsp thyme", "1/4 tsp oregano"],
                         steps: ["Toss prepped chicken with blackening spice blend.", "Quick-sear in a hot cast iron or pan 2 min to char the spices.", "Bowl: rice, blackened chicken, steamed veggies.", "Squeeze lemon over everything."],
                         tip: "Blackening spice transforms regular prepped chicken into something special. Smoked paprika is anti-inflammatory. The char from high heat creates incredible depth.",
                         portions: ["44g protein", "480 cal", "5g fiber", "10 min"]
                     },
-                    { type: "Dinner", icon: "🍳", name: "Cajun Chicken Pasta", portion: "46g protein - 520 cal", color: "#a3b899",
+                    { type: "Dinner", icon: "🍳", name: "Cajun Chicken Pasta", portion: "44g protein - 390 cal", color: "#a3b899",
                         ingredients: ["14 oz chicken breast, sliced thin", "9 oz protein pasta or whole wheat penne", "1 cup baby spinach", "2/3 cup cottage cheese, blended smooth", "2 tbsp parmesan", "2 cloves garlic, minced", "1 tbsp olive oil", "--- CAJUN SPICE ---", "1 tsp smoked paprika", "1/2 tsp garlic powder", "1/2 tsp onion powder", "1/4 tsp cayenne", "1/2 tsp oregano", "Salt, pepper"],
                         steps: ["Cook pasta per package, reserve 1/2 cup pasta water. Drain.", "Season chicken with cajun spice mix. Heat olive oil in skillet over medium-high, sear chicken 3-4 min per side. Remove, slice.", "In same pan, sauté garlic 30 sec. Add blended cottage cheese, parmesan, and a splash of pasta water. Stir into a creamy sauce.", "Add spinach, stir until wilted. Toss in pasta and chicken, coat everything in sauce.", "Add more pasta water if needed for consistency.", "PLATE FOR TWO: Toss everything together. Kasey = smaller portion (~4 oz pasta, 6 oz chicken). Charlie = larger portion (~5 oz pasta, 8 oz chicken)."],
                         tip: "Friday night comfort food! The cottage cheese becomes an insanely creamy cajun alfredo without the guilt. One pan after the pasta. Cayenne is anti-inflammatory and thermogenic. Hits that spicy comfort food craving.",
                         portions: ["46g protein", "520 cal", "4g fiber", "25 min"]
                     },
-                    { type: "Dessert", icon: "🍨", name: "Strawberry Cheesecake Protein Fluff", portion: "22g protein - 160 cal", color: "#c4a882",
+                    { type: "Dessert", icon: "🍨", name: "Strawberry Cheesecake Protein Fluff", portion: "22g protein - 130 cal", color: "#c4a882",
                         ingredients: ["1/2 cup low-fat cottage cheese", "1/4 cup nonfat Greek yogurt", "1/2 cup fresh strawberries, diced", "1 tsp honey", "1/4 tsp vanilla extract", "1 tbsp graham cracker crumbs"],
                         steps: ["Blend cottage cheese and yogurt until smooth.", "Fold in strawberries, honey, and vanilla.", "Top with graham cracker crumbs."],
                         tip: "Cottage cheese blended smooth tastes like cheesecake filling — 22g protein. Strawberry ellagic acid, casein for slow digestion.",
@@ -2826,27 +2827,27 @@ const mealData = {
                 ]
             },
             {
-                day: 14, theme: "Celebration!", protein: "129g", calories: "1,560",
+                day: 14, theme: "Celebration!", protein: "123g", calories: "1,500",
                 meals: [
-                    { type: "Breakfast", icon: "🌅", name: "Fluffy Protein Blueberry Pancakes", portion: "38g protein - 420 cal", color: "#a3b899",
+                    { type: "Breakfast", icon: "🌅", name: "Fluffy Protein Blueberry Pancakes", portion: "36g protein - 320 cal", color: "#a3b899",
                         ingredients: ["1/3 cup rolled oats (blended into flour)", "1 scoop ON Gold Standard Banana Cream whey", "1 egg", "1/4 cup nonfat Greek yogurt", "1/4 cup unsweetened almond milk", "1/2 tsp baking powder", "1/2 tsp vanilla extract", "1/4 cup fresh blueberries", "Cooking spray", "--- TOPPINGS ---", "2 tbsp pure maple syrup", "1 tbsp walnuts, chopped", "Extra blueberries"],
                         steps: ["Blend oats into flour. Mix with protein powder and baking powder.", "Whisk egg, yogurt, almond milk, vanilla. Combine wet and dry.", "Gently fold in blueberries.", "Cook 1/4 cup batter per pancake on a nonstick pan, 2-3 min per side.", "Stack and top with maple syrup, walnuts, and extra blueberries."],
                         tip: "Weekend pancake treat! Oat flour + protein powder = high-protein pancakes. Greek yogurt keeps them fluffy. Blueberry anthocyanins are powerful anti-cancer compounds. Take your supplement shake alongside.",
                         portions: ["38g protein", "420 cal", "4g fiber", "15 min"]
                     },
-                    { type: "Lunch", icon: "☀️", name: "White Bean & Spinach Soup", portion: "38g protein - 420 cal", color: "#a3b899",
+                    { type: "Lunch", icon: "☀️", name: "White Bean & Spinach Soup", portion: "36g protein - 320 cal", color: "#a3b899",
                         ingredients: ["5 oz shredded chicken (from prep)", "1 cup cannellini beans", "2 cups baby spinach", "2 cups marinara sauce", "2 cloves garlic", "1/2 cup diced carrots", "1 tbsp olive oil", "4 cups low-sodium chicken broth", "Italian seasoning, garlic powder, red pepper flakes"],
                         steps: ["Reheat prepped soup. Drizzle with olive oil."],
                         tip: "Last bowl. White beans + spinach + tomato sauce = the Mediterranean trifecta for gut health and cancer prevention.",
                         portions: ["38g protein", "420 cal", "12g fiber", "3 min reheat"]
                     },
-                    { type: "Dinner", icon: "🌙", name: "Chicken & Spinach Baked Pasta", portion: "48g protein - 540 cal", color: "#a3b899",
+                    { type: "Dinner", icon: "🌙", name: "Chicken & Spinach Baked Pasta", portion: "46g protein - 410 cal", color: "#a3b899",
                         ingredients: ["12 oz chicken breast, diced", "7 oz Kroger Protein Grain & Legume Spaghetti", "1 cup marinara sauce", "1/2 cup ricotta cheese", "1 cup baby spinach", "2 cloves garlic, minced", "3/4 cup shredded mozzarella", "2 tbsp shredded Parmesan", "1 tbsp olive oil", "Italian seasoning, red pepper flakes"],
                         steps: ["Preheat oven to 375°F. Cook protein pasta al dente.", "Sear diced chicken in olive oil with garlic. Season with Italian seasoning and red pepper flakes.", "Toss pasta with marinara, chicken, spinach, and ricotta.", "Pour into a small baking dish. Top with mozzarella and Parmesan.", "Bake 15-20 min until cheese is bubbly and golden.", "PLATE FOR TWO: Bake in one dish. Scoop Kasey's portion first (~40%), then Charlie gets the rest (~60%). Or use two small baking dishes if you want it perfect."],
                         tip: "Celebration dinner! 🎉 Marinara lycopene, garlic allicin, spinach folate, olive oil polyphenols, whole grain protein pasta. Every element is evidence-based Mediterranean. You just crushed 14 days. Start the cycle again or build from the recipe bank!",
                         portions: ["48g protein", "540 cal", "7g fiber", "30 min"]
                     },
-                    { type: "Dessert", icon: "🍨", name: "Caramelized Banana Bites", portion: "5g protein - 180 cal", color: "#c4a882",
+                    { type: "Dessert", icon: "🍨", name: "Caramelized Banana Bites", portion: "5g protein - 150 cal", color: "#c4a882",
                         ingredients: ["1 medium banana, sliced into rounds", "1 tsp coconut oil", "1 tbsp almond butter", "1 tsp honey", "1/2 tsp cinnamon", "1 tbsp toasted coconut flakes", "1 tsp mini dark chocolate chips", "Pinch of flaky sea salt"],
                         steps: ["Heat coconut oil in a pan over medium heat.", "Lay banana rounds flat, cook 1-2 min per side until golden and caramelized.", "Plate the banana bites. Drizzle almond butter and honey over top.", "Sprinkle cinnamon, coconut flakes, chocolate chips, and sea salt."],
                         tip: "All the best parts of the banana toast, minus the bread. Caramelizing concentrates the natural sugars. The almond butter + chocolate + sea salt combo is unreal.",
@@ -4015,16 +4016,11 @@ function openModal(meal, mealIndex) {
         portionsHtml += '<span class="portion-tag">' + p + '</span>';
     });
     
-    // Add serving size badge (person-aware)
-    var servesNote = '';
+    // Add person-specific boost notes (Charlie's portion scaling, Kasey's supplement notes)
     var charlieBoost = '';
     var kaseyBoost = '';
-    if (meal.type === 'Dinner') {
-        servesNote = '🍽 ' + personName + '\u2019s portions — cook together, plate separately';
-    } else if (meal.type === 'Breakfast') {
+    if (meal.type === 'Breakfast') {
         if (isCharlie) {
-            servesNote = '🍽 Per person — ' + charlieName + '\'s version (see boost below)';
-            // Generate Charlie-specific boost based on breakfast type
             var mealName = (meal.name || '').toLowerCase();
             if (mealName.indexOf('overnight') !== -1 || mealName.indexOf('oats') !== -1 || mealName.indexOf('breakfast bowl') !== -1 || mealName.indexOf('cobbler') !== -1 || mealName.indexOf('mango') !== -1 || mealName.indexOf('cacao berry') !== -1 || mealName.indexOf('strawberry chocolate') !== -1) {
                 charlieBoost = '💪 ' + charlieName.toUpperCase() + '\'S BOOST: Use ¾ cup oats (not ½), add extra ½ scoop whey, and double the nut topping. Adds ~15g protein and ~150 cal.';
@@ -4042,7 +4038,6 @@ function openModal(meal, mealIndex) {
                 charlieBoost = '💪 ' + charlieName.toUpperCase() + '\'S BOOST: Add an extra ½ scoop whey + 1 tbsp nut butter to hit your higher protein target. Adds ~15g protein and ~150 cal.';
             }
         } else {
-            servesNote = '🍽 Per person — ' + kaseyName + "'s version";
             var mealName = (meal.name || '').toLowerCase();
             if (mealName.indexOf('overnight') !== -1 || mealName.indexOf('oats') !== -1 || mealName.indexOf('cobbler') !== -1 || mealName.indexOf('cacao berry') !== -1 || mealName.indexOf('mango') !== -1 || mealName.indexOf('apple pie') !== -1 || mealName.indexOf('strawberry chocolate') !== -1) {
                 kaseyBoost = '\u2728 ' + kaseyName.toUpperCase() + ': Collagen + L-glutamine are blended in for gut lining repair. MCT oil helps absorb fat-soluble vitamins. This is your full supplement stack — no extra pills needed.';
@@ -4060,20 +4055,6 @@ function openModal(meal, mealIndex) {
                 kaseyBoost = '\u2728 ' + kaseyName.toUpperCase() + ': Your supplement stack (collagen, L-glutamine, MCT oil) should be taken with this meal for best absorption with fats and protein.';
             }
         }
-    } else if (meal.type === 'Dessert') {
-        if (isCharlie) {
-            servesNote = '🍽 ' + charlieName + ' — same portion as ' + kaseyName + ' (make up cals with bigger dinners + snacks)';
-        } else {
-            servesNote = '🍽 ' + kaseyName + ' — dessert is your anti-inflammatory treat. Same portion for both of you.';
-        }
-    } else if (meal.type === 'Lunch') {
-        servesNote = '🍽 ' + personName + ' — already portioned in your container';
-    }
-    if (servesNote && meal.type) {
-        var serveBg = isCharlie ? 'rgba(163,184,153,0.1)' : 'var(--lh-secondary-muted)';
-        var serveBorder = isCharlie ? 'rgba(163,184,153,0.2)' : 'var(--lh-secondary-border)';
-        var serveColor = isCharlie ? '#a3b899' : secondaryColor;
-        portionsHtml += '<div style="width:100%;margin-top:6px;padding:6px 10px;background:' + serveBg + ';border:1px solid ' + serveBorder + ';border-radius:4px;font-size:0.7rem;color:' + serveColor + ';letter-spacing:0.02em;">' + servesNote + '</div>';
     }
     if (charlieBoost) {
         portionsHtml += '<div style="width:100%;margin-top:4px;padding:8px 10px;background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.25);border-radius:4px;font-size:0.72rem;color:#c9a84c;letter-spacing:0.01em;line-height:1.4;">' + charlieBoost + '</div>';
