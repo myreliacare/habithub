@@ -1310,6 +1310,16 @@
             letter-spacing: 0.03em;
             cursor: pointer;
             transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .tile-icon {
+            width: 22px;
+            height: 22px;
+            color: #b59197;
+            flex-shrink: 0;
         }
         .landing-tile:hover {
             background: #e8d5d8;
@@ -1377,6 +1387,12 @@
             min-height: 36px;
         }
         .landing-prompt-display:hover { border-color: rgba(123, 168, 134, 0.3); }
+        .landing-prompt-hint {
+            font-size: 0.7rem;
+            color: #7a6668;
+            font-style: italic;
+            margin-top: 2px;
+        }
         .landing-challenge-month {
             font-size: 0.78rem;
             text-transform: uppercase;
@@ -1414,6 +1430,56 @@
             padding: 4px 0;
         }
         .landing-challenge-notes-toggle:hover { color: #7ba886; }
+        .landing-past-toggle {
+            font-size: 0.8rem;
+            color: #7a6668;
+            cursor: pointer;
+            user-select: none;
+            padding: 12px 0 4px;
+            margin-top: 8px;
+            border-top: 1px solid rgba(123, 168, 134, 0.1);
+        }
+        .landing-past-toggle:hover { color: #7ba886; }
+        .landing-past-list {
+            margin-top: 10px;
+        }
+        .landing-past-entry {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(123, 168, 134, 0.08);
+        }
+        .landing-past-entry:last-child { border-bottom: none; }
+        .landing-past-week {
+            font-size: 0.7rem;
+            color: #7a6668;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 4px;
+        }
+        .landing-past-question {
+            font-size: 0.85rem;
+            font-style: italic;
+            color: inherit;
+            margin-bottom: 6px;
+        }
+        .landing-past-answer {
+            font-size: 0.82rem;
+            color: inherit;
+            padding-left: 10px;
+            border-left: 2px solid rgba(123, 168, 134, 0.2);
+            margin-bottom: 4px;
+        }
+        .landing-past-answer-name {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: #b59197;
+            margin-bottom: 1px;
+        }
+        .landing-past-empty {
+            font-size: 0.82rem;
+            color: #7a6668;
+            font-style: italic;
+            padding: 6px 0;
+        }
         .landing-challenge-notes-body {
             margin-top: 8px;
         }
@@ -1602,15 +1668,15 @@
 
             <!-- Section Tiles -->
             <div class="landing-tiles">
-                <button class="landing-tile" onclick="switchToSection('restaurants')">Restaurants</button>
-                <button class="landing-tile" onclick="switchToSection('places')">Places to Go</button>
-                <button class="landing-tile" onclick="switchToSection('wishlists')">Wishlists</button>
-                <button class="landing-tile" onclick="switchToSection('travel')">Travel</button>
-                <button class="landing-tile" onclick="switchToSection('shows-movies')">TV & Movies</button>
-                <button class="landing-tile" onclick="switchToSection('bucket')">Bucket List</button>
-                <button class="landing-tile" onclick="switchToSection('home')">Dream Home</button>
-                <button class="landing-tile" onclick="switchToSection('pets')">Future Pets</button>
-                <button class="landing-tile" onclick="switchToSection('wellness')">Wellness</button>
+                <button class="landing-tile" onclick="switchToSection('restaurants')"><svg class="tile-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="2" x2="8" y2="22"/><path d="M5 2v5c0 1.7 1.3 3 3 3s3-1.3 3-3V2"/><line x1="16" y1="2" x2="16" y2="8"/><path d="M16 8c0 0 2.5-.5 2.5-3S16 2 16 2"/><line x1="16" y1="8" x2="16" y2="22"/></svg>Restaurants</button>
+                <button class="landing-tile" onclick="switchToSection('places')"><svg class="tile-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>Places to Go</button>
+                <button class="landing-tile" onclick="switchToSection('wishlists')"><svg class="tile-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="18" height="11" rx="1"/><rect x="2" y="7" width="20" height="3" rx="1"/><line x1="12" y1="7" x2="12" y2="21"/><path d="M12 7c0 0-1-2-3.5-2C6.5 5 5.5 6 5.5 7"/><path d="M12 7c0 0 1-2 3.5-2 2 0 3 1 3 2"/></svg>Wishlists</button>
+                <button class="landing-tile" onclick="switchToSection('travel')"><svg class="tile-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>Travel</button>
+                <button class="landing-tile" onclick="switchToSection('shows-movies')"><svg class="tile-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><polygon points="10,7 10,14 16,10.5"/><line x1="7" y1="21" x2="17" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>TV & Movies</button>
+                <button class="landing-tile" onclick="switchToSection('bucket')"><svg class="tile-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.9 5.8 6.5.9-4.7 4.6 1.1 6.5L12 17l-5.8 2.8 1.1-6.5L2.6 8.7l6.5-.9z"/></svg>Bucket List</button>
+                <button class="landing-tile" onclick="switchToSection('home')"><svg class="tile-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9"/><path d="M10 20v-6h4v6"/></svg>Dream Home</button>
+                <button class="landing-tile" onclick="switchToSection('pets')"><svg class="tile-icon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><ellipse cx="6.5" cy="9.5" rx="2.2" ry="3" transform="rotate(-15 6.5 9.5)"/><ellipse cx="11" cy="7" rx="2" ry="3" transform="rotate(-5 11 7)"/><ellipse cx="15.5" cy="7.5" rx="2" ry="2.8" transform="rotate(10 15.5 7.5)"/><ellipse cx="19" cy="11" rx="2" ry="2.7" transform="rotate(25 19 11)"/><path d="M7 16.5c0-3 2-5.5 5.5-5.5s5.5 2.5 5.5 5.5c0 3-2.5 4.5-5.5 4.5S7 19.5 7 16.5z"/></svg>Future Pets</button>
+                <button class="landing-tile" onclick="switchToSection('wellness')"><svg class="tile-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/><path d="M8 11h3M9.5 9.5v3M14 11h2"/></svg>Wellness</button>
             </div>
 
             <!-- Weekly Relationship Prompt -->
@@ -1621,6 +1687,7 @@
                     <div class="landing-prompt-person">
                         <div class="landing-prompt-name" data-lh-name="person1">Kasey</div>
                         <div id="prompt1Display" class="landing-prompt-display" style="display:none;" onclick="editPromptAnswer('person1')"></div>
+                        <div id="prompt1Hint" class="landing-prompt-hint" style="display:none;">tap to edit</div>
                         <div id="prompt1Input" class="landing-prompt-input-wrap">
                             <textarea id="prompt1Textarea" class="landing-prompt-textarea" placeholder="Your answer..." rows="2"></textarea>
                             <button class="landing-prompt-save" onclick="savePromptAnswer('person1')">Save</button>
@@ -1629,11 +1696,20 @@
                     <div class="landing-prompt-person">
                         <div class="landing-prompt-name" data-lh-name="person2">Charlie</div>
                         <div id="prompt2Display" class="landing-prompt-display" style="display:none;" onclick="editPromptAnswer('person2')"></div>
+                        <div id="prompt2Hint" class="landing-prompt-hint" style="display:none;">tap to edit</div>
                         <div id="prompt2Input" class="landing-prompt-input-wrap">
                             <textarea id="prompt2Textarea" class="landing-prompt-textarea" placeholder="Your answer..." rows="2"></textarea>
                             <button class="landing-prompt-save" onclick="savePromptAnswer('person2')">Save</button>
                         </div>
                     </div>
+                </div>
+
+                <!-- Past Prompts -->
+                <div class="landing-past-toggle" onclick="togglePastPrompts()">
+                    Past Prompts <span id="pastPromptsIcon" style="font-size:0.7rem;">▶</span>
+                </div>
+                <div id="pastPromptsContent" style="display:none;">
+                    <div id="pastPromptsList" class="landing-past-list"></div>
                 </div>
             </div>
 
@@ -2330,50 +2406,6 @@
             </div>
         </div>
 
-        <!-- TRADITIONS TAB -->
-        <div id="traditions-tab" class="dreams-tab">
-            <div class="section">
-                <h2 class="section-title">Traditions We Want to Start</h2>
-                
-                <button class="add-dream-btn" onclick="showForm('traditions')">+ Add Tradition Idea</button>
-                
-                <div class="dream-form" id="traditions-form">
-                    <form data-category="traditions">
-                        <div class="form-group">
-                            <label>Tradition Name</label>
-                            <input type="text" name="title" required placeholder="What tradition do you want to start?">
-                        </div>
-                        <div class="form-group">
-                            <label>Details</label>
-                            <textarea name="details" placeholder="When? How often? What would it look like?"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Add Image (Optional)</label>
-                            <input type="file" class="image-upload-input" id="traditions-image" accept="image/*" onchange="previewImage(event, 'traditions')">
-                            <label for="traditions-image" class="image-upload-label">Choose Image</label>
-                            <div id="traditions-preview"></div>
-                        </div>
-                        <div class="form-group">
-                            <label>Priority</label>
-                            <select name="priority">
-                                <option value="">Future Idea</option>
-                                <option value="soon">Start Soon</option>
-                                <option value="high">Start This Year</option>
-                            </select>
-                        </div>
-                        <div class="form-actions">
-                            <button type="button" class="btn" onclick="hideForm('traditions')">Cancel</button>
-                            <button type="button" class="btn save-btn" onclick="addDream(this)">Save</button>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="dream-list" id="traditions-list">
-                    <div class="empty-state">What traditions do you want to create together?</div>
-                </div>
-            </div>
-        </div>
-
         <!-- WELLNESS TAB -->
         <div id="wellness-tab" class="dreams-tab">
             <div class="section">
@@ -2588,7 +2620,7 @@
 
     <script>
         // Global variables -- available immediately
-        var categories = ['restaurants', 'our-restaurants', 'places', 'our-places', 'kasey-wishlist', 'charlie-wishlist', 'travel', 'our-travel', 'bucket', 'home', 'pets', 'traditions', 'shows-movies', 'our-shows-movies'];
+        var categories = ['restaurants', 'our-restaurants', 'places', 'our-places', 'kasey-wishlist', 'charlie-wishlist', 'travel', 'our-travel', 'bucket', 'home', 'pets', 'shows-movies', 'our-shows-movies'];
         var dreams = {};
         var isConnected = false;
         var currentImageData = {};
@@ -3237,8 +3269,7 @@
                     'our-shows-movies': 'No favorites yet!',
                     bucket: 'Start building your bucket list together!',
                     home: 'What does your dream home look like?',
-                    pets: 'Dream about your future fur (or scale, or feather) babies!',
-                    traditions: 'What traditions do you want to create together?'
+                    pets: 'Dream about your future fur (or scale, or feather) babies!'
                 };
                 listContainer.innerHTML = '<div class="empty-state">' + (emptyMessages[category] || '') + '</div>';
                 listContainer.classList.remove('expanded');
@@ -3558,6 +3589,7 @@
         ];
 
         var promptData = { week: '', person1: '', person2: '' };
+        var promptHistory = [];
         var challengeData = { month: '', completed: false, notes: '' };
 
         function getWeekKey() {
@@ -3574,9 +3606,11 @@
 
         function loadPromptLocal() {
             try { var d = localStorage.getItem('dreams_weeklyPrompt'); if (d) promptData = JSON.parse(d); } catch(e) {}
+            try { var h = localStorage.getItem('dreams_promptHistory'); if (h) promptHistory = JSON.parse(h); } catch(e) {}
         }
         function savePromptLocal() {
             try { localStorage.setItem('dreams_weeklyPrompt', JSON.stringify(promptData)); } catch(e) {}
+            try { localStorage.setItem('dreams_promptHistory', JSON.stringify(promptHistory)); } catch(e) {}
         }
         function loadChallengeLocal() {
             try { var d = localStorage.getItem('dreams_monthlyChallenge'); if (d) challengeData = JSON.parse(d); } catch(e) {}
@@ -3590,6 +3624,14 @@
                 try {
                     var docRef = window.fsModule.doc(window.dreamsDb, 'dreams', 'weeklyPrompt');
                     window.fsModule.setDoc(docRef, promptData).catch(function(err) {});
+                } catch(e) {}
+            }
+        }
+        function syncPromptHistoryToFirestore() {
+            if (window.dreamsDb && window.fsModule) {
+                try {
+                    var docRef = window.fsModule.doc(window.dreamsDb, 'dreams', 'promptHistory');
+                    window.fsModule.setDoc(docRef, { entries: promptHistory }).catch(function(err) {});
                 } catch(e) {}
             }
         }
@@ -3608,25 +3650,48 @@
             var promptIndex = weekNum % weeklyPrompts.length;
             document.getElementById('weeklyPromptQuestion').textContent = weeklyPrompts[promptIndex];
 
-            if (promptData.week !== weekKey) {
+            if (promptData.week && promptData.week !== weekKey) {
+                // Archive the old prompt before resetting
+                if (promptData.person1 || promptData.person2) {
+                    var oldWeekNum = parseInt(promptData.week.split('W')[1], 10);
+                    var oldQuestion = weeklyPrompts[oldWeekNum % weeklyPrompts.length];
+                    promptHistory.unshift({
+                        week: promptData.week,
+                        question: oldQuestion,
+                        person1: promptData.person1,
+                        person2: promptData.person2
+                    });
+                    // Keep last 52 weeks max
+                    if (promptHistory.length > 52) promptHistory = promptHistory.slice(0, 52);
+                    savePromptLocal();
+                    syncPromptHistoryToFirestore();
+                }
                 promptData = { week: weekKey, person1: '', person2: '' };
+                savePromptLocal();
+                syncPromptToFirestore();
+            } else if (!promptData.week) {
+                promptData.week = weekKey;
                 savePromptLocal();
                 syncPromptToFirestore();
             }
             renderPromptAnswers();
+            renderPastPrompts();
         }
 
         function renderPromptAnswers() {
             ['person1', 'person2'].forEach(function(p) {
                 var suffix = p === 'person1' ? '1' : '2';
                 var display = document.getElementById('prompt' + suffix + 'Display');
+                var hint = document.getElementById('prompt' + suffix + 'Hint');
                 var inputWrap = document.getElementById('prompt' + suffix + 'Input');
                 if (promptData[p]) {
                     display.textContent = promptData[p];
                     display.style.display = 'block';
+                    hint.style.display = 'block';
                     inputWrap.style.display = 'none';
                 } else {
                     display.style.display = 'none';
+                    hint.style.display = 'none';
                     inputWrap.style.display = 'block';
                 }
             });
@@ -3647,9 +3712,45 @@
             var suffix = person === 'person1' ? '1' : '2';
             document.getElementById('prompt' + suffix + 'Textarea').value = promptData[person] || '';
             document.getElementById('prompt' + suffix + 'Display').style.display = 'none';
+            document.getElementById('prompt' + suffix + 'Hint').style.display = 'none';
             document.getElementById('prompt' + suffix + 'Input').style.display = 'block';
             document.getElementById('prompt' + suffix + 'Textarea').focus();
         };
+
+        window.togglePastPrompts = function() {
+            var body = document.getElementById('pastPromptsContent');
+            var icon = document.getElementById('pastPromptsIcon');
+            if (body.style.display === 'none') {
+                body.style.display = 'block';
+                icon.textContent = '▼';
+            } else {
+                body.style.display = 'none';
+                icon.textContent = '▶';
+            }
+        };
+
+        function renderPastPrompts() {
+            var container = document.getElementById('pastPromptsList');
+            if (!promptHistory.length) {
+                container.innerHTML = '<div class="landing-past-empty">Past prompts will appear here after each week.</div>';
+                return;
+            }
+            var names = window.LifeHubSettings ? window.LifeHubSettings.current.names : { name1: 'Kasey', name2: 'Charlie' };
+            var html = '';
+            promptHistory.forEach(function(entry) {
+                html += '<div class="landing-past-entry">';
+                html += '<div class="landing-past-week">' + entry.week + '</div>';
+                html += '<div class="landing-past-question">' + entry.question + '</div>';
+                if (entry.person1) {
+                    html += '<div class="landing-past-answer"><div class="landing-past-answer-name">' + names.name1 + '</div>' + entry.person1 + '</div>';
+                }
+                if (entry.person2) {
+                    html += '<div class="landing-past-answer"><div class="landing-past-answer-name">' + names.name2 + '</div>' + entry.person2 + '</div>';
+                }
+                html += '</div>';
+            });
+            container.innerHTML = html;
+        }
 
         function initMonthlyChallenge() {
             var monthKey = getMonthKey();
@@ -3858,6 +3959,24 @@
                         } else if (promptData.week) {
                             ignorePrompt = true;
                             syncPromptToFirestore();
+                        }
+                    }, function(error) {});
+                })();
+
+                // Prompt history real-time listener
+                (function() {
+                    var histRef = fsModule.doc(db, 'dreams', 'promptHistory');
+                    var ignoreHist = false;
+                    fsModule.onSnapshot(histRef, function(snapshot) {
+                        if (ignoreHist) { ignoreHist = false; return; }
+                        if (snapshot.exists()) {
+                            var data = snapshot.data();
+                            promptHistory = data.entries || [];
+                            try { localStorage.setItem('dreams_promptHistory', JSON.stringify(promptHistory)); } catch(e) {}
+                            renderPastPrompts();
+                        } else if (promptHistory.length) {
+                            ignoreHist = true;
+                            syncPromptHistoryToFirestore();
                         }
                     }, function(error) {});
                 })();
