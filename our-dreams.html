@@ -1293,6 +1293,144 @@
         }
         /* ===== END MOBILE OPTIMIZATION ===== */
 
+        /* ===== LANDING HOME VIEW ===== */
+        .landing-tiles {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .landing-tile {
+            background: transparent;
+            border: 1px solid #b59197;
+            color: #7ba886;
+            padding: 16px 10px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .landing-tile:hover {
+            background: #f0d4da;
+            border-color: #b59197;
+        }
+        .landing-section-title {
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #7ba886;
+            margin-bottom: 10px;
+        }
+        .landing-prompt-question {
+            font-style: italic;
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 16px;
+            color: inherit;
+        }
+        .landing-prompt-answers {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .landing-prompt-person {
+            padding-bottom: 10px;
+        }
+        .landing-prompt-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #b59197;
+            margin-bottom: 6px;
+        }
+        .landing-prompt-textarea {
+            width: 100%;
+            padding: 8px 10px;
+            font-family: inherit;
+            font-size: 0.85rem;
+            border: 1px solid rgba(123, 168, 134, 0.25);
+            background: transparent;
+            color: inherit;
+            resize: vertical;
+            min-height: 40px;
+        }
+        .landing-prompt-textarea:focus { outline: none; border-color: #7ba886; }
+        .landing-prompt-save {
+            margin-top: 6px;
+            padding: 5px 14px;
+            font-family: inherit;
+            font-size: 0.78rem;
+            background: transparent;
+            border: 1px solid #7ba886;
+            color: #7ba886;
+            cursor: pointer;
+        }
+        .landing-prompt-save:hover { background: #7ba886; color: #fff; }
+        .landing-prompt-display {
+            font-size: 0.88rem;
+            line-height: 1.5;
+            padding: 8px 10px;
+            border: 1px solid rgba(123, 168, 134, 0.1);
+            color: inherit;
+            cursor: pointer;
+            min-height: 36px;
+        }
+        .landing-prompt-display:hover { border-color: rgba(123, 168, 134, 0.3); }
+        .landing-challenge-month {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #7a6668;
+            margin-bottom: 6px;
+        }
+        .landing-challenge-text {
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 14px;
+            color: inherit;
+        }
+        .landing-challenge-status {
+            margin-bottom: 12px;
+        }
+        .landing-challenge-check {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: inherit;
+        }
+        .landing-challenge-check input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #7ba886;
+        }
+        .landing-challenge-notes-toggle {
+            font-size: 0.8rem;
+            color: #7a6668;
+            cursor: pointer;
+            user-select: none;
+            padding: 4px 0;
+        }
+        .landing-challenge-notes-toggle:hover { color: #7ba886; }
+        .landing-challenge-notes-body {
+            margin-top: 8px;
+        }
+        .landing-challenge-notes-text {
+            font-size: 0.88rem;
+            line-height: 1.5;
+            color: inherit;
+            padding: 6px 0;
+        }
+        @media (min-width: 500px) {
+            .landing-tiles { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (min-width: 700px) {
+            .landing-tiles { grid-template-columns: repeat(4, 1fr); }
+        }
+        /* ===== END LANDING HOME VIEW ===== */
+
         /* ===== WELLNESS TRACKER ===== */
         .wellness-subsection {
             margin-bottom: 28px;
@@ -1445,12 +1583,14 @@
     
     <div class="container">
         <div class="page-header">
-            <h1 class="page-title">Our Life Together</h1>
+            <h1 class="page-title">Our Life Together ♡</h1>
             <p class="page-subtitle">Dreams, goals, ideas & all the things we want to do</p>
         </div>
 
-        <div class="section-nav-dropdown">
+        <!-- DROPDOWN NAV (hidden on home, shown on section pages) -->
+        <div class="section-nav-dropdown" id="sectionNavDropdown" style="display:none;">
             <select id="sectionSelect" onchange="switchToSection(this.value)">
+                <option value="landing">← Home</option>
                 <option value="restaurants">Restaurants</option>
                 <option value="places">Places to Go</option>
                 <option value="wishlists">Wishlists</option>
@@ -1459,13 +1599,83 @@
                 <option value="bucket">Bucket List</option>
                 <option value="home">Dream Home</option>
                 <option value="pets">Future Pets</option>
-                <option value="traditions">Traditions</option>
                 <option value="wellness">Wellness</option>
             </select>
         </div>
 
+        <!-- ═══ LANDING HOME VIEW ═══ -->
+        <div id="landing-tab" class="dreams-tab active">
+
+            <!-- Section Tiles -->
+            <div class="landing-tiles">
+                <button class="landing-tile" onclick="switchToSection('restaurants')">Restaurants</button>
+                <button class="landing-tile" onclick="switchToSection('places')">Places to Go</button>
+                <button class="landing-tile" onclick="switchToSection('wishlists')">Wishlists</button>
+                <button class="landing-tile" onclick="switchToSection('travel')">Travel</button>
+                <button class="landing-tile" onclick="switchToSection('shows-movies')">TV & Movies</button>
+                <button class="landing-tile" onclick="switchToSection('bucket')">Bucket List</button>
+                <button class="landing-tile" onclick="switchToSection('home')">Dream Home</button>
+                <button class="landing-tile" onclick="switchToSection('pets')">Future Pets</button>
+                <button class="landing-tile" onclick="switchToSection('wellness')">Wellness</button>
+            </div>
+
+            <!-- Weekly Relationship Prompt -->
+            <div class="section" style="margin-top: 24px;">
+                <div class="landing-section-title">Weekly Prompt</div>
+                <p class="landing-prompt-question" id="weeklyPromptQuestion"></p>
+                <div class="landing-prompt-answers">
+                    <div class="landing-prompt-person">
+                        <div class="landing-prompt-name" data-lh-name="person1">Kasey</div>
+                        <div id="prompt1Display" class="landing-prompt-display" style="display:none;" onclick="editPromptAnswer('person1')"></div>
+                        <div id="prompt1Input" class="landing-prompt-input-wrap">
+                            <textarea id="prompt1Textarea" class="landing-prompt-textarea" placeholder="Your answer..." rows="2"></textarea>
+                            <button class="landing-prompt-save" onclick="savePromptAnswer('person1')">Save</button>
+                        </div>
+                    </div>
+                    <div class="landing-prompt-person">
+                        <div class="landing-prompt-name" data-lh-name="person2">Charlie</div>
+                        <div id="prompt2Display" class="landing-prompt-display" style="display:none;" onclick="editPromptAnswer('person2')"></div>
+                        <div id="prompt2Input" class="landing-prompt-input-wrap">
+                            <textarea id="prompt2Textarea" class="landing-prompt-textarea" placeholder="Your answer..." rows="2"></textarea>
+                            <button class="landing-prompt-save" onclick="savePromptAnswer('person2')">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monthly Couples Challenge -->
+            <div class="section" style="margin-top: 16px;">
+                <div style="display:flex; align-items:baseline; gap:10px;">
+                    <div class="landing-section-title" style="margin-bottom:0;">Monthly Challenge</div>
+                    <div class="landing-challenge-month" id="challengeMonthLabel" style="margin-bottom:0;"></div>
+                </div>
+                <p class="landing-challenge-text" id="challengeText" style="margin-top:10px;"></p>
+                <div class="landing-challenge-status" style="display:flex; align-items:center; justify-content:space-between;">
+                    <label class="landing-challenge-check">
+                        <input type="checkbox" id="challengeComplete" onchange="toggleChallengeComplete()">
+                        <span id="challengeStatusLabel">Not completed</span>
+                    </label>
+                    <div class="landing-challenge-notes-toggle" onclick="toggleChallengeNotes()">
+                        Notes <span id="challengeNotesToggleIcon" style="font-size:0.7rem;">▶</span>
+                    </div>
+                </div>
+                <div class="landing-challenge-notes">
+                    <div id="challengeNotesContent" class="landing-challenge-notes-body" style="display:none;">
+                        <div id="challengeNotesDisplayWrap" style="display:none;" onclick="editChallengeNotes()">
+                            <p id="challengeNotesDisplay" class="landing-challenge-notes-text"></p>
+                            <span style="font-size:0.7rem; color:#7a6668; font-style:italic;">tap to edit</span>
+                        </div>
+                        <div id="challengeNotesEditWrap">
+                            <textarea id="challengeNotesInput" class="landing-prompt-textarea" placeholder="How's it going? Any notes..." rows="3"></textarea>
+                            <button class="landing-prompt-save" onclick="saveChallengeNotes()">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- RESTAURANTS TAB -->
-        <div id="restaurants-tab" class="dreams-tab active">
+        <div id="restaurants-tab" class="dreams-tab">
             <div class="section">
                 <h2 class="section-title">Restaurants We Want to Try</h2>
                 
@@ -2470,7 +2680,16 @@
 
         window.switchToSection = function(section) {
             document.querySelectorAll('.dreams-tab').forEach(function(t) { t.classList.remove('active'); });
-            document.getElementById(section + '-tab').classList.add('active');
+            var dropdown = document.getElementById('sectionNavDropdown');
+            if (section === 'landing') {
+                document.getElementById('landing-tab').classList.add('active');
+                dropdown.style.display = 'none';
+            } else {
+                document.getElementById(section + '-tab').classList.add('active');
+                dropdown.style.display = '';
+                document.getElementById('sectionSelect').value = section;
+            }
+            window.scrollTo(0, 0);
         };
 
         window.showForm = function(category) {
@@ -3273,6 +3492,237 @@
         }
         // ===== END WELLNESS TRACKER =====
 
+        // ===== WEEKLY PROMPT & MONTHLY CHALLENGE =====
+        var weeklyPrompts = [
+            "What's one thing I did this week that made you smile?",
+            "What's your favorite memory of us from this past month?",
+            "What's one way I can support you better this week?",
+            "What's something you're grateful for about our relationship?",
+            "What's a goal you have for us as a couple?",
+            "What's one thing you admire about me?",
+            "What's your favorite thing we do together?",
+            "What's something new you'd like to try together?",
+            "What's a challenge we've overcome together that you're proud of?",
+            "What makes you feel most loved by me?",
+            "What's something you've learned about yourself through our relationship?",
+            "What's a small gesture I do that means a lot to you?",
+            "What's your favorite quality about our relationship?",
+            "What's something you're excited about for our future?",
+            "What's one way we've grown together recently?",
+            "What's a tradition you'd like to start with us?",
+            "What's something I do that makes you laugh?",
+            "What's your favorite way to spend quality time together?",
+            "What's something you want to accomplish together this year?",
+            "What's one thing about our relationship that makes you feel secure?",
+            "What's a moment when you felt really connected to me?",
+            "What's something you appreciate about how we handle disagreements?",
+            "What's your favorite inside joke or moment between us?",
+            "What's one way our relationship has changed you for the better?",
+            "What's something you'd like more of in our relationship?",
+            "What's a compliment you wish you heard more often?",
+            "What's your favorite physical gesture of affection from me?",
+            "What's something I do that helps you feel understood?",
+            "What's a dream you have for us that we haven't talked about yet?",
+            "What's one thing that always brightens your day when I do it?",
+            "What's something about me that surprised you when you first got to know me?",
+            "What's a way we could be more intentional about our time together?",
+            "What's a song, show, or movie that reminds you of us?",
+            "What's one thing you're looking forward to doing together this season?",
+            "How do you feel about where we are right now as a couple?",
+            "What's something silly or small that you love about our routine?",
+            "What's a way I've helped you grow as a person?",
+            "What's one thing you never want to change about us?",
+            "What's a place you'd love to visit together someday?",
+            "What does home feel like to you when we're together?",
+            "What's a hard conversation we've had that made us stronger?",
+            "What's a quality I bring to our relationship that balances you out?",
+            "What's something about our relationship that you're proud of?",
+            "What's one thing you wish we did more often?",
+            "When do you feel most at peace with me?",
+            "What's a memory of us that you think about when you're having a bad day?",
+            "What's something I do that makes you feel taken care of?",
+            "What would you want our life to look like in five years?",
+            "What's one area where we make a really good team?",
+            "What's something you'd love to learn or experience together?",
+            "What's one thing about us that you think other people admire?",
+            "What's a way I've shown you love that really stuck with you?"
+        ];
+
+        var monthlyChallenges = [
+            "Write each other a love letter and read them aloud together",
+            "Go on a walk together at least 3 times this week",
+            "Try a new restaurant or cafe you've never been to",
+            "Have a technology-free evening once a week",
+            "Learn something new together — a skill, hobby, or topic",
+            "Do a random act of kindness for each other every week",
+            "Plan and execute a surprise date for each other",
+            "Start a new tradition together",
+            "Declutter and organize one space in your home together",
+            "Take photos together once a week to capture memories",
+            "Cook a new recipe together that neither of you has tried",
+            "Create something together — art, craft, garden, whatever"
+        ];
+
+        var promptData = { week: '', person1: '', person2: '' };
+        var challengeData = { month: '', completed: false, notes: '' };
+
+        function getWeekKey() {
+            var d = new Date();
+            var jan1 = new Date(d.getFullYear(), 0, 1);
+            var weekNum = Math.ceil(((d - jan1) / 86400000 + jan1.getDay() + 1) / 7);
+            return d.getFullYear() + '-W' + weekNum;
+        }
+
+        function getMonthKey() {
+            var d = new Date();
+            return d.getFullYear() + '-' + d.getMonth();
+        }
+
+        function loadPromptLocal() {
+            try { var d = localStorage.getItem('dreams_weeklyPrompt'); if (d) promptData = JSON.parse(d); } catch(e) {}
+        }
+        function savePromptLocal() {
+            try { localStorage.setItem('dreams_weeklyPrompt', JSON.stringify(promptData)); } catch(e) {}
+        }
+        function loadChallengeLocal() {
+            try { var d = localStorage.getItem('dreams_monthlyChallenge'); if (d) challengeData = JSON.parse(d); } catch(e) {}
+        }
+        function saveChallengeLocal() {
+            try { localStorage.setItem('dreams_monthlyChallenge', JSON.stringify(challengeData)); } catch(e) {}
+        }
+
+        function syncPromptToFirestore() {
+            if (window.dreamsDb && window.fsModule) {
+                try {
+                    var docRef = window.fsModule.doc(window.dreamsDb, 'dreams', 'weeklyPrompt');
+                    window.fsModule.setDoc(docRef, promptData).catch(function(err) {});
+                } catch(e) {}
+            }
+        }
+        function syncChallengeToFirestore() {
+            if (window.dreamsDb && window.fsModule) {
+                try {
+                    var docRef = window.fsModule.doc(window.dreamsDb, 'dreams', 'monthlyChallenge');
+                    window.fsModule.setDoc(docRef, challengeData).catch(function(err) {});
+                } catch(e) {}
+            }
+        }
+
+        function initWeeklyPrompt() {
+            var weekKey = getWeekKey();
+            var weekNum = parseInt(weekKey.split('W')[1], 10);
+            var promptIndex = weekNum % weeklyPrompts.length;
+            document.getElementById('weeklyPromptQuestion').textContent = weeklyPrompts[promptIndex];
+
+            if (promptData.week !== weekKey) {
+                promptData = { week: weekKey, person1: '', person2: '' };
+                savePromptLocal();
+                syncPromptToFirestore();
+            }
+            renderPromptAnswers();
+        }
+
+        function renderPromptAnswers() {
+            ['person1', 'person2'].forEach(function(p) {
+                var suffix = p === 'person1' ? '1' : '2';
+                var display = document.getElementById('prompt' + suffix + 'Display');
+                var inputWrap = document.getElementById('prompt' + suffix + 'Input');
+                if (promptData[p]) {
+                    display.textContent = promptData[p];
+                    display.style.display = 'block';
+                    inputWrap.style.display = 'none';
+                } else {
+                    display.style.display = 'none';
+                    inputWrap.style.display = 'block';
+                }
+            });
+        }
+
+        window.savePromptAnswer = function(person) {
+            var suffix = person === 'person1' ? '1' : '2';
+            var val = document.getElementById('prompt' + suffix + 'Textarea').value.trim();
+            if (!val) return;
+            promptData[person] = val;
+            promptData.week = getWeekKey();
+            savePromptLocal();
+            syncPromptToFirestore();
+            renderPromptAnswers();
+        };
+
+        window.editPromptAnswer = function(person) {
+            var suffix = person === 'person1' ? '1' : '2';
+            document.getElementById('prompt' + suffix + 'Textarea').value = promptData[person] || '';
+            document.getElementById('prompt' + suffix + 'Display').style.display = 'none';
+            document.getElementById('prompt' + suffix + 'Input').style.display = 'block';
+            document.getElementById('prompt' + suffix + 'Textarea').focus();
+        };
+
+        function initMonthlyChallenge() {
+            var monthKey = getMonthKey();
+            var d = new Date();
+            var monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+            document.getElementById('challengeMonthLabel').textContent = monthNames[d.getMonth()] + ' ' + d.getFullYear();
+            var challengeIndex = d.getMonth() % monthlyChallenges.length;
+            document.getElementById('challengeText').textContent = monthlyChallenges[challengeIndex];
+
+            if (challengeData.month !== monthKey) {
+                challengeData = { month: monthKey, completed: false, notes: '' };
+                saveChallengeLocal();
+                syncChallengeToFirestore();
+            }
+            document.getElementById('challengeComplete').checked = challengeData.completed;
+            document.getElementById('challengeStatusLabel').textContent = challengeData.completed ? 'Completed!' : 'Not completed';
+            renderChallengeNotes();
+        }
+
+        window.toggleChallengeComplete = function() {
+            challengeData.completed = document.getElementById('challengeComplete').checked;
+            challengeData.month = getMonthKey();
+            document.getElementById('challengeStatusLabel').textContent = challengeData.completed ? 'Completed!' : 'Not completed';
+            saveChallengeLocal();
+            syncChallengeToFirestore();
+        };
+
+        window.toggleChallengeNotes = function() {
+            var body = document.getElementById('challengeNotesContent');
+            var icon = document.getElementById('challengeNotesToggleIcon');
+            if (body.style.display === 'none') {
+                body.style.display = 'block';
+                icon.textContent = '▼';
+            } else {
+                body.style.display = 'none';
+                icon.textContent = '▶';
+            }
+        };
+
+        window.saveChallengeNotes = function() {
+            var val = document.getElementById('challengeNotesInput').value.trim();
+            challengeData.notes = val;
+            challengeData.month = getMonthKey();
+            saveChallengeLocal();
+            syncChallengeToFirestore();
+            renderChallengeNotes();
+        };
+
+        window.editChallengeNotes = function() {
+            document.getElementById('challengeNotesInput').value = challengeData.notes || '';
+            document.getElementById('challengeNotesDisplayWrap').style.display = 'none';
+            document.getElementById('challengeNotesEditWrap').style.display = 'block';
+            document.getElementById('challengeNotesInput').focus();
+        };
+
+        function renderChallengeNotes() {
+            if (challengeData.notes) {
+                document.getElementById('challengeNotesDisplay').textContent = challengeData.notes;
+                document.getElementById('challengeNotesDisplayWrap').style.display = 'block';
+                document.getElementById('challengeNotesEditWrap').style.display = 'none';
+            } else {
+                document.getElementById('challengeNotesDisplayWrap').style.display = 'none';
+                document.getElementById('challengeNotesEditWrap').style.display = 'block';
+            }
+        }
+        // ===== END PROMPT & CHALLENGE =====
+
         // === LOAD LOCAL DATA IMMEDIATELY ===
         categories.forEach(function(cat) {
             dreams[cat] = loadFromLocal(cat);
@@ -3284,6 +3734,12 @@
         // Load wellness tracker data
         loadWellnessLocal();
         renderAllWellness();
+
+        // Load prompt & challenge
+        loadPromptLocal();
+        loadChallengeLocal();
+        initWeeklyPrompt();
+        initMonthlyChallenge();
 
         // === LOAD FIREBASE (FIRESTORE) IN BACKGROUND ===
         (async function() {
@@ -3390,6 +3846,42 @@
                                 ignoreWellness = true;
                                 syncWellnessToFirestore();
                             }
+                        }
+                    }, function(error) {});
+                })();
+
+                // Weekly prompt real-time listener
+                (function() {
+                    var promptRef = fsModule.doc(db, 'dreams', 'weeklyPrompt');
+                    var ignorePrompt = false;
+                    fsModule.onSnapshot(promptRef, function(snapshot) {
+                        if (ignorePrompt) { ignorePrompt = false; return; }
+                        if (snapshot.exists()) {
+                            var data = snapshot.data();
+                            promptData = data;
+                            savePromptLocal();
+                            initWeeklyPrompt();
+                        } else if (promptData.week) {
+                            ignorePrompt = true;
+                            syncPromptToFirestore();
+                        }
+                    }, function(error) {});
+                })();
+
+                // Monthly challenge real-time listener
+                (function() {
+                    var chalRef = fsModule.doc(db, 'dreams', 'monthlyChallenge');
+                    var ignoreChallenge = false;
+                    fsModule.onSnapshot(chalRef, function(snapshot) {
+                        if (ignoreChallenge) { ignoreChallenge = false; return; }
+                        if (snapshot.exists()) {
+                            var data = snapshot.data();
+                            challengeData = data;
+                            saveChallengeLocal();
+                            initMonthlyChallenge();
+                        } else if (challengeData.month) {
+                            ignoreChallenge = true;
+                            syncChallengeToFirestore();
                         }
                     }, function(error) {});
                 })();
