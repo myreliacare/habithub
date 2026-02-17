@@ -1431,6 +1431,20 @@
             padding: 4px 0;
         }
         .landing-challenge-notes-toggle:hover { color: #7ba886; }
+        .toggle-arrow {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-right: 1.5px solid currentColor;
+            border-bottom: 1.5px solid currentColor;
+            transform: rotate(-45deg);
+            transition: transform 0.2s ease;
+            vertical-align: middle;
+            margin-left: 3px;
+        }
+        .toggle-arrow.open {
+            transform: rotate(45deg);
+        }
         .landing-past-toggle {
             font-size: 0.8rem;
             color: #7a6668;
@@ -1707,7 +1721,7 @@
 
                 <!-- Past Prompts -->
                 <div class="landing-past-toggle" onclick="togglePastPrompts()">
-                    Past Prompts <span id="pastPromptsIcon" style="font-size:0.7rem;">▶</span>
+                    Past Prompts <span id="pastPromptsIcon" class="toggle-arrow"></span>
                 </div>
                 <div id="pastPromptsContent" style="display:none;">
                     <div id="pastPromptsList" class="landing-past-list"></div>
@@ -1727,7 +1741,7 @@
                         <span id="challengeStatusLabel">Not completed</span>
                     </label>
                     <div class="landing-challenge-notes-toggle" onclick="toggleChallengeNotes()">
-                        Notes <span id="challengeNotesToggleIcon" style="font-size:0.7rem;">▶</span>
+                        Notes <span id="challengeNotesToggleIcon" class="toggle-arrow"></span>
                     </div>
                 </div>
                 <div class="landing-challenge-notes">
@@ -3723,10 +3737,10 @@
             var icon = document.getElementById('pastPromptsIcon');
             if (body.style.display === 'none') {
                 body.style.display = 'block';
-                icon.textContent = '▼';
+                icon.classList.add('open');
             } else {
                 body.style.display = 'none';
-                icon.textContent = '▶';
+                icon.classList.remove('open');
             }
         };
 
@@ -3784,10 +3798,10 @@
             var icon = document.getElementById('challengeNotesToggleIcon');
             if (body.style.display === 'none') {
                 body.style.display = 'block';
-                icon.textContent = '▼';
+                icon.classList.add('open');
             } else {
                 body.style.display = 'none';
-                icon.textContent = '▶';
+                icon.classList.remove('open');
             }
         };
 
