@@ -374,7 +374,7 @@
         }
 
         #sectionSelect:hover {
-            background-color: #333;
+            background-color: #f0d4da;
             border-color: #b59197;
         }
 
@@ -1300,7 +1300,7 @@
             border-bottom: 1px solid rgba(123, 168, 134, 0.15);
         }
         .wellness-subsection:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-        .wellness-subsection:has(+ .wellness-history-divider) { border-bottom: none; padding-bottom: 8px; }
+        .wellness-subsection.no-border { border-bottom: none; padding-bottom: 8px; }
         .wellness-subtitle {
             color: inherit;
             font-size: 1rem;
@@ -1316,20 +1316,34 @@
             align-items: center;
         }
         .wellness-input {
-            padding: 8px 10px;
-            font-size: 0.85rem;
+            padding: 8px 6px;
+            font-size: 0.72rem;
             font-family: inherit;
-            flex: 1;
-            min-width: 90px;
             color: inherit;
         }
         .wellness-input-wide { flex: 2; min-width: 140px; }
         .wellness-input:focus { outline: none; }
         .wellness-add-btn {
-            flex: 0 0 auto !important;
             padding: 8px 14px !important;
             font-size: 0.8rem !important;
             white-space: nowrap;
+            width: auto !important;
+        }
+        /* Non-measure rows: stack inputs, button stays compact at end */
+        .wellness-add-row:not(.wellness-measure-row) .wellness-input {
+            flex: 1 1 120px;
+            min-width: 120px;
+        }
+        /* Measurement rows: all inputs on one line, tiny and equal */
+        .wellness-measure-row {
+            flex-wrap: wrap;
+        }
+        .wellness-measure-row .wellness-input {
+            flex: 1 1 0;
+            min-width: 60px;
+        }
+        input.wellness-input, select.wellness-input {
+            font-size: 0.75rem !important;
         }
         .wellness-table-wrap {
             overflow-x: auto;
@@ -1378,28 +1392,22 @@
         .wellness-history-divider {
             border: none;
             border-top: 1px solid rgba(123, 168, 134, 0.3);
-            margin: 0 0 24px;
+            margin: 0 0 28px;
             text-align: center;
         }
         .wellness-history-divider::after {
-            content: 'history';
+            content: 'History';
             display: inline-block;
             position: relative;
-            top: -0.7em;
+            top: 0.6em;
             padding: 0 14px;
-            font-size: 0.7rem;
+            font-size: 0.95rem;
             text-transform: uppercase;
             letter-spacing: 0.12em;
             color: #7a6668;
             font-weight: 600;
         }
         @media (max-width: 480px) {
-            .wellness-add-row { flex-direction: column; }
-            .wellness-input, .wellness-input-wide { min-width: 100%; flex: unset; }
-            .wellness-add-btn { width: auto; align-self: flex-end; }
-            .wellness-measure-row { flex-direction: row !important; flex-wrap: wrap; }
-            .wellness-measure-row .wellness-input { min-width: 0 !important; flex: 1 1 30% !important; }
-            .wellness-measure-row .wellness-add-btn { flex: 0 0 auto !important; }
             .wellness-table { font-size: 0.78rem; }
             .wellness-table th, .wellness-table td { padding: 6px 6px; }
         }
@@ -2201,7 +2209,7 @@
                     </div>
                 </div>
 
-                <div class="wellness-subsection">
+                <div class="wellness-subsection no-border">
                     <h3 class="wellness-subtitle"><span data-lh-name="person2">Charlie's</span> Measurements</h3>
                     <div class="wellness-add-row wellness-measure-row">
                         <input type="date" id="measureDate2" class="wellness-input">
