@@ -337,6 +337,175 @@
             color: var(--sage-green);
         }
         
+
+        /* ===== DUAL VIEW STYLES ===== */
+        .dual-goals {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .dual-goals-card {
+            flex: 1;
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 12px 14px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+        .dual-goals-card.kasey-card {
+            border-color: var(--lh-secondary-border, rgba(232,180,184,0.3));
+        }
+        .dual-goals-name {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+        .dual-goals-name.kasey-name { color: var(--lh-secondary, #e8b4b8); }
+        .dual-goals-name.charlie-name { color: var(--sage-green); }
+        .dual-goals-macros {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            font-size: 0.78rem;
+        }
+        .dual-goals-macros span { color: var(--light-text); opacity: 0.6; }
+        .dual-goals-macros strong.kasey-accent { color: var(--lh-secondary, #e8b4b8); }
+        .dual-goals-macros strong.charlie-accent { color: var(--sage-green); }
+
+        .dual-day-header {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .dual-day-card {
+            flex: 1;
+            padding: 10px 14px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .dual-day-card .person-tag {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.7;
+            font-weight: 700;
+        }
+        .dual-day-card .macros {
+            font-size: 0.72rem;
+            display: flex;
+            gap: 10px;
+        }
+
+        .dual-columns {
+            display: flex;
+            gap: 10px;
+        }
+        .person-column {
+            flex: 1;
+            min-width: 0;
+        }
+        .person-col-label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            padding: 6px 0;
+            text-align: center;
+            font-weight: 700;
+            margin-bottom: 4px;
+            border-radius: 4px 4px 0 0;
+        }
+        .person-col-label.kasey-label {
+            color: var(--lh-secondary, #e8b4b8);
+            background: var(--lh-secondary-muted, rgba(232,180,184,0.08));
+        }
+        .person-col-label.charlie-label {
+            color: var(--sage-green);
+            background: rgba(163,184,153,0.08);
+        }
+        .person-meals {
+            border-radius: 0 0 6px 6px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        .person-meals.kasey-meals {
+            border-color: var(--lh-secondary-border, rgba(232,180,184,0.2));
+        }
+        .kasey-meals .meal-btn:hover {
+            background: var(--lh-secondary-muted, rgba(232,180,184,0.1));
+        }
+        .kasey-meals .meal-type {
+            color: var(--lh-secondary, #e8b4b8);
+        }
+        .kasey-meals .meal-arrow {
+            color: var(--lh-secondary, #e8b4b8);
+        }
+        .kasey-meals .meal-icon {
+            background: var(--lh-secondary-muted, rgba(232,180,184,0.1)) !important;
+        }
+
+        .dual-snack-btn {
+            margin-top: 10px;
+        }
+        .dual-notes {
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(224,210,208,0.08);
+        }
+        .dual-notes-row {
+            display: flex;
+            gap: 10px;
+        }
+        .dual-notes-row > div {
+            flex: 1;
+            min-width: 0;
+        }
+        .dual-notes-row textarea {
+            width: 100%;
+            min-height: 50px;
+            padding: 8px;
+            background: rgba(61,47,49,0.4);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--light-text);
+            font-family: 'Philosopher', serif;
+            font-size: 0.72rem;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+        .dual-notes-label {
+            font-size: 0.6rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+        .dual-notes-label.kasey-label { color: var(--lh-secondary-border, rgba(232,180,184,0.4)); }
+        .dual-notes-label.charlie-label { color: rgba(163,184,153,0.5); }
+
+        @media (max-width: 600px) {
+            .dual-columns {
+                flex-direction: column;
+                gap: 14px;
+            }
+            .dual-day-header {
+                flex-direction: column;
+                gap: 6px;
+            }
+            .dual-goals {
+                flex-direction: column;
+                gap: 6px;
+            }
+            .dual-notes-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
         @media (max-width: 768px) {
             .nav-links {
                 gap: 16px;
@@ -369,53 +538,6 @@
             letter-spacing: 0.05em;
             margin-top: 4px;
             opacity: 0.7;
-        }
-        
-        .toggle-container {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-        
-        .toggle-btn {
-            padding: 10px 20px;
-            border-radius: 4px;
-            font-size: 0.875rem;
-            font-family: 'Philosopher', serif;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 1px solid var(--border-color);
-            background: var(--card-bg);
-            color: var(--light-text);
-            letter-spacing: 0.05em;
-        }
-        
-        .toggle-btn.active {
-            background: var(--sage-green);
-            color: var(--dark-bg);
-            border: 1px solid var(--sage-green);
-        }
-        
-        .goals {
-            background: var(--card-bg);
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 16px;
-            display: flex;
-            justify-content: center;
-            gap: 32px;
-            font-size: 0.875rem;
-            border: 1px solid var(--border-color);
-        }
-        
-        .goals span {
-            color: var(--light-text);
-            opacity: 0.7;
-        }
-        
-        .goals strong {
-            color: var(--sage-green);
         }
         
         .plan-progress {
@@ -512,6 +634,13 @@
             line-height: 1;
         }
         
+        .day-prep-icon {
+            font-size: 0.45rem;
+            line-height: 1;
+            color: var(--sage-green);
+            opacity: 0.9;
+        }
+        
         .week-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
@@ -587,17 +716,9 @@
             opacity: 0.9;
         }
         
-        .day-header-right {
-            display: flex;
-            gap: 16px;
-            font-size: 0.75rem;
-        }
         
-        .meals-container {
-            border-radius: 6px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-        }
+        
+        
         
         .meal-btn {
             width: 100%;
@@ -827,6 +948,26 @@
             border: 1px solid var(--border-color);
         }
         
+
+        /* ===== PERSON-AWARE MODAL TINTING ===== */
+        .modal-container.kasey-modal .modal-section li span {
+            color: var(--lh-secondary, #e8b4b8);
+        }
+        .modal-container.kasey-modal .modal-section li .step-number {
+            background: var(--lh-secondary, #e8b4b8);
+        }
+        .modal-container.kasey-modal .tip-box {
+            background: var(--lh-secondary-muted, rgba(232,180,184,0.1));
+            border-color: var(--lh-secondary-border, rgba(232,180,184,0.25));
+        }
+        .modal-container.kasey-modal .portion-tag {
+            background: var(--lh-secondary-muted, rgba(232,180,184,0.15));
+            border-color: var(--lh-secondary-border, rgba(232,180,184,0.25));
+        }
+        .modal-container.kasey-modal .modal-section h4 {
+            color: var(--lh-secondary, #e8b4b8);
+        }
+
         /* ===== RESPONSIVE: DESKTOP ===== */
         @media (min-width: 769px) {
             .container {
@@ -898,16 +1039,9 @@
                 font-size: 0.7rem;
             }
 
-            .toggle-btn {
-                padding: 8px 14px;
-                font-size: 0.8rem;
-            }
+            
 
-            .goals {
-                gap: 16px;
-                padding: 12px;
-                font-size: 0.8rem;
-            }
+            
 
             .day-detail {
                 padding: 14px;
@@ -921,10 +1055,7 @@
             .day-theme {
                 font-size: 0.78rem;
             }
-            .day-header-right {
-                gap: 10px;
-                font-size: 0.7rem;
-            }
+            
 
             .meal-btn {
                 padding: 12px;
@@ -1019,15 +1150,6 @@
             .page-tab {
                 padding: 8px 2px;
                 font-size: 0.62rem;
-            }
-            .toggle-btn {
-                padding: 7px 10px;
-                font-size: 0.75rem;
-            }
-            .goals {
-                flex-direction: column;
-                gap: 4px;
-                text-align: center;
             }
             .day-header {
                 flex-direction: column;
@@ -1590,14 +1712,21 @@
         <button class="plan-delete-btn" id="plan-delete-btn" onclick="deleteCurrentPlan()">Delete</button>
     </div>
 
-    <div class="toggle-container">
-        <button class="toggle-btn active" data-person="kasey">Kasey</button>
-        <button class="toggle-btn" data-person="charlie">Charlie</button>
-    </div>
-    
-    <div class="goals">
-        <div><span>Protein:</span> <strong id="goal-protein">140-165g</strong></div>
-        <div><span>Calories:</span> <strong id="goal-calories">1,500-1,700</strong></div>
+    <div class="dual-goals" id="dual-goals">
+        <div class="dual-goals-card kasey-card">
+            <div class="dual-goals-name kasey-name" id="dual-kasey-name">Kasey</div>
+            <div class="dual-goals-macros">
+                <div><span>P:</span> <strong class="kasey-accent" id="goal-protein-k">140-165g</strong></div>
+                <div><span>C:</span> <strong class="kasey-accent" id="goal-calories-k">1,500-1,700</strong></div>
+            </div>
+        </div>
+        <div class="dual-goals-card">
+            <div class="dual-goals-name charlie-name" id="dual-charlie-name">Charlie</div>
+            <div class="dual-goals-macros">
+                <div><span>P:</span> <strong class="charlie-accent" id="goal-protein-c">180-210g</strong></div>
+                <div><span>C:</span> <strong class="charlie-accent" id="goal-calories-c">2,200-2,500</strong></div>
+            </div>
+        </div>
     </div>
     
     <div class="plan-progress" id="plan-progress">
@@ -1621,12 +1750,28 @@
                 <div class="day-num" id="day-num">1</div>
                 <div class="day-theme" id="day-theme">Italian</div>
             </div>
-            <div class="day-header-right">
-                <div id="day-protein">145g</div>
-                <div id="day-calories">1,600 cal</div>
+        </div>
+        <div class="dual-day-header" id="dual-day-macros">
+            <div class="dual-day-card" id="dual-macros-k" style="background:var(--lh-secondary-muted, rgba(232,180,184,0.12));">
+                <span class="person-tag" style="color:var(--lh-secondary, #e8b4b8)">Kasey</span>
+                <div class="macros"><span id="day-protein-k">145g</span> <span id="day-calories-k">1,600 cal</span></div>
+            </div>
+            <div class="dual-day-card" id="dual-macros-c" style="background:rgba(163,184,153,0.15);">
+                <span class="person-tag">Charlie</span>
+                <div class="macros"><span id="day-protein-c">189g</span> <span id="day-calories-c">2,240 cal</span></div>
             </div>
         </div>
-        <div class="meals-container" id="meals-container"></div>
+        <div class="dual-columns" id="dual-meals">
+            <div class="person-column" id="col-kasey">
+                <div class="person-col-label kasey-label" id="col-label-k">Kasey</div>
+                <div class="person-meals kasey-meals" id="meals-kasey"></div>
+            </div>
+            <div class="person-column" id="col-charlie">
+                <div class="person-col-label charlie-label" id="col-label-c">Charlie</div>
+                <div class="person-meals" id="meals-charlie"></div>
+            </div>
+        </div>
+        <div id="dual-extras"></div>
     </div>
     </div><!-- end plan-view -->
 
@@ -1823,6 +1968,7 @@
     <div class="modal">
         <div class="modal-header" id="modal-header">
             <button class="modal-close" onclick="closeModal()">×</button>
+            <span id="modal-person-badge" style="display:inline-block;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;padding:2px 8px;border-radius:3px;font-weight:700;margin-bottom:6px;"></span>
             <h3 id="modal-title">Recipe Name</h3>
             <div class="meta" id="modal-meta">25g protein • 350 cal • 25 min</div>
         </div>
@@ -2210,7 +2356,7 @@ var additionalRecipes = [
         ingredients: ["6 oz ground chicken or turkey", "2 cups coleslaw mix (shredded cabbage + carrots)", "2 cloves garlic, minced", "1 tbsp fresh ginger, grated", "2 tbsp low-sodium soy sauce", "1 tbsp sesame oil", "1 tsp sriracha", "Green onions, sliced", "Sesame seeds"],
         steps: ["Heat sesame oil in a large skillet over medium-high. Brown ground meat 5-6 min, breaking into small pieces.", "Add garlic and ginger, cook 30 sec until fragrant.", "Add coleslaw mix, stir-fry 3-4 min until cabbage is wilted but still has some crunch.", "Pour soy sauce and sriracha over everything, toss to coat.", "Top with green onions and sesame seeds. Eat as-is or over rice."],
         tip: "10 minutes, one pan, zero leftovers. The cabbage is incredibly filling for almost no calories, so the protein ratio is insane. Great for meal prep — holds up 3-4 days in the fridge.", portions: ["40g protein", "420 cal", "5g fiber", "10 min"]
-    },,
+    },
     { name: "Chicken Caesar Wrap", type: "Lunch", portion: "42g protein - 450 cal", color: "#a3b899",
         ingredients: ["5-6 oz prepped chicken, sliced or shredded", "1 large whole wheat tortilla", "1 cup chopped romaine", "2 tbsp Caesar dressing (Greek yogurt-based)", "1 tbsp shaved parmesan", "Squeeze of lemon", "Black pepper", "--- YOGURT CAESAR ---", "3 tbsp Greek yogurt", "1 tsp Dijon mustard", "1 tsp lemon juice", "1 small clove garlic, pressed", "1 tbsp parmesan", "Dash of Worcestershire"],
         steps: ["Make yogurt Caesar: whisk Greek yogurt, Dijon, lemon, garlic, parmesan, Worcestershire.", "Lay tortilla flat. Spread Caesar dressing, layer romaine, chicken, shaved parm.", "Roll tightly, cut in half on the diagonal."],
@@ -2235,7 +2381,7 @@ var additionalRecipes = [
         ingredients: ["1 small sweet potato, diced small (1/2 inch)", "2 oz chicken sausage, sliced", "1/4 cup diced onion", "1 cup baby spinach", "2 eggs", "1 tbsp olive oil", "1/2 tsp smoked paprika", "1/2 tsp garlic powder", "Salt, pepper, hot sauce"],
         steps: ["Heat olive oil in cast iron or skillet over medium. Add sweet potato, season with paprika + garlic powder. Cook 8-10 min, stirring occasionally, until fork-tender and crispy.", "Push potatoes to sides, add sausage and onion to center. Cook 3 min.", "Add spinach, stir until wilted.", "Make 2 wells, crack eggs into them. Cover pan, cook 3-4 min until whites are set.", "Hit with hot sauce and serve straight from the pan."],
         tip: "Savory, spicy, satisfying — the sweet potato gets crispy edges while staying soft inside. The eggs cook right in the hash so it's truly one-pan. Meal prep the hash base, then just crack fresh eggs in the morning.", portions: ["34g protein", "400 cal", "5g fiber", "20 min"]
-    },,
+    },
     { name: "Spicy Sausage & Spinach Frittata", type: "Breakfast", portion: "36g protein - 380 cal", color: "#a3b899",
         ingredients: ["6 eggs + 2 egg whites", "3 oz chicken sausage (spicy Italian or similar), diced", "1 cup baby spinach", "1/4 cup diced onion", "2 tbsp crumbled feta", "1/4 tsp garlic powder", "1/4 tsp red pepper flakes", "Salt, pepper", "1 tsp olive oil"],
         steps: ["Preheat oven to 375°F. Heat olive oil in an oven-safe skillet over medium.", "Cook sausage + onion 3-4 min. Add spinach, stir until wilted.", "Whisk eggs + whites with garlic powder, red pepper flakes, salt, pepper. Pour into skillet over veggies.", "Sprinkle feta on top. Cook stovetop 2 min until edges begin to set.", "Transfer to oven, bake 12-15 min until center is just set.", "Let cool 5 min, slice into 4 wedges."],
@@ -2303,7 +2449,7 @@ const mealData = {
         goals: { protein: "140-165g", calories: "1,500-1,700" },
         days: [
             {
-                day: 1, theme: "Bolognese Night", protein: "148g", calories: "1,550", prep: "PREP DAY — Prep Session 1 + Grocery Run 1 (covers Week 1)",
+                day: 1, theme: "Bolognese Night", protein: "143g", calories: "1,580", prep: "PREP DAY — Prep Session 1 + Grocery Run 1 (covers Week 1)",
                 meals: [
                     { type: "Breakfast", icon: "🌅", name: "Cacao Berry Smoothie Bowl", portion: "42g protein - 420 cal", color: "#a3b899",
                         ingredients: ["1 cup unsweetened almond milk", "1.5 tbsp cacao powder (NOT Dutch-processed)", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "1 scoop ON Gold Standard Banana Cream whey", "1/2 cup frozen blueberries", "1/2 cup nonfat Greek yogurt", "--- TOPPINGS ---", "2 tbsp walnuts, chopped", "1 tbsp ground flaxseed", "1 tsp honey"],
@@ -2323,16 +2469,16 @@ const mealData = {
                         tip: "Cauliflower is cruciferous — ricing it into the sauce sneaks in cancer-fighting sulforaphane without anyone noticing. The protein spaghetti adds extra fiber. Cooked tomato sauce = maximum lycopene. The pinch of sugar is a restaurant trick to balance the acid.",
                         portions: ["45g protein", "530 cal", "10g fiber", "25 min"]
                     },
-                    { type: "Dessert", icon: "🍨", name: "Raspberry Yogurt Bark", portion: "14g protein - 170 cal", color: "#c4a882",
-                        ingredients: ["1 cup nonfat Greek yogurt", "1 tsp honey", "1/2 tsp vanilla extract", "3/4 cup fresh raspberries", "1 tbsp mini dark chocolate chips", "1 tbsp crushed walnuts", "1 tsp chia seeds"],
-                        steps: ["Mix yogurt with honey and vanilla.", "Spread thin on parchment-lined sheet pan.", "Press raspberries into yogurt.", "Scatter chocolate chips, walnuts, and chia seeds.", "Freeze 2+ hours. Break into pieces."],
-                        tip: "Raspberries have the highest ellagic acid content of any berry — a potent anti-cancer compound. Walnuts add omega-3s, chia adds fiber.",
+                    { type: "Dessert", icon: "🍨", name: "Yogurt Bark", portion: "14g protein - 170 cal", color: "#c4a882",
+                        ingredients: ["1 cup nonfat Greek yogurt", "1 tsp honey", "1/2 tsp vanilla extract", "3/4 cup fresh berries (raspberries, blueberries, or mixed)", "1 tbsp mini dark chocolate chips", "1 tbsp crushed walnuts", "1 tsp chia seeds"],
+                        steps: ["Grab from prep — already made and frozen during your prep session. Break off a piece and enjoy."],
+                        tip: "Already prepped! Berries have the highest antioxidant content of any fruit — ellagic acid is a potent anti-cancer compound. Walnuts add omega-3s, chia adds fiber.",
                         portions: ["14g protein", "170 cal", "4g fiber", "5 min + freeze"]
                     }
                 ]
             },
             {
-                day: 2, theme: "Italian Comfort", protein: "150g", calories: "1,560",
+                day: 2, theme: "Italian Comfort", protein: "143g", calories: "1,550",
                 meals: [
                     { type: "Breakfast", icon: "🌅", name: "Kefir Berry Smoothie", portion: "35g protein - 380 cal", color: "#a3b899",
                         ingredients: ["1 cup Lifeway strawberry kefir", "1/2 cup frozen mixed berries", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "1/2 banana"],
@@ -2352,21 +2498,21 @@ const mealData = {
                         tip: "Use the fresh zucchini and ricotta tonight before they go bad. The turkey gives it substance and the scooped zucchini centers go right back into the filling so nothing is wasted. Marinara provides lycopene. This is serious comfort food.",
                         portions: ["46g protein", "520 cal", "5g fiber", "35 min"]
                     },
-                    { type: "Dessert", icon: "🍨", name: "Frozen Berry Yogurt Bark", portion: "14g protein - 160 cal", color: "#c4a882",
-                        ingredients: ["3/4 cup nonfat Greek yogurt", "1/2 cup mixed berries", "1 tsp honey", "1 tbsp mini dark chocolate chips"],
-                        steps: ["Thaw from freezer the night before (you froze 4 on Day 1 prep day). Reheat 2 per person ~45 sec in microwave."],
-                        tip: "Already prepped. Just break off a piece. Berry anthocyanins, yogurt probiotics, chocolate flavanols.",
-                        portions: ["14g protein", "160 cal", "2g fiber", "0 min"]
+                    { type: "Dessert", icon: "🍨", name: "Chocolate Cottage Cheese Pudding", portion: "20g protein - 170 cal", color: "#c4a882",
+                        ingredients: ["1/2 cup low-fat cottage cheese", "1.5 tbsp cacao powder (NOT Dutch-processed)", "1 tsp honey", "1/4 tsp vanilla extract", "Pinch of sea salt", "1 tbsp mini dark chocolate chips"],
+                        steps: ["Blend cottage cheese, cacao, honey, vanilla, and salt until completely smooth (about 30 sec in blender or food processor).", "Scoop into a bowl. Top with chocolate chips.", "Eat immediately or chill 30 min for a firmer mousse texture."],
+                        tip: "Tastes like chocolate mousse. 20g protein and under 170 cal. The salt makes the chocolate sing. Cacao flavanols are heart-healthy antioxidants.",
+                        portions: ["20g protein", "170 cal", "3g fiber", "5 min"]
                     }
                 ]
             },
             {
-                day: 3, theme: "Stew Night", protein: "152g", calories: "1,540",
+                day: 3, theme: "Stew Night", protein: "143g", calories: "1,570",
                 meals: [
                     { type: "Breakfast", icon: "🌅", name: "Peach Cobbler Overnight Oats", portion: "38g protein - 410 cal", color: "#a3b899",
                         ingredients: ["1/2 cup rolled oats", "1 cup unsweetened almond milk", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "1 scoop ON Gold Standard Banana Cream whey", "1 tsp chia seeds", "1 tsp cinnamon", "1/4 tsp nutmeg", "--- MORNING TOPPINGS ---", "1/2 cup frozen peaches (move to fridge night before)", "1 tbsp chopped walnuts", "1 tsp honey drizzle"],
-                        steps: ["Night before: mix oats, almond milk, collagen, L-glutamine, MCT oil, whey, chia, cinnamon, nutmeg in a jar.", "Refrigerate overnight.", "Morning: top with thawed peaches (should be soft from overnight in fridge), walnuts, honey."],
-                        tip: "Prep these jars on Day 2 evening — takes 3 min. Full supplement stack with warm cinnamon-nutmeg spice. Peach antioxidants + walnut omega-3s.",
+                        steps: ["Grab your jar from prep. Move frozen peaches to fridge the night before.", "Morning: top with thawed peaches (should be soft from overnight in fridge), walnuts, honey."],
+                        tip: "Made during Prep Session 1 — just grab and add toppings. Full supplement stack with warm cinnamon-nutmeg spice. Peach antioxidants + walnut omega-3s.",
                         portions: ["38g protein", "410 cal", "6g fiber", "3 min + overnight"]
                     },
                     { type: "Lunch", icon: "☀️", name: "Chicken Burrito Bowl", portion: "43g protein - 480 cal", color: "#a3b899",
@@ -2381,16 +2527,16 @@ const mealData = {
                         tip: "Red lentils provide incredible fiber plus folate for DNA repair. Cauliflower is cruciferous (sulforaphane). Cooked tomato sauce maximizes lycopene. This is one of the most cancer-protective meals in the plan.",
                         portions: ["48g protein", "510 cal", "14g fiber", "30 min"]
                     },
-                    { type: "Dessert", icon: "🍨", name: "Dark Chocolate Strawberry Bites", portion: "3g protein - 150 cal", color: "#c4a882",
-                        ingredients: ["4-5 fresh strawberries", "1 oz dark chocolate (70%+)", "Flaky sea salt"],
-                        steps: ["Melt dark chocolate in a small bowl (microwave 30 sec, stir, repeat).", "Dip each strawberry halfway into chocolate.", "Place on parchment paper, sprinkle with flaky sea salt.", "Let set 10-15 min in fridge (or eat warm — no judgment)."],
-                        tip: "Dark chocolate (70%+) is rich in flavanols with documented anti-cancer properties. Strawberries add vitamin C and ellagic acid. Sea salt makes the chocolate pop.",
-                        portions: ["3g protein", "150 cal", "3g fiber", "10 min"]
+                    { type: "Dessert", icon: "🍨", name: "Yogurt Bark", portion: "14g protein - 170 cal", color: "#c4a882",
+                        ingredients: ["1 cup nonfat Greek yogurt", "1 tsp honey", "1/2 tsp vanilla extract", "3/4 cup fresh berries (raspberries, blueberries, or mixed)", "1 tbsp mini dark chocolate chips", "1 tbsp crushed walnuts", "1 tsp chia seeds"],
+                        steps: ["Grab from prep — already made and frozen during your prep session. Break off a piece and enjoy."],
+                        tip: "Already prepped! Berries have the highest antioxidant content of any fruit — ellagic acid is a potent anti-cancer compound. Walnuts add omega-3s, chia adds fiber.",
+                        portions: ["14g protein", "170 cal", "4g fiber", "5 min + freeze"]
                     }
                 ]
             },
             {
-                day: 4, theme: "Enchilada Night", protein: "149g", calories: "1,530", prep: "PREP DAY — Prep Session 2 (mid-week refresh)",
+                day: 4, theme: "Enchilada Night", protein: "138g", calories: "1,520", prep: "PREP DAY — Prep Session 2 (mid-week refresh)",
                 meals: [
                     { type: "Breakfast", icon: "🌅", name: "Protein Yogurt Parfait", portion: "30g protein - 350 cal", color: "#a3b899",
                         ingredients: ["1 cup Oikos Triple Zero vanilla Greek yogurt", "1/2 cup fresh strawberries, sliced", "2 tbsp walnuts, chopped", "1 tsp honey drizzle"],
@@ -2410,16 +2556,16 @@ const mealData = {
                         tip: "First day eating prepped food! Cumin and chili powder both have anti-inflammatory properties. The carb balance tortillas keep the fiber high. Make a couple extra for Charlie's portions.",
                         portions: ["46g protein", "540 cal", "8g fiber", "35 min"]
                     },
-                    { type: "Dessert", icon: "🍨", name: "Banana Snickers Bites", portion: "6g protein - 180 cal", color: "#c4a882",
-                        ingredients: ["1 medium banana, sliced into 1-inch rounds", "2 tbsp almond butter", "1 oz dark chocolate (70%+), melted", "1 tbsp chopped walnuts", "Flaky sea salt"],
-                        steps: ["Slice banana into thick rounds.", "Spread almond butter on one slice, sandwich with another.", "Dip each sandwich halfway into melted dark chocolate.", "Place on parchment, sprinkle walnuts and sea salt.", "Freeze 20 min until chocolate sets."],
-                        tip: "Tastes like a Snickers but it's banana, almond butter, dark chocolate, and walnuts. Potassium, healthy fats, flavanols.",
-                        portions: ["6g protein", "180 cal", "3g fiber", "10 min + freeze"]
+                    { type: "Dessert", icon: "🍨", name: "Chocolate Cottage Cheese Pudding", portion: "20g protein - 170 cal", color: "#c4a882",
+                        ingredients: ["1/2 cup low-fat cottage cheese", "1.5 tbsp cacao powder (NOT Dutch-processed)", "1 tsp honey", "1/4 tsp vanilla extract", "Pinch of sea salt", "1 tbsp mini dark chocolate chips"],
+                        steps: ["Blend cottage cheese, cacao, honey, vanilla, and salt until completely smooth (about 30 sec in blender or food processor).", "Scoop into a bowl. Top with chocolate chips.", "Eat immediately or chill 30 min for a firmer mousse texture."],
+                        tip: "Tastes like chocolate mousse. 20g protein and under 170 cal. The salt makes the chocolate sing. Cacao flavanols are heart-healthy antioxidants.",
+                        portions: ["20g protein", "170 cal", "3g fiber", "5 min"]
                     }
                 ]
             },
             {
-                day: 5, theme: "Comfort Alfredo", protein: "151g", calories: "1,570",
+                day: 5, theme: "Comfort Alfredo", protein: "148g", calories: "1,610",
                 meals: [
                     { type: "Breakfast", icon: "🌅", name: "Cacao-Berry Overnight Oats", portion: "44g protein - 430 cal", color: "#a3b899",
                         ingredients: ["1/2 cup rolled oats", "1 cup unsweetened almond milk", "1.5 tbsp cacao powder (NOT Dutch-processed)", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "1 scoop ON Gold Standard Banana Cream whey", "1 tsp chia seeds", "--- MORNING TOPPINGS ---", "1/2 cup frozen mixed berries (move to fridge night before)", "1 tbsp walnuts", "1 tsp honey"],
@@ -2439,16 +2585,16 @@ const mealData = {
                         tip: "The brown bits from the chicken (fond) make the alfredo sauce taste way richer. The lemon squeeze at the end cuts through the cream and makes the whole dish brighter. Spinach sneaks in folate and iron.",
                         portions: ["46g protein", "520 cal", "6g fiber", "20 min"]
                     },
-                    { type: "Dessert", icon: "🍨", name: "Chocolate Chip Oat Cake", portion: "10g protein - 180 cal", color: "#c4a882",
-                        ingredients: ["1/3 cup rolled oats", "1/2 medium ripe banana, mashed", "1 egg white", "1 tbsp cacao powder", "1/2 tsp baking powder", "1/4 tsp vanilla extract", "1 tbsp mini dark chocolate chips", "Pinch of sea salt", "Cooking spray"],
-                        steps: ["Mash banana. Mix in oats, egg white, cacao, baking powder, vanilla, salt.", "Fold in chocolate chips.", "Pour into a greased mug or ramekin.", "Microwave 90 seconds (or bake at 350°F for 15 min).", "Let cool 2 min. Eat straight from the mug."],
-                        tip: "Single-serve mug cake in 2 minutes. Oat beta-glucan fiber, cacao flavanols, banana potassium. Feels indulgent, hits your macros.",
-                        portions: ["10g protein", "180 cal", "4g fiber", "5 min"]
+                    { type: "Dessert", icon: "🍨", name: "Yogurt Bark", portion: "14g protein - 170 cal", color: "#c4a882",
+                        ingredients: ["1 cup nonfat Greek yogurt", "1 tsp honey", "1/2 tsp vanilla extract", "3/4 cup fresh berries (raspberries, blueberries, or mixed)", "1 tbsp mini dark chocolate chips", "1 tbsp crushed walnuts", "1 tsp chia seeds"],
+                        steps: ["Grab from prep — already made and frozen during your prep session. Break off a piece and enjoy."],
+                        tip: "Already prepped! Berries have the highest antioxidant content of any fruit — ellagic acid is a potent anti-cancer compound. Walnuts add omega-3s, chia adds fiber.",
+                        portions: ["14g protein", "170 cal", "4g fiber", "5 min + freeze"]
                     }
                 ]
             },
             {
-                day: 6, theme: "Sweet Potato Spice", protein: "148g", calories: "1,550",
+                day: 6, theme: "Sweet Potato Spice", protein: "145g", calories: "1,530",
                 meals: [
                     { type: "Breakfast", icon: "🌅", name: "Egg Muffin Cups + Morning Shake", portion: "38g protein - 380 cal", color: "#a3b899",
                         ingredients: ["--- MORNING BOOST SHAKE ---", "1 cup unsweetened almond milk", "1.5 tbsp cacao powder (NOT Dutch-processed)", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "--- EGG MUFFIN CUPS (x2) ---", "2 eggs (from batch)", "Spinach, onion, cheese (baked in)"],
@@ -2468,21 +2614,21 @@ const mealData = {
                         tip: "Sweet potato provides beta-carotene safely from food. Black beans are antioxidant powerhouses. Cumin has anti-cancer properties. The prepped chicken makes this a 5-minute assembly.",
                         portions: ["44g protein", "510 cal", "12g fiber", "10 min"]
                     },
-                    { type: "Dessert", icon: "🍨", name: "Protein Chia Pudding", portion: "23g protein - 190 cal", color: "#c4a882",
-                        ingredients: ["2 tbsp chia seeds", "1/2 cup unsweetened almond milk", "1/2 scoop protein powder", "1/2 tsp vanilla", "1 tsp honey", "Berries for topping"],
-                        steps: ["Mix chia seeds, almond milk, protein powder, vanilla, and honey.", "Refrigerate 2+ hours or overnight.", "Top with berries before eating."],
-                        tip: "Chia seeds are loaded with omega-3 ALA and fiber. Make a couple of these during tonight's prep session for easy desserts later this week.",
-                        portions: ["23g protein", "190 cal", "8g fiber", "5 min + chill"]
+                    { type: "Dessert", icon: "🍨", name: "Chocolate Cottage Cheese Pudding", portion: "20g protein - 170 cal", color: "#c4a882",
+                        ingredients: ["1/2 cup low-fat cottage cheese", "1.5 tbsp cacao powder (NOT Dutch-processed)", "1 tsp honey", "1/4 tsp vanilla extract", "Pinch of sea salt", "1 tbsp mini dark chocolate chips"],
+                        steps: ["Blend cottage cheese, cacao, honey, vanilla, and salt until completely smooth (about 30 sec in blender or food processor).", "Scoop into a bowl. Top with chocolate chips.", "Eat immediately or chill 30 min for a firmer mousse texture."],
+                        tip: "Tastes like chocolate mousse. 20g protein and under 170 cal. The salt makes the chocolate sing. Cacao flavanols are heart-healthy antioxidants.",
+                        portions: ["20g protein", "170 cal", "3g fiber", "5 min"]
                     }
                 ]
             },
             {
-                day: 7, theme: "Chipotle Orzo", protein: "150g", calories: "1,540",
+                day: 7, theme: "Chipotle Orzo", protein: "142g", calories: "1,580",
                 meals: [
                     { type: "Breakfast", icon: "🌅", name: "Apple Pie Breakfast Bowl", portion: "36g protein - 400 cal", color: "#a3b899",
                         ingredients: ["1/2 cup rolled oats", "1 cup unsweetened almond milk", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "1 scoop ON Gold Standard Banana Cream whey", "1 tsp chia seeds", "1 tsp cinnamon", "1/4 tsp nutmeg", "Pinch of allspice", "--- MORNING TOPPINGS ---", "1/2 medium apple, diced", "1 tbsp walnuts, chopped", "1 tbsp maple syrup", "1 tbsp hemp hearts"],
-                        steps: ["Night before: mix oats, almond milk, collagen, L-glutamine, MCT oil, whey, chia, cinnamon, nutmeg, allspice. Stir, refrigerate.", "Morning: top with diced apple, walnuts, maple syrup, and hemp hearts."],
-                        tip: "Apple pie spices in your overnight oats. Full supplement stack built in. Apple pectin fiber, walnut omega-3s, cinnamon blood sugar regulation.",
+                        steps: ["Grab your jar from prep — same batch as Day 5, with apple pie spices instead of cacao.", "Morning: top with diced apple, walnuts, maple syrup, and hemp hearts."],
+                        tip: "Made during Prep Session 2. Apple pie spices in your overnight oats. Full supplement stack built in. Apple pectin fiber, walnut omega-3s, cinnamon blood sugar regulation.",
                         portions: ["36g protein", "400 cal", "6g fiber", "5 min + overnight"]
                     },
                     { type: "Lunch", icon: "☀️", name: "Spicy Chicken & Black Bean Bowl", portion: "44g protein - 490 cal", color: "#a3b899",
@@ -2497,20 +2643,20 @@ const mealData = {
                         tip: "Smoky chipotle + marinara is an incredible combo. The one-pot method means the orzo soaks up all that smoky tomato flavor. Lycopene from the marinara, allicin from garlic, capsaicin from chipotle.",
                         portions: ["48g protein", "520 cal", "6g fiber", "25 min"]
                     },
-                    { type: "Dessert", icon: "🍨", name: "Strawberry Chia Chocolate Bites", portion: "5g protein - 160 cal", color: "#c4a882",
-                        ingredients: ["1/2 cup fresh strawberries, finely diced", "2 tbsp chia seeds", "1 tbsp cacao powder", "1 tbsp honey", "2 tbsp rolled oats", "1 tbsp mini dark chocolate chips", "1 tbsp almond butter"],
-                        steps: ["Mix strawberries, chia seeds, cacao, honey, oats, and almond butter.", "Fold in chocolate chips.", "Roll into 6-8 small balls.", "Refrigerate 30 min to firm up."],
-                        tip: "Energy bites with strawberry ellagic acid, chia omega-3s, and cacao flavanols. Make a batch on prep day.",
-                        portions: ["5g protein", "160 cal", "4g fiber", "10 min + chill"]
+                    { type: "Dessert", icon: "🍨", name: "Yogurt Bark", portion: "14g protein - 170 cal", color: "#c4a882",
+                        ingredients: ["1 cup nonfat Greek yogurt", "1 tsp honey", "1/2 tsp vanilla extract", "3/4 cup fresh berries (raspberries, blueberries, or mixed)", "1 tbsp mini dark chocolate chips", "1 tbsp crushed walnuts", "1 tsp chia seeds"],
+                        steps: ["Grab from prep — already made and frozen during your prep session. Break off a piece and enjoy."],
+                        tip: "Already prepped! Berries have the highest antioxidant content of any fruit — ellagic acid is a potent anti-cancer compound. Walnuts add omega-3s, chia adds fiber.",
+                        portions: ["14g protein", "170 cal", "4g fiber", "5 min + freeze"]
                     }
                 ]
             },
             {
-                day: 8, theme: "Teriyaki Night", protein: "148g", calories: "1,530", prep: "PREP DAY — Prep Session 3 + Grocery Run 2 (covers Week 2)",
+                day: 8, theme: "Teriyaki Night", protein: "131g", calories: "1,580", prep: "PREP DAY — Prep Session 3 + Grocery Run 2 (covers Week 2)",
                 meals: [
                     { type: "Breakfast", icon: "🌅", name: "Strawberry Chocolate Overnight Oats", portion: "40g protein - 430 cal", color: "#a3b899",
                         ingredients: ["1/2 cup rolled oats", "1 cup unsweetened almond milk", "1.5 tbsp cacao powder (NOT Dutch-processed)", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "1 scoop ON Gold Standard Banana Cream whey", "1 tsp chia seeds", "--- MORNING TOPPINGS ---", "1/2 cup fresh strawberries, sliced", "1 tbsp mini dark chocolate chips (melted for the top layer)", "1 tbsp hemp hearts"],
-                        steps: ["Night before: blend almond milk, cacao, collagen, L-glutamine, MCT oil, and whey. Pour over oats and chia seeds. Stir, refrigerate.", "Morning: melt chocolate chips in the microwave (30 sec). Drizzle over the top for a solid chocolate layer.", "Top with fresh strawberry slices and hemp hearts."],
+                        steps: ["Grab your jar from prep — made during Prep Session 3.", "Morning: melt chocolate chips in the microwave (30 sec). Drizzle over the top for a solid chocolate layer.", "Top with fresh strawberry slices and hemp hearts."],
                         tip: "The chocolate top layer sets up like magic. Full supplement stack built in. Strawberry ellagic acid, cacao flavanols, hemp complete protein.",
                         portions: ["40g protein", "430 cal", "7g fiber", "5 min + overnight"]
                     },
@@ -2526,16 +2672,16 @@ const mealData = {
                         tip: "Fresh and vibrant. The cold cucumber and carrot salads contrast the warm teriyaki perfectly. Ginger and garlic are both anti-inflammatory powerhouses.",
                         portions: ["46g protein", "520 cal", "3g fiber", "20 min"]
                     },
-                    { type: "Dessert", icon: "🍨", name: "Chocolate Greek Yogurt", portion: "18g protein - 150 cal", color: "#c4a882",
-                        ingredients: ["3/4 cup nonfat Greek yogurt", "1 tbsp cacao powder (NOT Dutch-processed)", "1 tsp honey", "1/4 tsp vanilla extract", "1 tbsp mini dark chocolate chips", "Pinch of sea salt"],
-                        steps: ["Stir cacao powder into yogurt until smooth.", "Add honey, vanilla, and salt.", "Top with chocolate chips."],
-                        tip: "Tastes like chocolate mousse but it's mostly Greek yogurt. 18g protein, cacao flavanols, probiotics. The salt makes the chocolate pop.",
-                        portions: ["18g protein", "150 cal", "2g fiber", "2 min"]
+                    { type: "Dessert", icon: "🍨", name: "Caramelized Banana Bites", portion: "5g protein - 180 cal", color: "#c4a882",
+                        ingredients: ["1 medium banana, sliced into rounds", "1 tsp coconut oil", "1 tbsp almond butter", "1 tsp honey", "1/2 tsp cinnamon", "1 tbsp toasted coconut flakes", "1 tsp mini dark chocolate chips", "Pinch of flaky sea salt"],
+                        steps: ["Heat coconut oil in a pan over medium heat.", "Lay banana rounds flat, cook 1-2 min per side until golden and caramelized.", "Plate the banana bites. Drizzle almond butter and honey over top.", "Sprinkle cinnamon, coconut flakes, chocolate chips, and sea salt."],
+                        tip: "All the best parts of the banana toast, minus the bread. Caramelizing concentrates the natural sugars. The almond butter + chocolate + sea salt combo is unreal.",
+                        portions: ["5g protein", "180 cal", "3g fiber", "8 min"]
                     }
                 ]
             },
             {
-                day: 9, theme: "Lemon Garlic", protein: "148g", calories: "1,590",
+                day: 9, theme: "Lemon Garlic", protein: "140g", calories: "1,510",
                 meals: [
                     { type: "Breakfast", icon: "🌅", name: "Baked Protein Pancake Bowls", portion: "38g protein - 400 cal", color: "#a3b899",
                         ingredients: ["1/3 cup rolled oats, blended into flour", "1 scoop ON Gold Standard Banana Cream whey", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "1 egg", "1/4 cup nonfat Greek yogurt", "1/4 cup unsweetened almond milk", "1/2 tsp baking powder", "1/2 tsp vanilla", "--- TOPPINGS ---", "1/4 cup mixed berries (fresh, or thaw frozen in fridge overnight)", "1 tsp maple syrup", "1 tbsp chopped walnuts"],
@@ -2555,22 +2701,22 @@ const mealData = {
                         tip: "Use the fresh chicken cutlets tonight — they need to be cooked first. Garlic contains allicin with potent anti-cancer properties. Lemon boosts iron absorption. Cook extra chicken and farro for lunch prep!",
                         portions: ["48g protein", "530 cal", "6g fiber", "30 min"]
                     },
-                    { type: "Dessert", icon: "🍨", name: "Apple Samoas", portion: "4g protein - 170 cal", color: "#c4a882",
-                        ingredients: ["1 medium apple, cored and sliced into rings", "2 tbsp almond butter", "1 oz dark chocolate (70%+), melted", "2 tbsp unsweetened toasted coconut flakes", "Flaky sea salt"],
-                        steps: ["Core apple and slice into 1/4-inch rings.", "Spread almond butter on each ring.", "Drizzle with melted dark chocolate.", "Sprinkle toasted coconut flakes and sea salt."],
-                        tip: "Apple pectin fiber + almond butter healthy fats + dark chocolate flavanols + coconut MCTs. Named after the Girl Scout cookie but way better for you.",
-                        portions: ["4g protein", "170 cal", "4g fiber", "5 min"]
+                    { type: "Dessert", icon: "🍨", name: "Strawberry Cheesecake Protein Fluff", portion: "22g protein - 160 cal", color: "#c4a882",
+                        ingredients: ["1/2 cup low-fat cottage cheese", "1/4 cup nonfat Greek yogurt", "1/2 cup fresh strawberries, diced", "1 tsp honey", "1/4 tsp vanilla extract", "1 tbsp graham cracker crumbs"],
+                        steps: ["Blend cottage cheese and yogurt until smooth.", "Fold in strawberries, honey, and vanilla.", "Top with graham cracker crumbs."],
+                        tip: "Cottage cheese blended smooth tastes like cheesecake filling — 22g protein. Strawberry ellagic acid, casein for slow digestion.",
+                        portions: ["22g protein", "160 cal", "1g fiber", "5 min"]
                     }
                 ]
             },
             {
-                day: 10, theme: "Enchilada Night (Round 2)", protein: "149g", calories: "1,530",
+                day: 10, theme: "Enchilada Night (Round 2)", protein: "129g", calories: "1,570",
                 meals: [
-                    { type: "Breakfast", icon: "🌅", name: "Caramelized Banana Toast", portion: "12g protein - 350 cal", color: "#a3b899",
-                        ingredients: ["1 slice Ezekiel bread (or whole grain)", "1 medium banana, sliced lengthwise", "2 tbsp almond butter", "1 tsp coconut oil", "1 tbsp honey", "1 tsp cinnamon", "1 tbsp toasted coconut flakes", "Flaky sea salt"],
-                        steps: ["Toast bread to your liking.", "Heat coconut oil in a pan. Lay banana halves flat, cook 2 min per side until golden and caramelized.", "Spread almond butter on toast.", "Lay caramelized banana on top.", "Drizzle honey, sprinkle cinnamon, coconut flakes, and sea salt."],
-                        tip: "Celebration breakfast! Caramelizing banana concentrates natural sugars. Pair with your morning supplement shake for full protein coverage.",
-                        portions: ["12g protein", "350 cal", "5g fiber", "10 min"]
+                    { type: "Breakfast", icon: "🌅", name: "Chocolate Banana Protein Smoothie", portion: "38g protein - 400 cal", color: "#a3b899",
+                        ingredients: ["1 cup unsweetened almond milk", "1 scoop banana cream whey protein", "1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "1 medium banana", "1.5 tbsp cacao powder (NOT Dutch-processed)", "1 tbsp chia seeds", "1/2 cup ice"],
+                        steps: ["Add almond milk, protein powder, collagen, L-glutamine, MCT oil, and cacao powder to blender.", "Add banana and ice.", "Blend until smooth and thick.", "Pour into a glass or bowl. Top with chia seeds."],
+                        tip: "Chocolate + banana is a classic combo. The cacao gives you flavanols for heart health while the collagen + L-glutamine stack handles gut health. Full supplement stack in one glass.",
+                        portions: ["38g protein", "400 cal", "5g fiber", "5 min"]
                     },
                     { type: "Lunch", icon: "☀️", name: "Turkey Taco Wrap", portion: "40g protein - 450 cal", color: "#a3b899",
                         ingredients: ["4 oz seasoned ground turkey (from prep)", "1 Mission Carb Balance tortilla", "1/4 cup cooked brown rice", "2 tbsp Mexican blend shredded cheese", "2 tbsp salsa", "Hot sauce", "1 tbsp sour cream"],
@@ -2584,20 +2730,20 @@ const mealData = {
                         tip: "Round 2! These were good enough the first time to earn a repeat. You know the drill by now. Cumin and chili powder both have anti-inflammatory properties.",
                         portions: ["46g protein", "540 cal", "8g fiber", "35 min"]
                     },
-                    { type: "Dessert", icon: "🍨", name: "Maple Cinnamon Roasted Apples", portion: "2g protein - 150 cal", color: "#c4a882",
-                        ingredients: ["2 medium apples, cored and sliced", "1 tsp coconut oil, melted", "1 tbsp pure maple syrup", "1 tsp cinnamon", "1/4 tsp nutmeg", "1 tbsp chopped walnuts", "2 tbsp Greek yogurt for topping", "Pinch of sea salt"],
-                        steps: ["Toss apple slices with coconut oil, maple syrup, cinnamon, nutmeg, and salt.", "Spread on parchment-lined baking sheet.", "Roast at 375°F for 20-25 min until soft and caramelized.", "Top with walnuts and a dollop of Greek yogurt."],
-                        tip: "Roasting concentrates natural sugars and pectin. Cinnamon helps regulate blood sugar.",
-                        portions: ["2g protein", "150 cal", "4g fiber", "25 min"]
+                    { type: "Dessert", icon: "🍨", name: "Caramelized Banana Bites", portion: "5g protein - 180 cal", color: "#c4a882",
+                        ingredients: ["1 medium banana, sliced into rounds", "1 tsp coconut oil", "1 tbsp almond butter", "1 tsp honey", "1/2 tsp cinnamon", "1 tbsp toasted coconut flakes", "1 tsp mini dark chocolate chips", "Pinch of flaky sea salt"],
+                        steps: ["Heat coconut oil in a pan over medium heat.", "Lay banana rounds flat, cook 1-2 min per side until golden and caramelized.", "Plate the banana bites. Drizzle almond butter and honey over top.", "Sprinkle cinnamon, coconut flakes, chocolate chips, and sea salt."],
+                        tip: "All the best parts of the banana toast, minus the bread. Caramelizing concentrates the natural sugars. The almond butter + chocolate + sea salt combo is unreal.",
+                        portions: ["5g protein", "180 cal", "3g fiber", "8 min"]
                     }
                 ]
             },
             {
-                day: 11, theme: "Creamy Lemon", protein: "147g", calories: "1,540", prep: "PREP DAY — Prep Session 4 (final mid-week refresh)",
+                day: 11, theme: "Creamy Lemon", protein: "143g", calories: "1,520", prep: "PREP DAY — Prep Session 4 (final mid-week refresh)",
                 meals: [
                     { type: "Breakfast", icon: "🌅", name: "Mango-Coconut Overnight Oats", portion: "35g protein - 410 cal", color: "#a3b899",
                         ingredients: ["1/2 cup rolled oats", "1/2 cup unsweetened almond milk", "1/4 cup Simple Truth light coconut milk", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "3 tbsp hemp hearts", "1 tsp chia seeds", "--- MORNING TOPPINGS ---", "1/2 cup frozen mango (move to fridge night before)", "1 tbsp walnuts", "1 tsp honey"],
-                        steps: ["Combine oats, almond milk, coconut milk, collagen, L-glutamine, MCT oil, hemp hearts, and chia seeds in a jar.", "Stir well. Refrigerate overnight.", "Top with thawed mango, walnuts, and honey."],
+                        steps: ["Grab your jar from prep — made Day 10 evening with ingredients from Prep Session 3 grocery run.", "Top with thawed mango, walnuts, and honey."],
                         tip: "Coconut milk adds medium-chain fatty acids and a tropical vibe. Mango provides beta-carotene and vitamin C. Uses up that coconut milk.",
                         portions: ["35g protein", "410 cal", "8g fiber", "0 min"]
                     },
@@ -2622,7 +2768,7 @@ const mealData = {
                 ]
             },
             {
-                day: 12, theme: "Basil Night", protein: "153g", calories: "1,550",
+                day: 12, theme: "Basil Night", protein: "135g", calories: "1,570",
                 meals: [
                     { type: "Breakfast", icon: "🌅", name: "Egg Muffin Cups + Morning Shake", portion: "38g protein - 380 cal", color: "#a3b899",
                         ingredients: ["--- MORNING BOOST SHAKE ---", "1 cup unsweetened almond milk", "1.5 tbsp cacao powder (NOT Dutch-processed)", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "--- EGG MUFFIN CUPS (x2) ---", "2 eggs (from batch)", "Spinach, onion, cheese (baked in)"],
@@ -2642,16 +2788,16 @@ const mealData = {
                         tip: "One-pot wonder. The orzo absorbs all the marinara flavor. Cooked tomato sauce = max lycopene. Garlic, spinach, olive oil — this is textbook Mediterranean.",
                         portions: ["48g protein", "520 cal", "7g fiber", "25 min"]
                     },
-                    { type: "Dessert", icon: "🍨", name: "Banana Nut Date Chia Pudding", portion: "10g protein - 190 cal", color: "#c4a882",
-                        ingredients: ["2 tbsp chia seeds", "1/2 cup unsweetened almond milk", "1/2 scoop ON Gold Standard Banana Cream whey", "1/4 tsp vanilla extract", "1/4 tsp cinnamon", "--- TOPPING ---", "1 Medjool date, chopped", "1 tbsp walnuts, crushed", "Drizzle of honey"],
-                        steps: ["Mix chia seeds, almond milk, protein powder, vanilla, and cinnamon.", "Stir well, refrigerate overnight or 2+ hours.", "Top with chopped date, crushed walnuts, and honey drizzle."],
-                        tip: "Banana cream whey + date + walnut = dessert that tastes like banana bread pudding. Chia omega-3s, date antioxidants.",
-                        portions: ["10g protein", "190 cal", "6g fiber", "5 min + overnight"]
+                    { type: "Dessert", icon: "🍨", name: "Caramelized Banana Bites", portion: "5g protein - 180 cal", color: "#c4a882",
+                        ingredients: ["1 medium banana, sliced into rounds", "1 tsp coconut oil", "1 tbsp almond butter", "1 tsp honey", "1/2 tsp cinnamon", "1 tbsp toasted coconut flakes", "1 tsp mini dark chocolate chips", "Pinch of flaky sea salt"],
+                        steps: ["Heat coconut oil in a pan over medium heat.", "Lay banana rounds flat, cook 1-2 min per side until golden and caramelized.", "Plate the banana bites. Drizzle almond butter and honey over top.", "Sprinkle cinnamon, coconut flakes, chocolate chips, and sea salt."],
+                        tip: "All the best parts of the banana toast, minus the bread. Caramelizing concentrates the natural sugars. The almond butter + chocolate + sea salt combo is unreal.",
+                        portions: ["5g protein", "180 cal", "3g fiber", "8 min"]
                     }
                 ]
             },
             {
-                day: 13, theme: "Cajun Friday", protein: "148g", calories: "1,570",
+                day: 13, theme: "Cajun Friday", protein: "150g", calories: "1,560",
                 meals: [
                     { type: "Breakfast", icon: "🌅", name: "Protein Yogurt Parfait + Morning Shake", portion: "38g protein - 400 cal", color: "#a3b899",
                         ingredients: ["--- MORNING BOOST SHAKE ---", "1 cup unsweetened almond milk", "1.5 tbsp cacao powder (NOT Dutch-processed)", "~1/2 scoop Vital Proteins chocolate collagen (~12g)", "5g L-glutamine", "1 tsp Nature's Way MCT oil", "--- PARFAIT ---", "1 cup Oikos Triple Zero vanilla Greek yogurt", "1/2 cup fresh strawberries, sliced", "2 tbsp walnuts, chopped", "1 tsp honey drizzle"],
@@ -2671,16 +2817,16 @@ const mealData = {
                         tip: "Friday night comfort food! The cottage cheese becomes an insanely creamy cajun alfredo without the guilt. One pan after the pasta. Cayenne is anti-inflammatory and thermogenic. Hits that spicy comfort food craving.",
                         portions: ["46g protein", "520 cal", "4g fiber", "25 min"]
                     },
-                    { type: "Dessert", icon: "🍨", name: "Chocolate Cottage Cheese Pudding", portion: "20g protein - 170 cal", color: "#c4a882",
-                        ingredients: ["1/2 cup low-fat cottage cheese", "1.5 tbsp cacao powder (NOT Dutch-processed)", "1 tsp honey", "1/4 tsp vanilla extract", "Pinch of sea salt", "1 tbsp mini dark chocolate chips"],
-                        steps: ["Blend cottage cheese, cacao, honey, vanilla, and salt until completely smooth (about 30 sec in blender or food processor).", "Scoop into a bowl. Top with chocolate chips.", "Eat immediately or chill 30 min for a firmer mousse texture."],
-                        tip: "Tastes like chocolate mousse. 20g protein and under 170 cal. The salt makes the chocolate sing. Cacao flavanols are heart-healthy antioxidants.",
-                        portions: ["20g protein", "170 cal", "3g fiber", "5 min"]
+                    { type: "Dessert", icon: "🍨", name: "Strawberry Cheesecake Protein Fluff", portion: "22g protein - 160 cal", color: "#c4a882",
+                        ingredients: ["1/2 cup low-fat cottage cheese", "1/4 cup nonfat Greek yogurt", "1/2 cup fresh strawberries, diced", "1 tsp honey", "1/4 tsp vanilla extract", "1 tbsp graham cracker crumbs"],
+                        steps: ["Blend cottage cheese and yogurt until smooth.", "Fold in strawberries, honey, and vanilla.", "Top with graham cracker crumbs."],
+                        tip: "Cottage cheese blended smooth tastes like cheesecake filling — 22g protein. Strawberry ellagic acid, casein for slow digestion.",
+                        portions: ["22g protein", "160 cal", "1g fiber", "5 min"]
                     }
                 ]
             },
             {
-                day: 14, theme: "Celebration!", protein: "152g", calories: "1,560",
+                day: 14, theme: "Celebration!", protein: "129g", calories: "1,560",
                 meals: [
                     { type: "Breakfast", icon: "🌅", name: "Fluffy Protein Blueberry Pancakes", portion: "38g protein - 420 cal", color: "#a3b899",
                         ingredients: ["1/3 cup rolled oats (blended into flour)", "1 scoop ON Gold Standard Banana Cream whey", "1 egg", "1/4 cup nonfat Greek yogurt", "1/4 cup unsweetened almond milk", "1/2 tsp baking powder", "1/2 tsp vanilla extract", "1/4 cup fresh blueberries", "Cooking spray", "--- TOPPINGS ---", "2 tbsp pure maple syrup", "1 tbsp walnuts, chopped", "Extra blueberries"],
@@ -2700,11 +2846,11 @@ const mealData = {
                         tip: "Celebration dinner! 🎉 Marinara lycopene, garlic allicin, spinach folate, olive oil polyphenols, whole grain protein pasta. Every element is evidence-based Mediterranean. You just crushed 14 days. Start the cycle again or build from the recipe bank!",
                         portions: ["48g protein", "540 cal", "7g fiber", "30 min"]
                     },
-                    { type: "Dessert", icon: "🍨", name: "Strawberry Banana Bark", portion: "14g protein - 160 cal", color: "#c4a882",
-                        ingredients: ["1 cup nonfat Greek yogurt", "1 tsp honey", "1/4 tsp vanilla extract", "1/2 medium banana, sliced thin", "4-5 fresh strawberries, sliced", "1 tbsp mini dark chocolate chips", "1 tbsp crushed walnuts", "1 tsp hemp hearts"],
-                        steps: ["Mix yogurt with honey and vanilla.", "Spread thin on a parchment-lined sheet pan.", "Arrange banana and strawberry slices on top.", "Scatter chocolate chips, walnuts, and hemp hearts.", "Freeze 2+ hours. Break into pieces."],
-                        tip: "Banana prebiotic fiber, strawberry ellagic acid, walnut omega-3s, hemp complete protein. Celebrate! You crushed 14 days! 🎉",
-                        portions: ["14g protein", "160 cal", "3g fiber", "5 min + freeze"]
+                    { type: "Dessert", icon: "🍨", name: "Caramelized Banana Bites", portion: "5g protein - 180 cal", color: "#c4a882",
+                        ingredients: ["1 medium banana, sliced into rounds", "1 tsp coconut oil", "1 tbsp almond butter", "1 tsp honey", "1/2 tsp cinnamon", "1 tbsp toasted coconut flakes", "1 tsp mini dark chocolate chips", "Pinch of flaky sea salt"],
+                        steps: ["Heat coconut oil in a pan over medium heat.", "Lay banana rounds flat, cook 1-2 min per side until golden and caramelized.", "Plate the banana bites. Drizzle almond butter and honey over top.", "Sprinkle cinnamon, coconut flakes, chocolate chips, and sea salt."],
+                        tip: "All the best parts of the banana toast, minus the bread. Caramelizing concentrates the natural sugars. The almond butter + chocolate + sea salt combo is unreal.",
+                        portions: ["5g protein", "180 cal", "3g fiber", "8 min"]
                     }
                 ]
             }
@@ -2722,7 +2868,7 @@ mealData.charlie.days = mealData.kasey.days.map(function(day) {
     var kProtein = parseInt(day.protein);
     var kCal = parseInt(day.calories.replace(",", ""));
     cDay.protein = Math.round(kProtein * 1.3) + "g";
-    cDay.calories = (Math.round(kCal * 1.4 / 100) * 100).toLocaleString();
+    cDay.calories = (Math.round(kCal * 1.5 / 100) * 100).toLocaleString();
     
     cDay.meals = cDay.meals.map(function(meal) {
         var m = JSON.parse(JSON.stringify(meal));
@@ -2732,7 +2878,7 @@ mealData.charlie.days = mealData.kasey.days.map(function(day) {
         var origCal = calMatch ? parseInt(calMatch[1]) : 0;
         if (isNaN(origProtein) || origCal === 0) return m;
         var newProtein = Math.round(origProtein * 1.3);
-        var newCal = Math.round(origCal * 1.4);
+        var newCal = Math.round(origCal * 1.5);
         m.portion = newProtein + "g protein - " + newCal + " cal";
         
         m.portions = m.portions.map(function(p) {
@@ -2754,6 +2900,15 @@ mealData.charlie.days = mealData.kasey.days.map(function(day) {
     return cDay;
 });
 
+// Add Kasey-specific dinner tips (supplement focus, gut health, anti-inflammatory)
+mealData.kasey.days.forEach(function(day) {
+    day.meals.forEach(function(m) {
+        if (m.type === 'Dinner' && m.tip) {
+            m.tip += "\n\nKASEY: Your collagen + L-glutamine stack supports gut lining repair — pair with the cooked veggies here for maximum absorption. Olive oil polyphenols amplify the anti-inflammatory effect.";
+        }
+    });
+});
+
 // ===== PREP SESSION DETAILS =====
 var prepSessions = {
     1: {
@@ -2766,8 +2921,8 @@ var prepSessions = {
             {day:3, type:"Lunch", originalName:"Chicken Burrito Bowl"},
             {day:4, type:"Lunch", originalName:"Chipotle Chicken Wrap"},
             {day:1, type:"Dinner", originalName:"Cauliflower Bolognese over Protein Spaghetti"},
-            {day:1, type:"Dessert", originalName:"Raspberry Yogurt Bark"},
-            {day:2, type:"Dessert", originalName:"Frozen Berry Yogurt Bark"},
+            {day:1, type:"Dessert", originalName:"Yogurt Bark"},
+            {day:3, type:"Dessert", originalName:"Yogurt Bark"},
             {day:3, type:"Breakfast", originalName:"Peach Cobbler Overnight Oats"},
             {day:6, type:"Breakfast", originalName:"Egg Muffin Cups + Morning Shake"},
             {day:12, type:"Breakfast", originalName:"Egg Muffin Cups + Morning Shake"}
@@ -2814,9 +2969,10 @@ var prepSessions = {
             "→ FREEZE 4 immediately for Day 12 (label them!)",
             "→ Fridge the other 8 (Days 6 breakfast + extras)",
             "",
-            "═══ FROZEN YOGURT BARK (2 batches) ═══",
-            "Batch 1 — Raspberry (Day 1 dessert): 1 cup Greek yogurt, 3/4 cup raspberries, walnuts, chia, honey",
-            "Batch 2 — Mixed Berry (Day 2 dessert): 1.5 cups Greek yogurt, 3/4 cup mixed berries, dark choc chips, honey",
+            "═══ YOGURT BARK — 1 big batch for Days 1+3 (4 servings) ═══",
+            "4 cups nonfat Greek yogurt, 4 tsp honey, 2 tsp vanilla extract",
+            "3 cups fresh mixed berries (raspberries, blueberries, or mixed)",
+            "4 tbsp mini dark chocolate chips, 4 tbsp crushed walnuts, 4 tsp chia seeds",
             "",
             "═══ GROCERY RUN 1 — covers ALL of Week 1 (Days 1-7) ═══",
             "~5 lbs chicken breast (Session 1 — brine + cook today)",
@@ -2824,7 +2980,7 @@ var prepSessions = {
             "~2 lbs chicken breast (fresh dinners Days 5+7 — FREEZE, thaw as needed)",
             "1 lb ground turkey (Day 4 enchilada dinner — fridge, use within 3 days)",
             "Fresh strawberries 1 pint (Days 1-5 toppings)",
-            "Raspberries 1 pint (Day 1 bark)",
+            "Fresh berries 2 pints (Days 1+3 yogurt bark + breakfast toppings)",
             "Bananas 3-4",
             "2 lemons",
             "Marinara sauce (Bolognese tonight + Day 3 stew)",
@@ -2841,17 +2997,18 @@ var prepSessions = {
             "BRINE THE CHICKEN FIRST — Dissolve 1/4 cup kosher salt in 4 cups warm water. Add 5 lbs chicken breast. Refrigerate 30-60 min while you do everything else.",
             "FREEZE WEEK'S CHICKEN — Immediately put Session 2 chicken (3 lbs) and dinner chicken (2 lbs) in separate labeled freezer bags. You'll thaw them later.",
             "START RICE + FARRO — 1 cup dry rice + 2 cups dry farro. Both cook while you prep everything else.",
-            "BOLOGNESE DINNER — Brown ALL your ground turkey. Add riced cauliflower, marinara, Italian seasoning. Enough for tonight's dinner (2 portions each). Save remaining raw cauliflower in fridge for Day 3 stew.",
             "EGG MUFFIN CUPS — Preheat 375°F. Whisk 12 eggs + milk + salt & pepper. Grease ONE muffin tin. Divide spinach, onion, cheese into 12 cups. Pour egg. Bake 20 min. FREEZE 4 for Day 12. Fridge the other 8.",
             "COOK BRINED CHICKEN — Pat DRY with paper towels. Season with olive oil + spices. Sear 1 min/side in hot pan, then bake 400°F 12-15 min. PULL AT 160°F. Rest 10 FULL MINUTES.",
             "PORTION THE CHICKEN — You cooked ~60 oz. Split it 4 ways:\n→ CHIPOTLE (24 oz): Shred + toss with chipotles in adobo. This is for Days 1+4 wraps.\n→ LEMON-OREGANO (12 oz): Slice + season with oregano, lemon, garlic. For Day 2 grain bowls.\n→ SEASONED (12 oz): Dice + season with cumin, chili powder. For Day 3 burrito bowls.\n→ PLAIN (12 oz): Shred plain — goes into Day 3 stew dinner.",
+            "PREP PANTRY ITEMS — Drain & rinse: 1 can black beans (Day 3 burrito bowls), 1 can chickpeas (Day 2 grain bowls). Measure 1/2 cup corn (Day 3 bowls). Set all aside for packing containers.",
             "PACK LUNCH CONTAINERS — 8 total, labeled K or C:\n→ DAY 1 + DAY 4 CHIPOTLE WRAPS (4 containers): K = 5 oz chipotle chicken, C = 6.5 oz. Tortillas + toppings stay separate.\n→ DAY 2 GRAIN BOWLS (2 containers): K = 5 oz lemon chicken + ½ cup farro + chickpeas + roasted red peppers. C = 6.5 oz chicken + ⅔ cup farro + chickpeas + peppers.\n→ DAY 3 BURRITO BOWLS (2 containers): K = 5 oz seasoned chicken + ½ cup rice + black beans + corn. C = 6.5 oz + ⅔ cup rice + beans + corn.\n→ Add fresh toppings the morning you eat (spinach, lemon, feta, lime, hot sauce).",
-            "YOGURT BARK — Two parchment sheets: Raspberry bark (tonight's dessert) + Berry bark (Day 2 dessert). Freeze both.",
+            "YOGURT BARK — One big batch on a parchment-lined sheet pan: mix yogurt + honey + vanilla, spread thin, press in berries, scatter choc chips + walnuts + chia. Freeze 2+ hours. Break into pieces — store in a container. Covers Days 1+3 dessert for both of you.",
             "STORE FARRO — Save ~2.5 cups cooked farro for Day 5 grain bowls (stays fresh 5 days in fridge).",
             "PEACH COBBLER OATS — 2 jars for Day 3 breakfast: oats, almond milk, collagen, L-glutamine, MCT oil, whey, chia, cinnamon, nutmeg. Refrigerate. Move frozen peaches to fridge the night before. Add thawed peaches + walnuts + honey in the morning.",
-            "LABEL EVERYTHING — K or C on every container. Fridge stew chicken separately for Day 3."
+            "LABEL EVERYTHING — K or C on every container. Fridge stew chicken separately for Day 3.",
+            "TONIGHT'S DINNER: BOLOGNESE — Brown ALL your ground turkey. Add riced cauliflower, marinara, Italian seasoning. Enough for tonight's dinner (2 portions each). Save remaining raw cauliflower in fridge for Day 3 stew. Start this while you're finishing up packing containers, or after prep is done."
         ],
-        tip: "Big day but everything multitasks. Brine goes in first. Bolognese cooks for dinner while chicken + muffins bake. Rice and farro cook themselves. Use ALL ricotta in tomorrow's zucchini boats and ALL ground turkey tonight — they're your most perishable items. The broccoli keeps until Day 2-3 as a steamed side."
+        tip: "Big day but everything multitasks. Brine goes in first. Egg muffins bake while chicken cooks. Rice and farro cook themselves. Dinner is the last step — start the Bolognese while you're wrapping up containers or after everything is packed. Use ALL ricotta in tomorrow's zucchini boats and ALL ground turkey tonight — they're your most perishable items."
     },
     4: {
         name: "Prep Session 2",
@@ -2864,7 +3021,9 @@ var prepSessions = {
             {day:4, type:"Dinner", originalName:"Spicy Turkey Enchiladas"},
             {day:6, type:"Dinner", originalName:"Spicy Black Bean & Sweet Potato Bowl"},
             {day:5, type:"Breakfast", originalName:"Cacao-Berry Overnight Oats"},
-            {day:7, type:"Breakfast", originalName:"Apple Pie Breakfast Bowl"}
+            {day:7, type:"Breakfast", originalName:"Apple Pie Breakfast Bowl"},
+            {day:5, type:"Dessert", originalName:"Yogurt Bark"},
+            {day:7, type:"Dessert", originalName:"Yogurt Bark"}
         ],
         ingredients: [
             "",
@@ -2897,19 +3056,26 @@ var prepSessions = {
             "",
             "═══ SWEET POTATO (Day 6 dinner) ═══",
             "1 large sweet potato — cube + roast during this session",
-            "Olive oil, cumin, chili powder, garlic powder"
+            "Olive oil, cumin, chili powder, garlic powder",
+            "",
+            "═══ YOGURT BARK — 1 big batch for Days 5+7 (4 servings) ═══",
+            "4 cups nonfat Greek yogurt, 4 tsp honey, 2 tsp vanilla extract",
+            "3 cups fresh mixed berries",
+            "4 tbsp mini dark chocolate chips, 4 tbsp crushed walnuts, 4 tsp chia seeds"
         ],
         steps: [
             "BRINE CHICKEN — Thawed from freezer, into salt water, fridge 30 min.",
             "START RICE — 1.5 cups dry brown rice.",
-            "COOK TONIGHT'S ENCHILADAS — Brown 1 lb turkey with onion, garlic, cumin, chili powder. Roll into tortillas with enchilada sauce + cheese. Bake tonight.",
             "ROAST SWEET POTATO — Cube, toss with oil + spices, roast 400°F 25 min. Store for Day 6 dinner.",
             "COOK BRINED CHICKEN — Pat dry, season, sear + bake (400°F, pull at 160°F, rest 10 min). You need ~36 oz cooked for 3 days of lunches for both of you.",
+            "PREP PANTRY ITEMS — Drain & rinse: 1 can black beans (Days 5+6+7 bowls). Measure 1 cup corn (Days 6+7 bowls). Set aside for packing containers.",
             "PACK LUNCH CONTAINERS — 6 total, labeled K or C:\n→ DAY 5 FAJITA BOWLS (2 containers): K = 5 oz chicken + ½ cup rice + black beans. C = 6.5 oz + ⅔ cup rice + beans. Sear peppers + onion fresh that morning (2 min).\n→ DAY 6 GREEK BOWLS (2 containers): K = 5 oz chicken + ½ cup rice. C = 6.5 oz + ⅔ cup rice. Add hummus, cucumber, feta, roasted red peppers day-of.\n→ DAY 7 BLACK BEAN BOWLS (2 containers): K = 5 oz chicken + ½ cup rice + beans + corn. C = 6.5 oz + ⅔ cup rice + beans + corn.\n→ Fresh toppings day-of (salsa, sour cream, lime, feta).",
             "OVERNIGHT OATS — 4 jars: base mix in all. 2 jars get cacao powder (Day 5). 2 jars plain with apple pie spices (Day 7 — add diced apple + walnuts + maple in the morning).",
-            "Check egg muffin supply — should have 8 in fridge for Day 6 breakfast."
+            "YOGURT BARK — Same as Session 1: mix yogurt + honey + vanilla, spread on parchment, press in berries, scatter choc chips + walnuts + chia. Freeze. Covers Days 5+7 dessert for both of you.",
+            "Check egg muffin supply — should have 8 in fridge for Day 6 breakfast.",
+            "TONIGHT'S DINNER: ENCHILADAS — Brown 1 lb turkey with onion, garlic, cumin, chili powder. Roll into tortillas with enchilada sauce + cheese. Bake 375°F 20 min. Start this while you're packing containers or after prep is wrapped up."
         ],
-        tip: "Quick mid-week session! The enchiladas are tonight's dinner. Sweet potato roasts itself while you cook chicken. You're halfway through Week 1!"
+        tip: "Quick mid-week session! Sweet potato roasts itself while you cook chicken. Finish all your prep and packing first, then get the enchiladas in the oven. You're halfway through Week 1!"
     },
     8: {
         name: "Prep Session 3 + Grocery Run 2",
@@ -2965,10 +3131,9 @@ var prepSessions = {
             "~1.5 lbs chicken breast (Session 3 — brine + cook today for Day 13)",
             "~3.5 lbs chicken breast (Session 4 Day 11 — FREEZE, thaw Day 10 night)",
             "~3 lbs chicken breast (fresh dinners Days 8,9,11,12,14 — FREEZE, thaw as needed)",
-            "1 pint fresh strawberries (Days 8-11)",
+            "1 pint fresh strawberries (Days 8-13 — breakfast toppings + cheesecake fluff dessert)",
             "Fresh blueberries (Day 14 pancakes — weekend breakfast!)",
-            "2-3 apples (Days 9+10 desserts)",
-            "2-3 bananas (Days 9-14)",
+            "5-6 bananas (Days 8-14 — banana bites dessert + smoothies)",
             "1 English cucumber + carrots (Day 8 teriyaki sides)",
             "1 lemon (Day 9 lemon garlic dinner)",
             "Teriyaki sauce (Day 8 dinner)",
@@ -2976,9 +3141,9 @@ var prepSessions = {
             "Coconut milk (Day 11 mango oats)",
             "Frozen mango (Day 11 oats)",
             "FRESH ricotta (Day 14 baked pasta — don't open until Day 14!)",
-            "Cottage cheese (Day 11 dessert)",
-            "Graham crackers (Day 11 dessert)",
-            "Medjool dates (Day 12 dessert)",
+            "Cottage cheese 2 tubs (Days 9+11+13 cheesecake fluff dessert + Day 13 cajun pasta sauce)",
+            "Graham crackers (Days 9+11+13 cheesecake fluff topping)",
+            "Coconut oil + almond butter + toasted coconut flakes (banana bites dessert Days 8+10+12+14)",
             "Orzo pasta (Day 12 dinner)",
             "Broccoli or green beans (Day 13 blackened chicken bowl)",
             "Smoked paprika + cayenne (blackening spice — check spice rack)"
@@ -2989,6 +3154,7 @@ var prepSessions = {
             "START RICE — 2 cups dry brown rice.",
             "COOK TURKEY — Brown all 3 lbs with onion, garlic, cumin, chili powder, garlic powder. Split into:\n→ TACO WRAPS Days 8+10 (4 containers): K = 5 oz, C = 6.5 oz each day.\n→ DAY 10 ENCHILADA DINNER: Set aside 14 oz (7 oz each). Fridge.",
             "COOK BRINED CHICKEN — Pat dry, season, sear + bake. Pull at 160°F, rest 10 min. Split into:\n→ DAY 13 BLACKENED BOWLS (2 containers): K = 5 oz, C = 6.5 oz. Toss with blackening spice + sear day-of.",
+            "PREP PANTRY ITEMS — Drain & rinse: 2 cans black beans (Days 8+10 wraps + Day 13 bowl). Measure 1 cup corn (Day 13 bowl). Set aside for packing containers.",
             "PACK LUNCH CONTAINERS — 6 total, labeled K or C:\n→ DAYS 8+10 TACO WRAPS (4 containers): Turkey + rice + beans + cheese. Tortillas + sour cream + salsa stay separate.\n→ DAY 13 BLACKENED BOWLS (2 containers): Chicken + rice. Add broccoli/green beans fresh day-of.",
             "STRAWBERRY CHOCOLATE OATS — 2 jars: blend almond milk + cacao + collagen + L-glutamine + MCT + whey. Pour over oats + chia. Refrigerate. (Morning: melt choc chips, drizzle on top, add strawberries + hemp hearts.)",
             "NOTE: Day 10 evening, make 2 MANGO-COCONUT OATS for Day 11 breakfast. Ingredients are in the pantry from today's grocery run."
@@ -3003,7 +3169,6 @@ var prepSessions = {
             {day:11, type:"Lunch", originalName:"White Bean & Spinach Soup"},
             {day:12, type:"Lunch", originalName:"Chicken Enchilada Bowl"},
             {day:14, type:"Lunch", originalName:"White Bean & Spinach Soup"},
-            {day:12, type:"Dessert", originalName:"Banana Nut Date Chia Pudding"},
             {day:12, type:"Breakfast", originalName:"Egg Muffin Cups + Morning Shake"}
         ],
         ingredients: [
@@ -3027,20 +3192,15 @@ var prepSessions = {
             "1 can black beans",
             "1/2 cup corn",
             "1/4 cup enchilada sauce",
-            "Shredded cheese, sour cream, salsa, lime",
-            "",
-            "═══ CHIA PUDDING (Day 12 dessert — 2 jars) ═══",
-            "4 tbsp chia seeds, 1 cup almond milk",
-            "1 scoop protein powder, 1/4 tsp vanilla, 1/4 tsp cinnamon",
-            "Medjool date + walnuts + honey (toppings)"
+            "Shredded cheese, sour cream, salsa, lime"
         ],
         steps: [
             "BRINE CHICKEN — Last time! Salt water, fridge, 30 min.",
             "START RICE — 1 cup dry.",
             "COOK BRINED CHICKEN — Pat dry, season, sear + bake. Pull at 160°F, rest 10 min. Dice 12 oz with cumin + chili powder for enchilada bowls. Shred remaining ~30 oz for soup.",
+            "PREP PANTRY ITEMS — Drain & rinse: 1 can black beans, measure 1/2 cup corn, 1/4 cup enchilada sauce for Day 12 bowls. Set aside for packing.",
             "MAKE THE SOUP — Sauté garlic + carrots in olive oil. Add broth + marinara + beans. Simmer 10 min. Add spinach until wilted. Stir in shredded chicken. Season.\n→ 4 containers total: 2 for Day 11, 2 for Day 14. K gets ~1.5 cups per serving, C gets ~2 cups.",
             "PACK ENCHILADA BOWLS — 2 containers for Day 12:\n→ K = 5 oz diced chicken + ½ cup rice + black beans + corn + enchilada sauce + cheese.\n→ C = 6.5 oz chicken + ⅔ cup rice + beans + corn + sauce + cheese.",
-            "CHIA PUDDING — Mix chia + almond milk + protein powder + vanilla + cinnamon. 2 jars, refrigerate. Top with chopped date + walnuts + honey when eating.",
             "THAW EGG MUFFINS — Pull the 4 frozen muffins from Day 1 into the fridge for Day 12 breakfast.",
             "🎉 Last prep session! Just 3 fresh dinners left (Days 11, 12, 14) and you're DONE."
         ],
@@ -3226,8 +3386,6 @@ function renderProgress() {
 }
 
 function renderCalendar() {
-    var data = getData();
-    
     // Week ranges
     var w1Start = getDateForPlanDay(1);
     var w1End = getDateForPlanDay(7);
@@ -3276,7 +3434,13 @@ function renderCalendar() {
             var checkMark = isPast && !isActive ? '<span class="day-check">✓</span>' : '';
             var todayDot = isToday && !isActive ? '<span style="width:4px;height:4px;border-radius:50%;background:var(--sage-green);display:inline-block;"></span>' : '';
             
-            btn.innerHTML = '<span class="day-letter">' + SHORT_DAYS[dayDate.getDay()] + '</span><span class="day-number">' + dateNum + '</span>' + checkMark + todayDot;
+            var prepIcon = '';
+            var kDay = mealData.kasey && mealData.kasey.days && mealData.kasey.days[dayNum - 1];
+            if (kDay && kDay.prep) {
+                prepIcon = '<span class="day-prep-icon">◆</span>';
+            }
+            
+            btn.innerHTML = '<span class="day-letter">' + SHORT_DAYS[dayDate.getDay()] + '</span><span class="day-number">' + dateNum + '</span>' + checkMark + todayDot + prepIcon;
             btn.onclick = (function(d) { return function() { currentDay = d; showingSnacks = false; render(); }; })(dayNum);
             grid.appendChild(btn);
         }
@@ -3324,8 +3488,7 @@ function buildDynamicPrep(sessionDay, basePrepSession) {
     });
     
     // Build day-number patterns for fully-removed meals
-    // e.g., if Day 1 Dessert was swapped, look for "Day 1" in dessert-related lines
-    var swappedDayTypes = []; // [{day:1, type:"Dessert", oldName:"Raspberry..."}, ...]
+    var swappedDayTypes = [];
     swaps.forEach(function(s) {
         var mc = mealCounts[s.oldName];
         if (mc.swapped >= mc.total) {
@@ -3333,11 +3496,10 @@ function buildDynamicPrep(sessionDay, basePrepSession) {
         }
     });
     
-    // Build specific search terms from old meal names (unique words only)
+    // Build specific search terms from old meal names
     var uniqueTerms = [];
     swappedDayTypes.forEach(function(st) {
-        // Use the most distinctive word from the meal name
-        var words = st.oldName.replace(/[&+()—,]/g, ' ').split(/\s+/);
+        var words = st.oldName.replace(/[&+(),]/g, ' ').split(/\s+/);
         var generic = ['the','and','a','in','on','of','with','over','One','Pot','Spicy','Bowl','Rice',
                        'Chicken','Turkey','Day','Round','2','Protein','Fresh','Frozen','Morning','Cups',
                        'Shake','Oats','Overnight','Baked','Pasta','Wrap','Black','Bean','Sweet',
@@ -3355,88 +3517,38 @@ function buildDynamicPrep(sessionDay, basePrepSession) {
     // Build modified copy
     var ps = JSON.parse(JSON.stringify(basePrepSession));
     
-    // === BUILD HEADER ===
-    var header = ["═══ ⚠️ MEALS CHANGED — PREP UPDATED ═══"];
-    swaps.forEach(function(s) {
-        header.push("→ Day " + s.day + " " + s.type + ": " + s.oldName + " → " + s.newName);
-    });
-    header.push("");
-    
-    // === BUILD NEW MEAL INGREDIENTS SECTION ===
-    header.push("═══ NEW INGREDIENTS NEEDED ═══");
-    swaps.forEach(function(s) {
-        if (s.newMeal && s.newMeal.ingredients && s.newMeal.ingredients.length > 0) {
-            header.push("--- Day " + s.day + " " + s.newName + " ---");
-            s.newMeal.ingredients.forEach(function(ing) {
-                if (ing && ing.indexOf("---") !== 0 && ing.trim() !== '') {
-                    header.push(ing);
-                }
-            });
-        }
-    });
-    header.push("");
-    
-    // === BUILD ADJUSTMENT NOTES ===
-    header.push("═══ WHAT TO SKIP / REDUCE BELOW ═══");
-    var seen = {};
-    swaps.forEach(function(s) {
-        var mc = mealCounts[s.oldName];
-        if (!seen[s.oldName]) {
-            seen[s.oldName] = true;
-            if (mc.swapped >= mc.total) {
-                header.push("→ SKIP all \"" + s.oldName + "\" prep (struck through below)");
-            } else {
-                header.push("→ REDUCE \"" + s.oldName + "\" — only " + (mc.total - mc.swapped) + " serving(s) needed now");
-            }
-        }
-    });
-    header.push("");
-    header.push("═══ ORIGINAL PREP (adjusted) ═══");
-    header.push("");
-    
-    // Prepend header to ingredients
-    ps.ingredients = header.concat(ps.ingredients);
-    
-    // Strike through lines referencing fully-removed meals
-    // Two strategies: (1) distinctive term + day number, (2) day number alone for specific references
-    var swappedDays = {};
-    swappedDayTypes.forEach(function(st) { swappedDays[st.day] = true; });
-    
-    if (uniqueTerms.length > 0 || swappedDayTypes.length > 0) {
-        ps.ingredients = ps.ingredients.map(function(line) {
-            if (!line) return line;
-            if (line.indexOf("═══") !== -1 || line.indexOf("SKIP") !== -1 || line.indexOf("REDUCE") !== -1 || line.indexOf("→ Day") === 0 || line.indexOf("--- Day") === 0) return line;
-            var lower = line.toLowerCase();
-            var matched = false;
-            
-            // Strategy 1: distinctive term + day number
-            uniqueTerms.forEach(function(ut) {
-                var dayRef = "day " + ut.day;
-                if (lower.indexOf(ut.term) !== -1 && lower.indexOf(dayRef) !== -1) matched = true;
-                if (lower.indexOf(ut.term) !== -1 && lower.indexOf("batch") !== -1) matched = true;
-            });
-            
-            // Strategy 2: "Day N dessert/breakfast/lunch" pattern for lines with specific day+type refs
-            if (!matched) {
-                swappedDayTypes.forEach(function(st) {
-                    var pattern = "day " + st.day + " " + st.type.toLowerCase();
-                    if (lower.indexOf(pattern) !== -1) matched = true;
-                    // Also match "(Day N dessert)" and "Day N breakfast"
-                    var pattern2 = "day " + st.day + " " + st.type.toLowerCase().substring(0, 4);
-                    if (lower.indexOf(pattern2) !== -1) matched = true;
-                });
-            }
-            
-            if (matched) return "⚡ " + line;
-            return line;
+    // Helper: check if a line references a swapped-out meal
+    function lineMatchesSwapped(line) {
+        if (!line) return false;
+        var lower = line.toLowerCase();
+        var matched = false;
+        uniqueTerms.forEach(function(ut) {
+            var dayRef = "day " + ut.day;
+            if (lower.indexOf(ut.term) !== -1 && lower.indexOf(dayRef) !== -1) matched = true;
+            if (lower.indexOf(ut.term) !== -1 && lower.indexOf("batch") !== -1) matched = true;
         });
-        ps.steps = ps.steps.map(function(step) {
+        if (!matched) {
+            swappedDayTypes.forEach(function(st) {
+                var pattern = "day " + st.day + " " + st.type.toLowerCase();
+                if (lower.indexOf(pattern) !== -1) matched = true;
+                var pattern2 = "day " + st.day + " " + st.type.toLowerCase().substring(0, 4);
+                if (lower.indexOf(pattern2) !== -1) matched = true;
+            });
+        }
+        return matched;
+    }
+    
+    // Remove old ingredient/step lines referencing swapped meals (clean replace, no strikethrough)
+    if (uniqueTerms.length > 0 || swappedDayTypes.length > 0) {
+        ps.ingredients = ps.ingredients.filter(function(line) {
+            return !lineMatchesSwapped(line);
+        });
+        ps.steps = ps.steps.filter(function(step) {
             var lower = step.toLowerCase();
             var matched = false;
             uniqueTerms.forEach(function(ut) {
                 if (lower.indexOf(ut.term) !== -1) matched = true;
             });
-            // Also flag steps that mention "Day N" for swapped days when talking about the meal type
             if (!matched) {
                 swappedDayTypes.forEach(function(st) {
                     var dayRef = "day " + st.day;
@@ -3444,16 +3556,49 @@ function buildDynamicPrep(sessionDay, basePrepSession) {
                     if (lower.indexOf(dayRef) !== -1 && lower.indexOf(typeRef) !== -1) matched = true;
                 });
             }
-            if (matched) return "⚠️ MAY NEED ADJUSTMENT: " + step;
-            return step;
+            return !matched;
         });
     }
     
-    // Update tip
-    ps.tip = "⚠️ " + swaps.length + " meal(s) were swapped. New ingredients are listed at the top. Irrelevant prep lines are struck through. " + (ps.tip || "");
+    // Add new meal ingredients at the end
+    swaps.forEach(function(s) {
+        if (s.newMeal && s.newMeal.ingredients && s.newMeal.ingredients.length > 0) {
+            ps.ingredients.push("--- Day " + s.day + " " + s.newName + " (new) ---");
+            s.newMeal.ingredients.forEach(function(ing) {
+                if (ing && ing.indexOf("---") !== 0 && ing.trim() !== '') {
+                    ps.ingredients.push(ing);
+                }
+            });
+        }
+    });
+    
+    // Add a small swap note at the top
+    var swapNote = "\u21b9 Updated: ";
+    swaps.forEach(function(s, i) {
+        if (i > 0) swapNote += " \u00b7 ";
+        swapNote += "Day " + s.day + " " + s.type + " \u2192 " + s.newName;
+    });
+    ps.ingredients.unshift(swapNote);
+    
+    // Update tip with a clean note
+    var reducedMeals = [];
+    var seen = {};
+    swaps.forEach(function(s) {
+        var mc = mealCounts[s.oldName];
+        if (!seen[s.oldName]) {
+            seen[s.oldName] = true;
+            if (mc.swapped < mc.total) {
+                reducedMeals.push(s.oldName + " (now " + (mc.total - mc.swapped) + " serving" + ((mc.total - mc.swapped) > 1 ? "s" : "") + ")");
+            }
+        }
+    });
+    var tipNote = swaps.length + " meal" + (swaps.length > 1 ? "s" : "") + " replaced \u2014 prep list updated automatically.";
+    if (reducedMeals.length > 0) tipNote += " Reduced: " + reducedMeals.join(", ") + ".";
+    ps.tip = tipNote + (ps.tip ? " " + ps.tip : "");
     
     return ps;
 }
+
 
 // Returns number of swaps detected for a given prep session (used for banner indicator)
 function countPrepSwaps(sessionDay) {
@@ -3472,132 +3617,248 @@ function countPrepSwaps(sessionDay) {
 }
 
 function renderDayDetail() {
-    var data = getData();
-    var day = data.days[currentDay - 1];
-    if (!day) { currentDay = 1; day = data.days[0]; }
-    if (!day) return;
+    var kData = mealData.kasey;
+    var cData = mealData.charlie;
+    var kDay = kData.days[currentDay - 1];
+    var cDay = cData.days[currentDay - 1];
+    if (!kDay) { currentDay = 1; kDay = kData.days[0]; cDay = cData.days[0]; }
+    if (!kDay) return;
     var dayDate = getDateForPlanDay(currentDay);
     var dateStr = SHORT_DAYS[dayDate.getDay()] + ", " + SHORT_MONTHS[dayDate.getMonth()] + " " + dayDate.getDate();
-    
+
+    // -- Shared day header (date + theme) --
     var header = document.getElementById("day-header");
     header.style.background = dayColors[currentDay - 1];
     document.getElementById("day-num").textContent = dateStr;
-    document.getElementById("day-theme").textContent = day.theme;
-    document.getElementById("day-protein").textContent = day.protein + " protein";
-    document.getElementById("day-calories").textContent = day.calories + " cal";
-    
-    // Prep day banner
+    document.getElementById("day-theme").textContent = kDay.theme;
+
+    // -- Per-person macro cards --
+    document.getElementById("day-protein-k").textContent = kDay.protein + " protein (meals)";
+    document.getElementById("day-calories-k").textContent = kDay.calories + " cal + snacks";
+    document.getElementById("day-protein-c").textContent = cDay.protein + " protein (meals)";
+    document.getElementById("day-calories-c").textContent = cDay.calories + " cal + snacks";
+
+    // -- Goal cards (update names from settings) --
+    var names = (window.LifeHubSettings && window.LifeHubSettings.current.names) || {name1:'Kasey',name2:'Charlie'};
+    document.getElementById("dual-kasey-name").textContent = names.name1;
+    document.getElementById("dual-charlie-name").textContent = names.name2;
+    document.getElementById("goal-protein-k").textContent = kData.goals.protein;
+    document.getElementById("goal-calories-k").textContent = kData.goals.calories;
+    document.getElementById("goal-protein-c").textContent = cData.goals.protein;
+    document.getElementById("goal-calories-c").textContent = cData.goals.calories;
+    var colLabelK = document.getElementById("col-label-k");
+    var colLabelC = document.getElementById("col-label-c");
+    if (colLabelK) colLabelK.textContent = names.name1;
+    if (colLabelC) colLabelC.textContent = names.name2;
+    var macroTagK = document.querySelector("#dual-macros-k .person-tag");
+    var macroTagC = document.querySelector("#dual-macros-c .person-tag");
+    if (macroTagK) macroTagK.textContent = names.name1;
+    if (macroTagC) macroTagC.textContent = names.name2;
+
+    // -- Prep day banner (shared, above both columns) --
     var existingPrep = document.getElementById("prep-banner");
     if (existingPrep) existingPrep.remove();
-    if (day.prep) {
+    if (kDay.prep) {
         var prepBanner = document.createElement("div");
         prepBanner.id = "prep-banner";
+        currentPerson = "kasey"; // for prep session context
         var swapCount = countPrepSwaps(currentDay);
         var bannerBg = swapCount > 0 ? "rgba(201,168,76,0.2)" : "rgba(163,184,153,0.15)";
         var bannerBorder = swapCount > 0 ? "rgba(201,168,76,0.4)" : "rgba(163,184,153,0.3)";
         var bannerColor = swapCount > 0 ? "#c9a84c" : "#a3b899";
         prepBanner.style.cssText = "background:" + bannerBg + ";border:1px solid " + bannerBorder + ";border-radius:6px;padding:10px 14px;margin-bottom:12px;font-size:0.8rem;color:" + bannerColor + ";text-align:center;letter-spacing:0.03em;cursor:pointer;transition:background 0.2s;";
         var swapBadge = swapCount > 0 ? ' <span style="background:rgba(201,168,76,0.3);padding:2px 8px;border-radius:10px;font-size:0.65rem;margin-left:6px;">' + swapCount + ' meal' + (swapCount > 1 ? 's' : '') + ' changed</span>' : '';
-        prepBanner.innerHTML = "" + day.prep + swapBadge + ' <span style="opacity:0.6; margin-left:6px;">tap for details ›</span>';
+        prepBanner.innerHTML = "" + kDay.prep + swapBadge + ' <span style="opacity:0.6; margin-left:6px;">tap for details \u203a</span>';
         prepBanner.onmouseenter = function() { this.style.background = "rgba(163,184,153,0.25)"; };
-        prepBanner.onmouseleave = function() { this.style.background = "rgba(163,184,153,0.15)"; };
+        prepBanner.onmouseleave = function() { this.style.background = bannerBg; };
         prepBanner.onclick = function() {
+            currentPerson = "kasey";
             var ps = prepSessions[currentDay];
             if (ps) openModal(buildDynamicPrep(currentDay, ps));
         };
-        document.querySelector(".day-detail").insertBefore(prepBanner, document.getElementById("meals-container"));
+        var dualMeals = document.getElementById("dual-meals");
+        dualMeals.parentNode.insertBefore(prepBanner, dualMeals);
     }
-    
-    var container = document.getElementById("meals-container");
-    container.innerHTML = "";
-    
+
+    var dualCols = document.getElementById("dual-meals");
+    var extrasDiv = document.getElementById("dual-extras");
+    extrasDiv.innerHTML = "";
+
     if (showingSnacks) {
-        // Render snack menu
+        // Snack mode: full width, hide columns
+        dualCols.style.display = "none";
+        var container = extrasDiv;
         var backBtn = document.createElement("button");
         backBtn.className = "meal-btn";
-        backBtn.style.background = "rgba(163,184,153,0.15)";
-        backBtn.style.borderColor = "#a3b899";
-        backBtn.innerHTML = '<div class="meal-icon" style="background:rgba(163,184,153,0.2)">←</div><div class="meal-info"><div class="meal-type" style="color:#a3b899">Back to ' + dateStr + '</div><div class="meal-name">Return to meals</div></div>';
+        backBtn.style.background = "var(--lh-accent-muted, rgba(163,184,153,0.15))";
+        backBtn.style.borderColor = "var(--lh-accent, #a3b899)";
+        backBtn.innerHTML = '<div class="meal-icon" style="background:rgba(163,184,153,0.2)">\u2190</div><div class="meal-info"><div class="meal-type" style="color:#a3b899">Back to ' + dateStr + '</div><div class="meal-name">Return to meals</div></div>';
         backBtn.onclick = function() { showingSnacks = false; render(); };
         container.appendChild(backBtn);
-        
         var snackHeader = document.createElement("div");
         snackHeader.style.cssText = "text-align:center; padding: 16px 0 8px; color: rgba(242,235,224,0.5); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase;";
         snackHeader.textContent = "Mix & match \u2022 build your own snacks";
         container.appendChild(snackHeader);
-        
         snackMenu.forEach(function(snack) {
             var btn = document.createElement("button");
             btn.className = "meal-btn";
-            btn.innerHTML = '<div class="meal-icon" style="background: rgba(163,184,153,0.15)">\u2728</div>' +
-                '<div class="meal-info">' +
-                    '<div class="meal-type">Snack</div>' +
-                    '<div class="meal-name">' + snack.name + '</div>' +
-                    '<div class="meal-portion">' + snack.portion + '</div>' +
-                '</div>' +
-                '<div class="meal-arrow">\u203A</div>';
+            btn.innerHTML = '<div class="meal-icon" style="background: rgba(163,184,153,0.15)">\u2728</div><div class="meal-info"><div class="meal-type">Snack</div><div class="meal-name">' + snack.name + '</div><div class="meal-portion">' + snack.portion + '</div></div><div class="meal-arrow">\u203a</div>';
             btn.onclick = (function(s) { return function() { openModal(s); }; })(snack);
             container.appendChild(btn);
         });
     } else {
-        // Render day meals
-        day.meals.forEach(function(meal, mi) {
-            var btn = document.createElement("button");
-            btn.className = "meal-btn";
-            var iconMap = { "sun": "\u2600\uFE0F", "moon": "\uD83C\uDF19", "star": "\u2728", "dessert": "\uD83C\uDF68" };
+        dualCols.style.display = "";
+
+        // -- Helper to build meal list for a person --
+        function buildMealColumn(person, day, containerEl) {
+            containerEl.innerHTML = "";
             var typeIcons = { "Breakfast": "\uD83C\uDF05", "Lunch": "\u2600\uFE0F", "Dinner": "\uD83C\uDF19", "Dessert": "\uD83C\uDF68", "Snack": "\u2728" };
-            var rawIcon = meal.icon || typeIcons[meal.type] || "\u2728";
-            var displayIcon = iconMap[rawIcon] || rawIcon;
-            btn.innerHTML = '<div class="meal-icon" style="background: rgba(163,184,153,0.15)">' + displayIcon + '</div>' +
-                '<div class="meal-info">' +
-                    '<div class="meal-type">' + meal.type + '</div>' +
-                    '<div class="meal-name">' + meal.name + '</div>' +
-                    '<div class="meal-portion">' + meal.portion + '</div>' +
-                '</div>' +
-                '<div class="meal-arrow">\u203A</div>';
-            btn.onclick = (function(m, idx) { return function() { openModal(m, idx); }; })(meal, mi);
-            container.appendChild(btn);
-        });
-        
-        // Add snack menu button
+            var iconMap = { "sun": "\u2600\uFE0F", "moon": "\uD83C\uDF19", "star": "\u2728", "dessert": "\uD83C\uDF68" };
+            day.meals.forEach(function(meal, mi) {
+                var btn = document.createElement("button");
+                btn.className = "meal-btn";
+                var rawIcon = meal.icon || typeIcons[meal.type] || "\u2728";
+                var displayIcon = iconMap[rawIcon] || rawIcon;
+                btn.innerHTML = '<div class="meal-icon" style="background:rgba(163,184,153,0.15)">' + displayIcon + '</div><div class="meal-info"><div class="meal-type">' + meal.type + '</div><div class="meal-name">' + meal.name + '</div><div class="meal-portion">' + meal.portion + '</div></div><div class="meal-arrow">\u203a</div>';
+                btn.onclick = (function(p, m, idx) {
+                    return function() {
+                        currentPerson = p;
+                        openModal(m, idx);
+                    };
+                })(person, meal, mi);
+                containerEl.appendChild(btn);
+            });
+        }
+
+        buildMealColumn("kasey", kDay, document.getElementById("meals-kasey"));
+        buildMealColumn("charlie", cDay, document.getElementById("meals-charlie"));
+
+        // Snack button (full width, below columns)
         var snackBtn = document.createElement("button");
-        snackBtn.className = "meal-btn";
+        snackBtn.className = "meal-btn dual-snack-btn";
         snackBtn.style.borderColor = "rgba(163,184,153,0.4)";
         snackBtn.style.background = "rgba(163,184,153,0.05)";
-        snackBtn.innerHTML = '<div class="meal-icon" style="background: rgba(163,184,153,0.2)">\u2728</div>' +
-            '<div class="meal-info">' +
-                '<div class="meal-type" style="color:#a3b899">Snack Menu</div>' +
-                '<div class="meal-name" style="color:#a3b899">' + snackMenu.length + ' items \u2022 mix & match however you want</div>' +
-                '<div class="meal-portion">proteins, fruits, dips, nuts & more</div>' +
-            '</div>' +
-            '<div class="meal-arrow" style="color:#a3b899">\u203A</div>';
+        snackBtn.style.border = "1px solid rgba(163,184,153,0.3)";
+        snackBtn.style.borderRadius = "6px";
+        snackBtn.innerHTML = '<div class="meal-icon" style="background: rgba(163,184,153,0.2)">\u2728</div><div class="meal-info"><div class="meal-type" style="color:#a3b899">Snack Menu</div><div class="meal-name" style="color:#a3b899">' + snackMenu.length + ' items \u2022 mix & match however you want</div><div class="meal-portion">proteins, fruits, dips, nuts & more</div></div><div class="meal-arrow" style="color:#a3b899">\u203a</div>';
         snackBtn.onclick = function() { showingSnacks = true; render(); };
-        container.appendChild(snackBtn);
-        
-        // Day notes
+        extrasDiv.appendChild(snackBtn);
+
+        // Day notes (side by side)
         var notesDiv = document.createElement("div");
-        notesDiv.style.cssText = "margin-top: 16px; padding-top: 12px; border-top: 1px solid rgba(224,210,208,0.08);";
-        var noteKey = 'dayNote_' + currentPlanIndex + '_' + currentDay + '_' + currentPerson;
-        var savedNote = localStorage.getItem(noteKey) || '';
-        notesDiv.innerHTML = '<div style="font-size:0.65rem;color:rgba(224,210,208,0.35);letter-spacing:0.1em;margin-bottom:6px;text-transform:uppercase;">Day Notes</div>' +
-            '<textarea id="day-note-input" placeholder="How did today go? Any swaps, skips, or wins..." style="width:100%;min-height:60px;padding:10px;background:rgba(61,47,49,0.4);border:1px solid var(--border-color);border-radius:6px;color:var(--light-text);font-family:\'Philosopher\',serif;font-size:0.78rem;resize:vertical;box-sizing:border-box;">' + savedNote + '</textarea>';
-        container.appendChild(notesDiv);
-        
-        // Auto-save on input
+        notesDiv.className = "dual-notes";
+        var noteKeyK = 'dayNote_' + currentPlanIndex + '_' + currentDay + '_kasey';
+        var noteKeyC = 'dayNote_' + currentPlanIndex + '_' + currentDay + '_charlie';
+        var savedNoteK = localStorage.getItem(noteKeyK) || '';
+        var savedNoteC = localStorage.getItem(noteKeyC) || '';
+        notesDiv.innerHTML = '<div style="font-size:0.6rem;color:rgba(224,210,208,0.3);letter-spacing:0.1em;margin-bottom:8px;text-transform:uppercase;">Day Notes</div>' +
+            '<div class="dual-notes-row">' +
+            '<div><div class="dual-notes-label kasey-label">' + names.name1 + '</div><textarea id="day-note-k" placeholder="How did today go?">' + savedNoteK + '</textarea></div>' +
+            '<div><div class="dual-notes-label charlie-label">' + names.name2 + '</div><textarea id="day-note-c" placeholder="How did today go?">' + savedNoteC + '</textarea></div>' +
+            '</div>';
+        extrasDiv.appendChild(notesDiv);
+
         setTimeout(function() {
-            var ta = document.getElementById('day-note-input');
-            if (ta) {
-                ta.addEventListener('input', function() {
-                    localStorage.setItem(noteKey, this.value);
-                    saveDayNotesToFirebase();
-                });
-            }
+            var taK = document.getElementById('day-note-k');
+            var taC = document.getElementById('day-note-c');
+            if (taK) taK.addEventListener('input', function() { localStorage.setItem(noteKeyK, this.value); saveDayNotesToFirebase(); });
+            if (taC) taC.addEventListener('input', function() { localStorage.setItem(noteKeyC, this.value); saveDayNotesToFirebase(); });
         }, 50);
     }
 }
 
+
 var currentModalMeal = null;
 var currentModalMealIndex = -1;
+
+// Adjust breakfast ingredients for Charlie's larger portions
+function adjustIngredientsForCharlie(mealName, ingredients) {
+    var ings = ingredients.slice(); // copy
+    var name = (mealName || '').toLowerCase();
+    
+    // Determine breakfast category
+    var isOats = name.indexOf('overnight') !== -1 || name.indexOf('oats') !== -1 || name.indexOf('cobbler') !== -1 || name.indexOf('cacao berry') !== -1 || name.indexOf('mango') !== -1 || name.indexOf('apple pie') !== -1 || name.indexOf('strawberry chocolate') !== -1;
+    var isSmoothie = name.indexOf('smoothie') !== -1 || name.indexOf('kefir') !== -1;
+    var isPancake = name.indexOf('pancake') !== -1;
+    var isEggMuffin = name.indexOf('egg muffin') !== -1;
+    var isParfait = name.indexOf('parfait') !== -1;
+    var isToast = name.indexOf('toast') !== -1 || name.indexOf('caramelized banana') !== -1;
+    
+    // Apply specific swaps
+    ings = ings.map(function(ing) {
+        if (!ing) return ing;
+        
+        if (isOats) {
+            // Scale up oats, whey, nuts
+            if (ing === '1/2 cup rolled oats') return '3/4 cup rolled oats';
+            if (ing.indexOf('1 scoop ON Gold Standard') !== -1) return '1.5 scoops ON Gold Standard Banana Cream whey';
+            if (ing === '1 tbsp chopped walnuts' || ing === '1 tbsp walnuts' || ing === '1 tbsp walnuts, chopped') return '2 tbsp walnuts, chopped';
+            if (ing === '1 tsp honey drizzle' || ing === '1 tsp honey') return '2 tsp honey';
+            if (ing === '3 tbsp hemp hearts') return '4 tbsp hemp hearts';
+        }
+        
+        if (isSmoothie) {
+            if (ing.indexOf('1 scoop ON Gold Standard') !== -1) return '2 scoops ON Gold Standard Banana Cream whey';
+            if (ing === '1/2 cup nonfat Greek yogurt') return '3/4 cup nonfat Greek yogurt';
+            if (ing === '2 tbsp walnuts, chopped') return '3 tbsp walnuts, chopped';
+            if (ing === '1/2 cup frozen blueberries') return '3/4 cup frozen blueberries';
+            // Kefir smoothie (no whey in original)
+            if (ing === '1 cup Lifeway strawberry kefir') return '1.5 cups Lifeway strawberry kefir';
+            if (ing === '1/2 banana') return '1 banana';
+            if (ing === '1/2 cup frozen mixed berries') return '3/4 cup frozen mixed berries';
+        }
+        
+        if (isPancake) {
+            if (ing.indexOf('1/3 cup') !== -1 && ing.indexOf('oats') !== -1) return ing.replace('1/3 cup', '1/2 cup');
+            if (ing === '1 egg') return '2 eggs';
+            if (ing === '1/4 cup nonfat Greek yogurt') return '1/3 cup nonfat Greek yogurt';
+            if (ing.indexOf('1/4 cup') !== -1 && ing.indexOf('berries') !== -1) return ing.replace('1/4 cup', '1/3 cup');
+            if (ing === '1 tbsp chopped walnuts' || ing === '1 tbsp walnuts, chopped') return '2 tbsp walnuts, chopped';
+            if (ing.indexOf('1 scoop ON Gold Standard') !== -1) return '1.5 scoops ON Gold Standard Banana Cream whey';
+        }
+        
+        if (isEggMuffin) {
+            if (ing.indexOf('EGG MUFFIN CUPS (x2)') !== -1) return '--- EGG MUFFIN CUPS (x3) ---';
+            if (ing === '2 eggs (from batch)') return '3 eggs (from batch)';
+        }
+        
+        if (isParfait) {
+            if (ing === '1 cup Oikos Triple Zero vanilla Greek yogurt') return '1.5 cups Oikos Triple Zero vanilla Greek yogurt';
+            if (ing === '2 tbsp walnuts, chopped') return '3 tbsp walnuts, chopped';
+            if (ing === '1 tsp honey drizzle') return '2 tsp honey drizzle';
+            if (ing === '1/2 cup fresh strawberries, sliced') return '3/4 cup fresh strawberries, sliced';
+        }
+        
+        if (isToast) {
+            if (ing.indexOf('1 slice') !== -1 && ing.indexOf('bread') !== -1) return '2 slices ' + ing.replace('1 slice ', '');
+            if (ing === '1 medium banana, sliced lengthwise') return '1.5 bananas, sliced lengthwise';
+            if (ing === '2 tbsp almond butter') return '3 tbsp almond butter';
+        }
+        
+        return ing;
+    });
+    
+    // Add a Charlie header
+    ings.unshift('--- CHARLIE\'S PORTIONS ---');
+    
+    // Add extra ingredients for specific breakfasts
+    if (isSmoothie && name.indexOf('kefir') !== -1) {
+        // Kefir smoothie has no whey — add one for Charlie
+        var kefirIdx = -1;
+        for (var i = 0; i < ings.length; i++) {
+            if (ings[i] && ings[i].indexOf('kefir') !== -1) { kefirIdx = i; break; }
+        }
+        if (kefirIdx >= 0) ings.splice(kefirIdx + 1, 0, '1 scoop ON Gold Standard Banana Cream whey (Charlie add-on)');
+    }
+    if (isEggMuffin) {
+        // Add toast with nut butter
+        ings.push('--- CHARLIE ADD-ON ---');
+        ings.push('1 slice Ezekiel bread, toasted');
+        ings.push('1 tbsp almond butter');
+    }
+    
+    return ings;
+}
 
 function openModal(meal, mealIndex) {
     currentModalMeal = meal;
@@ -3605,28 +3866,87 @@ function openModal(meal, mealIndex) {
     
     var modal = document.getElementById("modal");
     var header = document.getElementById("modal-header");
-    header.style.background = meal.color || "#a3b899";
+    var isCharlie = (currentPerson === 'charlie');
+    var names = (window.LifeHubSettings && window.LifeHubSettings.current.names) || {name1:'Kasey',name2:'Charlie'};
+    var personName = isCharlie ? names.name2 : names.name1;
+    var kaseyName = names.name1;
+    var charlieName = names.name2;
+    
+    // Person-aware header color (cached computed styles)
+    var cs = getComputedStyle(document.documentElement);
+    var accentColor = cs.getPropertyValue('--lh-accent').trim() || '#a3b899';
+    var secondaryColor = cs.getPropertyValue('--lh-secondary').trim() || '#e8b4b8';
+    var headerColor = isCharlie ? (meal.color || accentColor) : secondaryColor;
+    header.style.background = headerColor;
+    
+    // Apply person-color class to entire modal (Kasey = pink, Charlie = green)
+    if (!isCharlie) {
+        modal.classList.add('kasey-modal');
+    } else {
+        modal.classList.remove('kasey-modal');
+    }
+    
+    // Person badge — only show for plan meals (not recipe bank or prep sessions)
+    var badge = document.getElementById("modal-person-badge");
+    if (currentModalMealIndex >= 0) {
+        badge.textContent = personName + "\u2019s portion";
+        badge.style.background = "rgba(0,0,0,0.15)";
+        badge.style.color = "var(--dark-bg)";
+        badge.style.display = "inline-block";
+    } else {
+        badge.style.display = "none";
+    }
+    
+    // Tint section headers for person color (Kasey=pink, Charlie=green)
+    var sectionHeaders = modal.querySelectorAll('.modal-section h4');
+    sectionHeaders.forEach(function(h) {
+        h.style.color = isCharlie ? '' : secondaryColor;
+    });
+    // Tint swap button for person color
+    var swapBtn = document.getElementById('modal-swap-btn');
+    if (swapBtn) {
+        if (!isCharlie) {
+            swapBtn.style.background = 'var(--lh-secondary-muted)';
+            swapBtn.style.borderColor = 'var(--lh-secondary-border)';
+            swapBtn.style.color = secondaryColor;
+        } else {
+            swapBtn.style.background = '';
+            swapBtn.style.borderColor = '';
+            swapBtn.style.color = '';
+        }
+    }
+    
     document.getElementById("modal-title").textContent = meal.name;
     document.getElementById("modal-meta").textContent = meal.portions.join(" \u2022 ");
     
     var ingList = document.getElementById("modal-ingredients");
     ingList.innerHTML = "";
-    meal.ingredients.forEach(function(ing) {
+    
+    // Build the display ingredients — person-specific adjustments
+    var displayIngredients = meal.ingredients.slice(); // copy
+    if (currentPerson === 'charlie' && meal.type === 'Breakfast') {
+        displayIngredients = adjustIngredientsForCharlie(meal.name, displayIngredients);
+    } else if (currentPerson === 'kasey' && meal.type === 'Breakfast') {
+        displayIngredients.unshift('--- ' + kaseyName.toUpperCase() + "'" + (kaseyName.toUpperCase().slice(-1) === 'S' ? '' : 'S') + ' PORTIONS ---');
+    }
+    
+    displayIngredients.forEach(function(ing) {
         if (!ing || ing.trim() === '') return; // skip empty lines
         var li = document.createElement("li");
         if (ing.indexOf("---") === 0) {
-            li.innerHTML = '<span></span><div class="step-text"><strong style="color: var(--sage-green); font-size: 0.75rem; letter-spacing: 0.05em;">' + ing.replace(/---/g, "").trim() + '</strong></div>';
+            var divColor = isCharlie ? 'var(--sage-green)' : 'var(--lh-secondary, #e8b4b8)';
+            li.innerHTML = '<span></span><div class="step-text"><strong style="color:' + divColor + '; font-size: 0.75rem; letter-spacing: 0.05em;">' + ing.replace(/---/g, "").trim() + '</strong></div>';
         } else if (ing.indexOf("═══") !== -1 || ing.indexOf("===") !== -1) {
             var isWarning = ing.indexOf("⚠️") !== -1 || ing.indexOf("ADJUST") !== -1;
-            var headerColor = isWarning ? "#c9a84c" : "var(--sage-green)";
-            li.innerHTML = '<span></span><div class="step-text"><strong style="color:' + headerColor + '; font-size: 0.72rem; letter-spacing: 0.04em; border-top: 1px solid rgba(163,184,153,0.2); padding-top: 8px; margin-top: 4px; display: block;">' + ing.replace(/[═=]+/g, "").trim() + '</strong></div>';
+            var ingHeaderColor = isWarning ? "#c9a84c" : "var(--sage-green)";
+            li.innerHTML = '<span></span><div class="step-text"><strong style="color:' + ingHeaderColor + '; font-size: 0.72rem; letter-spacing: 0.04em; border-top: 1px solid rgba(163,184,153,0.2); padding-top: 8px; margin-top: 4px; display: block;">' + ing.replace(/[═=]+/g, "").trim() + '</strong></div>';
         } else if (ing.indexOf("→") === 0) {
             var isSwapNote = ing.indexOf("SKIP") !== -1 || ing.indexOf("REDUCE") !== -1 || ing.indexOf("ADD") !== -1;
             var arrowColor = isSwapNote ? "color:#c9a84c;" : "opacity:0.5;";
             var textStyle = isSwapNote ? "font-size:0.75rem;color:#c9a84c;" : "opacity:0.5;font-size:0.72rem;";
             li.innerHTML = '<span style="' + arrowColor + '">→</span><div class="step-text" style="' + textStyle + '">' + ing.substring(1).trim() + '</div>';
-        } else if (ing.indexOf("⚡") === 0) {
-            li.innerHTML = '<span style="opacity:0.3;">•</span><div class="step-text" style="opacity:0.35;text-decoration:line-through;font-size:0.8rem;">' + ing.substring(1).trim() + '</div>';
+        } else if (ing.indexOf("\u21b9") === 0 || ing.indexOf("\u26a1") === 0) {
+            li.innerHTML = '<span style="color:#c9a84c;font-size:0.7rem;">\u21b9</span><div class="step-text" style="font-size:0.75rem;color:#c9a84c;font-style:italic;">' + ing.substring(1).trim() + '</div>';
         } else {
             li.innerHTML = '<span>\u2022</span><div class="step-text">' + ing + '</div>';
         }
@@ -3635,16 +3955,49 @@ function openModal(meal, mealIndex) {
     
     var stepList = document.getElementById("modal-steps");
     stepList.innerHTML = "";
+    var plateColor = isCharlie ? accentColor : secondaryColor;
     meal.steps.forEach(function(step, i) {
         var li = document.createElement("li");
-        var isWarning = step.indexOf("⚠️ MAY NEED ADJUSTMENT:") === 0;
-        var cleanStep = isWarning ? step.replace("⚠️ MAY NEED ADJUSTMENT: ", "") : step;
-        var formatted = cleanStep.replace(/\n→\s*/g, '<br><span style="color:var(--sage-green);margin-right:4px;">→</span>').replace(/\n/g, '<br>');
-        if (isWarning) {
-            li.innerHTML = '<span class="step-number" style="background:#c9a84c;">' + (i + 1) + '</span><div class="step-text" style="opacity:0.45;text-decoration:line-through;">' + formatted + '</div>';
-        } else {
-            li.innerHTML = '<span class="step-number">' + (i + 1) + '</span><div class="step-text">' + formatted + '</div>';
+        var displayStep = step;
+        
+        // Person-aware plating: highlight your portions, dim other person's
+        if (step.indexOf('PLATE FOR TWO') !== -1 && currentModalMealIndex >= 0) {
+            var pName = isCharlie ? charlieName : kaseyName;
+            var oName = isCharlie ? kaseyName : charlieName;
+            var pLow = pName.toLowerCase();
+            var oLow = oName.toLowerCase();
+            var raw = step.replace(/^PLATE FOR TWO:\s*/i, '');
+            // Split into sentences, then classify each
+            var sentences = raw.split(/(?<=\.)\s*/);
+            var styled = [];
+            sentences.forEach(function(sent) {
+                if (!sent.trim()) return;
+                // Split sentence into clauses on commas for finer classification
+                var clauses = sent.split(/,\s*/);
+                var styledClauses = [];
+                clauses.forEach(function(cl) {
+                    var low = cl.toLowerCase();
+                    var hasMine = low.indexOf(pLow) !== -1;
+                    var hasOther = low.indexOf(oLow) !== -1;
+                    if (hasMine && !hasOther) {
+                        styledClauses.push('<strong style="color:' + plateColor + '">' + cl + '</strong>');
+                    } else if (hasOther && !hasMine) {
+                        styledClauses.push('<span style="opacity:0.35">' + cl + '</span>');
+                    } else if (hasMine && hasOther) {
+                        // Both names in one clause — show full text, bold mine
+                        var bolded = cl.replace(new RegExp('(' + pName + ')', 'gi'), '<strong style="color:' + plateColor + '">$1</strong>');
+                        styledClauses.push(bolded);
+                    } else {
+                        styledClauses.push(cl);
+                    }
+                });
+                styled.push(styledClauses.join(', '));
+            });
+            displayStep = '🍽 ' + styled.join(' ');
         }
+        
+        var formatted = displayStep.replace(/\n/g, '<br>');
+        li.innerHTML = '<span class="step-number">' + (i + 1) + '</span><div class="step-text">' + formatted + '</div>';
         stepList.appendChild(li);
     });
     
@@ -3657,10 +4010,78 @@ function openModal(meal, mealIndex) {
     }
     
     var portions = document.getElementById("modal-portions");
-    portions.innerHTML = "";
+    var portionsHtml = '';
     meal.portions.forEach(function(p) {
-        portions.innerHTML += '<span class="portion-tag">' + p + '</span>';
+        portionsHtml += '<span class="portion-tag">' + p + '</span>';
     });
+    
+    // Add serving size badge (person-aware)
+    var servesNote = '';
+    var charlieBoost = '';
+    var kaseyBoost = '';
+    if (meal.type === 'Dinner') {
+        servesNote = '🍽 ' + personName + '\u2019s portions — cook together, plate separately';
+    } else if (meal.type === 'Breakfast') {
+        if (isCharlie) {
+            servesNote = '🍽 Per person — ' + charlieName + '\'s version (see boost below)';
+            // Generate Charlie-specific boost based on breakfast type
+            var mealName = (meal.name || '').toLowerCase();
+            if (mealName.indexOf('overnight') !== -1 || mealName.indexOf('oats') !== -1 || mealName.indexOf('breakfast bowl') !== -1 || mealName.indexOf('cobbler') !== -1 || mealName.indexOf('mango') !== -1 || mealName.indexOf('cacao berry') !== -1 || mealName.indexOf('strawberry chocolate') !== -1) {
+                charlieBoost = '💪 ' + charlieName.toUpperCase() + '\'S BOOST: Use ¾ cup oats (not ½), add extra ½ scoop whey, and double the nut topping. Adds ~15g protein and ~150 cal.';
+            } else if (mealName.indexOf('smoothie') !== -1 || mealName.indexOf('kefir') !== -1) {
+                charlieBoost = '💪 ' + charlieName.toUpperCase() + '\'S BOOST: Add 1 extra scoop whey + 1 tbsp nut butter. Adds ~25g protein and ~200 cal.';
+            } else if (mealName.indexOf('pancake') !== -1) {
+                charlieBoost = '💪 ' + charlieName.toUpperCase() + '\'S BOOST: Make 1 extra pancake (add 1 more egg + ¼ cup oat flour to batter). Top with extra walnuts. Adds ~15g protein and ~180 cal.';
+            } else if (mealName.indexOf('egg muffin') !== -1) {
+                charlieBoost = '💪 ' + charlieName.toUpperCase() + '\'S BOOST: Eat 3 muffin cups instead of 2. Add a piece of toast with 1 tbsp peanut-free nut butter. Adds ~15g protein and ~200 cal.';
+            } else if (mealName.indexOf('parfait') !== -1) {
+                charlieBoost = '💪 ' + charlieName.toUpperCase() + '\'S BOOST: Use 1 full cup yogurt (not ¾). Add extra scoop of granola and double the nuts. Adds ~12g protein and ~150 cal.';
+            } else if (mealName.indexOf('toast') !== -1 || mealName.indexOf('banana') !== -1) {
+                charlieBoost = '💪 ' + charlieName.toUpperCase() + '\'S BOOST: Use 2 slices of bread instead of 1. Add 1 tbsp almond butter + extra banana. Adds ~10g protein and ~200 cal.';
+            } else {
+                charlieBoost = '💪 ' + charlieName.toUpperCase() + '\'S BOOST: Add an extra ½ scoop whey + 1 tbsp nut butter to hit your higher protein target. Adds ~15g protein and ~150 cal.';
+            }
+        } else {
+            servesNote = '🍽 Per person — ' + kaseyName + "'s version";
+            var mealName = (meal.name || '').toLowerCase();
+            if (mealName.indexOf('overnight') !== -1 || mealName.indexOf('oats') !== -1 || mealName.indexOf('cobbler') !== -1 || mealName.indexOf('cacao berry') !== -1 || mealName.indexOf('mango') !== -1 || mealName.indexOf('apple pie') !== -1 || mealName.indexOf('strawberry chocolate') !== -1) {
+                kaseyBoost = '\u2728 ' + kaseyName.toUpperCase() + ': Collagen + L-glutamine are blended in for gut lining repair. MCT oil helps absorb fat-soluble vitamins. This is your full supplement stack — no extra pills needed.';
+            } else if (mealName.indexOf('smoothie') !== -1 || mealName.indexOf('kefir') !== -1) {
+                kaseyBoost = '\u2728 ' + kaseyName.toUpperCase() + ': Your supplement stack (collagen, L-glutamine, MCT oil) blends right in. The blueberries add anthocyanins — one of the most potent anti-cancer compounds in fruit.';
+            } else if (mealName.indexOf('pancake') !== -1) {
+                kaseyBoost = '\u2728 ' + kaseyName.toUpperCase() + ': Full supplement stack baked into the batter — collagen, L-glutamine, MCT oil all heat-stable at this temp. Berries on top add antioxidants.';
+            } else if (mealName.indexOf('egg muffin') !== -1) {
+                kaseyBoost = '\u2728 ' + kaseyName.toUpperCase() + ': 2 muffin cups hit your calorie target without overshooting. Take your collagen + L-glutamine in coffee or a small smoothie on the side.';
+            } else if (mealName.indexOf('parfait') !== -1) {
+                kaseyBoost = '\u2728 ' + kaseyName.toUpperCase() + ': Greek yogurt probiotics support the gut lining your L-glutamine is repairing. Strawberry ellagic acid is a studied anti-cancer compound. Light and effective.';
+            } else if (mealName.indexOf('toast') !== -1 || mealName.indexOf('banana') !== -1) {
+                kaseyBoost = '\u2728 ' + kaseyName.toUpperCase() + ': One slice keeps you in your calorie window. Take collagen + L-glutamine in coffee or tea alongside. The almond butter provides vitamin E.';
+            } else {
+                kaseyBoost = '\u2728 ' + kaseyName.toUpperCase() + ': Your supplement stack (collagen, L-glutamine, MCT oil) should be taken with this meal for best absorption with fats and protein.';
+            }
+        }
+    } else if (meal.type === 'Dessert') {
+        if (isCharlie) {
+            servesNote = '🍽 ' + charlieName + ' — same portion as ' + kaseyName + ' (make up cals with bigger dinners + snacks)';
+        } else {
+            servesNote = '🍽 ' + kaseyName + ' — dessert is your anti-inflammatory treat. Same portion for both of you.';
+        }
+    } else if (meal.type === 'Lunch') {
+        servesNote = '🍽 ' + personName + ' — already portioned in your container';
+    }
+    if (servesNote && meal.type) {
+        var serveBg = isCharlie ? 'rgba(163,184,153,0.1)' : 'var(--lh-secondary-muted)';
+        var serveBorder = isCharlie ? 'rgba(163,184,153,0.2)' : 'var(--lh-secondary-border)';
+        var serveColor = isCharlie ? '#a3b899' : secondaryColor;
+        portionsHtml += '<div style="width:100%;margin-top:6px;padding:6px 10px;background:' + serveBg + ';border:1px solid ' + serveBorder + ';border-radius:4px;font-size:0.7rem;color:' + serveColor + ';letter-spacing:0.02em;">' + servesNote + '</div>';
+    }
+    if (charlieBoost) {
+        portionsHtml += '<div style="width:100%;margin-top:4px;padding:8px 10px;background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.25);border-radius:4px;font-size:0.72rem;color:#c9a84c;letter-spacing:0.01em;line-height:1.4;">' + charlieBoost + '</div>';
+    }
+    if (kaseyBoost) {
+        portionsHtml += '<div style="width:100%;margin-top:4px;padding:8px 10px;background:var(--lh-secondary-muted, rgba(232,180,184,0.12));border:1px solid var(--lh-secondary-border, rgba(232,180,184,0.25));border-radius:4px;font-size:0.72rem;color:var(--lh-secondary, #e8b4b8);letter-spacing:0.01em;line-height:1.4;">' + kaseyBoost + '</div>';
+    }
+    portions.innerHTML = portionsHtml;
     
     // Show swap button only for plan meals (not snacks or prep sessions)
     var swapSection = document.getElementById('modal-swap-section');
@@ -3761,16 +4182,6 @@ document.addEventListener("keydown", function(e) {
     if (e.key === "Escape") closeModal();
 });
 
-document.querySelectorAll(".toggle-btn").forEach(function(btn) {
-    btn.addEventListener("click", function() {
-        document.querySelectorAll(".toggle-btn").forEach(function(b) { b.classList.remove("active"); });
-        this.classList.add("active");
-        currentPerson = this.dataset.person;
-        document.getElementById("goal-protein").textContent = getData().goals.protein;
-        document.getElementById("goal-calories").textContent = getData().goals.calories;
-        render();
-    });
-});
 
 function render() {
     renderPlanSelector();
@@ -4739,8 +5150,18 @@ function generateGroceryList() {
         return false;
     }
     
+    function isMealTotalForTwo(meal) {
+        var stepsText = (meal.steps || []).join(' ').toLowerCase();
+        var ingText = (meal.ingredients || []).join(' ').toLowerCase();
+        if (stepsText.indexOf('plate for two') !== -1) return true;
+        if (ingText.indexOf('already prepped & portioned') !== -1) return true;
+        return false;
+    }
+    
     // ===== COLLECT ALL INGREDIENTS =====
-    var data = getData();
+    // Use BOTH persons' data for complete grocery list
+    var kaseyDays = mealData.kasey.days;
+    var charlieDays = mealData.charlie.days;
     
     // 1. Prep session ingredients (scale = 1, already for both people)
     Object.keys(prepSessions).forEach(function(dayKey) {
@@ -4749,13 +5170,29 @@ function generateGroceryList() {
         });
     });
     
-    // 2. Non-prepped meal ingredients (scale for both)
-    data.days.forEach(function(day) {
+    // 2. Kasey's meal ingredients with smart scaling
+    kaseyDays.forEach(function(day) {
         day.meals.forEach(function(meal) {
             if (!meal.ingredients || isMealPrepped(meal)) return;
+            // Total-for-two meals (PLATE FOR TWO): scale 1. Per-person meals: scale 2.
+            var scale = isMealTotalForTwo(meal) ? 1 : 2;
             meal.ingredients.forEach(function(rawLine) {
-                preprocessLine(rawLine).forEach(function(item) { addIngredient(item, 2); });
+                preprocessLine(rawLine).forEach(function(item) { addIngredient(item, scale); });
             });
+        });
+    });
+    
+    // 2b. Charlie's breakfast extras (his scaled portions need additional ingredients)
+    charlieDays.forEach(function(day) {
+        day.meals.forEach(function(meal) {
+            if (!meal.ingredients || isMealPrepped(meal)) return;
+            if (meal.type === 'Breakfast') {
+                var adjusted = adjustIngredientsForCharlie(meal.name, meal.ingredients);
+                adjusted.forEach(function(rawLine) {
+                    if (rawLine.indexOf('---') === 0) return;
+                    preprocessLine(rawLine).forEach(function(item) { addIngredient(item, 1); });
+                });
+            }
         });
     });
     
@@ -5469,11 +5906,11 @@ async function regenWeek(weekNum) {
     
     if (!confirm('Regenerate ' + weekLabel + '? This will replace Days ' + startDay + '–' + endDay + ' with new meals.')) return;
     
-    // Collect meals from the OTHER week (to keep them, avoid repeating them)
+    // Collect meals from the OTHER week (both persons, avoid repeating them)
     var otherWeekMeals = [];
-    var data = getData();
-    if (data && data.days) {
-        data.days.forEach(function(day) {
+    [mealData.kasey.days, mealData.charlie.days].forEach(function(days) {
+        if (!days) return;
+        days.forEach(function(day) {
             if ((weekNum === 1 && day.day > 7) || (weekNum === 2 && day.day <= 7)) {
                 if (day.meals) day.meals.forEach(function(m) {
                     if (m.name && m.type !== 'Snack' && otherWeekMeals.indexOf(m.name) === -1) {
@@ -5482,7 +5919,7 @@ async function regenWeek(weekNum) {
                 });
             }
         });
-    }
+    });
     
     // Build recipe summary
     var recipeSummary = recipeBank.filter(function(r) { return r.type !== 'Snack'; }).map(function(r) {
@@ -5547,7 +5984,7 @@ async function regenWeek(weekNum) {
         var charlieData = mealData.charlie.days;
         
         var CHARLIE_PROTEIN_MULT = 1.3;
-        var CHARLIE_CAL_MULT = 1.7;
+        var CHARLIE_CAL_MULT = 1.4;
         
         hydrated.forEach(function(newDay) {
             var idx = newDay.day - 1;
@@ -5644,7 +6081,7 @@ function acceptPlan() {
     
     // Build Charlie's scaled meals (Kasey ~1350cal/140-165g → Charlie ~2300cal/180-210g)
     var CHARLIE_PROTEIN_MULT = 1.3;
-    var CHARLIE_CAL_MULT = 1.7;
+    var CHARLIE_CAL_MULT = 1.4;
     var charlieDays = kaseyDays.map(function(day) {
         var cDay = JSON.parse(JSON.stringify(day));
         var kProtein = parseInt(day.protein); var kCal = parseInt(day.calories.replace(",", ""));
